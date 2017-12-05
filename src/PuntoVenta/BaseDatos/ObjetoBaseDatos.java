@@ -98,7 +98,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(correo).append("', ")
                 .append("'").append(telefono).append("');");
 
-        int resultado = ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
 
         return resultado;
     }
@@ -130,7 +130,7 @@ public class ObjetoBaseDatos {
                 .append("';");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -189,7 +189,7 @@ public class ObjetoBaseDatos {
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("stpv")).append(".")
                 .append(mapTabla.get("empleado"))
-                .append("(nombre, apellido, nacionalidad, cedula, telefono, correo, cargo_id, password,departamento) VALUES (")
+                .append("(nombre, apellido, nacionalidad, cedula, telefono, correo, cargo_id, password, departamento) VALUES (")
                 .append("'").append(nombre).append("', ")
                 .append("'").append(apellido).append("', ")
                 .append("'").append(nacionalidad).append("', ")
@@ -200,7 +200,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(password).append("', ")
                 .append("'").append(password).append("');");
 
-        int resultado = ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         return resultado;
     }
 
@@ -264,10 +264,8 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-        if (emple != null) {
-            return emple;
-        }
-        return null;
+        
+        return emple;
     }
 
     /**
@@ -351,7 +349,7 @@ public class ObjetoBaseDatos {
                 .append("';");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -518,18 +516,14 @@ public class ObjetoBaseDatos {
 
                 id = result.getInt("id");
                 p = result.getString("password");
-//                System.out.println("password" + password);
             }
             char[] pass = PuntoVenta.Ventanas.LogIn.jpwContrasena.getPassword();
 
             String passString = new String(pass);
-//            System.out.println("password2" + pass);
-            if (passString.equals(p)) {
-//                System.out.println("password3" + p);
-
-            } else {
+            
+            if (!passString.equals(p)) {
                 return -1;
-            }
+            } 
         } catch (Exception e) {
             e.printStackTrace();
             id = -1;
@@ -594,7 +588,7 @@ public class ObjetoBaseDatos {
                 .append(";");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -619,7 +613,7 @@ public class ObjetoBaseDatos {
         int[] idTelefonos = crearTelefonosCliente(cliente.getId(), cliente.getListaTelefonos());
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -631,10 +625,15 @@ public class ObjetoBaseDatos {
     /**
      * Actualiza la informacion de un empleado basandose en el ModeloEmpleado.
      *
-     * @param empleado
+     * @param cliente
      * @return
      */
     public int actualizarClienteAdmin(ModeloCliente cliente) {
+        /* Konstanza:
+            - ¡¿Qué es un 'ClienteAdmin'?!
+            - El nombre dice que actualiza cliente pero el query es para empleados
+            - El argumento de la función debería ser el modelo de empleado
+        */
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
         sqlQuery.append("UPDATE ")
@@ -649,7 +648,7 @@ public class ObjetoBaseDatos {
                 .append(";");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -707,7 +706,7 @@ public class ObjetoBaseDatos {
      */
     public int getIdEstadoCaja(int idCaja) {
         int idEstadoCaja = -1;
-        ResultSet rs = null;
+        ResultSet rs;
         String fecha_cierre = "";
 
         StringBuilder sqlQuery = new StringBuilder();
@@ -738,7 +737,7 @@ public class ObjetoBaseDatos {
     }
 
     public ArrayList<HashMap<String, String>> getArrayListEmpleado() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         HashMap<String, String> map;
@@ -752,7 +751,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnasEmpleado) {
                     map.put(columna, rs.getString(columna));
                 }
@@ -778,7 +777,7 @@ public class ObjetoBaseDatos {
      * @return Arraylist de HashMap
      */
     public ArrayList<HashMap<String, String>> getArrayListEstadoCaja(int idCaja) {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
         String[] columnas = {"id", "empleado", "apertura", "cierre"};
@@ -799,7 +798,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
                 for (String columna : columnas) {
                     row.put(columna, rs.getString(columna));
                 }
@@ -814,7 +813,7 @@ public class ObjetoBaseDatos {
     }
 
     public ArrayList<HashMap<String, String>> getArrayListFactura() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
 //        StringBuilder sqlQuery = new StringBuilder();
 //        String[] columnas = {"codigo_factura", "cliente", "fecha_hora", "monto"};
@@ -825,9 +824,9 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.ejecutarSelect(sql1);
             ResultSetMetaData meta = rs.getMetaData();
             while (rs.next()) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
                 for (int i = 1; i < meta.getColumnCount() + 1; i++) {
-                    String codigo = "";
+                    String codigo;
                     if ("codigo_factura".equals(meta.getColumnName(i))) {
                         codigo = rs.getString(i);
                         while (codigo.length() < 10) {
@@ -857,7 +856,7 @@ public class ObjetoBaseDatos {
      * @return Arraylist de HashMap
      */
     public ArrayList<HashMap<String, String>> getArrayListDesgloseMoneda() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
         String[] columnas = {"id", "valor", "descripcion"};
@@ -871,7 +870,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                HashMap<String, String> row = new HashMap<String, String>();
+                HashMap<String, String> row = new HashMap<>();
                 for (String columna : columnas) {
                     row.put(columna, rs.getString(columna));
                 }
@@ -896,7 +895,7 @@ public class ObjetoBaseDatos {
         if (idVenta <= 0) {
             return null;
         }
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
@@ -924,7 +923,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnaProducto) {
                     if (("total".equals(columna) || "impuesto".equals(columna) || "pvp".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
@@ -957,7 +956,7 @@ public class ObjetoBaseDatos {
      * @return Arraylist de HashMap
      */
     public ArrayList<HashMap<String, String>> getArrayListProductos() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
@@ -975,7 +974,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnaProducto) {
                     map.put(columna, rs.getString(columna));
                 }
@@ -991,7 +990,7 @@ public class ObjetoBaseDatos {
     }
 
     public ArrayList<HashMap<String, String>> getArrayListTipoMoneda() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
@@ -1010,7 +1009,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnaTipoMoneda) {
                     map.put(columna, rs.getString(columna));
                 }
@@ -1026,7 +1025,7 @@ public class ObjetoBaseDatos {
     }
 
     public ArrayList<HashMap<String, String>> getArrayListClientes() {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         HashMap<String, String> map;
@@ -1040,7 +1039,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnasCliente) {
                     map.put(columna, rs.getString(columna));
                 }
@@ -1063,7 +1062,7 @@ public class ObjetoBaseDatos {
      * @return
      */
     public ArrayList<HashMap<String, String>> getArrayListCortesCaja(int idEstadoCaja) {
-        ArrayList<HashMap<String, String>> resultado = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
@@ -1086,7 +1085,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
-                map = new HashMap<String, String>();
+                map = new HashMap<>();
                 for (String columna : columnasCorteCaja) {
                     map.put(columna, rs.getString(columna));
                 }
@@ -1110,8 +1109,8 @@ public class ObjetoBaseDatos {
      */
     public HashMap<String, String> getMapCaja(int id) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
-        ResultSet rs = null;
+        HashMap<String, String> map = new HashMap<>();
+        ResultSet rs;
 
         sqlQuery.append("SELECT id, descripcion FROM ")
                 .append(mapSchema.get("stpv")).append(".")
@@ -1146,7 +1145,7 @@ public class ObjetoBaseDatos {
      */
     public HashMap<String, String> getMapCliente(char identificador, String cedula) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         ResultSet rs = null;
         String[] columnaCliente = new String[]{"id", "nombre", "apellido", "direccion", "nacionalidad", "cedula", "correo", "facebook", "twitter"};
 
@@ -1189,7 +1188,7 @@ public class ObjetoBaseDatos {
      */
     public HashMap<String, String> getMapCliente(final int idCliente) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         ResultSet rs = null;
         String[] columnaCliente = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "facebook", "twitter"};
 
@@ -1229,8 +1228,8 @@ public class ObjetoBaseDatos {
      */
     public HashMap<String, String> getMapEmpleado(int id) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
-        ResultSet rs = null;
+        HashMap<String, String> map = new HashMap<>();
+        ResultSet rs;
 
         String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "password"};
         String[] columnaCargo = new String[]{"descripcion"};
@@ -1275,8 +1274,8 @@ public class ObjetoBaseDatos {
 
     public HashMap<String, String> getMapUsuarioSistema(int idEmpleado) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
-        ResultSet rs = null;
+        HashMap<String, String> map = new HashMap<>();
+        ResultSet rs;
 
         String[] columnaUsuarioSistema = new String[]{"usuario"};
 
@@ -1319,7 +1318,7 @@ public class ObjetoBaseDatos {
      */
     public HashMap<String, String> getMapProducto(String codigoBarra) {
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
         String[] columnaProducto = {"id", "codigo_barra", "descripcion", "stockminimo", "stockmaximo", "limitedeventaporpersona", "puntodepedido", "costoxunidad", "margendeganancia", "baseimponible", "fecha_actualizacion", "impuesto", "pvp"};
 
@@ -1475,7 +1474,7 @@ public class ObjetoBaseDatos {
     public XBigDecimal getTotalEstadoCaja(int idEstadoCaja) {
         ResultSet rs;
         XBigDecimal resultado = new XBigDecimal(0);
-        XBigDecimal acum = new XBigDecimal(0);
+        XBigDecimal acum;
         String sql = "SELECT v.total AS total FROM stpv.venta AS v LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.corte_caja is null";
 
         try {
@@ -1503,7 +1502,7 @@ public class ObjetoBaseDatos {
     public XBigDecimal getTotalEstadoCajaCierre(int idEstadoCaja) {
         ResultSet rs;
         XBigDecimal resultado = new XBigDecimal(0);
-        XBigDecimal acum = new XBigDecimal(0);
+        XBigDecimal acum;
         String sql = "SELECT v.total AS total FROM stpv.venta AS v LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.cierre_caja is null";
 
         try {
@@ -1661,7 +1660,7 @@ public class ObjetoBaseDatos {
     /**
      * Obtiene el limite de cantidad maxima de un producto.
      *
-     * @param idEstadoCaja
+     * @param codigoBarra
      * @return XBigDecimal con el limite maximo del producto.
      */
     public int getLimiteMaximoProducto(String codigoBarra) {
@@ -1748,7 +1747,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(cedula).append("', ")
                 .append("'").append(direccion).append("');");
 
-        int resultado = ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
 
         return resultado;
     }
@@ -1767,7 +1766,7 @@ public class ObjetoBaseDatos {
         }
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
-        int cantidadTelefonos = ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+        int cantidadTelefonos = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         for (int i = 0; i < resultado.length; i++) {
             resultado[i] = cantidadTelefonos + i;
             sqlQuery = new StringBuilder();
@@ -1777,7 +1776,7 @@ public class ObjetoBaseDatos {
                     .append("(cliente_id,telefono_id) VALUES ")
                     .append("('").append(idCliente).append("',")
                     .append("'").append(resultado[i]).append("');");
-            int idTabla = ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            int idTabla = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         }
         return resultado;
     }
@@ -1835,7 +1834,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -1878,10 +1877,11 @@ public class ObjetoBaseDatos {
      * @param codigo
      * @param cantidad
      * @return
+     * @throws java.sql.SQLException
      */
     public int descontarCantidad(String codigo, double cantidad) throws SQLException {
 
-        ResultSet rs = null;
+        ResultSet rs;
         int resultado = -1;
         double can = Double.parseDouble((String) PuntoVenta.Ventanas.Venta.txtCantidad.getText());
 
@@ -1889,7 +1889,8 @@ public class ObjetoBaseDatos {
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("inventario")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" SET cantidad = " + cantidad + " - ").append(can)
+                .append(" SET cantidad = " + cantidad + " - ")
+                .append(can)
                 .append(" WHERE codigo_barra = '").append(codigo).append("'")
                 .append(";");
         try {
@@ -1916,10 +1917,10 @@ public class ObjetoBaseDatos {
      * @param codigo
      * @param cantidad
      * @return
+     * @throws java.sql.SQLException
      */
     public int contarCantidad(String codigo, double cantidad) throws SQLException {
-
-        ResultSet rs = null;
+        ResultSet rs;
         int resultado = -1;
         double can = PuntoVenta.Ventanas.Venta.jtbVenta.getModel().getRowCount();
 
@@ -1927,7 +1928,8 @@ public class ObjetoBaseDatos {
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("inventario")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" SET cantidad =" + cantidad + " + ").append(can)
+                .append(" SET cantidad =" + cantidad + " + ")
+                .append(can)
                 .append(" WHERE codigo_barra = '").append(codigo).append("'")
                 .append(";");
         try {
@@ -1953,6 +1955,8 @@ public class ObjetoBaseDatos {
      *
      * @param idEstadoCaja EstadoCaja a la que se aplicará el corte.
      * @param monto Monto total del corte
+     * @param excedente
+     * @param restante
      * @return
      */
     public int crearCorteCaja(int idEstadoCaja, XBigDecimal monto, XBigDecimal excedente, XBigDecimal restante) {
@@ -1974,7 +1978,7 @@ public class ObjetoBaseDatos {
         try {
             postgreSQL.conectar();
 //            System.out.println(sqlQuery.toString());
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2005,7 +2009,7 @@ public class ObjetoBaseDatos {
         try {
 //            System.out.println(sqlQuery.toString());
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2063,7 +2067,7 @@ public class ObjetoBaseDatos {
     /**
      * Método para crear un desglose de un cierre de caja dado un id y un monto.
      *
-     * @param idCorteCaja
+     * @param idCaja
      * @param idMoneda
      * @param cantidadMoneda
      * @param monto
@@ -2083,7 +2087,7 @@ public class ObjetoBaseDatos {
                 .append(monto).append(");");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2114,7 +2118,7 @@ public class ObjetoBaseDatos {
                 .append(new Timestamp(date.getTime())).append("');");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2142,7 +2146,7 @@ public class ObjetoBaseDatos {
                 .append(idVenta).append(");");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2203,7 +2207,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2287,7 +2291,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2317,7 +2321,7 @@ public class ObjetoBaseDatos {
                 .append(" AND producto_id=").append(idProducto).append(";");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2361,7 +2365,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2393,7 +2397,7 @@ public class ObjetoBaseDatos {
 
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2422,7 +2426,7 @@ public class ObjetoBaseDatos {
 
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2505,7 +2509,7 @@ public class ObjetoBaseDatos {
     }
 
     public void guardarPagos(int idventa, List<ValorPagos> valor) {
-        String sql = "";
+        String sql;
         for (ValorPagos vp : valor) {
             sql = "INSERT into stpv.pago (id_venta,tipopago,monto,fecha_hora) VALUES(" + idventa + ",'" + vp.getTipo() + "','" + vp.getMonto() + "','" + vp.getFecha() + "');";
             System.out.println(sql);
@@ -2524,7 +2528,8 @@ public class ObjetoBaseDatos {
      * Actualiza un registro de venta con su correspondiente IVA y Total.
      *
      * @param idVenta
-     * @param estadoVenta
+     * @param iva
+     * @param total
      * @return
      */
     public int setMontoVenta(int idVenta, String iva, String total) {
@@ -2540,7 +2545,7 @@ public class ObjetoBaseDatos {
                 .append(";");
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(sqlQuery.toString());
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2553,7 +2558,7 @@ public class ObjetoBaseDatos {
      * Muestra el nombre del empleado en la caja
      *
      * @param cedula cedula del empleado que se mostrara.
-     * @param password Codigo del producto que se desee eliminar.
+     * @param password 
      * @return
      */
     public int setEmpleadoCaja(String cedula, char[] password) {
@@ -2666,11 +2671,14 @@ public class ObjetoBaseDatos {
         return query;
     }
 
-    private int ejecutarManipulacionDeDatosSimpple(String query) {
-        int resultado = -1;
+    private int ejecutarManipulacionDeDatosSimple(String query) {
+        /* Konstanza: el -1 está de más, 
+        ya que en caso de error la función 'postgreSQL.ejecutarManipulacionDeDatosSimple(query)' retorna -1*/
+        int resultado = -1; 
+        
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimpple(query);
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(query);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2680,6 +2688,8 @@ public class ObjetoBaseDatos {
     }
 
     public String direccionCliente(String cedula) {
+        // Konstanza: mejorar query
+        
         String direccion = "";
         try {
             postgreSQL.conectar();
@@ -2698,7 +2708,6 @@ public class ObjetoBaseDatos {
     }
 
     public List<reporte1> reimprimirfac(String codigo) {
-        DecimalFormat redondeo = new DecimalFormat("0.00");
         List lista = new ArrayList();
         Empresa emp;
         ResultSet rs;

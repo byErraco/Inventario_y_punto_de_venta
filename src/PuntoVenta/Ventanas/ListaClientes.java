@@ -265,7 +265,7 @@ public class ListaClientes extends javax.swing.JInternalFrame {
             venta.getTxtDocumento().setText(jtbListaCliente.getValueAt(row, 0).toString());
             String documento = jtbListaCliente.getValueAt(jtbListaCliente.getSelectedRow(), 0).toString();
             
-            // KONSTANZA, aquí hay un error, el documento tiene el número sin el tipo, no hay '-'
+            // Konstanza: aquí hay un error, el documento tiene el número sin el tipo, no hay '-'
             venta.getCmbTipoDocumento().setSelectedItem(documento.split("-")[0]);
             venta.getTxtDocumento().setText(documento.split("-")[1]);
             this.cerrarVentana();

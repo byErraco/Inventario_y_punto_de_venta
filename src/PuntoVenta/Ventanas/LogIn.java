@@ -10,14 +10,12 @@ import javax.swing.JOptionPane;
 public class LogIn extends javax.swing.JFrame {
     static Object txtNombreUsuario;
     
-
     public MenuPrincipal menuPrincipal;
 
     String contrasena = "";
-    int vali=0;
+    int vali = 0;
+    
     public LogIn(MenuPrincipal menuPrincipal) {
-         
-
         initComponents();
    
         this.menuPrincipal = menuPrincipal;
@@ -246,21 +244,15 @@ public class LogIn extends javax.swing.JFrame {
     private static javax.swing.JTextField txtCedula;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Método para asignar usuario y clave automatico.
-     */
+    /* Konstanza: nueva función para entrar al sistema. 
+       La primera función 'entrarProgramador' no servía, los valores que asignaba a
+       las variables no están en la base de datos.
+    */
     private void entrarProgramador() {
-        String nombre = "inverdata@inverdata.com.ve";
-       String password = "1234";
-        txtCedula.setText(nombre);
-        jpwContrasena.setText(password);
-    }
-
-    // KONSTANZA NUEVA FUNCION
-    private void entrarProgramador2() {
         txtCedula.setText("1");
         jpwContrasena.setText("1");
     }
+    
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables
      * conf y ctrl utiliza las variable del menuPrincipal llamadas configuracion
@@ -271,7 +263,7 @@ public class LogIn extends javax.swing.JFrame {
      *
      */
     public void ingresarSistema() {
-        entrarProgramador2();
+        entrarProgramador();
         
         String cedula = txtCedula.getText();
         char[] arrayPassword = jpwContrasena.getPassword();
