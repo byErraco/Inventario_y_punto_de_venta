@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<queryString>
+		<![CDATA[select to_char(abrir_caja.id,'00000000') as id,nombres || ' '||apellidos as nombre
+,maquina,
+COALESCE(round(monto_incial::numeric,2),0.00 )as monto,
+COALESCE(round(((Select precio from calcular(id))+(Select impuesto from calcular(id)))::numeric,2),0.00)
+as venta,
+COALESCE(round((Select precionoexentpo from vernoexento(id))::numeric,2),0.00) as precionoexento,
+COALESCE(round((Select precioexentpo from verexento(id))::numeric,2),0.00) as precioexento,
+COALESCE(round((Select impuesto from calcular(id))::numeric, 2),0.00) as iva,
+to_char(apertura, 'DD/MM/YYYY') ||'   '||to_char(apertura, 'HH12:MI:SS:pm') as apertura,
+to_char(cierre, 'DD/MM/YYYY') ||'   '||to_char(cierre, 'HH12:MI:SS:pm') as cierre,
+CASE WHEN estatus='t' THEN 'Caja abierta'     WHEN estatus='f' THEN 'Caja cerrada'     END as   estatus,
+COALESCE((select efectivo from calcularpago(id)),0.00) as efectivo,
+COALESCE((select debito from calcularpago(id)),0.00) as debito,
+COALESCE((select credito from calcularpago(id)),0.00) as credito,
+COALESCE((select ticketalimentacion from calcularpago(id)),0.00) as ticketalimentacion,
+COALESCE((SELECT sum(operacion_caja.monto) FROM operacion_caja where  operacion_caja.tipo_operacion='Entrada' and id_apertura_caja=abrir_caja.id),0.00) as entrada,  COALESCE((SELECT sum(operacion_caja.monto) FROM operacion_caja where  operacion_caja.tipo_operacion='Salida' and id_apertura_caja=abrir_caja.id),0.00) as salida
+ from abrir_caja inner join schema_usuario.tbl_usuario on (cedula_usu=ci) where to_char(apertura, 'DD/MM/YYYY')='24/09/2013'  and cedula_usu=123456789 and estatus='t' order by id desc;]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="maquina" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="venta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precionoexento" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precioexento" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="iva" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apertura" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cierre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="efectivo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="debito" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="credito" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ticketalimentacion" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="entrada" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="salida" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
