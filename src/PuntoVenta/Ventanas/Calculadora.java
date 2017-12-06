@@ -30,12 +30,12 @@ public class Calculadora extends javax.swing.JInternalFrame {
     public Calculadora(MenuPrincipal menu) {
         this.menu = menu;
         initComponents();
+        
         this.setTitle("Calculadora");
 
         Action actBtnIgual = new AbstractAction("btnIgualAction") {
             @Override
             public void actionPerformed(ActionEvent e) {
- 
                 btnIgualActionPerformed(e);
             }
         };
@@ -152,8 +152,6 @@ public class Calculadora extends javax.swing.JInternalFrame {
             }
         };
         
-
-      
         actBtnIgual.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
         jPanel1.getActionMap().put("btnIgualAction", actBtnIgual);
         jPanel1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actBtnIgual.getValue(Action.ACTION_COMMAND_KEY), "btnIgualAction");
@@ -575,20 +573,17 @@ public class Calculadora extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnRestarActionPerformed
 
     private void btnSieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSieteActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "7");
     }//GEN-LAST:event_btnSieteActionPerformed
 
     private void btnOchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOchoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "8");
     }//GEN-LAST:event_btnOchoActionPerformed
 
     private void btnNueveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNueveActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "9");
     }//GEN-LAST:event_btnNueveActionPerformed
 
@@ -602,50 +597,42 @@ public class Calculadora extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSumarActionPerformed
 
     private void btnCuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuatroActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "4");
     }//GEN-LAST:event_btnCuatroActionPerformed
 
     private void btnCincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCincoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "5");
     }//GEN-LAST:event_btnCincoActionPerformed
 
     private void btnSeisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeisActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "6");
     }//GEN-LAST:event_btnSeisActionPerformed
 
     private void btnUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "1");
     }//GEN-LAST:event_btnUnoActionPerformed
 
     private void btnDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDosActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "2");
     }//GEN-LAST:event_btnDosActionPerformed
 
     private void btnTresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTresActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "3");
     }//GEN-LAST:event_btnTresActionPerformed
 
     private void btnCeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCeroActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "0");
     }//GEN-LAST:event_btnCeroActionPerformed
 
     private void btnPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPuntoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + ".");
     }//GEN-LAST:event_btnPuntoActionPerformed
 

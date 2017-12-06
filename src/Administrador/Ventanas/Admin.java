@@ -54,6 +54,7 @@ public class Admin extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form Admin
+     * @param menuPrincipal
      */
     public Admin(MenuPrincipal menuPrincipal) {
 

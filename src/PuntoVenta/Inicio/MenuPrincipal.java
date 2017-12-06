@@ -13,7 +13,7 @@ import PuntoVenta.Ventanas.Acerca;
 import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
-import PuntoVenta.Ventanas.Cierre_Caja;
+import PuntoVenta.Ventanas.CierreCaja;
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -48,7 +48,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Admin admin;
     public bloqueo2 bloqueo;
     public Empresa empresa;
-    public Cierre_Caja cierre;
+    public CierreCaja cierre;
 
     //OTRAS VENTANAS
     //UTILIZAR DESPUES PARA SISTEMA DE CAMBIO DE PANTALLAS

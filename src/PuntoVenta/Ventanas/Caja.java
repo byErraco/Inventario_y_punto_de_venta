@@ -26,9 +26,8 @@ public class Caja extends javax.swing.JInternalFrame {
     public String fecha;
     static DecimalFormat nf = new DecimalFormat("###,###,###,###.00");
 
-    private CorteCaja corteCaja;
-    private Cierre_Caja cierre;
-    private LogIn logIn;
+    private CorteCaja ventanaCorte;
+    private CierreCaja ventanaCierre;
 
     /**
      *
@@ -69,7 +68,7 @@ public class Caja extends javax.swing.JInternalFrame {
         this.dispose();
     }
 
-    public void crearHotKeys() {
+    private void crearHotKeys() {
         Action actAbrirCaja = new AbstractAction("actionAbrirCaja") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -206,69 +205,33 @@ public class Caja extends javax.swing.JInternalFrame {
      */
     public void abrirVentanaCorteCaja() {
         if (menuPrincipal.isEstadoCaja()) {
-            boolean probar;
-            if (corteCaja != null) {
-                corteCaja.dispose();
-                probar = corteCaja.isClosed();
-            } else {
-                probar = true;
-            }
-            if (probar) {
-                corteCaja = new CorteCaja(this);
+            if (ventanaCorte != null) {
+                JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
+            } 
+            else {
+                ventanaCorte = new CorteCaja(this);
 
                 Dimension desktopSize = menuPrincipal.panel.getSize();
-                Dimension jInternalFrameSize = corteCaja.getSize();
-                corteCaja.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
-
-                menuPrincipal.panel.add(corteCaja);
-                corteCaja.show();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
+                Dimension jInternalFrameSize = ventanaCorte.getSize();
+                ventanaCorte.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                                         (desktopSize.height - jInternalFrameSize.height) / 2);
+                menuPrincipal.panel.add(ventanaCorte);
+                ventanaCorte.show();
             }
-
         } else {
             Utilidades.Sonidos.beep();
         }
     }
 
-    /**
-     * Desglosa Moneda.
-     */
-//    private void abrirVentanaDesgloseMoneda(boolean aFlag) {
-//        if (menuPrincipal.isEstadoCaja()) {
-//
-//            if (menuPrincipal.estacerrado(desgloseMoneda)) {
-//                desgloseMoneda = new DesgloseMoneda(this, aFlag);
-//
-//                Dimension desktopSize = menuPrincipal.panel.getSize();
-//                Dimension jInternalFrameSize = desgloseMoneda.getSize();
-//                desgloseMoneda.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-//                        (desktopSize.height - jInternalFrameSize.height) / 2);
-//
-//                menuPrincipal.panel.add(desgloseMoneda);
-//                desgloseMoneda.show();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
-//            }
-//
-//        } else {
-//            Utilidades.Sonidos.beep();
-//        }
-//    }
     private void abrirVentanaCierre() {
-        if (menuPrincipal.isEstadoCaja()) {
-            //Cual es la pantalla para ver el flujo de la caja
-            if (menuPrincipal.estacerrado(cierre)) {
-                cierre = new Cierre_Caja(this);
-                Dimension desktopSize = menuPrincipal.panel.getSize();
-                Dimension jInternalFrameSize = cierre.getSize();
-                cierre.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
-//
-                menuPrincipal.panel.add(cierre);
-                cierre.show();
-            }
+        if (menuPrincipal.isEstadoCaja() && menuPrincipal.estacerrado(ventanaCierre)) {
+            ventanaCierre = new CierreCaja(this);
+            Dimension desktopSize = menuPrincipal.panel.getSize();
+            Dimension jInternalFrameSize = ventanaCierre.getSize();
+            ventanaCierre.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                                (desktopSize.height - jInternalFrameSize.height) / 2);
+            menuPrincipal.panel.add(ventanaCierre);
+            ventanaCierre.show();
         }
     }
 
@@ -296,23 +259,6 @@ public class Caja extends javax.swing.JInternalFrame {
         btnCorte = new javax.swing.JButton();
 
         setClosable(true);
-        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameClosing(evt);
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-        });
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
         pnlContenedor.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(172, 162, 162), null, null));
@@ -331,9 +277,6 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
         txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtFiltroKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtFiltroKeyReleased(evt);
             }
@@ -526,25 +469,12 @@ public class Caja extends javax.swing.JInternalFrame {
         jtbResultadoBusqueda.setRowSorter(sorter);
     }//GEN-LAST:event_txtFiltroKeyReleased
 
-    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-
-    }//GEN-LAST:event_formInternalFrameClosing
-
     private void btnCorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteActionPerformed
         abrirVentanaCorteCaja();
     }//GEN-LAST:event_btnCorteActionPerformed
 
-    private void txtFiltroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (jtbResultadoBusqueda.getRowCount() > 0) {
-                jtbResultadoBusqueda.requestFocus();
-                jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
-            }
-        }
-    }//GEN-LAST:event_txtFiltroKeyPressed
-
     private void txtFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltroActionPerformed
-        // TODO add your handling code here:
+        focusResultado();
     }//GEN-LAST:event_txtFiltroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -591,26 +521,25 @@ public class Caja extends javax.swing.JInternalFrame {
     public javax.swing.JTextField getTxtFiltro() {
         return txtFiltro;
     }
-
+    
+    /** Konstanza: 
+     * Nueva función
+     * Cambia el focus a 'jtbResultadoBusqueda'
+     */
+    private void focusResultado() {
+        if (jtbResultadoBusqueda.getRowCount() > 0) {
+            jtbResultadoBusqueda.requestFocus();
+            jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
+        }
+    }
+    
     private void focusPuntoInteres() {
         if (!this.txtFiltro.hasFocus()) {
             this.txtFiltro.requestFocus();
             this.txtFiltro.setSelectionStart(0);
             this.txtFiltro.setSelectionEnd(this.txtFiltro.getText().length());
         } else {
-            txtFiltroKeyPressed(new KeyEvent(this, 0, 0, 0, KeyEvent.VK_ENTER, ' '));
+            focusResultado();
         }
     }
-
-    private void abrirVentanaLogIn() {
-        logIn = new LogIn(menuPrincipal);
-        Dimension desktopSize = menuPrincipal.panel.getSize();
-        Dimension jInternalFrameSize = logIn.getSize();
-        logIn.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-
-        menuPrincipal.panel.add(logIn);
-        logIn.show();
-    }
-
 }

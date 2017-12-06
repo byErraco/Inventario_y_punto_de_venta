@@ -517,7 +517,7 @@ public class ObjetoBaseDatos {
                 id = result.getInt("id");
                 p = result.getString("password");
             }
-            char[] pass = PuntoVenta.Ventanas.LogIn.jpwContrasena.getPassword();
+            char[] pass = PuntoVenta.Ventanas.LogIn.jpwClave.getPassword();
 
             String passString = new String(pass);
             
