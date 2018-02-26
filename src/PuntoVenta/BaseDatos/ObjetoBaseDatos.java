@@ -583,6 +583,11 @@ public class ObjetoBaseDatos {
                 .append(mapTabla.get("empleado"))
                 .append(" SET nombre='").append(empleado.getNombre())
                 .append("', apellido='").append(empleado.getApellido())
+                //Ernesto:los siguientes campos tambien deberian ṕoder ser modificados
+                //.append("', cedula='").append(empleado.getCedula())
+                //.append("', telefono='").append(empleado.getTelefono())
+                //.append("', departamento='").append(empleado.getDepartamento()) NUEVA TABLA DEPARTAMENTO
+                //.append("', password='").append(empleado.getPassword()) CAMPO ELIMINADO
                 .append("', correo='").append(empleado.getCorreo())
                 .append("' WHERE id=").append(empleado.getId())
                 .append(";");
@@ -606,6 +611,10 @@ public class ObjetoBaseDatos {
                 .append(" SET nombre='").append(cliente.getNombre())
                 .append("', apellido='").append(cliente.getApellido())
                 .append("', correo='").append(cliente.getCorreo())
+                //Ernesto:
+                /*.append("', direccion='").append(empleado.getDireccion())
+                .append("', cedula='").append(empleado.getCedula())
+                .append("', telefono='").append(empleado.getTelefono())*/
                 .append("', twitter='").append(cliente.getTwitter())
                 .append("', facebook='").append(cliente.getFacebook())
                 .append("' WHERE id=").append(cliente.getId())
@@ -768,7 +777,7 @@ public class ObjetoBaseDatos {
 
     /**
      * Método que busca los registros de apertura y cierre de una caja
-     * particular y devulve el id, la cedula del empleado que la abrió/cerró, y
+     * particular y devuelve el id, la cedula del empleado que la abrió/cerró, y
      * los datetime de apertura y cierre.
      *
      * NOTA: Probablemente se deba filtrar la busqueda por usuario tambien.
@@ -988,7 +997,8 @@ public class ObjetoBaseDatos {
         }
         return resultado;
     }
-
+        //Ernesto:
+        //devuelve una lista de los tipos de moneda existentes en un arraylist?
     public ArrayList<HashMap<String, String>> getArrayListTipoMoneda() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
@@ -1005,6 +1015,7 @@ public class ObjetoBaseDatos {
         sqlQuery.append(" FROM ")
                 .append(mapSchema.get("stpv")).append(".")
                 .append(mapTabla.get("tipo_moneda")).append(";");
+                //Tabla "tipo_moneda" actualizada a "tipo_pago"
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1380,7 +1391,7 @@ public class ObjetoBaseDatos {
                 .append(" ON v.estado_venta_id=ev.id")
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta__pago")).append(" AS vp")
+                .append(mapTabla.get("venta_pago")).append(" AS vp")
                 .append(" ON v.id=vp.venta_id")
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("stpv")).append(".")
@@ -1523,7 +1534,7 @@ public class ObjetoBaseDatos {
             postgreSQL.desconectar();
         }
         resultado = new XBigDecimal(resultado.toString().replaceAll("-", ""));
-//        System.out.println("REsultado valor xbd" + resultado);
+//        System.out.println("Resultado valor xbd" + resultado);
         return resultado;
     }
 
@@ -1534,6 +1545,8 @@ public class ObjetoBaseDatos {
         double tdd = 0;
         double tdc = 0;
         double ctk = 0;
+        //Ernesto:
+        //Anotacion: no esta especificado el alias para "p" y "v" en el siguiente Query
         String sql = "SELECT p.tipopago,p.monto FROM stpv.pago p INNER JOIN stpv.venta v ON p.id_venta=v.id LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.cierre_caja is null";
 
         try {
@@ -1576,6 +1589,8 @@ public class ObjetoBaseDatos {
         double tdc = 0;
         double ctk = 0;
         for (Integer id : lista) {
+            //Ernesto:
+            //Anotacion: no esta especificado el alias para "p" y "v" en el siguiente Query
             String sql = "SELECT p.tipopago,p.monto FROM stpv.venta v INNER JOIN stpv.pago p on p.id_venta =v.id WHERE v.id='" + id + "';";
 //            System.out.println(sql);
             try {
@@ -1617,6 +1632,8 @@ public class ObjetoBaseDatos {
         ResultSet rs;
 //        List<ValorPagos> resultado = new ArrayList();
         double monto = 0;
+        //Ernesto:
+        //Anotacion: no esta especificado el alias para "cc" en el siguiente Query
         String sql = "SELECT cc.monto_corte FROM stpv.corte_caja cc WHERE cc.estado_caja_id=" + idEstadoCaja + ";";
 
         try {
@@ -1740,6 +1757,9 @@ public class ObjetoBaseDatos {
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("stpv")).append(".")
                 .append(mapTabla.get("cliente"))
+                //Ernesto:
+                //Tabla cliente fue eliminada en version Express
+                //Quedan valores pendientes por agregar a la tabla correspondiente de este metodo
                 .append("(nombre, apellido, nacionalidad, cedula, direccion) VALUES (")
                 .append("'").append(nombre).append("', ")
                 .append("'").append(apellido).append("', ")
@@ -1752,6 +1772,8 @@ public class ObjetoBaseDatos {
         return resultado;
     }
 
+    
+    //Este metodo ya no es necesario, la tabla "telefono" fue eliminada del nuevo modelo de BBDD
     public int[] crearTelefonosCliente(int idCliente, List<String> listaTelefonos) {
         StringBuilder sqlQuery = new StringBuilder();
         int[] resultado = new int[listaTelefonos.size()];
@@ -1919,6 +1941,9 @@ public class ObjetoBaseDatos {
      * @return
      * @throws java.sql.SQLException
      */
+    //Ernesto:
+    //Este metodo es igual al anterior con la diferencia que este Query no emplea
+    //la palabra reservada SUM para sumar, solo UPDATE
     public int contarCantidad(String codigo, double cantidad) throws SQLException {
         ResultSet rs;
         int resultado = -1;
@@ -2019,6 +2044,8 @@ public class ObjetoBaseDatos {
     }
 
     public void ActualizarCorteEnVenta(int idEstadoCaja) {
+        //Ernesto:
+        //Agregar alias para "v"
         String sql = "UPDATE stpv.venta v SET corte_caja = true WHERE v.estado_caja_id=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
@@ -2033,6 +2060,8 @@ public class ObjetoBaseDatos {
     }
 
     public void ActualizarCierreEnVenta(int idEstadoCaja) {
+        //Ernesto:
+        //Agregar alias para "v"
         String sql = "UPDATE stpv.venta v SET cierre_caja = true WHERE v.estado_caja_id=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
@@ -2049,6 +2078,8 @@ public class ObjetoBaseDatos {
     public String montoInicial(int idEstadoCaja) {
         ResultSet rs;
         String monto = "";
+        //Ernesto:
+        //Agregar alias para "ec"
         String sql = "SELECT ec.monto_apertura FROM stpv.estado_caja ec WHERE ec.id=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
@@ -2079,7 +2110,7 @@ public class ObjetoBaseDatos {
 
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("desglose_caja_cierre"))
+                .append(mapTabla.get("desglose_caja_cierre"))//Esta tabla no existe
                 .append("(cierre_caja_id, moneda_id, cantidad_moneda, monto) VALUES (")
                 .append(idCaja).append(", ")
                 .append(idMoneda).append(", ")
@@ -2140,6 +2171,10 @@ public class ObjetoBaseDatos {
 
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("stpv")).append(".")
+                //Ernesto:
+                //Doble "__" en nombre de tabla "venta__pago"
+                //esto se repite en los siguientes metodos donde se conecta 
+                //con esta tabla
                 .append(mapTabla.get("venta__pago"))
                 .append("(pago_id, venta_id) VALUES (")
                 .append(idPago).append(", ")
@@ -2375,7 +2410,7 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Hace el UPDATE de la columna excedente de la tabla ESTADO_CAJP
+     * Hace el UPDATE de la columna excedente de la tabla ESTADO_CAJA
      *
      * @param idEstadoCaja Id de la tabla estado_caja, en caso de ser 0 se asume
      * que la tabla no existe y realiza un insert
@@ -2492,7 +2527,8 @@ public class ObjetoBaseDatos {
         }
         return true;
     }
-
+    //Ernesto:
+    //Campo "iva" fue reemplazado por "impuesto"
     public void actualizaiva(int id, String iva, XBigDecimal monto, double pagoconinva, double pagosiniva, String totalpag, String cambio, int idemp) {
         SimpleDateFormat sdf = new SimpleDateFormat("Y-MM-dd hh:mm a");
         String fecha = sdf.format(new Date());
@@ -2711,7 +2747,7 @@ public class ObjetoBaseDatos {
         List lista = new ArrayList();
         Empresa emp;
         ResultSet rs;
-        emp = datosEmpresas();
+        emp = datosEmpresas();//Ernesto: /*REVISAR QUERY Faltan asignaciones de alias*/
         String sql = "SELECT DISTINCT CONCAT(c.nombre,' ',c.apellido) as nombre,c.cedula,c.direccion,"
                 + "ven.codigo_factura,ven.total_exento,ven.total_no_exento,ven.iva,ven.total,ven.totalpag,ven.cambio,"
                 + "pag.tipopago,pag.monto,vp.cantidad_producto, CONCAT (e.nombre,' ',e.apellido) as nombE,"
