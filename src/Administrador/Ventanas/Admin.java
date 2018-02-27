@@ -936,7 +936,7 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaEmpleado.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el empleado?: " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
             if (seleccion == 0) {
                 String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
                 menuPrincipal.getOBD().eliminarEmpleado(cedula);
@@ -952,17 +952,11 @@ public class Admin extends javax.swing.JInternalFrame {
         int numeroRow = jtbListaEmpleado.getSelectedRow();
         if (numeroRow < 0) {
             jtbListaEmpleado.setRowSelectionInterval(0, 0);
-            numeroRow = jtbListaEmpleado.getSelectedRow();
         }
-        if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa modificar el empleado?: " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Modificar Empleado");
-            if (seleccion == 0) {
-                String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-                abrirVentanaModificacionEmpleados();
-                Administrador.Ventanas.ModificacionEmpleados.txtDocumento.setText(cedula);
-            } else {
-                jtbListaEmpleado.requestFocus();
-            }
+        else {
+            String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+            abrirVentanaModificacionEmpleados();
+            Administrador.Ventanas.ModificacionEmpleados.txtDocumento.setText(cedula);
         }
     }
 
