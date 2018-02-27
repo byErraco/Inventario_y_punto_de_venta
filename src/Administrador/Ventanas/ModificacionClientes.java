@@ -82,6 +82,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
+        setTitle("Saphiro - Modificar cliente");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

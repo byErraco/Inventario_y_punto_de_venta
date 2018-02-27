@@ -63,7 +63,7 @@ public class VentaTableModel extends ArrayListTableModel {
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        return column == Columnas.Cantidad.ordinal();
+        return false;
     }
 
 }

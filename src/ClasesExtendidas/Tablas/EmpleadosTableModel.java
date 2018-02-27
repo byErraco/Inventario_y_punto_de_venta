@@ -17,7 +17,7 @@ public class EmpleadosTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Cedula("Cedula", "cedula"),
+        Cedula("Cédula", "cedula"),
         Nombre("Nombre", "nombre");
 
         String header;

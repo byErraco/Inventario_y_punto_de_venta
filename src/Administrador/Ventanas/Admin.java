@@ -60,7 +60,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         initComponents();
         this.menuPrincipal = menuPrincipal;
-        this.setTitle("Saphiro - Administracion de Modulos");
         crearHotKeys();
         actualizarTabla();
     }
@@ -130,6 +129,7 @@ public class Admin extends javax.swing.JInternalFrame {
         setBackground(new java.awt.Color(32, 182, 155));
         setClosable(true);
         setForeground(java.awt.Color.cyan);
+        setTitle("Saphiro - Administración de módulos");
 
         jToolBarAdmin.setBackground(new java.awt.Color(32, 182, 155));
         jToolBarAdmin.setFloatable(false);
@@ -186,7 +186,7 @@ public class Admin extends javax.swing.JInternalFrame {
         btnParametros.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         btnParametros.setForeground(new java.awt.Color(0, 0, 0));
         btnParametros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01.parametros.png"))); // NOI18N
-        btnParametros.setText("<html><font size=2><center>Parametros<br>F3</center></font></html>");
+        btnParametros.setText("<html><font size=2><center>Parámetros<br>F3</center></font></html>");
         btnParametros.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnParametros.setBorderPainted(false);
         btnParametros.setFocusable(false);
@@ -398,7 +398,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jTextField1.setToolTipText("");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -417,7 +416,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
         jTextField2.setToolTipText("");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -428,7 +426,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
         jTextField4.setToolTipText("");
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -456,7 +453,6 @@ public class Admin extends javax.swing.JInternalFrame {
         Alerta.setForeground(new java.awt.Color(255, 0, 0));
         Alerta.setText("Ej: ####-#######");
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setAutoscrolls(false);
@@ -473,7 +469,6 @@ public class Admin extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel6.setText("Moneda:");
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField3KeyTyped(evt);

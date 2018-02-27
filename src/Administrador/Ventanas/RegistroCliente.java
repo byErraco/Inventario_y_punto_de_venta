@@ -90,7 +90,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Saphiro - Registro Empleados");
+        setTitle("Saphiro - Registrar cliente");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

@@ -93,7 +93,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         txtDepartamento = new javax.swing.JTextField();
 
         setClosable(true);
-        setTitle("Saphiro - Registro Empleados");
+        setTitle("Saphiro - Registrar empleado");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 
@@ -252,10 +252,8 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
                                     .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblCorreo)
                                     .addComponent(lblTelefono)
-                                    .addComponent(lblPassword))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblDepartamento)
+                                    .addComponent(lblPassword)
+                                    .addComponent(lblDepartamento))
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
