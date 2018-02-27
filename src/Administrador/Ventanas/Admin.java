@@ -961,16 +961,10 @@ public class Admin extends javax.swing.JInternalFrame {
             jtbListaCliente.setRowSelectionInterval(0, 0);
             numeroRow = jtbListaCliente.getSelectedRow();
         }
-        if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa modificar el cliente?: " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Modificar cliente");
-            if (seleccion == 0) {
-                String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                abrirVentanaModificacionCliente();
-                Administrador.Ventanas.ModificacionClientes.txtDocumento.setText(cedula);
-
-            } else {
-                jtbListaEmpleado.requestFocus();
-            }
+        else {
+            String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+            abrirVentanaModificacionCliente();
+            Administrador.Ventanas.ModificacionClientes.txtDocumento.setText(cedula);
         }
     }
 
@@ -981,7 +975,7 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaCliente.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el cliente?: " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
                 String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
                 menuPrincipal.getOBD().eliminarCliente(cedula);
@@ -1050,26 +1044,6 @@ public class Admin extends javax.swing.JInternalFrame {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /* //metodo para agarrar datos de la tabla
-    private JTable jtbListaEmpleado;
-    private DefaultTableModel model;
- 
-    public tablaSeleccion()
-    {
-        model = new DefaultTableModel(rowData, columns);
-        table = new JTable(model);
- 
-        setLayout(new BorderLayout());
-        add(new JScrollPane(table), BorderLayout.CENTER);
-    }
-    
-    
-    public Object getSelectedValue()
-    {
-        int col = jtbListaEmpleado.getSelectedColumn();
-        int row = jtbListaEmpleado.getSelectedRow();
-        return jtbListaEmpleado.getModel().getValueAt(row, col);
-    }*/
     private enum Modulo {
 
         EMPLEADOS(1, "actionEmpleados"),
