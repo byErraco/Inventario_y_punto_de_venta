@@ -48,53 +48,60 @@ public class ObjetoBaseDatos {
      * cambian en la base de datos.
      */
     private void crearMaps() {
-        mapSchema.put("stpv", "stpv");
+        mapSchema.put("spve", "spve");
         mapTabla.put("caja", "caja");
-        mapTabla.put("cargo", "cargo");
-        mapTabla.put("cliente", "cliente");
-        mapTabla.put("cliente__telefono", "cliente__telefono");
+        mapTabla.put("cierre_caja", "cierre_caja");
         mapTabla.put("corte_caja", "corte_caja");
         mapTabla.put("desglose_caja", "desglose_caja");
-        mapTabla.put("desglose_caja_cierre", "desglose_caja_cierre");
-        mapTabla.put("empleado", "empleado");
         mapTabla.put("estado_caja", "estado_caja");
-        mapTabla.put("estado_venta", "estado_venta");
-        mapTabla.put("moneda", "moneda");
-        mapTabla.put("pago", "pago");
-        mapTabla.put("telefono", "telefono");
-        mapTabla.put("tipo_moneda", "tipo_moneda");
-        mapTabla.put("usuario", "usuario_sistema");
+        mapTabla.put("cargo", "cargo");
+        //mapTabla.put("cliente", "cliente");
+        //mapTabla.put("cliente__telefono", "cliente__telefono");
+        mapTabla.put("empleado", "empleado");
+        mapTabla.put("persona", "persona");
+        //mapTabla.put("estado_venta", "estado_venta");
+        //mapTabla.put("moneda", "moneda");
         mapTabla.put("venta", "venta");
-        mapTabla.put("venta__pago", "venta__pago");
-        mapTabla.put("venta__producto", "venta__producto");
-
-        mapSchema.put("inventario", "inventario");
+        mapTabla.put("venta_producto", "venta_producto");
+        mapTabla.put("pago", "pago");
+        //mapTabla.put("telefono", "telefono");
+        mapTabla.put("tipo_pago", "tipo_pago");
         mapTabla.put("producto", "producto");
+        mapTabla.put("ajuste", "ajuste");
+        mapTabla.put("produccion", "produccion");
+        mapTabla.put("compra", "compra");
+        mapTabla.put("producto_componente", "producto_componente");
+        //mapTabla.put("usuario", "usuario_sistema");
+        
+        //mapTabla.put("venta__pago", "venta__pago");
+        
+        //mapSchema.put("inventario", "inventario");
+        //mapTabla.put("producto", "producto");
 
     }
 
     /**
-     * Inserta un cliente en la tabla stpv.cliente.
+     * Inserta un cliente en la tabla spve.persona.
      *
      * @param nombre
      * @param apellido
-     * @param nacionalidad
-     * @param cedula
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      * @param direccion
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearClienteAdmin(String nombre, String apellido, char nacionalidad, String cedula, String direccion, String telefono, String correo) {
+    public int crearPersona(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String direccion, String telefono, String correo) {
         StringBuilder sqlQuery = new StringBuilder();
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("cliente"))
-                .append("(nombre, apellido, direccion, nacionalidad, cedula, correo, telefono) VALUES (")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
+                .append("(nombre, apellido, direccion, tipo_persona, numero_identificacion_persona, correo, telefono) VALUES (")
                 .append("'").append(nombre).append("', ")
                 .append("'").append(apellido).append("', ")
                 .append("'").append(direccion).append("', ")
-                .append("'").append(nacionalidad).append("', ")
-                .append("'").append(cedula).append("', ")
+                .append("'").append(tipo_persona).append("', ")
+                .append("'").append(numero_identificacion_persona).append("', ")
                 .append("'").append(correo).append("', ")
                 .append("'").append(telefono).append("');");
 
@@ -104,29 +111,29 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Modifica un cliente en la tabla stpv.cliente.
+     * Modifica un cliente en la tabla spve.persona.
      *
      * @param nombre
      * @param apellido
-     * @param cedula
+     * @param numero_identificacion_persona
      * @param telefono
      * @param correo
      * @param direccion
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
-    public int modificarCliente(String nombre, String apellido, String direccion, String telefono, String correo, String cedula) {
+    public int modificarPersona(String nombre, String apellido, String direccion, String telefono, String correo, String numero_identificacion_persona) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("cliente"))
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
                 .append(" SET nombre='").append(nombre)
                 .append("', apellido='").append(apellido)
                 .append("', direccion='").append(direccion)
                 .append("', correo='").append(correo)
                 .append("', telefono='").append(telefono)
-                .append("' WHERE cedula='")
-                .append(cedula)
+                .append("' WHERE numero_identificacion_persona='")
+                .append(numero_identificacion_persona)
                 .append("';");
         try {
             postgreSQL.conectar();
@@ -145,19 +152,19 @@ public class ObjetoBaseDatos {
      * no se guarda su id, sino la cedula.
      *
      *
-     * @param cedula Cedula del empleado que se desee eliminar.
+     * @param numero_identificacion_persona Cedula del empleado que se desee eliminar.
      * @return
      */
-    public int eliminarCliente(String cedula) {
+    public int eliminarPersona(String numero_identificacion_persona) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("DELETE FROM ")
-                .append(mapSchema.get("stpv"))
-                .append(".").append(mapTabla.get("cliente"))
-                .append(" WHERE cedula='")
-                .append(cedula)
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("persona"))
+                .append(" WHERE numero_identificacion_persona='")
+                .append(numero_identificacion_persona)
                 .append("';");
 
         try {
@@ -173,35 +180,61 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Inserta un empleado en la tabla stpv.empleado.
+     * Inserta un empleado en la tabla spve.empleado.
      *
      * @param nombre
      * @param apellido
-     * @param nacionalidad
-     * @param cedula
+     * @param tipo_persona
+     * @param numero_identificacion_persona
+     * @param direccion_persona
      * @param telefono
-     * @param correo
+     * @param email_persona
      * @return id del empleado resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearEmpleado(String nombre, String apellido, char nacionalidad, String cedula, String telefono, String correo, int cargo_id, String password, String departamento) {
+    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono, String email_persona, String direccion_persona) {
         StringBuilder sqlQuery = new StringBuilder();
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("empleado"))
-                .append("(nombre, apellido, nacionalidad, cedula, telefono, correo, cargo_id, password, departamento) VALUES (")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
+                .append("(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona) VALUES (")
                 .append("'").append(nombre).append("', ")
                 .append("'").append(apellido).append("', ")
-                .append("'").append(nacionalidad).append("', ")
-                .append("'").append(cedula).append("', ")
+                .append("'").append(tipo_persona).append("', ")
+                .append("'").append(numero_identificacion_persona).append("', ")
                 .append("'").append(telefono).append("', ")
-                .append("'").append(correo).append("', ")
-                .append("'").append(cargo_id).append("', ")
-                .append("'").append(password).append("', ")
-                .append("'").append(password).append("');");
+                .append("'").append(email_persona).append("', ")
+                .append("'").append(direccion_persona).append("', ");
+                //.append("'").append(cargo_id).append("', ")
+                //.append("'").append(password).append("', ")
+                //.append("'").append(password).append("');");
 
         int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         return resultado;
+    }
+    
+    //Ernesto:
+    //Metodo para seleccionar el tipo de cargo que tendrá un empleado
+    public Cargo seleccionarCargo() {
+        ResultSet rs;
+        Cargo cargo = new Cargo();
+
+        String query = "SELECT nombre_cargo FROM stpv.cargo";
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(query);
+            while (rs.next()) {
+                cargo.setCargo(rs.getString("nombre_cargo"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+        if (cargo != null) {
+            return cargo;
+        }
+        return null;
     }
 
     /**
