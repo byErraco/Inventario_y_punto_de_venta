@@ -191,9 +191,9 @@ public class ObjetoBaseDatos {
      * @param email_persona
      * @return id del empleado resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono, String email_persona, String direccion_persona) {
+    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono, String email_persona, String direccion_persona, String id_empleado, String id_cargo, String contraseña, String id_persona) {
         StringBuilder sqlQuery = new StringBuilder();
-
+        seleccionarCargo();
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona"))
@@ -205,6 +205,15 @@ public class ObjetoBaseDatos {
                 .append("'").append(telefono).append("', ")
                 .append("'").append(email_persona).append("', ")
                 .append("'").append(direccion_persona).append("', ");
+        sqlQuery.append("INSERT INTO ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("empleado")) 
+                .append("(id_empleado, id_persona, id_cargo, contraseña) VALUES(")
+                .append("'").append(id_empleado).append("', ")
+                .append("'").append(id_persona).append("', ")
+                .append("'").append(id_cargo).append("', ")
+                .append("'").append(contraseña).append("', ");
+                
                 //.append("'").append(cargo_id).append("', ")
                 //.append("'").append(password).append("', ")
                 //.append("'").append(password).append("');");
@@ -278,19 +287,24 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Empleado emple = new Empleado();
 
-        String query = "SELECT * FROM stpv.empleado where id=" + idEmpleado;
+        String query = "SELECT persona.nombre_persona, persona.apellido_persona, persona.tipo_persona, persona.numero_identificacion_persona, \n" +
+                        "persona.telefono_persona, persona.email_persona, \n" +
+                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
+                        "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
+                        "INNER JOIN spve.cargo ON empleado.id_cargo = cargo.id_cargo WHERE id_empleado =" + idEmpleado;
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
             while (rs.next()) {
-                emple.setId(rs.getString("id"));
-                emple.setNombre(rs.getString("nombre"));
-                emple.setApellido(rs.getString("apellido"));
-                emple.setNacionalidad(rs.getString("nacionalidad"));
-                emple.setCedula(rs.getString("cedula"));
-                emple.setCorreo(rs.getString("correo"));
-                emple.setTelefono(rs.getString("telefono"));
-                emple.setPassword(rs.getString("password"));
+                emple.setId(rs.getString("id_empleado"));
+                emple.setNombre(rs.getString("nombre_persona"));
+                emple.setApellido(rs.getString("apellido_persona"));
+                emple.setNacionalidad(rs.getString("tipo_persona"));
+                emple.setCedula(rs.getString("numero_identificacion_persona"));
+                emple.setCorreo(rs.getString("email_persona"));
+                emple.setTelefono(rs.getString("telefono_persona"));
+                emple.setDireccion(rs.getString("direccion_persona"));
+                //emple.setPassword(rs.getString("password"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -310,7 +324,7 @@ public class ObjetoBaseDatos {
      * @param moneda
      * @param direccion
      */
-    public void ingresoEmp(String nombre, String rif, String telefono, String direccion, String moneda) {
+    /*public void ingresoEmp(String nombre, String rif, String telefono, String direccion, String moneda) {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
         String sql = "SELECT * FROM stpv.empresa";
@@ -349,7 +363,7 @@ public class ObjetoBaseDatos {
             Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
+    }*/
 
     /**
      * Modifica los datos del empleado en la tabla stpv.empleado.
@@ -368,7 +382,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
                 .append(" SET nombre='").append(nombre)
                 .append("', apellido='").append(apellido)

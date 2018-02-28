@@ -16,17 +16,19 @@ public class Empleado {
      String nacionalidad;
      String cedula;
      String correo;
+     String direccion;
      String cargo_id;
      String telefono;
      String password;
 
-    public Empleado(String id, String nombre, String apellido, String nacionalidad, String cedula, String correo, String cargo_id, String telefono, String password) {
+    public Empleado(String id, String nombre, String apellido, String nacionalidad, String cedula, String correo, String direccion, String cargo_id, String telefono, String password) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.nacionalidad = nacionalidad;
         this.cedula = cedula;
         this.correo = correo;
+        this.direccion = direccion;
         this.cargo_id = cargo_id;
         this.telefono = telefono;
         this.password = password;
@@ -81,6 +83,14 @@ public class Empleado {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+    
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String correo) {
+        this.direccion = direccion;
     }
 
     public String getCargo_id() {
