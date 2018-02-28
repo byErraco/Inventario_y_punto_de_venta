@@ -212,7 +212,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(id_empleado).append("', ")
                 .append("'").append(id_persona).append("', ")
                 .append("'").append(id_cargo).append("', ")
-                .append("'").append(contraseña).append("', ");
+                .append("'").append(contraseña);
                 
                 //.append("'").append(cargo_id).append("', ")
                 //.append("'").append(password).append("', ")
@@ -378,20 +378,25 @@ public class ObjetoBaseDatos {
      * @param departamento
      * @return
      */
-    public int modificarEmpleado(String nombre, String apellido, String cedula, String telefono, String correo, int cargo_id, String password, String departamento) {
+    public int modificarEmpleado(String id_cargo, String nombre, String apellido, String cedula, String telefono, String correo, int cargo_id, String password, String departamento) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
+                .append(" SET nombre_persona='").append(nombre)
+                .append("', apellido_persona='").append(apellido)
+                .append("', email_persona='").append(correo)
+                .append("', telefono_persona='").append(telefono)
+                .append("' WHERE numero_identificacion_persona='")
+                .append(cedula)
+                .append("';");
+        sqlQuery.append("UPDATE ")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
-                .append(" SET nombre='").append(nombre)
-                .append("', apellido='").append(apellido)
-                .append("', correo='").append(correo)
-                .append("', cargo_id='").append(cargo_id)
-                .append("', telefono='").append(telefono)
-                .append("', password='").append(password)
-                .append("', departamento='").append(departamento)
-                .append("' WHERE cedula='")
+                .append(" SET id_cargo ='").append(id_cargo)
+                .append("', contraseña='").append(password)
+                .append("' WHERE numero_identificacion_persona='")
                 .append(cedula)
                 .append("';");
         try {
@@ -420,9 +425,9 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("DELETE FROM ")
-                .append(mapSchema.get("stpv"))
+                .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
-                .append(" WHERE cedula='")
+                .append(" WHERE numero_identificacion_persona='")
                 .append(cedula)
                 .append("';");
 
@@ -442,20 +447,20 @@ public class ObjetoBaseDatos {
      * Verifica la existencia de un usuario en la base de datos. -Utiliza el
      * schema "stpv" del mapSchema y la tabla "usuario" del mapTabla.
      *
-     * @param usuario usuario a validar.
+     * @param cedula usuario a validar.
      * @param password del usuario.
      * @return Id del usuario. Si no existe retorna -1
      */
-    public int autenticarUsuario(String usuario, char[] password) {
+    public int autenticarUsuario(String cedula, char[] password) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT empleado_id AS id, password FROM ")
+        sqlQuery.append("SELECT id_empleado AS id, contraseña FROM ")
                 .append(mapSchema.get("stpv"))
-                .append(".").append(mapTabla.get("usuario"))
-                .append(" WHERE email='")
-                .append(usuario)
+                .append(".").append(mapTabla.get("empleado"))
+                .append(" WHERE numero_identificacion_persona='")
+                .append(cedula)
                 .append("';");
 
         try {
@@ -465,7 +470,7 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("password");
+                p = result.getString("contraseña");
             }
             Cripto c = new Cripto(p);
             boolean autenticado = c.validate(new String(password));

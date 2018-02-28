@@ -1,4 +1,0 @@
-﻿INSERT INTO spve.persona (id_persona, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, activo_persona) VALUES ('1' , 'ernesto' , 'rincon' , 'V' , '20944806' , '04266241381' , 'erincongil@gmail.com' , 'mcbo' , '1');
-INSERT INTO spve.cargo (id_cargo, nombre_cargo, activo_cargo) VALUES ('1' , 'gerente' , '1');
-INSERT INTO spve.empleado (id_empleado, id_cargo, id_persona, activo_empleado) VALUES ('1' , '1' ,'1' , '1');
-SELECT persona.id_persona, persona.nombre_persona, persona.apellido_persona AS persona, empleado.id_empleado AS empleado FROM spve.empleado LEFT JOIN spve.persona ON persona.id_persona = empleado.id_empleado--; SELECT cargo.id_cargo, cargo.nombre_cargo AS cargo FROM spve.cargo RIGHT JOIN spve.empleado ON empleado.id_empleado = cargo.id_cargo
