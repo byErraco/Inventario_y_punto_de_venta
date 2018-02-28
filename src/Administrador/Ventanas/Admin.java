@@ -978,7 +978,7 @@ public class Admin extends javax.swing.JInternalFrame {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
                 String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarCliente(cedula);
+                menuPrincipal.getOBD().eliminarPersona(cedula);
                 actualizarTabla();
 
             } else {

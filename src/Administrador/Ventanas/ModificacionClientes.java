@@ -433,7 +433,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
             return;
         }
 
-        idCliente = admin.menuPrincipal.getOBD().modificarCliente(nombre, apellido, direccion, telefono, correo, cedula);
+        idCliente = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, direccion, telefono, correo, cedula);
 
         if (idCliente > 0) {
             HashMap<String, String> mapCliente = admin.menuPrincipal.getOBD().getMapCliente(idCliente);
