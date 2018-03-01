@@ -43,6 +43,11 @@ public class ObjetoBaseDatos {
         crearMaps();
     }
 
+    public static void main(String[] args){
+        ObjetoBaseDatos obd = new ObjetoBaseDatos("localhost:5432", "inverdata", "C1234567c");
+        System.out.println(obd);
+    }
+    
     /**
      * Mapas para no tener que cambiar los nombres de los schemas y tablas si se
      * cambian en la base de datos.
@@ -92,7 +97,8 @@ public class ObjetoBaseDatos {
      */
     public int crearPersona(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String direccion, String telefono, String correo) {
         StringBuilder sqlQuery = new StringBuilder();
-
+        int resultado;
+        
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona"))
@@ -105,7 +111,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(correo).append("', ")
                 .append("'").append(telefono).append("');");
 
-        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
 
         return resultado;
     }
@@ -123,7 +129,8 @@ public class ObjetoBaseDatos {
      */
     public int modificarPersona(String nombre, String apellido, String direccion, String telefono, String correo, String numero_identificacion_persona) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
+        
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona"))
@@ -135,14 +142,9 @@ public class ObjetoBaseDatos {
                 .append("' WHERE numero_identificacion_persona='")
                 .append(numero_identificacion_persona)
                 .append("';");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        
         return resultado;
     }
 
@@ -187,38 +189,26 @@ public class ObjetoBaseDatos {
      * @param tipo_persona
      * @param numero_identificacion_persona
      * @param direccion_persona
-     * @param telefono
+     * @param telefono_persona
      * @param email_persona
+     * @param contraseña
      * @return id del empleado resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono, String email_persona, String direccion_persona, String id_empleado, String id_cargo, String contraseña, String id_persona) {
+    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña) {
         StringBuilder sqlQuery = new StringBuilder();
-        seleccionarCargo();
-        sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("persona"))
-                .append("(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona) VALUES (")
-                .append("'").append(nombre).append("', ")
-                .append("'").append(apellido).append("', ")
-                .append("'").append(tipo_persona).append("', ")
-                .append("'").append(numero_identificacion_persona).append("', ")
-                .append("'").append(telefono).append("', ")
-                .append("'").append(email_persona).append("', ")
-                .append("'").append(direccion_persona).append("', ");
-        sqlQuery.append("INSERT INTO ")
+        int resultado;
+            resultado = crearPersona(nombre, apellido, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
+            if(resultado > 0){
+                sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado")) 
-                .append("(id_empleado, id_persona, id_cargo, contraseña) VALUES(")
-                .append("'").append(id_empleado).append("', ")
-                .append("'").append(id_persona).append("', ")
-                .append("'").append(id_cargo).append("', ")
+                .append("(id_persona, id_cargo, contraseña) VALUES(")
+                .append("'").append(resultado).append("', ")
+                .append("'").append(1).append("', ")
                 .append("'").append(contraseña);
+                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+            }
                 
-                //.append("'").append(cargo_id).append("', ")
-                //.append("'").append(password).append("', ")
-                //.append("'").append(password).append("');");
-
-        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         return resultado;
     }
     
@@ -368,46 +358,37 @@ public class ObjetoBaseDatos {
     /**
      * Modifica los datos del empleado en la tabla stpv.empleado.
      *
-     * @param nombre
-     * @param apellido
-     * @param cedula
-     * @param telefono
-     * @param correo
-     * @param cargo_id
+     * @param id_cargo
+     * @param nombre_persona
+     * @param apellido_persona
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      * @param password
+     * @param email_persona
+     * @param telefono_persona
      * @param departamento
+     * @param direccion_persona
      * @return
      */
-    public int modificarEmpleado(String id_cargo, String nombre, String apellido, String cedula, String telefono, String correo, int cargo_id, String password, String departamento) {
+    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String password, String departamento) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
-        sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("persona"))
-                .append(" SET nombre_persona='").append(nombre)
-                .append("', apellido_persona='").append(apellido)
-                .append("', email_persona='").append(correo)
-                .append("', telefono_persona='").append(telefono)
-                .append("' WHERE numero_identificacion_persona='")
-                .append(cedula)
-                .append("';");
-        sqlQuery.append("UPDATE ")
+        int resultado;
+        
+                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+                if(resultado > 0){
+                modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
+                sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
                 .append(" SET id_cargo ='").append(id_cargo)
                 .append("', contraseña='").append(password)
                 .append("' WHERE numero_identificacion_persona='")
-                .append(cedula)
+                .append(numero_identificacion_persona)
                 .append("';");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
-        return resultado;
+                
+                
+                }
+                return resultado;
     }
 
     /**
@@ -627,59 +608,21 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int actualizarEmpleado(ModeloEmpleado empleado) {
+    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String password, String departamento) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
-        sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("empleado"))
-                .append(" SET nombre='").append(empleado.getNombre())
-                .append("', apellido='").append(empleado.getApellido())
-                //Ernesto:los siguientes campos tambien deberian ṕoder ser modificados
-                //.append("', cedula='").append(empleado.getCedula())
-                //.append("', telefono='").append(empleado.getTelefono())
-                //.append("', departamento='").append(empleado.getDepartamento()) NUEVA TABLA DEPARTAMENTO
-                //.append("', password='").append(empleado.getPassword()) CAMPO ELIMINADO
-                .append("', correo='").append(empleado.getCorreo())
-                .append("' WHERE id=").append(empleado.getId())
-                .append(";");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        int resultado;
+            modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
+            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, password, departamento);
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+       
         return resultado;
     }
 
-    public int actualizarCliente(ModeloCliente cliente) {
+    public int actualizarCliente(ModeloCliente cliente, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
-        sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("cliente"))
-                .append(" SET nombre='").append(cliente.getNombre())
-                .append("', apellido='").append(cliente.getApellido())
-                .append("', correo='").append(cliente.getCorreo())
-                //Ernesto:
-                /*.append("', direccion='").append(empleado.getDireccion())
-                .append("', cedula='").append(empleado.getCedula())
-                .append("', telefono='").append(empleado.getTelefono())*/
-                .append("', twitter='").append(cliente.getTwitter())
-                .append("', facebook='").append(cliente.getFacebook())
-                .append("' WHERE id=").append(cliente.getId())
-                .append(";");
-        int[] idTelefonos = crearTelefonosCliente(cliente.getId(), cliente.getListaTelefonos());
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        int resultado;
+        modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
         return resultado;
     }
 
@@ -696,7 +639,7 @@ public class ObjetoBaseDatos {
             - El argumento de la función debería ser el modelo de empleado
         */
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("stpv")).append(".")
                 .append(mapTabla.get("empleado"))
@@ -707,14 +650,7 @@ public class ObjetoBaseDatos {
                 .append("', telefono='").append(cliente.getTelefono())
                 .append("' WHERE id=").append(cliente.getId())
                 .append(";");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
         return resultado;
 
     }
@@ -1738,9 +1674,9 @@ public class ObjetoBaseDatos {
         int resultado = -1;
 
         sqlQuery.append("SELECT limitedeventaporpersona FROM ")
-                .append(mapSchema.get("inventario")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" WHERE codigo_barra = '").append(codigoBarra).append("'");
+                .append(" WHERE codigo_venta_producto = '").append(codigoBarra).append("'");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1769,13 +1705,13 @@ public class ObjetoBaseDatos {
         sqlQuery.append("SELECT SUM(cc.monto_corte) AS total");
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("corte_caja")).append(" AS cc")
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("stpv")).append(".")
                 .append(mapTabla.get("estado_caja")).append(" AS ec")
-                .append(" ON cc.estado_caja_id=ec.id")
-                .append(" WHERE ec.id=").append(idEstadoCaja).append(";");
+                .append(" ON cc.id_estado_caja=ec.id_estado_caja")
+                .append(" WHERE ec.id_estado_caja=").append(idEstadoCaja).append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1796,37 +1732,30 @@ public class ObjetoBaseDatos {
     /**
      * Inserta un cliente en la tabla stpv.cliente.
      *
-     * @param nombre
-     * @param apellido
-     * @param nacionalidad
-     * @param cedula
-     * @param direccion
+     * 
+     * @param nombre_persona
+     * @param apellido_persona
+     * @param tipo_persona
+     * @param numero_identificacion_persona
+     * @param direccion_persona
+     * @param email_persona
+     * @param telefono_persona
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearCliente(String nombre, String apellido, char nacionalidad, String cedula, String direccion) {
+    public int crearCliente(String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona) {
         StringBuilder sqlQuery = new StringBuilder();
+        int resultado;
+        
+        crearPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
 
-        sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("cliente"))
-                //Ernesto:
-                //Tabla cliente fue eliminada en version Express
-                //Quedan valores pendientes por agregar a la tabla correspondiente de este metodo
-                .append("(nombre, apellido, nacionalidad, cedula, direccion) VALUES (")
-                .append("'").append(nombre).append("', ")
-                .append("'").append(apellido).append("', ")
-                .append("'").append(nacionalidad).append("', ")
-                .append("'").append(cedula).append("', ")
-                .append("'").append(direccion).append("');");
-
-        int resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
 
         return resultado;
     }
 
     
     //Este metodo ya no es necesario, la tabla "telefono" fue eliminada del nuevo modelo de BBDD
-    public int[] crearTelefonosCliente(int idCliente, List<String> listaTelefonos) {
+    /*public int[] crearTelefonosCliente(int idCliente, List<String> listaTelefonos) {
         StringBuilder sqlQuery = new StringBuilder();
         int[] resultado = new int[listaTelefonos.size()];
 
@@ -1853,7 +1782,7 @@ public class ObjetoBaseDatos {
             int idTabla = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
         }
         return resultado;
-    }
+    }*/
 
     /**
      * Realiza un INSERT a la tabla venta-
@@ -1868,17 +1797,17 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
 
-        sqlQuery.append("SELECT id FROM ")
-                .append(mapSchema.get("stpv")).append(".")
+        sqlQuery.append("SELECT id_venta FROM ")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE cliente_id=").append(idCliente)
-                .append(" AND estado_venta_id in (").append(EstadoVenta.EnProceso)
+                .append(" WHERE id_cliente=").append(idCliente)
+                .append(" AND id_estado_venta in (").append(EstadoVenta.EnProceso)
                 .append(",").append(EstadoVenta.Pausada).append(");");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
-                resultado = rs.getInt("id");
+                resultado = rs.getInt("id_venta");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1890,16 +1819,16 @@ public class ObjetoBaseDatos {
 
         if (resultado != -1) {
             sqlQuery.append("UPDATE ")
-                    .append(mapSchema.get("stpv")).append(".")
+                    .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append(" SET estado_caja_id=").append(idEstadoCaja)
+                    .append(" SET estado_venta=").append(idEstadoCaja)
                     .append(" WHERE id=").append(resultado)
                     .append(";");
         } else {
             sqlQuery.append("INSERT INTO ")
-                    .append(mapSchema.get("stpv")).append(".")
+                    .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append("(cliente_id, estado_caja_id, estado_venta_id,fecha_hora) VALUES (")
+                    .append("(id_cliente, estado_venta, fecha_venta) VALUES (")
                     .append(idCliente).append(", ")
                     .append(idEstadoCaja).append(", ")
                     .append(EstadoVenta.EnProceso).append(", ")
@@ -1908,7 +1837,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -1922,11 +1851,11 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         String resultado = "";
         sqlQuery.append("SELECT * FROM ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE cliente_id=").append(idCliente)
-                .append(" AND (estado_venta_id = ").append(EstadoVenta.EnProceso)
-                .append(" OR estado_venta_id = ").append(EstadoVenta.Pausada).append(");");
+                .append(" WHERE id_cliente=").append(idCliente)
+                .append(" AND (estado_venta = ").append(EstadoVenta.EnProceso)
+                .append(" OR estado_venta = ").append(EstadoVenta.Pausada).append(");");
         try {
             //System.out.println(sqlQuery.toString());
             postgreSQL.conectar();
@@ -1961,17 +1890,17 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("inventario")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" SET cantidad = " + cantidad + " - ")
+                .append(" SET cantidad_disponible = " + cantidad + " - ")
                 .append(can)
-                .append(" WHERE codigo_barra = '").append(codigo).append("'")
+                .append(" WHERE codigo_venta_producto = '").append(codigo).append("'")
                 .append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
-                resultado = rs.getInt("codigo_barra");
+                resultado = rs.getInt("codigo_venta_producto");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2003,17 +1932,17 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("inventario")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" SET cantidad =" + cantidad + " + ")
+                .append(" SET cantidad_disponible =" + cantidad + " + ")
                 .append(can)
-                .append(" WHERE codigo_barra = '").append(codigo).append("'")
+                .append(" WHERE codigo_venta_producto = '").append(codigo).append("'")
                 .append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
-                resultado = rs.getInt("codigo_barra");
+                resultado = rs.getInt("codigo_venta_producto");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2039,12 +1968,12 @@ public class ObjetoBaseDatos {
     public int crearCorteCaja(int idEstadoCaja, XBigDecimal monto, XBigDecimal excedente, XBigDecimal restante) {
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("corte_caja"))
-                .append("(estado_caja_id, monto_corte, excedente, restante, fecha_hora) VALUES (")
+                .append("(id_estado_caja, monto_corte, excedente_caja, restante_caja, fecha_corte) VALUES (")
                 .append(idEstadoCaja).append(", ")
                 .append(monto.setScale(2, RoundingMode.UNNECESSARY).toString()).append(", ")
                 .append(excedente.setScale(2, RoundingMode.UNNECESSARY).toString()).append(", ")
@@ -2052,15 +1981,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(new Timestamp(date.getTime()))
                 .append("');");
 
-        try {
-            postgreSQL.conectar();
-//            System.out.println(sqlQuery.toString());
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "corte_caja");
         return resultado;
     }
 
@@ -2074,31 +1995,24 @@ public class ObjetoBaseDatos {
      */
     public int crearDesgloseCaja(int idCorteCaja, String tipo, XBigDecimal monto) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("desglose_caja"))
-                .append("(corte_caja_id, monto,tipopag) VALUES (")
+                .append("(id_corte_caja, monto_desglose_caja,tipo_pago_desglose) VALUES (")
                 .append(idCorteCaja).append(", ")
                 .append(monto).append(",' ")
                 .append(tipo).append("');");
-        try {
-//            System.out.println(sqlQuery.toString());
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "desglose_caja");
+  
         return resultado;
     }
 
     public void ActualizarCorteEnVenta(int idEstadoCaja) {
         //Ernesto:
         //Agregar alias para "v"
-        String sql = "UPDATE stpv.venta v SET corte_caja = true WHERE v.estado_caja_id=" + idEstadoCaja;
+        String sql = "UPDATE spve.venta v SET corte_caja = true WHERE v.id_estado_caja=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
             postgreSQL.conectar();
@@ -2112,9 +2026,7 @@ public class ObjetoBaseDatos {
     }
 
     public void ActualizarCierreEnVenta(int idEstadoCaja) {
-        //Ernesto:
-        //Agregar alias para "v"
-        String sql = "UPDATE stpv.venta v SET cierre_caja = true WHERE v.estado_caja_id=" + idEstadoCaja;
+        String sql = "UPDATE spve.venta v SET cierre_caja = true WHERE v.id_estado_caja=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
             postgreSQL.conectar();
@@ -2132,7 +2044,7 @@ public class ObjetoBaseDatos {
         String monto = "";
         //Ernesto:
         //Agregar alias para "ec"
-        String sql = "SELECT ec.monto_apertura FROM stpv.estado_caja ec WHERE ec.id=" + idEstadoCaja;
+        String sql = "SELECT ec.monto_apertura FROM spve.estado_caja ec WHERE ec.id_estado_caja=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
             postgreSQL.conectar();
@@ -2156,26 +2068,20 @@ public class ObjetoBaseDatos {
      * @param monto
      * @return
      */
-    public int crearDesgloseCierreCaja(int idCaja, int idMoneda, int cantidadMoneda, XBigDecimal monto) {
+    public int crearCierreCaja(int idCaja, int idMoneda, int cantidadMoneda, XBigDecimal monto) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("desglose_caja_cierre"))//Esta tabla no existe
-                .append("(cierre_caja_id, moneda_id, cantidad_moneda, monto) VALUES (")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("cierre_caja"))//Esta tabla no existe
+                .append("(id_corte_caja, monto_corte, fecha_corte) VALUES (")
                 .append(idCaja).append(", ")
                 .append(idMoneda).append(", ")
                 .append(cantidadMoneda).append(", ")
                 .append(monto).append(");");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "cierre_caja");
+       
         return resultado;
     }
 
@@ -2190,23 +2096,16 @@ public class ObjetoBaseDatos {
     public int crearPago(XBigDecimal monto, int idTipoPago) {
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("pago"))
-                .append("(monto, tipo_moneda_id, fecha_hora) VALUES (")
+                .append("(monto_pago, id_tipo_pago, fecha_pago) VALUES (")
                 .append(monto.toString()).append(", ")
                 .append(idTipoPago).append(", '")
                 .append(new Timestamp(date.getTime())).append("');");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "pago");
         return resultado;
     }
 
@@ -2219,26 +2118,19 @@ public class ObjetoBaseDatos {
      */
     public int asociarPagoVenta(int idPago, int idVenta) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
 
         sqlQuery.append("INSERT INTO ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 //Ernesto:
                 //Doble "__" en nombre de tabla "venta__pago"
                 //esto se repite en los siguientes metodos donde se conecta 
                 //con esta tabla
-                .append(mapTabla.get("venta__pago"))
-                .append("(pago_id, venta_id) VALUES (")
+                .append(mapTabla.get("venta_producto"))
+                .append("(id_pago, id_venta) VALUES (")
                 .append(idPago).append(", ")
                 .append(idVenta).append(");");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
         return resultado;
     }
 
@@ -2257,11 +2149,11 @@ public class ObjetoBaseDatos {
         int cantidadAnterior = 0;
         int resultado = -1;
 
-        sqlQuery.append("SELECT id, cantidad_producto AS cantidad FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta__producto"))
-                .append(" WHERE venta_id=").append(idVenta)
-                .append(" AND producto_id=").append(idProducto).append(";");
+        sqlQuery.append("SELECT id_venta_producto, cantidad_producto AS cantidad FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" WHERE id_venta=").append(idVenta)
+                .append(" AND id_producto=").append(idProducto).append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -2278,8 +2170,8 @@ public class ObjetoBaseDatos {
         sqlQuery = new StringBuilder();
         if (resultado != -1) {
             sqlQuery.append("UPDATE ")
-                    .append(mapSchema.get("stpv")).append(".")
-                    .append(mapTabla.get("venta__producto"))
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("venta_producto"))
                     .append(" SET cantidad_producto=").append(cantidadProducto + cantidadAnterior)
                     .append(" WHERE id=").append(resultado)
                     .append(";");
@@ -2291,15 +2183,9 @@ public class ObjetoBaseDatos {
                     .append(idProducto).append(", ")
                     .append(idVenta).append(", ")
                     .append(cantidadProducto).append(");");
-        }
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(),"venta_producto");
+        
+    }
         return resultado;
     }
 
@@ -2317,7 +2203,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         double cantidadAnterior = 0.00;
-        int resultado = -1;
+        int resultado;
         int idProducto = -1;
 
         sqlQuery.append("SELECT vp.producto_id AS idProducto, vp.cantidad_producto AS cantidad FROM ")
@@ -2355,37 +2241,32 @@ public class ObjetoBaseDatos {
         sqlQuery = new StringBuilder();
         if (idProducto > 0) {
             sqlQuery.append("UPDATE ")
-                    .append(mapSchema.get("stpv")).append(".")
-                    .append(mapTabla.get("venta__producto"))
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("venta_producto"))
                     .append(" SET cantidad_producto=").append(cantidadProducto + cantidadAnterior)
                     .append(" WHERE venta_id=").append(idVenta)
                     .append(" AND producto_id=").append(idProducto)
                     .append(";");
         } else {
             StringBuilder queryID = new StringBuilder();
-            queryID.append("SELECT id FROM ")
-                    .append(mapSchema.get("inventario")).append(".")
+            queryID.append("SELECT id_producto FROM ")
+                    .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("producto"))
-                    .append(" WHERE codigo_barra='").append(codigoProducto).append("'");
+                    .append(" WHERE codigo_venta_producto='").append(codigoProducto).append("'");
 
             sqlQuery.append("INSERT INTO ")
-                    .append(mapSchema.get("stpv")).append(".")
-                    .append(mapTabla.get("venta__producto"))
-                    .append("(producto_id, venta_id, cantidad_producto) VALUES ((")
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("venta_producto"))
+                    .append("(id_producto, id_venta, cantidad_producto) VALUES ((")
                     .append(queryID).append("), ")
                     .append(idVenta).append(", ")
                     .append(cantidadProducto).append(");");
         }
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
+      
         return resultado;
     }
+        
 
     /**
      * Elimina un producto incluido en una venta, dado un idVenta y el código de
@@ -2399,21 +2280,15 @@ public class ObjetoBaseDatos {
      */
     public int eliminarProductoEnVenta(int idVenta, String codigoBarra) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
-        String idProducto = "(SELECT id FROM inventario.producto WHERE codigo_barra='" + codigoBarra + "' LIMIT 1)";
+        int resultado;
+        String idProducto = "(SELECT id_producto FROM spve.producto WHERE codigo_venta_producto='" + codigoBarra + "' LIMIT 1)";
         sqlQuery.append("DELETE FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta__producto"))
-                .append(" WHERE venta_id=").append(idVenta)
-                .append(" AND producto_id=").append(idProducto).append(";");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" WHERE id_venta=").append(idVenta)
+                .append(" AND id_producto=").append(idProducto).append(";");
+    
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
         return resultado;
     }
 
@@ -2450,46 +2325,33 @@ public class ObjetoBaseDatos {
                     .append(" WHERE id=").append(idEstadoCaja)
                     .append(";");
         }
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "estado_caja");
         return resultado;
     }
 
     /**
      * Hace el UPDATE de la columna excedente de la tabla ESTADO_CAJA
      *
-     * @param idEstadoCaja Id de la tabla estado_caja, en caso de ser 0 se asume
+     * @param idCorteCaja Id de la tabla estado_caja, en caso de ser 0 se asume
      * que la tabla no existe y realiza un insert
      * @param monto Si es positivo se entiende como excendente, de lo contrario
      * es faltante.
      * @return id del estado_caja resultado del INSERT o del UPDATE.
      */
-    public int setExcendenteFaltanteCaja(int idEstadoCaja, String monto) {
+    public int setExcendenteFaltanteCaja(int idCorteCaja, String monto) {
         Date date = new java.util.Date();
-        int resultado = -1;
+        int resultado;
         StringBuilder sqlQuery = new StringBuilder();
 
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("estado_caja"))
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("corte_caja"))
                 .append(" SET excedente=").append(monto)
-                .append(" WHERE id=").append(idEstadoCaja)
+                .append(" WHERE id_corte_caja=").append(idCorteCaja)
                 .append(";");
 
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+      
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "corte_caja");
         return resultado;
     }
 
@@ -2501,24 +2363,18 @@ public class ObjetoBaseDatos {
      * @return
      */
     public int setEstadoVenta(int idVenta, EstadoVenta estadoVenta) {
-        int resultado = -1;
+        int resultado;
         StringBuilder sqlQuery = new StringBuilder();
 
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" SET estado_venta_id=").append(estadoVenta)
-                .append(" WHERE id=").append(idVenta)
+                .append(" SET estado_venta=").append(estadoVenta)
+                .append(" WHERE id_venta=").append(idVenta)
                 .append(";");
 
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+       
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
         return resultado;
     }
 
@@ -2621,24 +2477,18 @@ public class ObjetoBaseDatos {
      * @return
      */
     public int setMontoVenta(int idVenta, String iva, String total) {
-        int resultado = -1;
+        int resultado;
         StringBuilder sqlQuery = new StringBuilder();
 
         sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" SET iva=").append(iva)
-                .append(", total=").append(total)
-                .append("WHERE id=").append(idVenta)
+                .append(" SET impuesto_venta=").append(iva)
+                .append(", total_venta=").append(total)
+                .append("WHERE id_venta=").append(idVenta)
                 .append(";");
-        try {
-            postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+      
+            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
         return resultado;
     }
 
@@ -2759,14 +2609,14 @@ public class ObjetoBaseDatos {
         return query;
     }
 
-    private int ejecutarManipulacionDeDatosSimple(String query) {
+    private int ejecutarManipulacionDeDatosSimple(String query, String tabla) {
         /* Konstanza: el -1 está de más, 
         ya que en caso de error la función 'postgreSQL.ejecutarManipulacionDeDatosSimple(query)' retorna -1*/
-        int resultado = -1; 
+        int resultado = -1;
         
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(query);
+            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(query, tabla);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
