@@ -37,9 +37,9 @@ public class ObjetoBaseDatos {
     HashMap<String, String> mapTabla = new HashMap<String, String>();
     HashMap<String, String> mapSchema = new HashMap<String, String>();
 
-    public ObjetoBaseDatos(String url, String login, String password) {
+    public ObjetoBaseDatos(String url, String login, String contraseña) {
         this.url = url;
-        postgreSQL = new PostgreSQL(url, login, password);
+        postgreSQL = new PostgreSQL(url, login, contraseña);
         crearMaps();
     }
 
@@ -297,7 +297,7 @@ public class ObjetoBaseDatos {
                 emple.setCorreo(rs.getString("email_persona"));
                 emple.setTelefono(rs.getString("telefono_persona"));
                 emple.setDireccion(rs.getString("direccion_persona"));
-                //emple.setPassword(rs.getString("password"));
+                //emple.setPassword(rs.getString("contraseña"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -366,14 +366,14 @@ public class ObjetoBaseDatos {
      * @param apellido_persona
      * @param tipo_persona
      * @param numero_identificacion_persona
-     * @param password
+     * @param contraseña
      * @param email_persona
      * @param telefono_persona
      * @param departamento
      * @param direccion_persona
      * @return
      */
-    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String password, String departamento) {
+    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña, String departamento) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         
@@ -384,7 +384,7 @@ public class ObjetoBaseDatos {
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
                 .append(" SET id_cargo ='").append(id_cargo)
-                .append("', contraseña='").append(password)
+                .append("', contraseña='").append(contraseña)
                 .append("' WHERE numero_identificacion_persona='")
                 .append(numero_identificacion_persona)
                 .append("';");
@@ -432,10 +432,10 @@ public class ObjetoBaseDatos {
      * schema "stpv" del mapSchema y la tabla "usuario" del mapTabla.
      *
      * @param cedula usuario a validar.
-     * @param password del usuario.
+     * @param contraseña del usuario.
      * @return Id del usuario. Si no existe retorna -1
      */
-    public int autenticarUsuario(String cedula, char[] password) {
+    public int autenticarUsuario(String cedula, char[] contraseña) {
         ResultSet result;
         int id = -1;
 
@@ -457,7 +457,7 @@ public class ObjetoBaseDatos {
                 p = result.getString("contraseña");
             }
             Cripto c = new Cripto(p);
-            boolean autenticado = c.validate(new String(password));
+            boolean autenticado = c.validate(new String(contraseña));
             if (autenticado) {
                 return id;
             } else {
@@ -476,21 +476,21 @@ public class ObjetoBaseDatos {
     /**
      * Verifica la existencia de un empleado en la base de datos. -Utiliza el
      * schema "stpv" del mapSchema y la tabla "empleado" del mapTabla. Este
-     * método funciona con la encriptacion sha1 del password.
+     * método funciona con la encriptacion sha1 del contraseña.
      *
      * @param cedula empleado a validar.
-     * @param password del empleado.
+     * @param contraseña del empleado.
      * @return Id del empleado. Si no existe retorna -1
      */
-    public int autenticarEmpleado(String cedula, char[] password) {
+    public int autenticarEmpleado(String cedula, char[] contraseña) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT numero_identificacion_persona AS id, password FROM ")
-                .append(mapSchema.get("stpv"))
+        sqlQuery.append("SELECT numero_identificacion_persona AS id, contraseña FROM ")
+                .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
-                .append(" WHERE cedula='")
+                .append(" WHERE numero_identificacion_persona='")
                 .append(cedula)
                 .append("';");
 
@@ -501,7 +501,7 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("password");
+                p = result.getString("contraseña");
             }
             char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
 
@@ -531,15 +531,15 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int autenticarEmpleado2(String cedula, char[] password) {
+    public int autenticarEmpleado2(String cedula, char[] contraseña) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT id, password FROM ")
-                .append(mapSchema.get("stpv"))
+        sqlQuery.append("SELECT id_empleado, contraseña FROM ")
+                .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
-                .append(" WHERE cedula='")
+                .append(" WHERE numero_identificacion_persona='")
                 .append(cedula)
                 .append("';");
 
@@ -551,7 +551,7 @@ public class ObjetoBaseDatos {
             if (result.next()) {
 
                 id = result.getInt("id");
-                p = result.getString("password");
+                p = result.getString("contraseña");
             }
             char[] pass = PuntoVenta.Ventanas.LogIn.jpwClave.getPassword();
 
@@ -570,19 +570,19 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int autsupervisor(String password) {
+    public int autsupervisor(String contraseña) {
         ResultSet result;
         int id1 = 1;
         int id = -1;
-//        System.out.println(password + "1111");
+//        System.out.println(contraseña + "1111");
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT password FROM ")
-                .append(mapSchema.get("stpv"))
+        sqlQuery.append("SELECT contraseña FROM ")
+                .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
-                .append(" WHERE cargo_id='")
+                .append(" WHERE id_cargo='")
                 .append(id1)
-                .append("'AND password='")
-                .append(password)
+                .append("'AND contraseña='")
+                .append(contraseña)
                 .append("';");
 
         try {
@@ -590,14 +590,14 @@ public class ObjetoBaseDatos {
             result = postgreSQL.ejecutarSelect(sqlQuery.toString());
             String j = null;
             if (result.next()) {
-                j = result.getString("password");
+                j = result.getString("contraseña");
             }
 //            System.out.println(j + " este es el bd");
-            if (password.equals(j)) {
+            if (contraseña.equals(j)) {
 //                System.out.println("lol");
                 id = 6;
             } else {
-//                System.out.println(password + "no lo es");
+//                System.out.println(contraseña + "no lo es");
                 id = -1;
             }
 
@@ -611,11 +611,11 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String password, String departamento) {
+    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String contraseña, String departamento) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
             modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
-            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, password, departamento);
+            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, contraseña, departamento);
             resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
        
         return resultado;
@@ -635,28 +635,19 @@ public class ObjetoBaseDatos {
      * @param cliente
      * @return
      */
-    public int actualizarClienteAdmin(ModeloCliente cliente) {
+    //public int actualizarClienteAdmin(ModeloCliente cliente) {
         /* Konstanza:
             - ¡¿Qué es un 'ClienteAdmin'?!
             - El nombre dice que actualiza cliente pero el query es para empleados
             - El argumento de la función debería ser el modelo de empleado
         */
-        StringBuilder sqlQuery = new StringBuilder();
+        /*StringBuilder sqlQuery = new StringBuilder(ModeloCliente cliente, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona){
         int resultado;
-        sqlQuery.append("UPDATE ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("empleado"))
-                .append(" SET nombre='").append(cliente.getNombre())
-                .append("', apellido='").append(cliente.getApellido())
-                .append("', direccion='").append(cliente.getDireccion())
-                .append("', correo='").append(cliente.getCorreo())
-                .append("', telefono='").append(cliente.getTelefono())
-                .append("' WHERE id=").append(cliente.getId())
-                .append(";");
-                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
         return resultado;
 
-    }
+    }*/
 
     /**
      * Verifica en la base de datos si una caja específica está abierta o
@@ -673,7 +664,7 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("SELECT fecha_apertura, fecha_cierre FROM ")
-                .append(mapSchema.get("stpv"))
+                .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("estado_caja"))
                 .append(" WHERE caja_id=")
                 .append(idCaja)
@@ -1233,7 +1224,7 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
 
-        String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "password"};
+        String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "contraseña"};
         String[] columnaCargo = new String[]{"descripcion"};
 
         sqlQuery.append("SELECT ");
@@ -2499,15 +2490,15 @@ public class ObjetoBaseDatos {
      * Muestra el nombre del empleado en la caja
      *
      * @param cedula cedula del empleado que se mostrara.
-     * @param password 
+     * @param contraseña 
      * @return
      */
-    public int setEmpleadoCaja(String cedula, char[] password) {
+    public int setEmpleadoCaja(String cedula, char[] contraseña) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT cedula AS id, password FROM ")
+        sqlQuery.append("SELECT cedula AS id, contraseña FROM ")
                 .append(mapSchema.get("stpv"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE cedula='")
@@ -2521,7 +2512,7 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("password");
+                p = result.getString("contraseña");
             }
             char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
             String passString = new String(pass);
