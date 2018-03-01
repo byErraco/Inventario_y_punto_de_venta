@@ -44,8 +44,9 @@ public class ObjetoBaseDatos {
     }
 
     public static void main(String[] args){
-        ObjetoBaseDatos obd = new ObjetoBaseDatos("localhost:5432", "inverdata", "C1234567c");
+        ObjetoBaseDatos obd = new ObjetoBaseDatos("jdbc:postgresql://localhost:5432/stpv", "inverdata", "C1234567c");
         System.out.println(obd);
+        obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
     }
     
     /**
@@ -93,6 +94,8 @@ public class ObjetoBaseDatos {
      * @param tipo_persona
      * @param numero_identificacion_persona
      * @param direccion
+     * @param telefono
+     * @param correo
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
     public int crearPersona(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String direccion, String telefono, String correo) {
@@ -102,7 +105,7 @@ public class ObjetoBaseDatos {
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona"))
-                .append("(nombre, apellido, direccion, tipo_persona, numero_identificacion_persona, correo, telefono) VALUES (")
+                .append("(nombre_persona, apellido_persona, direccion_persona, tipo_persona, numero_identificacion_persona, email_persona, telefono_persona) VALUES (")
                 .append("'").append(nombre).append("', ")
                 .append("'").append(apellido).append("', ")
                 .append("'").append(direccion).append("', ")
@@ -134,11 +137,11 @@ public class ObjetoBaseDatos {
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona"))
-                .append(" SET nombre='").append(nombre)
-                .append("', apellido='").append(apellido)
-                .append("', direccion='").append(direccion)
-                .append("', correo='").append(correo)
-                .append("', telefono='").append(telefono)
+                .append(" SET nombre_persona='").append(nombre)
+                .append("', apellido_persona='").append(apellido)
+                .append("', direccion_persona='").append(direccion)
+                .append("', email_persona='").append(correo)
+                .append("', telefono_persona='").append(telefono)
                 .append("' WHERE numero_identificacion_persona='")
                 .append(numero_identificacion_persona)
                 .append("';");
@@ -484,7 +487,7 @@ public class ObjetoBaseDatos {
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT cedula AS id, password FROM ")
+        sqlQuery.append("SELECT numero_identificacion_persona AS id, password FROM ")
                 .append(mapSchema.get("stpv"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE cedula='")
