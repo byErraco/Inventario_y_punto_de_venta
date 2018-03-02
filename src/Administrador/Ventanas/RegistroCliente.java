@@ -469,15 +469,14 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         char nacionalidad;
         int idCliente;
 
-        boolean registrado;
-
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        cedula = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
+        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        cedula = txtDocumento.getText();
         direccion = txaDireccion.getText();
         telefono = txtTelefono.getText();
         correo = txtCorreo.getText();
+        
         if (cedula.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtDocumento.requestFocus();
@@ -506,24 +505,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         idCliente = admin.menuPrincipal.getOBD().crearPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo);
 
         if (idCliente > 0) {
-            HashMap<String, String> mapCliente = admin.menuPrincipal.getOBD().getMapCliente(idCliente);
-
-            ModeloCliente cliente = new ModeloCliente(mapCliente);
-
-            correo = txtCorreo.getText();
-            if (!correo.isEmpty()) {
-                cliente.setCorreo(correo);
-            }
-            telefono = txtTelefono.getText();
-            if (!telefono.isEmpty()) {
-                cliente.setTelefono(telefono);
-            }
-            int check = admin.menuPrincipal.getOBD().actualizarClienteAdmin(cliente);
-            if (check != idCliente) {
-//                System.err.println("ERROR GRAVE");
-            }
             this.cerrarVentana();
-
         } else {
             Utilidades.Sonidos.beep();
         }

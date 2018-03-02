@@ -434,7 +434,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         direccion = txtDireccion.getText();
         clave = String.valueOf(jClave.getPassword());
 
-        //cargo_id = cmbCargoId.getSelectedItem().toString().charAt(0);
         cargo_id = Integer.valueOf((String) cmbCargoId.getSelectedItem());
 
         if (numero_identificacion.isEmpty()) {
@@ -463,23 +462,10 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             return;
         }
 
-        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion);
+        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave);
 
         if (idEmpleado > 0) {
-            HashMap<String, String> mapEmpleado = admin.menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-
-            ModeloEmpleado empleado = new ModeloEmpleado(mapEmpleado);
-
-            telefono = txtTelefono.getText();
-            if (!telefono.isEmpty()) {
-                empleado.setTelefono(telefono);
-            }
-            int check = admin.menuPrincipal.getOBD().actualizarEmpleado(empleado);
-            if (check != idEmpleado) {
-//                System.err.println("ERROR GRAVE");
-            }
             this.cerrarVentana();
-
         } else {
             Utilidades.Sonidos.beep();
         }

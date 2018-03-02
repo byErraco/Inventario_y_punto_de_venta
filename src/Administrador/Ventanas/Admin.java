@@ -697,10 +697,9 @@ public class Admin extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Documentos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             limpiar();
         } else {
-            menuPrincipal.getOBD().ingresoEmp(nombre, rif, telefono, direccion, moneda);
+            /*menuPrincipal.getOBD().ingresoEmp(nombre, rif, telefono, direccion, moneda);
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            limpiar();
-
+            limpiar();*/
         }
 
         //abrirVentanaUpload();

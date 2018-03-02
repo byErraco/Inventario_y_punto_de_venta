@@ -467,7 +467,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     }
 
     private void modificarEmpleado() {
-        String cedula, nombre, apellido, telefono, correo, password, departamento;
+        String cedula, nombre, apellido, telefono, correo, password;
         char nacionalidad;
         int idEmpleado, cargo_id;
 
@@ -480,7 +480,6 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         telefono = txtTelefono.getText();
         correo = txtCorreo.getText();
         password = txtPassword.getText();
-        departamento = txtDepartamento.getText();
         cargo_id = Integer.valueOf((String) cmbCargoId.getSelectedItem());
 
 //        txtDocumento.setEnabled(false);
@@ -510,13 +509,8 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             txtPassword.requestFocus();
             return;
         }
-        if (departamento.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtDepartamento.requestFocus();
-            return;
-        }
 
-        idEmpleado = admin.menuPrincipal.getOBD().modificarEmpleado(nombre, apellido, cedula, telefono, correo, cargo_id, password, departamento);
+        /*idEmpleado = admin.menuPrincipal.getOBD().modificarEmpleado(nombre, apellido, cedula, telefono, correo, cargo_id, password);
 
         if (idEmpleado > 0) {
             HashMap<String, String> mapEmpleado = admin.menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
@@ -536,8 +530,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
 
         } else {
             Utilidades.Sonidos.beep();
-        }
-
+        }*/
     }
 
 

@@ -106,30 +106,21 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblDocumento" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblDocumento" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblNombre" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblApellido" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                                          <Component id="lblCorreo" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblNombre" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblApellido" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                                  <Component id="lblCorreo" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblPassword" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblTelefono" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblCargo" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblDepartamento" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtDepartamento" max="32767" attributes="0"/>
                           <Component id="cmbCargoId" max="32767" attributes="0"/>

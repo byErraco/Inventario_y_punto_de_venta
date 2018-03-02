@@ -418,20 +418,21 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
 
     private void registrarCliente() {
-        String documento, nombre, apellido, direccion;
+        String documento, nombre, apellido, direccion, telefono, correo;
         char nacionalidad;
         int idCliente;
 
-        boolean registrado;
-
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        documento = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
+        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        documento = txtDocumento.getText();
         direccion = txaDireccion.getText();
+        telefono = txtTelefono.getText();
+        correo = txtCorreo.getText();
+        
         if (documento.isEmpty()) {
             Utilidades.Sonidos.beep();
-            JOptionPane.showMessageDialog(null, "Documentos obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Documento obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
             txtDocumento.requestFocus();
             return;
         }
@@ -453,45 +454,15 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txaDireccion.requestFocus();
             return;
         }
-        idCliente = venta.menuPrincipal.getOBD().crearCliente(nombre, apellido, nacionalidad, documento, direccion);
+        
+        idCliente = venta.menuPrincipal.getOBD().crearPersona(nombre, apellido, nacionalidad, documento, direccion, telefono, correo);
         JOptionPane.showMessageDialog(null, "Usuario registrado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
         this.dispose();
 
         if (idCliente > 0) {
-            HashMap<String, String> mapCliente = venta.menuPrincipal.getOBD().getMapCliente(idCliente);
-
-            ModeloCliente cliente = new ModeloCliente(mapCliente);
-
-            String correo = txtCorreo.getText();
-            if (!correo.isEmpty()) {
-                cliente.setCorreo(correo);
-            }
-            String twitter = txtTwitter.getText();
-            if (!twitter.isEmpty()) {
-                cliente.setTwitter(twitter);
-            }
-            String facebook = txtFacebook.getText();
-            if (!facebook.isEmpty()) {
-                cliente.setFacebook(facebook);
-            }
-            String telefono = txtTelefono.getText();
-            if (!telefono.isEmpty()) {
-                List<String> listaTelefonos = new ArrayList<String>();
-                listaTelefonos.add(telefono);
-                cliente.setListaTelefonos(listaTelefonos);
-            }
-            int check = venta.menuPrincipal.getOBD().actualizarCliente(cliente);
-            if (check != idCliente) {
-//                System.err.println("ERROR GRAVE");
-            }
-
             venta.crearVenta(nacionalidad, documento);
             venta.getCmbTipoDocumento().setSelectedItem(nacionalidad);
             venta.getTxtDocumento().setText(documento);
-
-            //this.cerrarVentana();
-            //JOptionPane.showMessageDialog(null, "Usuario registrado correctamente", "Exito", JOptionPane.ERROR_MESSAGE);
-            //this.dispose();
         } else {
             Utilidades.Sonidos.beep();
         }
