@@ -77,6 +77,7 @@ CREATE SEQUENCE spve.empleado_seq;
 
 CREATE TABLE IF NOT EXISTS spve.empleado (
   id_empleado INT NOT NULL DEFAULT NEXTVAL ('spve.empleado_seq'),
+  contraseña VARCHAR(10) NOT NULL,
   id_cargo INT NOT NULL,
   id_persona INT NOT NULL,
   activo_empleado SMALLINT NOT NULL DEFAULT 1,
