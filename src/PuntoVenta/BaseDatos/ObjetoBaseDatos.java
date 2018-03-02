@@ -49,7 +49,7 @@ public class ObjetoBaseDatos {
         //obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
         //obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
         //obd.eliminarPersona("1234567");
-        
+        //obd.crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña);
         
         
         
@@ -670,8 +670,8 @@ public class ObjetoBaseDatos {
      * @param idCaja
      * @return Estado de la caja. Abierto o cerrado.
      */
-    public boolean getEstadoCaja(int idCaja) {
-        boolean estado = false;
+    public boolean getCajaAbierta(int idCaja) {
+        boolean cajaAbierta = false;
         ResultSet rs;
         String fecha_apertura = "";
         String fecha_cierre = "";
@@ -679,10 +679,10 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("SELECT fecha_apertura, fecha_cierre FROM ")
                 .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("estado_caja"))
-                .append(" WHERE caja_id=")
+                .append(".").append(mapTabla.get("corte_caja"))
+                .append(" WHERE id_caja=")
                 .append(idCaja)
-                .append(" ORDER BY id DESC LIMIT 1;");
+                .append(" ORDER BY id_caja DESC LIMIT 1;");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -697,9 +697,9 @@ public class ObjetoBaseDatos {
         }
         //Este if verifica que la caja tenga fecha de apertura y no tenga fecha de cierre.
         if (!fecha_apertura.isEmpty() && (fecha_cierre == null || fecha_cierre.isEmpty())) {
-            estado = true;
+            cajaAbierta = true;
         }
-        return estado;
+        return cajaAbierta;
     }
 
     /**
