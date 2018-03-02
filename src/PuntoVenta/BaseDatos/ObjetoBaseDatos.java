@@ -49,10 +49,10 @@ public class ObjetoBaseDatos {
         //obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
         //obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
         //obd.eliminarPersona("1234567");
-        
-        
-        
-        
+        obd.crearEmpleado("ernesto", "rincon", 'V', "20944806", "04266241381", "erincongil@gmail.com", "mcbo", "asdf", "1");
+        //obd.seleccionarCargo();
+        //Empleado empleado = obd.getDatosEmpleado(1);
+        //System.out.println(empleado.getNombre());
     }
     
     /**
@@ -130,16 +130,11 @@ public class ObjetoBaseDatos {
      *
      * @param nombre_persona
      * @param apellido_persona
-     * @param nombre
-     * @param apellido
      * @param tipo_persona
      * @param direccion_persona
      * @param telefono_persona
      * @param email_persona
      * @param numero_identificacion_persona
-     * @param telefono
-     * @param correo
-     * @param direccion
      * @param numero_identificacion_persona_viejo
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
@@ -209,22 +204,23 @@ public class ObjetoBaseDatos {
      * @param telefono_persona
      * @param email_persona
      * @param contraseña
+     * @param id_cargo
      * @return id del empleado resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña) {
+    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña, String id_cargo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
             resultado = crearPersona(nombre, apellido, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
-            if(resultado > 0){
+            //if(resultado > 0){
                 sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado")) 
-                .append("(id_persona, id_cargo, contraseña) VALUES(")
+                .append("(id_empleado, contraseña, id_persona, id_cargo) VALUES(")
                 .append("'").append(resultado).append("', ")
                 .append("'").append(1).append("', ")
                 .append("'").append(contraseña);
-                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
-            }
+                //resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+            //}
                 
         return resultado;
     }
@@ -235,7 +231,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Cargo cargo = new Cargo();
 
-        String query = "SELECT nombre_cargo FROM stpv.cargo";
+        String query = "SELECT nombre_cargo FROM spve.cargo";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
@@ -285,12 +281,12 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Consulta los datos del Empleado en la tabla stpv.empleado.
+     * Consulta los datos del Empleado en la tabla spve.empleado.
      *
      * @param idEmpleado
      * @return Empleado resultado de la consulta o null en caso de fallar.
      */
-    public Empleado datosEmpleado(int idEmpleado) {
+    public Empleado getDatosEmpleado(int idEmpleado) {
         ResultSet rs;
         Empleado emple = new Empleado();
 
@@ -385,6 +381,7 @@ public class ObjetoBaseDatos {
      * @param telefono_persona
      * @param departamento
      * @param direccion_persona
+     * @param numero_identificacion_persona_viejo
      * @return
      */
     public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña, String departamento, String numero_identificacion_persona_viejo) {
@@ -670,19 +667,43 @@ public class ObjetoBaseDatos {
      * @param idCaja
      * @return Estado de la caja. Abierto o cerrado.
      */
-    public boolean getEstadoCaja(int idCaja) {
-        boolean estado = false;
+    public boolean getCajaCerrada(int idCaja) {
+        boolean cajaAbierta = false;
         ResultSet rs;
         String fecha_apertura = "";
         String fecha_cierre = "";
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT fecha_apertura, fecha_cierre FROM ")
+        sqlQuery.append("SELECT caja.id_caja, MAX(estado_caja.id_estado_caja) FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("caja"))
+                .append(" INNER JOIN ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("estado_caja"))
-                .append(" WHERE caja_id=")
-                .append(idCaja)
-                .append(" ORDER BY id DESC LIMIT 1;");
+                .append(" ON ")
+                .append("estado_caja.id_caja = caja.id_caja")
+                .append(" GROUP BY ")
+                .append("caja.id_caja;")
+                .append("SELECT estado_caja.id_estado_caja, MAX(corte_caja.id_corte_caja) FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("estado_caja"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("corte_caja"))
+                .append(" ON ")
+                .append("corte_caja.id_estado_caja = estado_caja.id_estado_caja")
+                .append(" GROUP BY ")
+                .append(".").append("estado_caja.id_estado_caja;")
+                .append("SELECT EXISTS (SELECT cierre_caja.id_corte_caja, corte_caja.id_corte_caja FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("cierre_caja"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("corte_caja"))
+                .append(" ON ")
+                .append("cierre_caja.id_corte_caja = corte_caja.id_corte_caja")
+                .append(" GROUP BY ")
+                .append("cierre_caja.id_cierre_caja, corte_caja.id_corte_caja);");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -697,9 +718,9 @@ public class ObjetoBaseDatos {
         }
         //Este if verifica que la caja tenga fecha de apertura y no tenga fecha de cierre.
         if (!fecha_apertura.isEmpty() && (fecha_cierre == null || fecha_cierre.isEmpty())) {
-            estado = true;
+            cajaAbierta = true;
         }
-        return estado;
+        return cajaAbierta;
     }
 
     /**
@@ -1119,19 +1140,19 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
 
-        sqlQuery.append("SELECT id, descripcion FROM ")
-                .append(mapSchema.get("stpv")).append(".")
+        sqlQuery.append("SELECT id_caja, descripcion_caja FROM ")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("caja"))
-                .append(" WHERE id=").append(id)
+                .append(" WHERE id_caja=").append(id)
                 .append(" LIMIT 1;");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             String descripcion;
             if (rs.next()) {
-                descripcion = rs.getString("descripcion");
-                map.put("id", String.valueOf(id));
-                map.put("descripcion", descripcion);
+                descripcion = rs.getString("descripcion_caja");
+                map.put("id_caja", String.valueOf(id));
+                map.put("descripcion_caja", descripcion);
             }
         } catch (Exception e) {
             e.printStackTrace();
