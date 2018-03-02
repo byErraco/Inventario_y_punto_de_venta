@@ -97,7 +97,7 @@ public class PostgreSQL {
      * @return id del row resultante del INSERT o UPDATE
      * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
-    public synchronized int ejecutarManipulacionDeDatosSimple(String sql) throws XSQLException {
+    public synchronized int ejecutarManipulacionDeDatosSimple(String sql, String tabla) throws XSQLException {
         int resultado = -1;
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
@@ -105,14 +105,14 @@ public class PostgreSQL {
             }
             this.sentencia.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (this.sentencia.getGeneratedKeys().next()) {
-                resultado = this.sentencia.getGeneratedKeys().getInt("id");
+                resultado = this.sentencia.getGeneratedKeys().getInt("id_"+tabla);
             }
             this.sentencia.close();
         } catch (SQLException e) {
             e.printStackTrace();
             this.desconectar();
             resultado = -1;
-            throw new XSQLException("La base de datos no está conectada.");
+            //throw new XSQLException("La base de datos no está conectada.");
         }
         return resultado;
     }
