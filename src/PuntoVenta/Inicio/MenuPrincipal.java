@@ -175,9 +175,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
         btnFacturas = new javax.swing.JButton();
+        btnMovimientos = new javax.swing.JButton();
+        btnProductos = new javax.swing.JButton();
+        btnAdmin = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        btnAdmin = new javax.swing.JButton();
         btnbloqueo = new javax.swing.JButton();
         btnCalculadora = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -254,33 +256,29 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnFacturas);
 
-        btnAyuda.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
-        btnAyuda.setText("<html><font size=2><center>Ayuda<br>F10</center></font></html>");
-        btnAyuda.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnAyuda.setFocusable(false);
-        btnAyuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAyuda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAyuda.addActionListener(new java.awt.event.ActionListener() {
+        btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnMovimientos.setText("Movimientos F8");
+        btnMovimientos.setFocusable(false);
+        btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnMovimientos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAyudaActionPerformed(evt);
+                btnMovimientosActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnAyuda);
+        jToolBar1.add(btnMovimientos);
 
-        jButton5.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. acerca.png"))); // NOI18N
-        jButton5.setText("<html><font size=2><center>Acerca<br>F11</center></font></html>");
-        jButton5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnProductos.setText("    Productos F9");
+        btnProductos.setFocusable(false);
+        btnProductos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProductos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnProductosActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton5);
+        jToolBar1.add(btnProductos);
 
         btnAdmin.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. admin.png"))); // NOI18N
@@ -313,6 +311,35 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAdmin);
 
+        btnAyuda.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnAyuda.setText("<html><font size=2><center>Ayuda<br>F10</center></font></html>");
+        btnAyuda.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnAyuda.setFocusable(false);
+        btnAyuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAyuda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAyudaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnAyuda);
+
+        jButton5.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. acerca.png"))); // NOI18N
+        jButton5.setText("<html><font size=2><center>Acerca<br>F11</center></font></html>");
+        jButton5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jButton5.setFocusable(false);
+        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton5);
+
+        btnbloqueo.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnbloqueo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. bloqueo.png"))); // NOI18N
         btnbloqueo.setText("<html><font size=2><center>Bloqueo<br>F12</center></font></html>");
         btnbloqueo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -460,6 +487,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_btnAdminKeyPressed
 
+    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
+       //productos
+    }//GEN-LAST:event_btnProductosActionPerformed
+
+    private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
+     //movimientos       
+       
+    }//GEN-LAST:event_btnMovimientosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton btnAdmin;
@@ -467,6 +503,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
     public static javax.swing.JButton btnFacturas;
+    private javax.swing.JButton btnMovimientos;
+    private javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
     public javax.swing.JButton btnbloqueo;
