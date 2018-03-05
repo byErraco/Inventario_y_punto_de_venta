@@ -1,0 +1,1 @@
+﻿SELECT max(id_estado_caja) FROM spve.estado_caja WHERE id_caja = 1;

@@ -1180,10 +1180,10 @@ public class Venta extends javax.swing.JInternalFrame {
             return;
         }
         //La caja no puede estar cerrada.
-        if (!menuPrincipal.isEstadoCaja()) {
+        if (!menuPrincipal.isCajaAbierta()) {
             Utilidades.Sonidos.beep();
             this.setClienteAsociadoFactura(false);
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "La caja está cerrada. ¿Deséa abirla?", "Caja cerrada");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "La caja está cerrada. ¿Desea abrirla?", "Caja cerrada");
             if (seleccion == 0) {
                 this.menuPrincipal.abrirVentanaCaja();
             }

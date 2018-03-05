@@ -211,8 +211,8 @@ public class LogIn extends javax.swing.JFrame {
        las variables no están en la base de datos.
     */
     private void entrarProgramador() {
-        txtCedula.setText("1");
-        jpwClave.setText("1");
+        txtCedula.setText("admin");
+        jpwClave.setText("admin");
     }
     
     /**

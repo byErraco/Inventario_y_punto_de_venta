@@ -677,40 +677,25 @@ public class ObjetoBaseDatos {
         ResultSet rs;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT caja.id_caja, MAX(estado_caja.id_estado_caja) FROM ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("caja"))
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("estado_caja"))
-                .append(" ON ")
-                .append("estado_caja.id_caja = caja.id_caja")
-                .append(" GROUP BY ")
-                .append("caja.id_caja;")
-                .append("SELECT estado_caja.id_estado_caja, MAX(corte_caja.id_corte_caja) FROM ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("estado_caja"))
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("corte_caja"))
-                .append(" ON ")
-                .append("corte_caja.id_estado_caja = estado_caja.id_estado_caja")
-                .append(" GROUP BY ")
-                .append("estado_caja.id_estado_caja;")
-                .append("SELECT EXISTS (SELECT cierre_caja.id_corte_caja, corte_caja.id_corte_caja FROM ")
+        
+        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("cierre_caja"))
-                .append(" INNER JOIN ")
+                .append(" as cic WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("corte_caja"))
-                .append(" ON ")
-                .append("cierre_caja.id_corte_caja = corte_caja.id_corte_caja")
-                .append(" GROUP BY ")
-                .append("cierre_caja.id_cierre_caja, corte_caja.id_corte_caja);");
+                .append(" as cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("estado_caja"))
+                .append(" as ec WHERE ec.id_caja = ") 
+                .append(idCaja)
+                .append(")));");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
-            if (rs.next()) {
+            
+            if(rs.next()){
                 cajaAbierta = !rs.getBoolean("exists");
             }
         } catch (Exception e) {
@@ -2563,6 +2548,42 @@ public class ObjetoBaseDatos {
         }
 
         return id;
+    }
+
+    /**
+     * Devuelve el id del último estado de caja 
+     * para una caja específica, si no encuentra ningún estado
+     * devuelve -1
+     * 
+     * @param idCaja
+     * @return 
+     */
+    public int getIdUltimoEstadoCaja(int idCaja) {
+        int idUltimoEstadoCaja = -1;
+        ResultSet rs;
+
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        sqlQuery.append("SELECT max(id_estado_caja) FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("estado_caja"))
+                .append(" WHERE id_caja = ") 
+                .append(idCaja)
+                .append(";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            if(rs.next()){
+                idUltimoEstadoCaja = rs.getInt("max");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+        return idUltimoEstadoCaja;
     }
 
     /**
