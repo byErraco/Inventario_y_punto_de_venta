@@ -81,6 +81,7 @@ public class PostgreSQL {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return null; 
             }
+            
             return sentencia.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();

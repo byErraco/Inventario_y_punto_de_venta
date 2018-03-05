@@ -52,7 +52,7 @@ public class Caja extends javax.swing.JInternalFrame {
         estructuraCaja = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja")));
         ArrayListTableModel model = new ArrayListTableModel(estructuraCaja, columnas, columnas);
         getTblResultadoBusqueda().setModel(model);
-        setBotonesCajaEnabled(menuPrincipal.isEstadoCaja());
+        setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
 
         getTblResultadoBusqueda().setFont(new Font("Arial", Font.PLAIN, 12));
         getTblResultadoBusqueda().getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -160,7 +160,7 @@ public class Caja extends javax.swing.JInternalFrame {
      * @param aFlag True para abrir una caja, false para cerrarla.
      */
     public void setEstadoCaja(boolean aFlag) {
-        if (aFlag && !menuPrincipal.isEstadoCaja()) {
+        if (aFlag && !menuPrincipal.isCajaAbierta()) {
             boolean aux;
             String montoInicial = "";
             do {
@@ -191,7 +191,7 @@ public class Caja extends javax.swing.JInternalFrame {
             } else {
                 Utilidades.Sonidos.beep();
             }
-        } else if (!aFlag && menuPrincipal.isEstadoCaja()) {
+        } else if (!aFlag && menuPrincipal.isCajaAbierta()) {
             getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
 
             abrirVentanaCierre();
@@ -204,7 +204,7 @@ public class Caja extends javax.swing.JInternalFrame {
      * Crea un corte de caja.
      */
     public void abrirVentanaCorteCaja() {
-        if (menuPrincipal.isEstadoCaja()) {
+        if (menuPrincipal.isCajaAbierta()) {
             if (ventanaCorte != null) {
                 JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
             } 
@@ -224,7 +224,7 @@ public class Caja extends javax.swing.JInternalFrame {
     }
 
     private void abrirVentanaCierre() {
-        if (menuPrincipal.isEstadoCaja() && menuPrincipal.estacerrado(ventanaCierre)) {
+        if (menuPrincipal.isCajaAbierta() && menuPrincipal.estacerrado(ventanaCierre)) {
             ventanaCierre = new CierreCaja(this);
             Dimension desktopSize = menuPrincipal.panel.getSize();
             Dimension jInternalFrameSize = ventanaCierre.getSize();
@@ -237,7 +237,7 @@ public class Caja extends javax.swing.JInternalFrame {
 
     private void abrirVentanaFlujoCaja() {
         getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
-        if (menuPrincipal.isEstadoCaja()) {
+        if (menuPrincipal.isCajaAbierta()) {
             //Cual es la pantalla para ver el flujo de la caja
         }
 
