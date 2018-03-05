@@ -14,6 +14,8 @@ import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
 import PuntoVenta.Ventanas.Cierre_Caja;
+import PuntoVenta.Ventanas.Productos;
+import PuntoVenta.Ventanas.Movimientos;
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -49,6 +51,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public bloqueo2 bloqueo;
     public Empresa empresa;
     public Cierre_Caja cierre;
+    public Productos productos; //añadido
+    public Movimientos movim;   // añadido
 
     //OTRAS VENTANAS
     //UTILIZAR DESPUES PARA SISTEMA DE CAMBIO DE PANTALLAS
@@ -68,6 +72,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private ObjetoBaseDatos obd; //Objeto Base Datos
     private Properties configuracion;
     private boolean logged;
+    private Object actProd;
 
     /**
      * ?
@@ -175,9 +180,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
         btnFacturas = new javax.swing.JButton();
+        btnAdmin = new javax.swing.JButton();
         btnMovimientos = new javax.swing.JButton();
         btnProductos = new javax.swing.JButton();
-        btnAdmin = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         btnbloqueo = new javax.swing.JButton();
@@ -256,30 +261,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnFacturas);
 
-        btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnMovimientos.setText("Movimientos F8");
-        btnMovimientos.setFocusable(false);
-        btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnMovimientos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMovimientosActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnMovimientos);
-
-        btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnProductos.setText("    Productos F9");
-        btnProductos.setFocusable(false);
-        btnProductos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnProductos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnProductos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProductosActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnProductos);
-
         btnAdmin.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. admin.png"))); // NOI18N
         btnAdmin.setText("<html><font size=2><center>Admin<br>F6</center></font></html>");
@@ -310,6 +291,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(btnAdmin);
+
+        btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnMovimientos.setText("<html><font size=2><center>Movimientos<br>F8</center></font></html>");
+        btnMovimientos.setFocusable(false);
+        btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnMovimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMovimientosActionPerformed(evt);
+            }
+        });
+        btnMovimientos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnMovimientosKeyPressed(evt);
+            }
+        });
+        jToolBar1.add(btnMovimientos);
+
+        btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnProductos.setText("<html><font size=2><center>Productos<br>F9</center></font></html>");
+        btnProductos.setFocusable(false);
+        btnProductos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProductos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductosActionPerformed(evt);
+            }
+        });
+        btnProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnProductosKeyPressed(evt);
+            }
+        });
+        jToolBar1.add(btnProductos);
 
         btnAyuda.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
@@ -464,6 +481,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAyuda.setEnabled(false);
         jButton5.setEnabled(false);
         btnAdmin.setEnabled(false);
+        btnProductos.setEnabled(false);
+        btnMovimientos.setEnabled(false);
         abrirVentanaBloqueo();
 
     }//GEN-LAST:event_btnbloqueoActionPerformed
@@ -488,13 +507,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdminKeyPressed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-       //productos
+       abrirVentanaProd();
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
-     //movimientos       
+     abrirVentanaMovimientos();     
        
     }//GEN-LAST:event_btnMovimientosActionPerformed
+
+    private void btnProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnProductosKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F9) {
+            abrirVentanaProd();
+        }
+    }//GEN-LAST:event_btnProductosKeyPressed
+
+    private void btnMovimientosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMovimientosKeyPressed
+        
+         if (evt.getKeyCode() == KeyEvent.VK_F8) {
+           abrirVentanaMovimientos();
+        }
+        
+    }//GEN-LAST:event_btnMovimientosKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -553,6 +586,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
+            
+            
+            
 
             bloqueo = new bloqueo2(this);
             Dimension desktopSize = panel.getSize();
@@ -615,6 +651,30 @@ public class MenuPrincipal extends javax.swing.JFrame {
         } else {
             calc.requestFocus();
         }
+    }
+    
+    
+    public void abrirVentanaProd(){
+    
+        factura = new Factura(this);
+        Dimension desktopSize = panel.getSize();
+        Dimension jInternalFrameSize = factura.getSize();
+        factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                (desktopSize.height - jInternalFrameSize.height) / 2);
+        panel.add(factura);
+        factura.show();
+    
+    }
+    
+    public void abrirVentanaMovimientos(){
+         factura = new Factura(this);
+        Dimension desktopSize = panel.getSize();
+        Dimension jInternalFrameSize = factura.getSize();
+        factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                (desktopSize.height - jInternalFrameSize.height) / 2);
+        panel.add(factura);
+        factura.show();
+    
     }
 
     public void setBotonesMenuPrincipalEnabled(boolean aFlag) {
@@ -690,6 +750,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
                 abrirVentanaBloqueo();
             }
+            
+            Action actProducto = new AbstractAction(Modulo.PRODUCTOS.getAction()){
+            @Override
+             public void actionPerformed(ActionEvent e){
+               abrirVentanaProd();
+             }
+            };
+            
+            Action actMovimiento = new AbstractAction (Modulo.MOVIMIENTOS.getAction()){
+            
+            @Override
+             public void actionPerformed(ActionEvent e){
+               abrirVentanaMovimientos();
+             }
+            
+            };
         };
 
         actCaja.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
@@ -700,7 +776,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actbloqueo.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         actAyuda.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-
+       
+        
+        
+        
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);
         getBtnCaja().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCaja.getValue(Action.ACCELERATOR_KEY), Modulo.CAJA.getAction());
 
@@ -721,7 +800,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jButton5.getActionMap().put(Modulo.ACERCA.getAction(), actAcerca);
         jButton5.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAcerca.getValue(Action.ACCELERATOR_KEY), Modulo.ACERCA.getAction());
-
+        
+       // btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(), (Action) actProd);
+      //  btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((keyStroke)actProd.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());
+        
     }
 
     /**
@@ -801,13 +883,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         CAJA(1, "actionCaja"),
         VENTAS(2, "actionVentas"),
-        FACTURAS(4, "actionFacturas"),
-        USUARIO(5, "actionUsuarios"),
-        AYUDA(9, "actionAyuda"),
-        ACERCA(7, "actionAcerca"),
-        CALC(8, "actionCalculadora"),
+        FACTURAS(3, "actionFacturas"),
+        USUARIO(4, "actionUsuarios"),
+        AYUDA(11, "actionAyuda"),
+        ACERCA(5, "actionAcerca"),
+        CALC(10, "actionCalculadora"),
         ADMIN(6, "actionAdmin"),
-        BLOQUEO(11, "actionBloqueo");
+        PRODUCTOS(8,"actionProducto"),// nueva ventana
+        MOVIMIENTOS(9,"actionMovim"), // nueva ventana
+        BLOQUEO(12, "actionBloqueo");
 
         private final int id;
         private final String action;
