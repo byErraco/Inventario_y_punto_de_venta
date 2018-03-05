@@ -26,16 +26,16 @@ public class ModeloEmpleado {
     private String telefono;
     
     public ModeloEmpleado(HashMap<String, String> map){
-        this.id = Integer.parseInt(map.get("id"));
-        this.nombre = map.get("nombre");
-        this.apellido = map.get("apellido");
-        this.nacionalidad =  map.get("nacionalidad").charAt(0);
-        this.cedula = map.get("cedula");
-        this.correo = map.get("correo");
-        this.cargo = map.get("cargo");
-        this.id_Cargo = Integer.parseInt(map.get("cargo_id"));
-        this.telefono = map.get("telefono");
-        this.password = map.get("password");
+        this.id = Integer.parseInt(map.get("id_empleado"));
+        this.nombre = map.get("nombre_persona");
+        this.apellido = map.get("apellido_persona");
+        this.nacionalidad =  map.get("tipo_persona").charAt(0);
+        this.cedula = map.get("numero_identificacion_persona");
+        this.correo = map.get("email_persona");
+        this.cargo = map.get("nombre_cargo");
+        this.id_Cargo = Integer.parseInt(map.get("id_cargo"));
+        this.telefono = map.get("telefono_persona");
+        this.password = map.get("clave");
     }
 
     /**

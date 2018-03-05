@@ -551,21 +551,24 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("SELECT id_empleado, clave FROM ")
                 .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("empleado"))
-                .append(" WHERE numero_identificacion_persona='")
+                .append(".").append(mapTabla.get("empleado")).append(" as e ")
+                .append("INNER JOIN ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("persona")).append(" as p ")
+                .append("ON e.id_persona = p.id_persona ")
+                .append("WHERE numero_identificacion_persona='")
                 .append(cedula)
-                .append("';");
-
+                .append("';"); 
         try {
             postgreSQL.conectar();
             result = postgreSQL.ejecutarSelect(sqlQuery.toString());
             String p = null;
 
             if (result.next()) {
-
-                id = result.getInt("id");
+                id = result.getInt("id_empleado");
                 p = result.getString("clave");
             }
+            
             char[] pass = PuntoVenta.Ventanas.LogIn.jpwClave.getPassword();
 
             String passString = new String(pass);
@@ -693,7 +696,7 @@ public class ObjetoBaseDatos {
                 .append(" ON ")
                 .append("corte_caja.id_estado_caja = estado_caja.id_estado_caja")
                 .append(" GROUP BY ")
-                .append(".").append("estado_caja.id_estado_caja;")
+                .append("estado_caja.id_estado_caja;")
                 .append("SELECT EXISTS (SELECT cierre_caja.id_corte_caja, corte_caja.id_corte_caja FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("cierre_caja"))
@@ -1254,27 +1257,32 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
 
-        String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "clave"};
-        String[] columnaCargo = new String[]{"descripcion"};
+        String[] columnaEmpleado = new String[]{"id_empleado", "clave", "nombre_persona", "apellido_persona", "tipo_persona", "numero_identificacion_persona", "email_persona", "telefono_persona"};
+        String[] columnaCargo = new String[]{"id_cargo", "nombre_cargo"};
 
         sqlQuery.append("SELECT ");
         for (String columna : columnaEmpleado) {
-            sqlQuery.append("e.").append(columna).append(",");
+            sqlQuery.append(columna).append(",");
         }
         for (String columna : columnaCargo) {
-            sqlQuery.append("c.").append(columna).append(",");
+            sqlQuery.append(columna).append(",");
         }
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("stpv")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado")).append(" AS e")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona")).append(" AS p")
+                .append(" ON e.id_persona = p.id_persona")
                 .append(" LEFT JOIN ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("cargo")).append(" AS c")
-                .append(" ON e.cargo_id=c.id")
-                .append(" WHERE e.id=").append(id)
-                .append(" LIMIT 1;");
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("cargo"))
+                .append(" ON id_cargo_empleado=id_cargo")
+                .append(" WHERE id_empleado=").append(id)
+                .append(";");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());

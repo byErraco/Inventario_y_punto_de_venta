@@ -462,7 +462,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             return;
         }
 
-        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave);
+        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave, cargo_id);
 
         if (idEmpleado > 0) {
             this.cerrarVentana();

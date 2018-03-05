@@ -93,7 +93,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
 
         this.setTitle("Saphiro - " + this.configuracion.getProperty("nombre_equipo"));
-        this.estadoCaja = this.getOBD().getEstadoCaja(this.modeloCaja.getId());
+        this.estadoCaja = this.getOBD().isCajaAbierta(this.modeloCaja.getId());
 
         this.idEstadoCaja = this.getOBD().getIdEstadoCaja(this.modeloCaja.getId());
         crearHotKeys();

@@ -1,0 +1,1 @@
+﻿SELECT id_empleado, clave FROM spve.empleado as e INNER JOIN spve.persona as p ON e.id_persona = p.id_persona WHERE p.numero_identificacion_persona = 'admin';    
