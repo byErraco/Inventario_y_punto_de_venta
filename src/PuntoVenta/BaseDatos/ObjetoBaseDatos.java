@@ -37,19 +37,20 @@ public class ObjetoBaseDatos {
     HashMap<String, String> mapTabla = new HashMap<String, String>();
     HashMap<String, String> mapSchema = new HashMap<String, String>();
 
-    public ObjetoBaseDatos(String url, String login, String contraseña) {
+    public ObjetoBaseDatos(String url, String login, String clave) {
         this.url = url;
-        postgreSQL = new PostgreSQL(url, login, contraseña);
+        postgreSQL = new PostgreSQL(url, login, clave);
         crearMaps();
     }
 
     public static void main(String[] args){
         ObjetoBaseDatos obd = new ObjetoBaseDatos("jdbc:postgresql://localhost:5432/stpv", "inverdata", "C1234567c");
         System.out.println(obd);
-        //obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
-        //obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
-        //obd.eliminarPersona("1234567");
-        obd.crearEmpleado("ernesto", "rincon", 'V', "20944806", "04266241381", "erincongil@gmail.com", "mcbo", "asdf", "1");
+        //LISTO//obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
+        //LISTO//obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
+        //LISTO//obd.eliminarPersona("20944806");
+        //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "asdf", 1);
+        obd.eliminarEmpleado("25491458");
         //obd.seleccionarCargo();
         //Empleado empleado = obd.getDatosEmpleado(1);
         //System.out.println(empleado.getNombre());
@@ -203,24 +204,25 @@ public class ObjetoBaseDatos {
      * @param direccion_persona
      * @param telefono_persona
      * @param email_persona
-     * @param contraseña
+     * @param clave
      * @param id_cargo
      * @return id del empleado resultado del INSERT o -1 en caso de fallar.
      */
-    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña, String id_cargo) {
+    public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, int id_cargo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
             resultado = crearPersona(nombre, apellido, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
-            //if(resultado > 0){
+            if(resultado > 0){
                 sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado")) 
-                .append("(id_empleado, contraseña, id_persona, id_cargo) VALUES(")
+                .append("(clave, id_persona, id_cargo) VALUES(")
+                .append("'").append(clave).append("', ")
                 .append("'").append(resultado).append("', ")
-                .append("'").append(1).append("', ")
-                .append("'").append(contraseña);
-                //resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
-            //}
+                .append("'").append(id_cargo)
+                .append("');");
+                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+            }
                 
         return resultado;
     }
@@ -307,7 +309,7 @@ public class ObjetoBaseDatos {
                 emple.setCorreo(rs.getString("email_persona"));
                 emple.setTelefono(rs.getString("telefono_persona"));
                 emple.setDireccion(rs.getString("direccion_persona"));
-                //emple.setPassword(rs.getString("contraseña"));
+                //emple.setPassword(rs.getString("clave"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -376,7 +378,7 @@ public class ObjetoBaseDatos {
      * @param apellido_persona
      * @param tipo_persona
      * @param numero_identificacion_persona
-     * @param contraseña
+     * @param clave
      * @param email_persona
      * @param telefono_persona
      * @param departamento
@@ -384,7 +386,7 @@ public class ObjetoBaseDatos {
      * @param numero_identificacion_persona_viejo
      * @return
      */
-    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String contraseña, String departamento, String numero_identificacion_persona_viejo) {
+    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String clave, String departamento, String numero_identificacion_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         
@@ -395,7 +397,7 @@ public class ObjetoBaseDatos {
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
                 .append(" SET id_cargo ='").append(id_cargo)
-                .append("', contraseña='").append(contraseña)
+                .append("', clave='").append(clave)
                 .append("' WHERE numero_identificacion_persona='")
                 .append(numero_identificacion_persona_viejo)
                 .append("';");
@@ -443,15 +445,15 @@ public class ObjetoBaseDatos {
      * schema "stpv" del mapSchema y la tabla "usuario" del mapTabla.
      *
      * @param cedula usuario a validar.
-     * @param contraseña del usuario.
+     * @param clave del usuario.
      * @return Id del usuario. Si no existe retorna -1
      */
-    public int autenticarUsuario(String cedula, char[] contraseña) {
+    public int autenticarUsuario(String cedula, char[] clave) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT id_empleado AS id, contraseña FROM ")
+        sqlQuery.append("SELECT id_empleado AS id, clave FROM ")
                 .append(mapSchema.get("stpv"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE numero_identificacion_persona='")
@@ -465,10 +467,10 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("contraseña");
+                p = result.getString("clave");
             }
             Cripto c = new Cripto(p);
-            boolean autenticado = c.validate(new String(contraseña));
+            boolean autenticado = c.validate(new String(clave));
             if (autenticado) {
                 return id;
             } else {
@@ -487,18 +489,18 @@ public class ObjetoBaseDatos {
     /**
      * Verifica la existencia de un empleado en la base de datos. -Utiliza el
      * schema "stpv" del mapSchema y la tabla "empleado" del mapTabla. Este
-     * método funciona con la encriptacion sha1 del contraseña.
+     * método funciona con la encriptacion sha1 del clave.
      *
      * @param cedula empleado a validar.
-     * @param contraseña del empleado.
+     * @param clave del empleado.
      * @return Id del empleado. Si no existe retorna -1
      */
-    public int autenticarEmpleado(String cedula, char[] contraseña) {
+    public int autenticarEmpleado(String cedula, char[] clave) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT numero_identificacion_persona AS id, contraseña FROM ")
+        sqlQuery.append("SELECT numero_identificacion_persona AS id, clave FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE numero_identificacion_persona='")
@@ -512,7 +514,7 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("contraseña");
+                p = result.getString("clave");
             }
             char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
 
@@ -542,12 +544,12 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int autenticarEmpleado2(String cedula, char[] contraseña) {
+    public int autenticarEmpleado2(String cedula, char[] clave) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT id_empleado, contraseña FROM ")
+        sqlQuery.append("SELECT id_empleado, clave FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE numero_identificacion_persona='")
@@ -562,7 +564,7 @@ public class ObjetoBaseDatos {
             if (result.next()) {
 
                 id = result.getInt("id");
-                p = result.getString("contraseña");
+                p = result.getString("clave");
             }
             char[] pass = PuntoVenta.Ventanas.LogIn.jpwClave.getPassword();
 
@@ -581,19 +583,19 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int autsupervisor(String contraseña) {
+    public int autsupervisor(String clave) {
         ResultSet result;
         int id1 = 1;
         int id = -1;
-//        System.out.println(contraseña + "1111");
+//        System.out.println(clave + "1111");
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT contraseña FROM ")
+        sqlQuery.append("SELECT clave FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE id_cargo='")
                 .append(id1)
-                .append("'AND contraseña='")
-                .append(contraseña)
+                .append("'AND clave='")
+                .append(clave)
                 .append("';");
 
         try {
@@ -601,14 +603,14 @@ public class ObjetoBaseDatos {
             result = postgreSQL.ejecutarSelect(sqlQuery.toString());
             String j = null;
             if (result.next()) {
-                j = result.getString("contraseña");
+                j = result.getString("clave");
             }
 //            System.out.println(j + " este es el bd");
-            if (contraseña.equals(j)) {
+            if (clave.equals(j)) {
 //                System.out.println("lol");
                 id = 6;
             } else {
-//                System.out.println(contraseña + "no lo es");
+//                System.out.println(clave + "no lo es");
                 id = -1;
             }
 
@@ -622,11 +624,11 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String contraseña, String departamento, String numero_identificacion_persona_viejo) {
+    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String clave, String departamento, String numero_identificacion_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
             modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
-            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, contraseña, departamento, numero_identificacion_persona_viejo);
+            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, clave, departamento, numero_identificacion_persona_viejo);
             resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
        
         return resultado;
@@ -667,11 +669,9 @@ public class ObjetoBaseDatos {
      * @param idCaja
      * @return Estado de la caja. Abierto o cerrado.
      */
-    public boolean getCajaCerrada(int idCaja) {
+    public boolean isCajaAbierta(int idCaja) {
         boolean cajaAbierta = false;
         ResultSet rs;
-        String fecha_apertura = "";
-        String fecha_cierre = "";
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("SELECT caja.id_caja, MAX(estado_caja.id_estado_caja) FROM ")
@@ -708,17 +708,12 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
-                fecha_apertura = rs.getString("fecha_apertura");
-                fecha_cierre = rs.getString("fecha_cierre");
+                cajaAbierta = !rs.getBoolean("exists");
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             postgreSQL.desconectar();
-        }
-        //Este if verifica que la caja tenga fecha de apertura y no tenga fecha de cierre.
-        if (!fecha_apertura.isEmpty() && (fecha_cierre == null || fecha_cierre.isEmpty())) {
-            cajaAbierta = true;
         }
         return cajaAbierta;
     }
@@ -1259,7 +1254,7 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
 
-        String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "contraseña"};
+        String[] columnaEmpleado = new String[]{"id", "nombre", "apellido", "nacionalidad", "cedula", "correo", "cargo_id", "clave"};
         String[] columnaCargo = new String[]{"descripcion"};
 
         sqlQuery.append("SELECT ");
@@ -2525,15 +2520,15 @@ public class ObjetoBaseDatos {
      * Muestra el nombre del empleado en la caja
      *
      * @param cedula cedula del empleado que se mostrara.
-     * @param contraseña 
+     * @param clave 
      * @return
      */
-    public int setEmpleadoCaja(String cedula, char[] contraseña) {
+    public int setEmpleadoCaja(String cedula, char[] clave) {
         ResultSet result;
         int id = -1;
 
         StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT cedula AS id, contraseña FROM ")
+        sqlQuery.append("SELECT cedula AS id, clave FROM ")
                 .append(mapSchema.get("stpv"))
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" WHERE cedula='")
@@ -2547,7 +2542,7 @@ public class ObjetoBaseDatos {
 
             if (result.next()) {
                 id = result.getInt("id");
-                p = result.getString("contraseña");
+                p = result.getString("clave");
             }
             char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
             String passString = new String(pass);
