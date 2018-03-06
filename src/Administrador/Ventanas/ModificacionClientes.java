@@ -332,22 +332,9 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
-        boolean valido = true;
-        if ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != KeyEvent.VK_MINUS))) {
+        if ((txtTelefono.getText().length() > 15) || ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != '-') && (evt.getKeyChar() != '+')))) {
             evt.consume();
-        } else if ((Character.isDigit(evt.getKeyChar())) && txtTelefono.getText().length() == 4) {
-            evt.consume();
-        } else if (txtTelefono.getText().length() != 4 && (evt.getKeyChar() == KeyEvent.VK_MINUS)) {
-            evt.consume();
-        } else if (txtTelefono.getText().length() > 11) {
-            evt.consume();
-        } else {
-            valido = false;
         }
-        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-            valido = false;
-        }
-        //Alerta.setVisible(valido);
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed

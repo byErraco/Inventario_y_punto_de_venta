@@ -1040,6 +1040,7 @@ public class ObjetoBaseDatos {
 
     /**
      * Devuelve la lista de personas activas
+     * 
      * @return 
      */
     public ArrayList<HashMap<String, String>> getArrayListClientes() {
@@ -1062,7 +1063,6 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnasCliente) {
-                    System.out.println("COLUMNA: "+columna);
                     map.put(columna, rs.getString(columna));
                 }
                 resultado.add(map);
