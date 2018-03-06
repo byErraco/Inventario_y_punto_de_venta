@@ -9,6 +9,7 @@ import ClasesExtendidas.Tablas.TipoMonedaTableModel;
 import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
+import PuntoVenta.Ventanas.Detalles;
 import PuntoVenta.Modelos.ModeloProducto;
 import static PuntoVenta.Ventanas.ListaProductos.txtCampoDescripcion;
 import java.awt.event.ActionEvent;
@@ -99,10 +100,10 @@ public class Productos extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnVer = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 204, 102));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jButton1.setText("<html><font size=2><center>Agregar</center></font></html> ");
@@ -145,11 +146,11 @@ public class Productos extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel1.setText("BUSQUEDA");
 
-        jButton4.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton4.setText("<html><font size=2><center>Ver</center></font></html> ");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnVer.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnVer.setText("<html><font size=2><center>Ver</center></font></html> ");
+        btnVer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnVerActionPerformed(evt);
             }
         });
 
@@ -175,7 +176,7 @@ public class Productos extends javax.swing.JInternalFrame {
                 .addGap(75, 75, 75)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(81, 81, 81))
@@ -194,7 +195,7 @@ public class Productos extends javax.swing.JInternalFrame {
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnVer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32))
         );
 
@@ -205,10 +206,11 @@ public class Productos extends javax.swing.JInternalFrame {
         agregarProducto();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
+       Detalles det = new Detalles();
+       det.setVisible(true);
        
-       
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnVerActionPerformed
 
     
     
@@ -225,10 +227,10 @@ public class Productos extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnVer;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
@@ -240,31 +242,6 @@ public class Productos extends javax.swing.JInternalFrame {
         return jTextField1;
     }
      
+
      
-     
-     
-     /*
- public void cargarInformacionProducto(String idProducto) {
-        if (txtProductoId.getText().isEmpty() || !txtProductoId.getText().equalsIgnoreCase(idProducto)) {
-            txtProductoId.setText(idProducto);
-        }
-        HashMap<String, String> map = menuPrincipal.getOBD().getMapProducto(idProducto);
-        if (!map.isEmpty()) {
-            productoPorAsociar = new ModeloProducto(map);
-            lblProductoPrecio.setVisible(true);
-            lblProductoPrecioValor.setText(map.get("pvp"));
-            txtProductoNombre.setText(map.get("descripcion"));
-            txtCantidad.setText("1");
-            txtCantidad.setSelectionStart(0);
-            txtCantidad.setSelectionEnd(txtCantidad.getText().length());
-            txtCantidad.requestFocus();
-        } else {
-            Utilidades.Sonidos.beep();
-            limpiarCamposProductoTxt();
-            txtProductoId.setSelectionStart(0);
-            txtProductoId.setSelectionEnd(txtProductoId.getText().length());
-            txtProductoId.requestFocus();
-        }
-    }
-*/
 }

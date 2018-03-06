@@ -9,7 +9,7 @@ package PuntoVenta.Ventanas;
  *
  * @author David Chavez
  */
-public class Detalles extends javax.swing.JFrame {
+public class Detalles extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form Detalles
