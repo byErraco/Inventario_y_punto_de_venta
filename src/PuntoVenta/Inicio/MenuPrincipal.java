@@ -51,8 +51,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public bloqueo2 bloqueo;
     public Empresa empresa;
     public Cierre_Caja cierre;
-    public Productos productos; //añadido
-    public Movimientos movim;   // añadido
+    public Productos producto; //añadido
+    public Movimientos movimiento;   // añadido
 
     //OTRAS VENTANAS
     //UTILIZAR DESPUES PARA SISTEMA DE CAMBIO DE PANTALLAS
@@ -65,6 +65,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private boolean estadoCaja;
     private ModeloCaja modeloCaja;
     private Factura factura;
+    private Productos prod; // añadido para producto
+    private Movimientos mov;// añadido para movimiento
     private Acerca acerca = new Acerca();
     private Ayuda ayuda = new Ayuda();
     private int idEstadoCaja;
@@ -586,6 +588,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
             PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
+//            PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false); // añadido productos
+//            PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false); // añadido movimientos
+            
             
             
             
@@ -656,24 +661,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     public void abrirVentanaProd(){
     
-        factura = new Factura(this);
+        prod = new Productos(this);
         Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = factura.getSize();
-        factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+        Dimension jInternalFrameSize = prod.getSize();
+        prod.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                 (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(factura);
-        factura.show();
+        panel.add(prod);
+        prod.show();
     
     }
     
     public void abrirVentanaMovimientos(){
-         factura = new Factura(this);
+         movimiento = new Movimientos(this);
         Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = factura.getSize();
-        factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+        Dimension jInternalFrameSize = movimiento.getSize();
+        movimiento.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                 (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(factura);
-        factura.show();
+        panel.add(movimiento);
+        movimiento.show();
     
     }
 
@@ -776,8 +781,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actbloqueo.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         actAyuda.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-       
-        
+//        actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
+   //     actMovimientos.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
         
         
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);
@@ -801,9 +806,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jButton5.getActionMap().put(Modulo.ACERCA.getAction(), actAcerca);
         jButton5.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAcerca.getValue(Action.ACCELERATOR_KEY), Modulo.ACERCA.getAction());
         
-       // btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(), (Action) actProd);
-      //  btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((keyStroke)actProd.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());
+      //  btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(),actProducto);
+      //  btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actProd.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());
         
+      //  btnMovimientos.getActionMap().put(Modulo.MOVIMIENTOS.getAction(), actMovimientos);
+       // btnMovimientos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actMovimientos.getValue(Action.ACCELERATOR_KEY),Modulo.MOVIMIENTOS.getAction());
     }
 
     /**
@@ -811,6 +818,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public javax.swing.JButton getBtnCaja() {
         return btnCaja;
+    }
+    
+     public javax.swing.JButton getBtnProd() {
+        return btnProductos;
+    }
+     
+      public javax.swing.JButton getBtnMov() {
+        return btnMovimientos;
     }
 
     /**

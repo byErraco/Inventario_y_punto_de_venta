@@ -5,6 +5,8 @@
  */
 package PuntoVenta.Ventanas;
 
+import PuntoVenta.Inicio.MenuPrincipal;
+
 /**
  *
  * @author David Chavez
@@ -16,6 +18,10 @@ public class Movimientos extends javax.swing.JInternalFrame {
      */
     public Movimientos() {
         initComponents();
+    }
+
+    public Movimientos(MenuPrincipal aThis) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**

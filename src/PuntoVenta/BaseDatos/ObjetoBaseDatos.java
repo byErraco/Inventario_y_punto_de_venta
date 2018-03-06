@@ -8,6 +8,7 @@ package PuntoVenta.BaseDatos;
 import ClasesExtendidas.Numeros.XBigDecimal;
 import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Modelos.ModeloEmpleado;
+import PuntoVenta.Modelos.ModeloProducto;
 import PuntoVenta.reporte1;
 import Utilidades.ArticuloDescontar;
 import Utilidades.Cripto;
@@ -480,6 +481,8 @@ public class ObjetoBaseDatos {
                 PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
+              //  PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
+              //  PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
                 PuntoVenta.Ventanas.bloqueo2.jButton2.setEnabled(true);
                 PuntoVenta.Ventanas.bloqueo2.jButton2.requestFocus();
 
