@@ -466,17 +466,17 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
 
     private void registrarCliente() {
-        String numero_identificacion, nombre, apellido, telefono, email, direccion;
+        String nombre, apellido, numero_identificacion, direccion, telefono, email;
         char tipo;
         int idCliente;
-
-        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        numero_identificacion = txtDocumento.getText();
+        
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
+        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        numero_identificacion = txtDocumento.getText();
+        direccion = txtDireccion.getText();
         telefono = txtTelefono.getText();
         email = txtCorreo.getText();
-        direccion = txtDireccion.getText();
         
         if (numero_identificacion.isEmpty()) {
             Utilidades.Sonidos.beep();

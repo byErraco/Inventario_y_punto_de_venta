@@ -750,12 +750,15 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         HashMap<String, String> map;
-        String[] columnasEmpleado = {"e.cedula AS cedula", "e.nombre||' '||e.apellido AS nombre"};
+        
+        String[] columnasEmpleado = {"tipo_persona", "numero_identificacion_persona", "nombre_persona||' '||apellido_persona AS nombre_persona", "nombre_cargo"};
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasEmpleado, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM ")
-                .append("stpv.empleado AS e;");
+                .append("spve.persona as p INNER JOIN spve.empleado as e ON p.id_persona = e.id_persona")
+                .append(" LEFT JOIN spve.cargo ON id_cargo_empleado = id_cargo WHERE activo_empleado = 1; ");
+         
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1035,23 +1038,31 @@ public class ObjetoBaseDatos {
         return resultado;
     }
 
+    /**
+     * Devuelve la lista de personas activas
+     * @return 
+     */
     public ArrayList<HashMap<String, String>> getArrayListClientes() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         HashMap<String, String> map;
-        String[] columnasCliente = {"c.cedula AS cedula", "c.nombre||' '||c.apellido AS nombre"};
+        
+        String[] columnasCliente = {"tipo_persona", "numero_identificacion_persona", "nombre_persona||' '||apellido_persona AS nombre_persona"};
+        
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasCliente, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM ")
-                .append("stpv.cliente AS c;");
+                .append("spve.persona WHERE activo_persona = 1;");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnasCliente) {
+                    System.out.println("COLUMNA: "+columna);
                     map.put(columna, rs.getString(columna));
                 }
                 resultado.add(map);

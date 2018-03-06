@@ -29,12 +29,8 @@ import javax.swing.event.InternalFrameEvent;
 //¿?¿?¿?¿?¿?¿
 public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
-    private Admin admin;
-    private MenuPrincipal menuPrincipal;
-    private ObjetoBaseDatos obd;
-    private Object ObjetoBaseDatos;
-    private Object txtNombre;
-    private RegistroEmpleados registroEmpleados;
+    private final Admin admin;
+    private final ObjetoBaseDatos obd;
     private HashMap<String, Integer> cargos;
 
     /**
