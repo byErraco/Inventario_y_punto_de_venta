@@ -1112,6 +1112,39 @@ public class ObjetoBaseDatos {
     }
 
     /**
+     * Devuelve todos los cargos activos en un HashMap
+     * donde el String es el nombre del cargo e Integer el id
+     * 
+     * @return 
+     */
+    public HashMap<String, Integer> getMapCargos(){
+        StringBuilder sqlQuery = new StringBuilder();
+        HashMap<String, Integer> cargos = new HashMap<>();
+        ResultSet rs;
+        
+        sqlQuery.append("SELECT id_cargo, nombre_cargo FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("cargo"))
+                .append(" WHERE activo_cargo = 1;");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            while (rs.next()) {
+                cargos.put(rs.getString("nombre_cargo"), rs.getInt("id_cargo"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            cargos = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+                
+        return cargos;
+    }
+    
+    /**
      * Utiliza el id de la caja para buscar en la base de datos y crear un
      * map<k, v> de la tabla caja
      *

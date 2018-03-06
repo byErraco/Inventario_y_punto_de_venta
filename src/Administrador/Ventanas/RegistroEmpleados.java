@@ -11,6 +11,7 @@ import PuntoVenta.Modelos.ModeloEmpleado;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -34,6 +35,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     private Object ObjetoBaseDatos;
     private Object txtNombre;
     private RegistroEmpleados registroEmpleados;
+    private HashMap<String, Integer> cargos;
 
     /**
      * Creates new form RegistroEmpleados
@@ -42,8 +44,10 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
      */
     public RegistroEmpleados(Admin admin) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
+        setCargos();
     }
 
     /**
@@ -55,6 +59,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
      */
     public RegistroEmpleados(Admin admin, char identificador, String documento) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
         cmbTipoDocumento.setSelectedItem(identificador);
@@ -178,8 +183,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblPassword.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
         lblPassword.setText("Contraseña:");
-
-        cmbCargoId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3" }));
 
         lblCargo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblCargo.setForeground(new java.awt.Color(255, 255, 255));
@@ -415,7 +418,15 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         this.addInternalFrameListener(listener);
 
     }
-
+    
+    private void setCargos() {
+        this.cargos = this.obd.getMapCargos();
+        
+        for (Entry<String, Integer> entry : this.cargos.entrySet()) {   
+            cmbCargoId.addItem(entry.getKey());
+        }
+    }
+    
     private void cerrarVentana() {
         this.dispose();
     }
@@ -434,7 +445,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         direccion = txtDireccion.getText();
         clave = String.valueOf(jClave.getPassword());
 
-        cargo_id = Integer.valueOf((String) cmbCargoId.getSelectedItem());
+        cargo_id = cargos.get((String) cmbCargoId.getSelectedItem());
 
         if (numero_identificacion.isEmpty()) {
             Utilidades.Sonidos.beep();
@@ -462,7 +473,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             return;
         }
 
-        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave, cargo_id);
+        idEmpleado = this.obd.crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave, cargo_id);
 
         if (idEmpleado > 0) {
             this.cerrarVentana();
