@@ -86,7 +86,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         lblCorreo = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txaDireccion = new javax.swing.JTextArea();
+        txtDireccion = new javax.swing.JTextArea();
         lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
@@ -187,9 +187,9 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        txaDireccion.setColumns(20);
-        txaDireccion.setRows(5);
-        jScrollPane1.setViewportView(txaDireccion);
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        jScrollPane1.setViewportView(txtDireccion);
 
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblDireccion.setForeground(new java.awt.Color(255, 255, 255));
@@ -419,7 +419,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void cmbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoDocumentoActionPerformed
-        // TODO add your handling code here:
+        txtApellido.setVisible(!cmbTipoDocumento.getSelectedItem().equals("J"));
+        lblApellido.setVisible(!cmbTipoDocumento.getSelectedItem().equals("J"));
     }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
 
     private void crearHotKeys() {
@@ -465,19 +466,19 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
 
     private void registrarCliente() {
-        String cedula, nombre, apellido, direccion, telefono, correo;
-        char nacionalidad;
+        String numero_identificacion, nombre, apellido, telefono, email, direccion;
+        char tipo;
         int idCliente;
 
+        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        numero_identificacion = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        cedula = txtDocumento.getText();
-        direccion = txaDireccion.getText();
         telefono = txtTelefono.getText();
-        correo = txtCorreo.getText();
+        email = txtCorreo.getText();
+        direccion = txtDireccion.getText();
         
-        if (cedula.isEmpty()) {
+        if (numero_identificacion.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtDocumento.requestFocus();
             return;
@@ -494,7 +495,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         }
         if (direccion.isEmpty()) {
             Utilidades.Sonidos.beep();
-            txaDireccion.requestFocus();
+            txtDireccion.requestFocus();
             return;
         }
         if (telefono.isEmpty()) {
@@ -502,7 +503,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txtTelefono.requestFocus();
             return;
         }
-        idCliente = admin.menuPrincipal.getOBD().crearPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo);
+        
+        idCliente = admin.menuPrincipal.getOBD().crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email);
 
         if (idCliente > 0) {
             this.cerrarVentana();
@@ -524,9 +526,9 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTelefono;
     private javax.swing.JPanel pnlContenedor;
-    private javax.swing.JTextArea txaDireccion;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JTextField txtTelefono;

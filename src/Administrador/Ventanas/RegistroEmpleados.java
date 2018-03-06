@@ -118,7 +118,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblDocumento.setForeground(new java.awt.Color(255, 255, 255));
         lblDocumento.setText("CI / RIF:");
 
-        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "J", "E", "P" }));
+        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "E" }));
         cmbTipoDocumento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTipoDocumentoActionPerformed(evt);
@@ -473,7 +473,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             return;
         }
 
-        idEmpleado = this.obd.crearEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, email, direccion, clave, cargo_id);
+        idEmpleado = this.obd.crearEmpleado(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email, clave, cargo_id);
 
         if (idEmpleado > 0) {
             this.cerrarVentana();

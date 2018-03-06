@@ -211,12 +211,12 @@ public class ObjetoBaseDatos {
     public int crearEmpleado(String nombre, String apellido, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, int id_cargo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
-            resultado = crearPersona(nombre, apellido, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
+            resultado = crearPersona(nombre, apellido, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona);
             if(resultado > 0){
                 sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado")) 
-                .append("(clave, id_persona, id_cargo) VALUES(")
+                .append("(clave, id_persona, id_cargo_empleado) VALUES(")
                 .append("'").append(clave).append("', ")
                 .append("'").append(resultado).append("', ")
                 .append("'").append(id_cargo)
