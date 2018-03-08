@@ -5,12 +5,16 @@ import java.util.HashMap;
 public class ModeloProducto {
 
     private int id;
+    private int cantidad; //añadido
     private String codigoBarra;
     private String descripcion;
+    private String tipo;//agregado
     private String baseImponible;
     private String pvp;
     private String isva;
     private int limiteVentaPorPersona;
+
+   
 
     public ModeloProducto(String id, String codigoBarra, String descripcion, String idGalpon,
             String descripcionGalpon, String cantidad, String precio, String iva, String limite) {
@@ -38,6 +42,8 @@ public class ModeloProducto {
       this.codigoBarra = map.get("codigo_barra");
        this.descripcion = map.get("descripcion");
        this.baseImponible = map.get("descripcion_g");
+       this.tipo = map.get("tipo"); //añadido
+       this.cantidad = Integer.parseInt(map.get("cantidad"));//añadido
         this.pvp = map.get("pvp");
        this.isva = map.get("iva");
     }
@@ -90,5 +96,16 @@ public class ModeloProducto {
     public int getLimiteVentaPorPersona() {
         return limiteVentaPorPersona;
     }
+    
+    
+    
+   // agregados al codigo:
 
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
 }

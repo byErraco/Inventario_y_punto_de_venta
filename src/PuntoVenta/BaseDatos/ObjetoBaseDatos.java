@@ -479,7 +479,7 @@ public class ObjetoBaseDatos {
                 PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
-                PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(true);
+                PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
               //  PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
               //  PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);

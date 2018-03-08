@@ -31,14 +31,18 @@ import javax.swing.table.TableRowSorter;
  */
 public class Productos extends javax.swing.JInternalFrame {
  private final ModeloProducto producto;
+ private final MenuPrincipal menuPrincipal;
    
-    public Productos() {
+    public Productos(MenuPrincipal menuPrincipal , ModeloProducto producto) {
         initComponents();
+        this.menuPrincipal = menuPrincipal;
+        this.setTitle("Saphiro - Adinistracion de Productos");
         this.producto = producto;
         crearHotKeys();
         actualizarTabla();
     
     }
+
 
     public Productos(MenuPrincipal aThis) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -222,9 +226,9 @@ public class Productos extends javax.swing.JInternalFrame {
 // revisar
     private void actualizarTabla() {
         String[] headers = {"Código", "Descripción","Cantidad","Tipo", "Precio"};
-        String[] columnas = {"codigo_barra", "descripcion","cantidad_disponible","", "pvp"};
-        ArrayList<HashMap<String, String>> Productos = productos.menuPrincipal.getOBD().getArrayListProductos();
-        ArrayListTableModel model = new ArrayListTableModel(Productos, headers, columnas);
+        String[] columnas = {"codigo_barra", "descripcion","cantidad_disponible","tipo", "pvp"};
+        ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
+        ArrayListTableModel model = new ArrayListTableModel(Producto, headers, columnas);
         jtbProductos.setModel(model);
     }
 

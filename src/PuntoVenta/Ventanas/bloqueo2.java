@@ -271,7 +271,7 @@ ingresarSistema();
       PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
       PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
       PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
       PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
         } else {
             Utilidades.Sonidos.beep();

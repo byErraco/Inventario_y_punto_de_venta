@@ -12,13 +12,12 @@ public class MovimientoTableModel extends ArrayListTableModel {
  
     enum Columnas {
 
-        Producto("Producto", "producto"),  //nombre del producto
-        Cantidad("Cantidad", "cant"),      // cantidad registrada
-        Cantidad2("Cantidad", "cant2"),    // catidad movida
-        Tipo("Tipo", "tipo"),              // tipo deproducto
-        FechaReg("Fecha","fecha"),         // fecha registrado en el inventario
-        FechaMov("Fecha","fecha1"),        // fecha de movimiento del producto
-        Usuario("Usuario","usuario");      //  usuario 
+        Producto("Producto", "producto"),                           //nombre del producto
+        CantidadRegistrada("Cantidad", "cantidad_registrada"),      // cantidad registrada
+        CantidadMovida("Cantidad", "cantidad_movida"),              // catidad movida
+        Tipo("Tipo", "tipo"),                                       // tipo deproducto
+        FechaMovimiento("Fecha","fecha"),                           // fecha de movimiento del producto
+        Usuario("Usuario","usuario");                               //  usuario 
 
         String header;
         String columna;
@@ -36,13 +35,13 @@ public class MovimientoTableModel extends ArrayListTableModel {
         }
     }
    
-    public MovimientoTableModel(ArrayList<HashMap<String, String>> contenido) {
-        super(contenido,
-        new String[]{Columnas.Producto.getHeader(),Columnas.Cantidad.getHeader(),
-        Columnas.Cantidad2.getHeader(),Columnas.Tipo.getHeader(),Columnas.FechaReg.getHeader(),Columnas.FechaMov.getHeader(),
+    public MovimientoTableModel(ArrayList<HashMap<String, String>> Movimiento) {
+        super(Movimiento,
+        new String[]{Columnas.Producto.getHeader(),Columnas.CantidadRegistrada.getHeader(),
+        Columnas.CantidadMovida.getHeader(),Columnas.Tipo.getHeader(),Columnas.FechaMovimiento.getHeader(),
         Columnas.Usuario.getHeader()},
-        new String[]{Columnas.Producto.getColumna(),Columnas.Cantidad.getColumna(),Columnas.Cantidad2.getColumna(),
-        Columnas.Tipo.getColumna(),Columnas.FechaReg.getColumna(),Columnas.FechaMov.getColumna(),Columnas.Usuario.getColumna()});
+        new String[]{Columnas.Producto.getColumna(),Columnas.CantidadRegistrada.getColumna(),Columnas.CantidadMovida.getColumna(),
+        Columnas.Tipo.getColumna(),Columnas.FechaMovimiento.getColumna(),Columnas.Usuario.getColumna()});
     }
     
     

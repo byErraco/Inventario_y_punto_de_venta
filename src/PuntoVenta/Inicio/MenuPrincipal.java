@@ -1,11 +1,13 @@
 package PuntoVenta.Inicio;
 
-import PuntoVenta.Ventanas.bloqueo2;
+//import PuntoVenta.Ventanas.bloqueo2;  
+import PuntoVenta.Ventanas.LogBloq; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Modelos.ModeloCaja;
 import PuntoVenta.Modelos.ModeloEmpleado;
+import PuntoVenta.Modelos.ModeloProducto; // añadido
 import PuntoVenta.Ventanas.Caja;
 import PuntoVenta.Ventanas.Calculadora;
 import PuntoVenta.Ventanas.LogIn;
@@ -44,11 +46,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     //VENTANAS
     public Caja caja;
     public Calculadora calc;
-
     public Venta venta;
     public LogIn login;
     public Admin admin;
-    public bloqueo2 bloqueo;
+    public LogBloq bloqueo;
     public Empresa empresa;
     public Cierre_Caja cierre;
     public Productos producto; //añadido
@@ -186,7 +187,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnMovimientos = new javax.swing.JButton();
         btnProductos = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnAcerca = new javax.swing.JButton();
         btnbloqueo = new javax.swing.JButton();
         btnCalculadora = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
@@ -213,11 +214,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCaja.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnCajaMouseExited(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnCajaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCajaMouseExited(evt);
             }
         });
         btnCaja.addActionListener(new java.awt.event.ActionListener() {
@@ -297,6 +298,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
         btnMovimientos.setText("<html><font size=2><center>Movimientos<br>F8</center></font></html>");
+        btnMovimientos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnMovimientos.setFocusable(false);
         btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -315,6 +317,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
         btnProductos.setText("<html><font size=2><center>Productos<br>F9</center></font></html>");
+        btnProductos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnProductos.setFocusable(false);
         btnProductos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnProductos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -344,19 +347,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAyuda);
 
-        jButton5.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. acerca.png"))); // NOI18N
-        jButton5.setText("<html><font size=2><center>Acerca<br>F11</center></font></html>");
-        jButton5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jButton5.setFocusable(false);
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnAcerca.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. acerca.png"))); // NOI18N
+        btnAcerca.setText("<html><font size=2><center>Acerca<br>F11</center></font></html>");
+        btnAcerca.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnAcerca.setFocusable(false);
+        btnAcerca.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAcerca.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAcerca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnAcercaActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton5);
+        jToolBar1.add(btnAcerca);
 
         btnbloqueo.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnbloqueo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. bloqueo.png"))); // NOI18N
@@ -436,9 +439,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaActionPerformed
         acerca();
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnAcercaActionPerformed
 
     private void btnCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajaActionPerformed
         abrirVentanaCaja();
@@ -481,7 +484,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja.setEnabled(false);
         btnVentas.setEnabled(false);
         btnAyuda.setEnabled(false);
-        jButton5.setEnabled(false);
+        btnAcerca.setEnabled(false);
         btnAdmin.setEnabled(false);
         btnProductos.setEnabled(false);
         btnMovimientos.setEnabled(false);
@@ -533,6 +536,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JButton btnAcerca;
     public static javax.swing.JButton btnAdmin;
     public static javax.swing.JButton btnAyuda;
     public static javax.swing.JButton btnCaja;
@@ -543,7 +547,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
     public javax.swing.JButton btnbloqueo;
-    public static javax.swing.JButton jButton5;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
@@ -583,30 +586,24 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public void abrirVentanaBloqueo() {
 
         if (estacerrado(bloqueo)) {
+            
+           
             PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(false);
+            PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
-//            PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false); // añadido productos
-//            PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false); // añadido movimientos
-            
-            
-            
-            
+  //revisar   PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
+         //   PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
 
-            bloqueo = new bloqueo2(this);
+            bloqueo = new LogBloq(this);
             Dimension desktopSize = panel.getSize();
             Dimension jInternalFrameSize = bloqueo.getSize();
             bloqueo.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                     (desktopSize.height - jInternalFrameSize.height) / 2);
 
             panel.add(bloqueo);
-            try {
-                bloqueo.setMaximum(true);
-            } catch (PropertyVetoException ex) {
-                ex.printStackTrace();
-            }
+            bloqueo.setMaximum(true);
             bloqueo.show();
 
             setVentanaAbierta(Modulo.BLOQUEO);
@@ -672,13 +669,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     public void abrirVentanaMovimientos(){
-         movimiento = new Movimientos(this);
+         mov = new Movimientos(this);
         Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = movimiento.getSize();
-        movimiento.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+        Dimension jInternalFrameSize = mov.getSize();
+        mov.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                 (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(movimiento);
-        movimiento.show();
+        panel.add(mov);
+        mov.show();
     
     }
 
@@ -755,24 +752,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
                 abrirVentanaBloqueo();
             }
-            
-            Action actProducto = new AbstractAction(Modulo.PRODUCTOS.getAction()){
+        };
+        
+        //añadido a productos
+          Action actProducto = new AbstractAction(Modulo.PRODUCTOS.getAction()){
             @Override
              public void actionPerformed(ActionEvent e){
-               abrirVentanaProd();
-             }
+                 
+                    abrirVentanaProd();
+                }
             };
             
+            //añadido a movimientos
             Action actMovimiento = new AbstractAction (Modulo.MOVIMIENTOS.getAction()){
             
             @Override
-             public void actionPerformed(ActionEvent e){
-               abrirVentanaMovimientos();
-             }
+             
+            public void actionPerformed(ActionEvent e){
+            
+                abrirVentanaMovimientos();
+              }
             
             };
-        };
-
+        
+        
+        
+        
         actCaja.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         actVentas.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
         actFacturas.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
@@ -781,8 +786,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actbloqueo.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         actAyuda.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-//        actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
-   //     actMovimientos.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
+        actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
+        actMovimiento.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
         
         
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);
@@ -803,14 +808,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAyuda.getActionMap().put(Modulo.AYUDA.getAction(), actAyuda);
         btnAyuda.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAyuda.getValue(Action.ACCELERATOR_KEY), Modulo.AYUDA.getAction());
 
-        jButton5.getActionMap().put(Modulo.ACERCA.getAction(), actAcerca);
-        jButton5.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAcerca.getValue(Action.ACCELERATOR_KEY), Modulo.ACERCA.getAction());
+        btnAcerca.getActionMap().put(Modulo.ACERCA.getAction(), actAcerca);
+        btnAcerca.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAcerca.getValue(Action.ACCELERATOR_KEY), Modulo.ACERCA.getAction());
         
-      //  btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(),actProducto);
-      //  btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actProd.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());
+        btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(),actProducto);
+        btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actProducto.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());   //  producto
         
-      //  btnMovimientos.getActionMap().put(Modulo.MOVIMIENTOS.getAction(), actMovimientos);
-       // btnMovimientos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actMovimientos.getValue(Action.ACCELERATOR_KEY),Modulo.MOVIMIENTOS.getAction());
+        btnMovimientos.getActionMap().put(Modulo.MOVIMIENTOS.getAction(), actMovimiento);
+        btnMovimientos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actMovimiento.getValue(Action.ACCELERATOR_KEY),Modulo.MOVIMIENTOS.getAction());  // movimiento
     }
 
     /**
@@ -905,7 +910,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         CALC(10, "actionCalculadora"),
         ADMIN(6, "actionAdmin"),
         PRODUCTOS(8,"actionProducto"),// nueva ventana
-        MOVIMIENTOS(9,"actionMovim"), // nueva ventana
+        MOVIMIENTOS(9,"actionMovimiento"), // nueva ventana
         BLOQUEO(12, "actionBloqueo");
 
         private final int id;

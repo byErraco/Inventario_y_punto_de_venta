@@ -11,6 +11,12 @@ import java.util.HashMap;
         
       public class ProductoTableModel extends  ArrayListTableModel {
 
+   /* public ProductoTableModel(ArrayList<HashMap<String, String>> Producto, String[] headers, String[] columnas) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+*/
+   
+
           enum Columnas{
           
               Codigo("Codigo","codigo"),
@@ -37,8 +43,8 @@ import java.util.HashMap;
           
           
           
-      public ProductoTableModel(ArrayList<HashMap<String, String>> contenido) {
-       super(contenido,
+      public ProductoTableModel(ArrayList<HashMap<String, String>> Producto) {
+       super(Producto,
         new String[]{Columnas.Codigo.getHeader(),Columnas.Descripcion.getHeader(),
         Columnas.Tipo.getHeader(),Columnas.Cantidad.getHeader(),Columnas.Precio.getHeader()},
         new String[]{Columnas.Codigo.getColumna(),Columnas.Descripcion.getColumna(),
