@@ -10,11 +10,11 @@ package ClasesExtendidas.Tablas;
  *
  * @author inverdata
  */
-public class TipoMonedaTableModel extends ArrayListTableModel {
+public class TipoPagoTableModel extends ArrayListTableModel {
 
     enum Colunmas {
 
-        TipoMoneda("Tipo Moneda"),
+        TipoPago("Tipo pago"),
         Monto("Monto");
 
         String header;
@@ -34,8 +34,8 @@ public class TipoMonedaTableModel extends ArrayListTableModel {
         }
     }
 
-    public TipoMonedaTableModel() {
-        super(new String[]{Colunmas.TipoMoneda.getHeader(), Colunmas.Monto.getHeader()});
+    public TipoPagoTableModel() {
+        super(new String[]{Colunmas.TipoPago.getHeader(), Colunmas.Monto.getHeader()});
     }
 
 }

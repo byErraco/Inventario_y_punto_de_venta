@@ -1002,31 +1002,33 @@ public class ObjetoBaseDatos {
         }
         return resultado;
     }
-        //Ernesto:
-        //devuelve una lista de los tipos de moneda existentes en un arraylist?
-    public ArrayList<HashMap<String, String>> getArrayListTipoMoneda() {
+    
+    /**
+     * Devuelve la lista de tipos de pago activos
+     * 
+     * @return 
+     */
+    public ArrayList<HashMap<String, String>> getArrayListTipoPago() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnaTipoMoneda = {"id", "descripcion"};
+        String[] columnasTipoPago = {"id_tipo_pago", "descripcion_pago"};
 
         sqlQuery.append("SELECT ");
-        for (String columna : columnaTipoMoneda) {
+        for (String columna : columnasTipoPago) {
             sqlQuery.append(columna).append(",");
         }
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
-        sqlQuery.append(" FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("tipo_moneda")).append(";");
-                //Tabla "tipo_moneda" actualizada a "tipo_pago"
+        sqlQuery.append(" FROM spve.tipo_pago WHERE activo_tipo_pago = 1;");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
                 map = new HashMap<>();
-                for (String columna : columnaTipoMoneda) {
+                for (String columna : columnasTipoPago) {
                     map.put(columna, rs.getString(columna));
                 }
                 resultado.add(map);
@@ -1079,7 +1081,7 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Método para obtener la lista de cortes que se le han ralizado a un
+     * Método para obtener la lista de cortes que se le han realizado a un
      * estado_caja.
      *
      * @param idEstadoCaja
@@ -1090,20 +1092,14 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnasCorteCaja = {"id AS nombre", "monto_corte"};
+        String[] columnasCorteCaja = {"fecha_corte", "monto_corte"};
 
         sqlQuery.append("SELECT ");
-        sqlQuery = addColumnasAlQuery(columnasCorteCaja, "cc.", sqlQuery);
+        sqlQuery = addColumnasAlQuery(columnasCorteCaja, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
-        sqlQuery.append(" FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("corte_caja")).append(" AS cc")
-                .append(" LEFT JOIN ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("estado_caja")).append(" AS ec")
-                .append(" ON cc.estado_caja_id=ec.id ")
-                .append(" WHERE ec.id=").append(idEstadoCaja)
+        sqlQuery.append(" FROM spve.corte_caja")
+                .append(" WHERE id_estado_caja = ").append(idEstadoCaja)
                 .append(";");
         try {
             postgreSQL.conectar();
