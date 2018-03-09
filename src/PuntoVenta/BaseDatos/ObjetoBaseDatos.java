@@ -780,11 +780,10 @@ public class ObjetoBaseDatos {
 
     /**
      * Método que busca los registros de apertura y cierre de una caja
-     * particular y devuelve el id, la cedula del empleado que la abrió/cerró, y
-     * los datetime de apertura y cierre.
-     *
-     * NOTA: Probablemente se deba filtrar la busqueda por usuario tambien.
-     *
+     * particular y devuelve el tipo y número de identificación del empleado que abrió la caja,
+     * la fecha de apertura, el tipo y número de identificación del empleado que cerró la caja
+     * y la fecha de cierre
+     * 
      * @param idCaja
      * @return Arraylist de HashMap
      */
@@ -792,26 +791,29 @@ public class ObjetoBaseDatos {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnas = {"id", "empleado", "apertura", "cierre"};
 
-        sqlQuery.append("SELECT ec.id AS id, CAST(e.nacionalidad AS text)||'-'||e.cedula AS empleado, ")
-                .append("to_char(ec.fecha_apertura, 'DD Mon YYYY HH12:MI:SS AM') AS apertura, to_char(ec.fecha_cierre, 'DD Mon YYYY HH12:MI:SS AM') AS cierre ")
-                .append("FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("empleado")).append(" AS e ")
-                .append("LEFT JOIN ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("estado_caja")).append(" AS ec ")
-                .append("ON e.id=ec.empleado_id ")
-                .append("WHERE ec.caja_id=")
+        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado_apertura", "fecha_apertura", "p1.tipo_persona||'-'||p1.numero_identificacion_persona AS empleado_cierre", "fecha_corte AS fecha_cierre"};
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnasEstadoCaja, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(" FROM spve.estado_caja as ec INNER JOIN spve.caja as c ON ec.id_caja = c.id_caja")
+                .append(" LEFT JOIN spve.corte_caja as cc ON ec.id_estado_caja = cc.id_estado_caja")
+                .append(" LEFT JOIN spve.cierre_caja as cic ON cc.id_corte_caja = cic.id_corte_caja")
+                .append(" INNER JOIN spve.empleado as em ON ec.id_empleado = em.id_empleado")
+                .append(" INNER JOIN spve.persona as p ON em.id_persona = p.id_persona")
+                .append(" LEFT JOIN spve.empleado as em1 ON cc.id_empleado = em1.id_empleado")
+                .append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
+                .append(" WHERE ec.id_caja = ")
                 .append(idCaja)
-                .append(" ORDER BY id DESC;");
+                .append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, empleado_cierre, fecha_cierre")
+                .append(" ORDER BY fecha_apertura DESC;");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
                 HashMap<String, String> row = new HashMap<>();
-                for (String columna : columnas) {
+                for (String columna : columnasEstadoCaja) {
                     row.put(columna, rs.getString(columna));
                 }
                 resultado.add(row);
@@ -2389,6 +2391,36 @@ public class ObjetoBaseDatos {
             resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "estado_caja");
         return resultado;
     }
+    
+    /**
+     * Abre una caja creando un estado de caja
+     * 
+     * 
+     * @param id_caja
+     * @param id_empleado
+     * @param monto_apertura
+     * @return 
+     */
+    public int abrirCaja(int id_caja, int id_empleado, String monto_apertura){
+        Date date = new java.util.Date();
+        Date fecha_apertura = new Timestamp(date.getTime());
+        
+        int resultado;
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("estado_caja"))
+                    .append(" (fecha_apertura, monto_apertura, id_empleado, id_caja) VALUES ('")
+                    .append(fecha_apertura).append("', ")
+                    .append(monto_apertura).append(", ")
+                    .append(id_empleado).append(", ")
+                    .append(id_caja).append(");");
+        
+        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "estado_caja");
+        
+        return resultado;
+    }
 
     /**
      * Hace el UPDATE de la columna excedente de la tabla ESTADO_CAJA
@@ -2707,8 +2739,6 @@ public class ObjetoBaseDatos {
     }
 
     private int ejecutarManipulacionDeDatosSimple(String query, String tabla) {
-        /* Konstanza: el -1 está de más, 
-        ya que en caso de error la función 'postgreSQL.ejecutarManipulacionDeDatosSimple(query)' retorna -1*/
         int resultado = -1;
         
         try {

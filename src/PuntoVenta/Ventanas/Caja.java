@@ -2,6 +2,7 @@ package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.EstadoCajaTableModel;
 import Utilidades.Globales;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -47,11 +48,10 @@ public class Caja extends javax.swing.JInternalFrame {
      * Método para actualizar el contenido de la tabla en la ventana caja.
      */
     public void actualizarTabla() {
-        ArrayList estructuraCaja;
-        String[] columnas = {"ID", "Empleado", "Apertura", "Cierre"};
-        estructuraCaja = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja")));
-        ArrayListTableModel model = new ArrayListTableModel(estructuraCaja, columnas, columnas);
-        getTblResultadoBusqueda().setModel(model);
+        ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja"))); 
+        EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList);
+        getTblResultadoBusqueda().setModel(estadoCajaTableModel);
+        
         setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
 
         getTblResultadoBusqueda().setFont(new Font("Arial", Font.PLAIN, 12));
@@ -199,7 +199,35 @@ public class Caja extends javax.swing.JInternalFrame {
             Utilidades.Sonidos.beep();
         }
     }
-
+    
+    /**
+     * Abre la caja creando un nuevo estado de caja
+     */
+    public void abrirCaja() {
+        String montoApertura;
+        
+        if(!menuPrincipal.isCajaAbierta()){
+            do {
+                montoApertura = JOptionPane.showInputDialog(this, "Monto de apertura", 0);
+            } while (!montoApertura.matches(Globales.patronCantidad));
+            
+            int idEstadoCaja = menuPrincipal.getOBD().abrirCaja(menuPrincipal.getModeloCaja().getId(),
+                                                                menuPrincipal.getEmpleado().getId(),
+                                                                montoApertura);
+            
+            if(idEstadoCaja >= 0){
+                actualizarTabla();
+                menuPrincipal.setIdEstadoCaja(idEstadoCaja);
+                menuPrincipal.setEstadoCaja(true);
+                menuPrincipal.setBotonesMenuPrincipalEnabled(true);
+                setBotonesCajaEnabled(true);
+                if (jtbResultadoBusqueda.getSelectedRow() > 0) {
+                    btnImprimir.setEnabled(false);
+                }
+            }
+        }
+    }
+    
     /**
      * Crea un corte de caja.
      */
@@ -447,7 +475,7 @@ public class Caja extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbrirCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirCajaActionPerformed
-        setEstadoCaja(true);
+        abrirCaja();
     }//GEN-LAST:event_btnAbrirCajaActionPerformed
 
     private void btnFlujoCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlujoCajaActionPerformed

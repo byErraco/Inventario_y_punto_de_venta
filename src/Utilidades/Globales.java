@@ -11,6 +11,6 @@ package Utilidades;
  */
 public class Globales {
     
-    public static String patronCantidad = "^\\d+(?:\\.\\d{2})?$";
+    public static String patronCantidad = "\\d+(\\.\\d{1,3})?";
     
 }

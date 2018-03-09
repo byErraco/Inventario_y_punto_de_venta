@@ -106,6 +106,7 @@ public class PostgreSQL {
             if (this.conexion == null || this.conexion.isClosed()) {
                 throw new XSQLException("La base de datos no está conectada.");
             }
+            System.out.println(sql);
             this.sentencia.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (this.sentencia.getGeneratedKeys().next()) {
                 resultado = this.sentencia.getGeneratedKeys().getInt("id_"+tabla);
