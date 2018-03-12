@@ -678,10 +678,15 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         
-        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja FROM ")
+        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja, fecha_corte FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("cierre_caja"))
-                .append(" as cic WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
+                .append(" as cic LEFT JOIN ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("corte_caja"))
+                .append("AS c ")
+                .append("ON cic.id_corte_caja = c.id_corte_caja ")
+                .append("WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("corte_caja"))
                 .append(" as cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
@@ -689,7 +694,7 @@ public class ObjetoBaseDatos {
                 .append(".").append(mapTabla.get("estado_caja"))
                 .append(" as ec WHERE ec.id_caja = ") 
                 .append(idCaja)
-                .append(")));");
+                .append(")) AND fecha_corte >= current_date);");
         
         try {
             postgreSQL.conectar();
