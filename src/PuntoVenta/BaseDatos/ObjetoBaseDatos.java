@@ -684,15 +684,15 @@ public class ObjetoBaseDatos {
                 .append(" as cic LEFT JOIN ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("corte_caja"))
-                .append("AS c ")
+                .append(" AS c ")
                 .append("ON cic.id_corte_caja = c.id_corte_caja ")
                 .append("WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("corte_caja"))
-                .append(" as cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
+                .append(" AS cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("estado_caja"))
-                .append(" as ec WHERE ec.id_caja = ") 
+                .append(" AS ec WHERE ec.id_caja = ") 
                 .append(idCaja)
                 .append(")) AND fecha_corte >= current_date);");
         
