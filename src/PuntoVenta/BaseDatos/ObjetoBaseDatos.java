@@ -678,18 +678,23 @@ public class ObjetoBaseDatos {
 
         StringBuilder sqlQuery = new StringBuilder();
         
-        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja FROM ")
+        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja, fecha_corte FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("cierre_caja"))
-                .append(" as cic WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
+                .append(" as cic LEFT JOIN ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("corte_caja"))
-                .append(" as cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
+                .append(" AS c ")
+                .append("ON cic.id_corte_caja = c.id_corte_caja ")
+                .append("WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
+                .append(mapSchema.get("spve"))
+                .append(".").append(mapTabla.get("corte_caja"))
+                .append(" AS cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("estado_caja"))
-                .append(" as ec WHERE ec.id_caja = ") 
+                .append(" AS ec WHERE ec.id_caja = ") 
                 .append(idCaja)
-                .append(")));");
+                .append(")) AND fecha_corte < current_date);");
         
         try {
             postgreSQL.conectar();
@@ -792,20 +797,20 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
 
-        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado_apertura", "fecha_apertura", "p1.tipo_persona||'-'||p1.numero_identificacion_persona AS empleado_cierre", "fecha_corte AS fecha_cierre"};
+        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado_apertura", "fecha_apertura", "fecha_corte"};
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasEstadoCaja, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM spve.estado_caja as ec INNER JOIN spve.caja as c ON ec.id_caja = c.id_caja")
                 .append(" LEFT JOIN spve.corte_caja as cc ON ec.id_estado_caja = cc.id_estado_caja")
-                .append(" LEFT JOIN spve.cierre_caja as cic ON cc.id_corte_caja = cic.id_corte_caja")
+                //.append(" LEFT JOIN spve.cierre_caja as cic ON cc.id_corte_caja = cic.id_corte_caja")
                 .append(" INNER JOIN spve.empleado as em ON ec.id_empleado = em.id_empleado")
                 .append(" INNER JOIN spve.persona as p ON em.id_persona = p.id_persona")
-                .append(" LEFT JOIN spve.empleado as em1 ON cc.id_empleado = em1.id_empleado")
-                .append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
+                //.append(" LEFT JOIN spve.empleado as em1 ON cc.id_empleado = em1.id_empleado")
+                //.append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
                 .append(" WHERE ec.id_caja = ")
                 .append(idCaja)
-                .append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, empleado_cierre, fecha_cierre")
+                //.append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, fecha_cierre")
                 .append(" ORDER BY fecha_apertura DESC;");
         
         try {
