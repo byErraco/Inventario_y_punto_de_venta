@@ -1,7 +1,7 @@
 package PuntoVenta.Inicio;
 
 //import PuntoVenta.Ventanas.bloqueo2;  
-import PuntoVenta.Ventanas.LogBloq; //cambiado por bloqueo2
+import PuntoVenta.Ventanas.Bloqueo; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
@@ -49,7 +49,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Venta venta;
     public LogIn login;
     public Admin admin;
-    public LogBloq bloqueo;
+    public Bloqueo bloqueo; // modificado de bloqueo2 --> Bloqueo
     public Empresa empresa;
     public Cierre_Caja cierre;
     public Productos producto; //añadido
@@ -596,7 +596,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
   //revisar   PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
          //   PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
 
-            bloqueo = new LogBloq(this);
+            bloqueo = new Bloqueo(this);
             Dimension desktopSize = panel.getSize();
             Dimension jInternalFrameSize = bloqueo.getSize();
             bloqueo.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -657,26 +657,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
     
     public void abrirVentanaProd(){
-    
-        prod = new Productos(this);
+        producto =  new Productos(this);
         Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = prod.getSize();
-        prod.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(prod);
-        prod.show();
-    
+        Dimension jInternalFrameSize = producto.getSize();
+        producto.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
+                (desktopSize.height - jInternalFrameSize.height )/ 2);
+                panel.add(producto);
+                producto.show();
+             
+        
     }
     
     public void abrirVentanaMovimientos(){
-         mov = new Movimientos(this);
-        Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = mov.getSize();
-        mov.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(mov);
-        mov.show();
-    
+      
     }
 
     public void setBotonesMenuPrincipalEnabled(boolean aFlag) {
@@ -786,8 +779,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actbloqueo.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0));
         actAyuda.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
-        actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
-        actMovimiento.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
+        actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
+        actMovimiento.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
         
         
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);

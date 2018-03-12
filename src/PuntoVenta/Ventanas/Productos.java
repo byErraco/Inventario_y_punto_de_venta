@@ -30,14 +30,14 @@ import javax.swing.table.TableRowSorter;
  * @author David Chavez
  */
 public class Productos extends javax.swing.JInternalFrame {
- private final ModeloProducto producto;
+ private final ModeloProducto productos;
  private final MenuPrincipal menuPrincipal;
    
     public Productos(MenuPrincipal menuPrincipal , ModeloProducto producto) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
         this.setTitle("Saphiro - Adinistracion de Productos");
-        this.producto = producto;
+        this.productos = producto;
         crearHotKeys();
         actualizarTabla();
     
@@ -48,35 +48,40 @@ public class Productos extends javax.swing.JInternalFrame {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+  
+
     public void crearHotKeys() {
-        Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cerrarVentana();
-            }
-        };
-        Action actFocus = new AbstractAction("actionFocus") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                focusPuntoInteres();
-            }
-        };
+        
         Action actAgregar = new AbstractAction("actionAgregar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.out.println("KEY: Agregar a la venta");
+//               agregarProducto();
             }
         };
-
+        Action actModificar = new AbstractAction("actionModificar") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               modificarProducto();
+            }
+        };
+       
+        
+        Action actEliminar = new AbstractAction("actionEliminar") {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EliminarProductos();
+            }
+        };
     }
 
     public void agregarProducto() {
-        if (producto.getId() > 0) {
+        if (productos.getId() > 0) {
             int row = jtbProductos.getSelectedRow();
             if (row >= 0) {
                 String codigoBarra = jtbProductos.getValueAt(row, 0).toString();
                 cerrarVentana();
-                producto.getCodigoBarra();
+                productos.getCodigoBarra();
             } else {
                 Utilidades.Sonidos.beep();
             }
@@ -85,16 +90,18 @@ public class Productos extends javax.swing.JInternalFrame {
         }
 
     }
+    public void modificarProducto(){
     
     
-     public void focusPuntoInteres() {
-        if (getTextField1().hasFocus()) {
-            jtbProductos.requestFocus();
-        } else {
-            getTextField1().requestFocus();
-        }
+    
     }
-
+    
+    
+    public void EliminarProductos(){
+    
+    
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -121,9 +128,19 @@ public class Productos extends javax.swing.JInternalFrame {
 
         btnModificar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnModificar.setText("<html><font size=2><center>Modificar</center></font></html> ");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         btnEliminar.setText("<html><font size=2><center>Eliminar</center></font></html> ");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         jtbProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -148,6 +165,15 @@ public class Productos extends javax.swing.JInternalFrame {
             jtbProductos.getColumnModel().getColumn(2).setResizable(false);
             jtbProductos.getColumnModel().getColumn(3).setResizable(false);
         }
+
+        txtProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtProductosKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtProductosKeyReleased(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel1.setText("BUSQUEDA");
@@ -218,6 +244,30 @@ public class Productos extends javax.swing.JInternalFrame {
        
     }//GEN-LAST:event_btnVerActionPerformed
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        modificarProducto();
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        EliminarProductos();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void txtProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductosKeyPressed
+       if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (jtbProductos.getRowCount() > 0) {
+                jtbProductos.requestFocus();
+                jtbProductos.setRowSelectionInterval(0, 0);
+            }
+        }
+    }//GEN-LAST:event_txtProductosKeyPressed
+
+    private void txtProductosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductosKeyReleased
+       String filtro = txtProductos.getText();
+        TableRowSorter sorter = new TableRowSorter(jtbProductos.getModel());
+        sorter.setRowFilter(RowFilter.regexFilter(filtro));
+        jtbProductos.setRowSorter(sorter);
+    }//GEN-LAST:event_txtProductosKeyReleased
+
     
     
      private void cerrarVentana() {
@@ -226,7 +276,7 @@ public class Productos extends javax.swing.JInternalFrame {
 // revisar
     private void actualizarTabla() {
         String[] headers = {"Código", "Descripción","Cantidad","Tipo", "Precio"};
-        String[] columnas = {"codigo_barra", "descripcion","cantidad_disponible","tipo", "pvp"};
+        String[] columnas = {"codigo_barra", "descripcion_producto","cantidad_disponible","producto_pre_fabricado", "pvp"};
         ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
         ArrayListTableModel model = new ArrayListTableModel(Producto, headers, columnas);
         jtbProductos.setModel(model);

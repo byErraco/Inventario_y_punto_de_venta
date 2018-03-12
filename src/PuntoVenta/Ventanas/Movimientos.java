@@ -6,24 +6,50 @@
 package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
+import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.MovimientoTableModel;
+import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.Modelos.ModeloProducto;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JInternalFrame;
+import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.table.TableRowSorter;
+
 
 /**
  *
  * @author David Chavez
  */
 public class Movimientos extends javax.swing.JInternalFrame {
-
+private final MenuPrincipal menuPrincipal;
     /**
      * Creates new form Productos
      */
-    public Movimientos() {
+    public Movimientos(MenuPrincipal menuPrincipal) {
+        this.menuPrincipal = menuPrincipal;
+         this.setTitle("Saphiro - Movimientos de Productos");
+       //  crearHotKeys();
+         actualizarTabla();
         initComponents();
     }
 
-    public Movimientos(MenuPrincipal aThis) {
+    private Movimientos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+  
+    
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,21 +59,35 @@ public class Movimientos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        txtMovimiento = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        jtbMovimiento = new javax.swing.JTable();
+        btnCompra = new javax.swing.JButton();
+        btnFabricacion = new javax.swing.JButton();
+        btnAjuste = new javax.swing.JButton();
+        btnReporte = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        txtMovimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtMovimientoActionPerformed(evt);
+            }
+        });
+        txtMovimiento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtMovimientoKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtMovimientoKeyReleased(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel1.setText("BUSQUEDA");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtbMovimiento.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -55,19 +95,39 @@ public class Movimientos extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jtbMovimiento);
 
-        jButton1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton1.setText("<html><font size=2><center>Compra</center></font></html> ");
+        btnCompra.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnCompra.setText("<html><font size=2><center>Compra</center></font></html> ");
+        btnCompra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompraActionPerformed(evt);
+            }
+        });
 
-        jButton2.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton2.setText("<html><font size=2><center>Fabricación</center></font></html> ");
+        btnFabricacion.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnFabricacion.setText("<html><font size=2><center>Fabricación</center></font></html> ");
+        btnFabricacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFabricacionActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton3.setText("<html><font size=2><center>Ajuste</center></font></html> ");
+        btnAjuste.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnAjuste.setText("<html><font size=2><center>Ajuste</center></font></html> ");
+        btnAjuste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjusteActionPerformed(evt);
+            }
+        });
 
-        jButton4.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jButton4.setText("<html><font size=2><center>Reporte</center></font></html> ");
+        btnReporte.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnReporte.setText("<html><font size=2><center>Reporte</center></font></html> ");
+        btnReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReporteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,13 +137,13 @@ public class Movimientos extends javax.swing.JInternalFrame {
                 .addGap(57, 57, 57)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(103, 103, 103)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnFabricacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(90, 90, 90)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(68, Short.MAX_VALUE))
@@ -94,7 +154,7 @@ public class Movimientos extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(222, 222, 222)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -103,20 +163,57 @@ public class Movimientos extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFabricacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
+      // compras();
+    }//GEN-LAST:event_btnCompraActionPerformed
+
+    private void btnFabricacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFabricacionActionPerformed
+      // Fabricacion();
+    }//GEN-LAST:event_btnFabricacionActionPerformed
+
+    private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
+            //Ajuste();        
+    }//GEN-LAST:event_btnAjusteActionPerformed
+
+    private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+        // Reporte();
+    }//GEN-LAST:event_btnReporteActionPerformed
+
+    private void txtMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMovimientoActionPerformed
+        //
+    }//GEN-LAST:event_txtMovimientoActionPerformed
+
+    private void txtMovimientoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMovimientoKeyPressed
+        
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (jtbMovimiento.getRowCount() > 0) {
+                jtbMovimiento.requestFocus();
+                jtbMovimiento.setRowSelectionInterval(0, 0);
+            }
+        }
+    }//GEN-LAST:event_txtMovimientoKeyPressed
+
+    private void txtMovimientoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMovimientoKeyReleased
+        String filtro = txtMovimiento.getText();
+        TableRowSorter sorter = new TableRowSorter(jtbMovimiento.getModel());
+        sorter.setRowFilter(RowFilter.regexFilter(filtro));
+        jtbMovimiento.setRowSorter(sorter);
+    }//GEN-LAST:event_txtMovimientoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -151,19 +248,34 @@ public class Movimientos extends javax.swing.JInternalFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Movimientos().setVisible(true);
+               new Movimientos().setVisible(true);
             }
         });
+        
+        
     }
+    
+    public void actualizarTabla(){
+     String[] headers = {"Código", "Descripción","Cantidad","Tipo", "Precio"};
+        String[] columnas = {"codigo_barra", "descripcion_producto","cantidad_disponible","producto_pre_fabricado", "pvp"};
+        ArrayList<HashMap<String, String>> Movimiento = menuPrincipal.getOBD().getArrayListProductos();
+        ArrayListTableModel model = new ArrayListTableModel(Movimiento, headers, columnas);
+        jtbMovimiento.setModel(model);
+    }
+    
+    //public void TipoProd(){
+   // String [] columnas = {"producto_pre_fabricado"};
+    
+ //   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnAjuste;
+    private javax.swing.JButton btnCompra;
+    private javax.swing.JButton btnFabricacion;
+    private javax.swing.JButton btnReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable jtbMovimiento;
+    private javax.swing.JTextField txtMovimiento;
     // End of variables declaration//GEN-END:variables
 }

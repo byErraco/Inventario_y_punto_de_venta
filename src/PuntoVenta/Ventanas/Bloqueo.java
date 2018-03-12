@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
-public class LogBloq extends javax.swing.JFrame {
+public class Bloqueo extends javax.swing.JFrame {
     static Object txtNombreUsuario;
     
 
@@ -15,7 +15,7 @@ public class LogBloq extends javax.swing.JFrame {
 
     String contrasena = "";
     int vali=0;
-    public LogBloq(MenuPrincipal menuPrincipal) {
+    public Bloqueo(MenuPrincipal menuPrincipal) {
          
 
         initComponents();
@@ -204,7 +204,7 @@ public class LogBloq extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del Sistema ahora", "Salir - SINAMC", JOptionPane.YES_NO_OPTION);
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Salir - SINAMC", JOptionPane.YES_NO_OPTION);
 
         if (g == JOptionPane.YES_OPTION) {
             System.exit(0);

@@ -95,6 +95,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font size=2&gt;&lt;center&gt;Modificar&lt;/center&gt;&lt;/font&gt;&lt;/html&gt; "/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModificarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnEliminar">
       <Properties>
@@ -103,6 +106,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font size=2&gt;&lt;center&gt;Eliminar&lt;/center&gt;&lt;/font&gt;&lt;/html&gt; "/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
@@ -153,6 +159,10 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="txtProductos">
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtProductosKeyPressed"/>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtProductosKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
