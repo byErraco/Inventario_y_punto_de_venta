@@ -37,7 +37,7 @@ public class Caja extends javax.swing.JInternalFrame {
     public Caja(MenuPrincipal menuPrincipal) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
-        this.setTitle("Saphiro - Gestion de la caja N°" + menuPrincipal.getModeloCaja().getId());
+        this.setTitle("Saphiro - Gestión de la caja N°" + menuPrincipal.getModeloCaja().getId());
 
         actualizarTabla();
 
@@ -50,15 +50,11 @@ public class Caja extends javax.swing.JInternalFrame {
     public void actualizarTabla() {
         ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja"))); 
         EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList);
-        getTblResultadoBusqueda().setModel(estadoCajaTableModel);
+        jtbResultadoBusqueda.setModel(estadoCajaTableModel);
         
         setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
 
-        getTblResultadoBusqueda().setFont(new Font("Arial", Font.PLAIN, 12));
-        getTblResultadoBusqueda().getColumnModel().getColumn(0).setPreferredWidth(50);
-        getTblResultadoBusqueda().getColumnModel().getColumn(1).setPreferredWidth(140);
-        getTblResultadoBusqueda().getColumnModel().getColumn(2).setPreferredWidth(200);
-        getTblResultadoBusqueda().getColumnModel().getColumn(3).setPreferredWidth(200);
+        jtbResultadoBusqueda.setFont(new Font("Arial", Font.PLAIN, 12));
     }
 
     /**
@@ -192,7 +188,7 @@ public class Caja extends javax.swing.JInternalFrame {
                 Utilidades.Sonidos.beep();
             }
         } else if (!aFlag && menuPrincipal.isCajaAbierta()) {
-            getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
+            jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
 
             abrirVentanaCierre();
         } else {
@@ -264,7 +260,7 @@ public class Caja extends javax.swing.JInternalFrame {
     }
 
     private void abrirVentanaFlujoCaja() {
-        getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
+        jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
         if (menuPrincipal.isCajaAbierta()) {
             //Cual es la pantalla para ver el flujo de la caja
         }
@@ -528,8 +524,8 @@ public class Caja extends javax.swing.JInternalFrame {
     }
 
     private void imprimirFacturaCaja() {
-        if (getTblResultadoBusqueda().getSelectedRow() >= 0) {
-            int r = Integer.parseInt(getTblResultadoBusqueda().getValueAt(getTblResultadoBusqueda().getSelectedRow(), 0).toString().trim());
+        if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
+            int r = Integer.parseInt(jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString().trim());
             //btnImprimir.setEnabled(true);
 
 //    ctrl.VerFacturaCaja(conf, r);
