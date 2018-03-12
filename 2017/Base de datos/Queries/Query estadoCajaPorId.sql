@@ -4,5 +4,4 @@ LEFT JOIN spve.corte_caja as cc ON ec.id_estado_caja = cc.id_estado_caja
 INNER JOIN spve.empleado as em ON ec.id_empleado = em.id_empleado
 INNER JOIN spve.persona as p ON em.id_persona = p.id_persona
 WHERE ec.id_caja = 1
-GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, fecha_corte
 ORDER BY fecha_apertura DESC;

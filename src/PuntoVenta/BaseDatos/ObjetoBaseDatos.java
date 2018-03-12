@@ -50,10 +50,13 @@ public class ObjetoBaseDatos {
         //LISTO//obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
         //LISTO//obd.eliminarPersona("20944806");
         //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "asdf", 1);
-        obd.eliminarEmpleado("25491458");
+        //obd.eliminarEmpleado("admin");
+        //LISTO//obd.crearCierreCaja(5,4);
+        obd.crearCorteCaja(100.00, 0.00, 0.00, 1, 2);
         //obd.seleccionarCargo();
-        //Empleado empleado = obd.getDatosEmpleado(1);
+        //LISTO//Empleado empleado = obd.getDatosEmpleado(2);
         //System.out.println(empleado.getNombre());
+        
     }
     
     /**
@@ -296,7 +299,7 @@ public class ObjetoBaseDatos {
                         "persona.telefono_persona, persona.email_persona, \n" +
                         "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
-                        "INNER JOIN spve.cargo ON empleado.id_cargo = cargo.id_cargo WHERE id_empleado =" + idEmpleado;
+                        "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE id_empleado =" + idEmpleado;
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
@@ -797,7 +800,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
 
-        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado_apertura", "fecha_apertura", "fecha_corte"};
+        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado", "fecha_apertura", "fecha_corte"};
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasEstadoCaja, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
@@ -2023,13 +2026,16 @@ public class ObjetoBaseDatos {
     /**
      * Método para crear un corte de caja dado un id y un monto.
      *
+     * @param idCorteCaja
+     * @param fechaCorte
      * @param idEstadoCaja EstadoCaja a la que se aplicará el corte.
      * @param monto Monto total del corte
      * @param excedente
      * @param restante
+     * @param idEmpleado
      * @return
      */
-    public int crearCorteCaja(int idEstadoCaja, XBigDecimal monto, XBigDecimal excedente, XBigDecimal restante) {
+    public int crearCorteCaja(double monto, double excedente, double restante, int idEstadoCaja, int idEmpleado) {
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
@@ -2037,13 +2043,15 @@ public class ObjetoBaseDatos {
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("corte_caja"))
-                .append("(id_estado_caja, monto_corte, excedente_caja, restante_caja, fecha_corte) VALUES (")
+                .append("(fecha_corte, monto_corte, excedente_caja, restante_caja, id_estado_caja, id_empleado) VALUES (")
+                //.append(idCorteCaja).append(", ")
+                .append("'").append(new Timestamp(date.getTime())).append("', ")
+                .append(monto)/*.setScale(2, RoundingMode.UNNECESSARY).toString())*/.append(", ")
+                .append(excedente)/*.setScale(2, RoundingMode.UNNECESSARY).toString())*/.append(", ")
+                .append(restante)/*.setScale(2, RoundingMode.UNNECESSARY).toString())*/.append(", ")
                 .append(idEstadoCaja).append(", ")
-                .append(monto.setScale(2, RoundingMode.UNNECESSARY).toString()).append(", ")
-                .append(excedente.setScale(2, RoundingMode.UNNECESSARY).toString()).append(", ")
-                .append(restante.setScale(2, RoundingMode.UNNECESSARY).toString()).append(", ")
-                .append("'").append(new Timestamp(date.getTime()))
-                .append("');");
+                .append(idEmpleado)
+                .append(");");
 
         resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "corte_caja");
         return resultado;
@@ -2132,18 +2140,19 @@ public class ObjetoBaseDatos {
      * @param monto
      * @return
      */
-    public int crearCierreCaja(int idCaja, int idMoneda, int cantidadMoneda, XBigDecimal monto) {
+    public int crearCierreCaja(int idCierre, int idCaja) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
 
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("cierre_caja"))//Esta tabla no existe
-                .append("(id_corte_caja, monto_corte, fecha_corte) VALUES (")
-                .append(idCaja).append(", ")
-                .append(idMoneda).append(", ")
-                .append(cantidadMoneda).append(", ")
-                .append(monto).append(");");
+                .append(mapTabla.get("cierre_caja"))
+                .append("(id_cierre_caja, id_corte_caja) VALUES (")
+                .append(idCierre).append(", ")
+                .append(idCaja).append("); ");
+                //.append(idMoneda).append(", ")
+                //.append(cantidadMoneda).append(", ")
+                //.append(monto).append(");");
         resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "cierre_caja");
        
         return resultado;
