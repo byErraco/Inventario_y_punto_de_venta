@@ -68,7 +68,7 @@ public class Caja extends javax.swing.JInternalFrame {
         Action actAbrirCaja = new AbstractAction("actionAbrirCaja") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setEstadoCaja(true);
+                abrirCaja();
             }
         };
         Action actCerrarCaja = new AbstractAction("actionCerrarCaja") {
