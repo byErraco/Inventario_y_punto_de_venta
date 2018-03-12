@@ -16,10 +16,9 @@ public class EstadoCajaTableModel extends ArrayListTableModel{
     
     enum Columnas {
 
-        EmpleadoApertura("Empleado apertura", "empleado_apertura"),
+        EmpleadoApertura("Empleado", "empleado_apertura"),
         FechaApertura("Fecha apertura", "fecha_apertura"),
-        EmpleadoCierre("Empleado cierre", "empleado_cierre"),
-        FechaCierre("Fecha cierre", "fecha_cierre");
+        FechaCierre("Fecha corte", "fecha_corte");
         
         String header;
         String columna;
@@ -40,8 +39,8 @@ public class EstadoCajaTableModel extends ArrayListTableModel{
 
     public EstadoCajaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.EmpleadoApertura.getHeader(), Columnas.FechaApertura.getHeader(), Columnas.EmpleadoCierre.getHeader(), Columnas.FechaCierre.getHeader()},
-                new String[]{Columnas.EmpleadoApertura.getColumna(), Columnas.FechaApertura.getColumna(), Columnas.EmpleadoCierre.getColumna(), Columnas.FechaCierre.getColumna()});
+                new String[]{Columnas.EmpleadoApertura.getHeader(), Columnas.FechaApertura.getHeader(), Columnas.FechaCierre.getHeader()},
+                new String[]{Columnas.EmpleadoApertura.getColumna(), Columnas.FechaApertura.getColumna(), Columnas.FechaCierre.getColumna()});
     }
 
 }
