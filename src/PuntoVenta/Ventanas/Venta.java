@@ -6,8 +6,10 @@ import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Modelos.ModeloProducto;
-import java.awt.Color;
 
+import Administrador.Ventanas.RegistroCliente;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -41,7 +43,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private DecimalFormat redondeo = new DecimalFormat("0.00");
     public final MenuPrincipal menuPrincipal;
     public String impuesto;
-    public RegistroCliente registroSimpleCliente;
+    public RegistroCliente registroCliente;
     public ListaClientes ventanaCliente;
     private boolean clienteAsociadoFactura;
     ModeloProducto productoPorAsociar;
@@ -1090,20 +1092,20 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param documento
      */
     private void abrirVentanaRegistroSimpleCliente(char identificador, String documento) {
-        if (menuPrincipal.estacerrado(registroSimpleCliente)) {
+        if (menuPrincipal.estacerrado(registroCliente)) {
             if (documento.isEmpty()) {
-                registroSimpleCliente = new RegistroCliente(this);
+                registroCliente = new RegistroCliente(this);
             } else {
-                registroSimpleCliente = new RegistroCliente(this, identificador, documento);
+                registroCliente = new RegistroCliente(this, identificador, documento);
             }
 
             Dimension desktopSize = menuPrincipal.panel.getSize();
-            Dimension jInternalFrameSize = registroSimpleCliente.getSize();
-            registroSimpleCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+            Dimension jInternalFrameSize = registroCliente.getSize();
+            registroCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                     (desktopSize.height - jInternalFrameSize.height) / 2);
 
-            menuPrincipal.panel.add(registroSimpleCliente);
-            registroSimpleCliente.show();
+            menuPrincipal.panel.add(registroCliente);
+            registroCliente.show();
         } else {
             JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
         }
@@ -1113,15 +1115,15 @@ public class Venta extends javax.swing.JInternalFrame {
      * Abre la ventana de registro simple.
      */
     private void abrirVentanaRegistroSimpleCliente() {
-        if (menuPrincipal.estacerrado(registroSimpleCliente)) {
-            registroSimpleCliente = new RegistroCliente(this);
+        if (menuPrincipal.estacerrado(registroCliente)) {
+            registroCliente = new RegistroCliente(this);
             Dimension desktopSize = menuPrincipal.panel.getSize();
-            Dimension jInternalFrameSize = registroSimpleCliente.getSize();
-            registroSimpleCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+            Dimension jInternalFrameSize = registroCliente.getSize();
+            registroCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                     (desktopSize.height - jInternalFrameSize.height) / 2);
 
-            menuPrincipal.panel.add(registroSimpleCliente);
-            registroSimpleCliente.show();
+            menuPrincipal.panel.add(registroCliente);
+            registroCliente.show();
         } else {
             JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
         }

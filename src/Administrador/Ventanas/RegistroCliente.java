@@ -8,6 +8,7 @@ package Administrador.Ventanas;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
+import PuntoVenta.Ventanas.Venta;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -29,37 +30,67 @@ import javax.swing.event.InternalFrameEvent;
 public class RegistroCliente extends javax.swing.JInternalFrame {
 
     private Admin admin;
-    private MenuPrincipal menuPrincipal;
+    private Venta venta;
     private ObjetoBaseDatos obd;
-    private Object ObjetoBaseDatos;
-    private Object txtNombre;
-    private RegistroCliente registroEmpleados;
 
     /**
-     * Creates new form RegistroEmpleados
+     * Crea una ventana de RegistroCliente
+     * para uso por el módulo de administración
      *
-     * @param venta
+     * @param admin Ventana de admin.
      */
     public RegistroCliente(Admin admin) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
+        initComponents();
+        crearHotKeys();
+    }
+    
+    /**
+     * Crea una ventana de RegistroCliente
+     * para uso por el módulo de ventas
+     * 
+     * @param venta Ventana de venta.
+     */
+    public RegistroCliente(Venta venta) {
+        this.venta = venta;
+        this.obd = venta.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
     }
 
     /**
-     * Creates new form RegistroEmpleados
-     *
+     * Crea una ventana de RegistroCliente
+     * para uso por el módulo de administración
+     * 
      * @param admin Ventana de admin.
      * @param identificador Indicador del combobox. J,V,E,P.
      * @param documento Cedula, RIF o número de pasaporte de la persona
      */
     public RegistroCliente(Admin admin, char identificador, String documento) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
         cmbTipoDocumento.setSelectedItem(identificador);
         txtDocumento.setText(documento);
-
+    }
+    
+    /**
+     * Crea una ventana de RegistroCliente
+     * para uso por el módulo de ventas
+     * 
+     * @param venta Ventana de venta.
+     * @param identificador Indicador del combobox. J,V,E,P.
+     * @param documento Cedula, RIF o número de pasaporte de la persona
+     */
+    public RegistroCliente(Venta venta, char identificador, String documento) {
+        this.venta = venta;
+        this.obd = venta.menuPrincipal.getOBD();
+        initComponents();
+        crearHotKeys();
+        cmbTipoDocumento.setSelectedItem(identificador);
+        txtDocumento.setText(documento);
     }
 
     /**
@@ -190,6 +221,11 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
 
         txtDireccion.setColumns(20);
         txtDireccion.setRows(5);
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDireccion);
 
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -294,9 +330,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadosActionPerformed
-        //?''?????!!!!
         registrarCliente();
-        admin.actualizarTabla();
+        if(admin != null) admin.actualizarTabla();
     }//GEN-LAST:event_btnRegistrarEmpleadosActionPerformed
 
 
@@ -412,6 +447,12 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         lblApellido.setVisible(!cmbTipoDocumento.getSelectedItem().equals("J"));
     }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
 
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        if (txtDireccion.getText().length() > 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
+
     private void crearHotKeys() {
         Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
             @Override
@@ -439,7 +480,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             @Override
             public void internalFrameClosed(InternalFrameEvent e) {
                 try {
-                    admin.getTxtDocumento().requestFocus();
+                    if(admin != null) admin.getTxtDocumento().requestFocus();
+                    else venta.getTxtDocumento().requestFocus();
                 } catch (Exception E) {
 //                    System.out.println(E);
                 }
@@ -493,10 +535,18 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             return;
         }
         
-        idCliente = admin.menuPrincipal.getOBD().crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email);
+        idCliente = obd.crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email);
 
         if (idCliente > 0) {
+            JOptionPane.showMessageDialog(null, "Persona registrada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
             this.cerrarVentana();
+            
+            if(venta != null) {
+                venta.crearVenta(tipo, numero_identificacion);
+                venta.getCmbTipoDocumento().setSelectedItem(tipo);
+                venta.getTxtDocumento().setText(numero_identificacion);
+            }
         } else {
             Utilidades.Sonidos.beep();
         }

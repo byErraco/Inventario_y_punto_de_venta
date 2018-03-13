@@ -175,6 +175,11 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
 
         txtDireccion.setColumns(20);
         txtDireccion.setRows(5);
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDireccion);
 
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -370,6 +375,12 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDocumentoActionPerformed
 
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        if (txtDireccion.getText().length() > 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
+
     private void cerrarVentana() {
         this.dispose();
     }
@@ -441,11 +452,11 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTelefono;
     private javax.swing.JPanel pnlContenedor;
-    private javax.swing.JTextField txtApellido;
-    private javax.swing.JTextField txtCorreo;
+    public static javax.swing.JTextField txtApellido;
+    public static javax.swing.JTextField txtCorreo;
     private javax.swing.JTextArea txtDireccion;
-    private javax.swing.JTextField txtDocumento;
-    private javax.swing.JTextField txtNombres;
-    private javax.swing.JTextField txtTelefono;
+    public static javax.swing.JTextField txtDocumento;
+    public static javax.swing.JTextField txtNombres;
+    public static javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

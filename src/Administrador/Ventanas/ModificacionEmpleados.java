@@ -191,6 +191,11 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
 
         txtDireccion.setColumns(20);
         txtDireccion.setRows(5);
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDireccion);
 
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -413,6 +418,12 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         //if(!Character.isDigit(aux) || e==8) evt.consume();
 
     }//GEN-LAST:event_txtCorreoKeyTyped
+
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        if (txtDireccion.getText().length() > 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
 
     private void cerrarVentana() {
         this.dispose();
