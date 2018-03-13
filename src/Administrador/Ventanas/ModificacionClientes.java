@@ -43,15 +43,14 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
      * Creates new form RegistroEmpleados
      *
      * @param admin Ventana de admin.
-     * @param identificador Indicador del combobox. J,V,E,P.
-     * @param documento Cedula, RIF o número de pasaporte de la persona
+     * @param tipo_persona Indicador del combobox. J,V,E,P.
+     * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public ModificacionClientes(Admin admin, char identificador, String documento) {
+    public ModificacionClientes(Admin admin, String tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
         initComponents();
         //crearHotKeys();
-        //cmbTipoDocumento.setSelectedItem(identificador);
-        //txtDocumento.setText(documento);
+        setCliente(tipo_persona, numero_identificacion_persona);
     }
 
     /**
@@ -78,7 +77,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         lblCorreo = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txaDireccion = new javax.swing.JTextArea();
+        txtDireccion = new javax.swing.JTextArea();
         lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
@@ -144,7 +143,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
 
         lblTelefono.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
-        lblTelefono.setText("Telefono:");
+        lblTelefono.setText("Teléfono:");
 
         txtTelefono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTelefono.addActionListener(new java.awt.event.ActionListener() {
@@ -174,13 +173,13 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
             }
         });
 
-        txaDireccion.setColumns(20);
-        txaDireccion.setRows(5);
-        jScrollPane1.setViewportView(txaDireccion);
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        jScrollPane1.setViewportView(txtDireccion);
 
         lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblDireccion.setForeground(new java.awt.Color(255, 255, 255));
-        lblDireccion.setText("Direccion:");
+        lblDireccion.setText("Dirección:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -198,7 +197,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
                             .addComponent(lblNombre)
                             .addComponent(lblDireccion))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,11 +234,13 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCorreo))
-                .addGap(7, 7, 7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDireccion)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblDireccion)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
@@ -253,7 +254,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenedorLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnModificarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120))
+                .addGap(125, 125, 125))
         );
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,57 +286,21 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         admin.actualizarTabla();
     }//GEN-LAST:event_btnModificarEmpleadosActionPerformed
 
-    private void txtDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDocumentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDocumentoActionPerformed
-
-    private void txtDocumentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDocumentoKeyTyped
+    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
         /*
-
-        char c=evt.getKeyChar();
-
-        if(Character.isDigit(c) || evt.getKeyCode()==KeyEvent.VK_ENTER);
-        else
-        {
-            evt.consume();
-            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan numeros.");
-        }
-
-         */
-    }//GEN-LAST:event_txtDocumentoKeyTyped
-
-    private void txtNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombresActionPerformed
-
-    private void txtNombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyTyped
-        /*char c=evt.getKeyChar();
-
-        if(Character.isDigit(c))
-        {
-            evt.consume();
-            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan letras.");
-        }*/
-    }//GEN-LAST:event_txtNombresKeyTyped
-
-    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
-        char c = evt.getKeyChar();
-
-        if (Character.isDigit(c)) {
-            evt.consume();
+        char aux=evt.getKeyChar();
+        String str=null;
+        int e=0;
+        try{
+            e=txtDocumento.getText().length();
+        }catch(Exception E){
 
         }
-    }//GEN-LAST:event_txtApellidoKeyTyped
 
-    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefonoActionPerformed
-
-    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
-        if ((txtTelefono.getText().length() > 15) || ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != '-') && (evt.getKeyChar() != '+')))) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtTelefonoKeyTyped
+        System.out.println(e);
+        */
+        //if(!Character.isDigit(aux) || e==8) evt.consume();
+    }//GEN-LAST:event_txtCorreoKeyTyped
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
         /*boolean esValido = false;
@@ -350,30 +315,70 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         {
             esValido = true;
         }
-         */
+        */
     }//GEN-LAST:event_txtCorreoActionPerformed
 
-    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
-        /*
-        char aux=evt.getKeyChar();
-        String str=null;
-        int e=0;
-        try{
-            e=txtDocumento.getText().length();
-        }catch(Exception E){
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        if ((txtTelefono.getText().length() > 15) || ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != '-') && (evt.getKeyChar() != '+')))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
+
+    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefonoActionPerformed
+
+    private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
+        char c = evt.getKeyChar();
+
+        if (Character.isDigit(c)) {
+            evt.consume();
 
         }
+    }//GEN-LAST:event_txtApellidoKeyTyped
 
-        System.out.println(e);
-         */
-        //if(!Character.isDigit(aux) || e==8) evt.consume();
+    private void txtNombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyTyped
+        /*char c=evt.getKeyChar();
 
-    }//GEN-LAST:event_txtCorreoKeyTyped
+        if(Character.isDigit(c))
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan letras.");
+        }*/
+    }//GEN-LAST:event_txtNombresKeyTyped
+
+    private void txtNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombresActionPerformed
+
+    private void txtDocumentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDocumentoKeyTyped
+        /*
+
+        char c=evt.getKeyChar();
+
+        if(Character.isDigit(c) || evt.getKeyCode()==KeyEvent.VK_ENTER);
+        else
+        {
+            evt.consume();
+            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan numeros.");
+        }
+
+        */
+    }//GEN-LAST:event_txtDocumentoKeyTyped
+
+    private void txtDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDocumentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDocumentoActionPerformed
 
     private void cerrarVentana() {
         this.dispose();
     }
-
+    
+    private void setCliente(String tipo_persona, String numero_identificacion_persona){
+        cmbTipoDocumento.setSelectedItem(tipo_persona);
+        txtDocumento.setText(numero_identificacion_persona);
+    }
+    
     private void modificarCliente() {
         String cedula, nombre, apellido, telefono, correo, direccion;
         char nacionalidad;
@@ -383,7 +388,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         apellido = txtApellido.getText();
         nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
         cedula = txtDocumento.getText();
-        direccion = txaDireccion.getText();
+        direccion = txtDireccion.getText();
         telefono = txtTelefono.getText();
         correo = txtCorreo.getText();
         
@@ -409,7 +414,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         }
         if (direccion.isEmpty()) {
             Utilidades.Sonidos.beep();
-            txaDireccion.requestFocus();
+            txtDireccion.requestFocus();
             return;
         }
 
@@ -436,11 +441,11 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTelefono;
     private javax.swing.JPanel pnlContenedor;
-    private javax.swing.JTextArea txaDireccion;
-    public static javax.swing.JTextField txtApellido;
-    public static javax.swing.JTextField txtCorreo;
-    public static javax.swing.JTextField txtDocumento;
-    public static javax.swing.JTextField txtNombres;
-    public static javax.swing.JTextField txtTelefono;
+    private javax.swing.JTextField txtApellido;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextArea txtDireccion;
+    private javax.swing.JTextField txtDocumento;
+    private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

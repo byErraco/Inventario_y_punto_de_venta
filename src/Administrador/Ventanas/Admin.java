@@ -832,8 +832,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroEmpleados.show();
     }
 
-    public void abrirVentanaModificacionEmpleados() {
-        modificacionEmpleados = new ModificacionEmpleados(this);
+    public void abrirVentanaModificacionEmpleados(String tipo_persona, String numero_identificacion_persona) {
+        modificacionEmpleados = new ModificacionEmpleados(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionEmpleados.getSize();
         modificacionEmpleados.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -841,8 +841,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionEmpleados);
         modificacionEmpleados.show();
-        String cedula = null;
-
     }
 
     public void abrirVentanaRegistroCliente() {
@@ -856,8 +854,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroCliente.show();
     }
 
-    public void abrirVentanaModificacionCliente() {
-        modificacionClientes = new ModificacionClientes(this);
+    public void abrirVentanaModificacionCliente(String tipo_persona, String numero_identificacion_persona) {
+        modificacionClientes = new ModificacionClientes(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
         modificacionClientes.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -865,8 +863,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionClientes);
         modificacionClientes.show();
-        String cedula = null;
-
     }
 
     public static void conseguirRuta() {
@@ -948,9 +944,12 @@ public class Admin extends javax.swing.JInternalFrame {
             jtbListaEmpleado.setRowSelectionInterval(0, 0);
         }
         else {
-            String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-            abrirVentanaModificacionEmpleados();
-            Administrador.Ventanas.ModificacionEmpleados.txtDocumento.setText(cedula);
+            String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+            String tipo_persona = partes[0];
+            String numero_identificacion_persona = partes[1]; 
+
+            abrirVentanaModificacionEmpleados(tipo_persona, numero_identificacion_persona);
         }
     }
 
@@ -958,12 +957,14 @@ public class Admin extends javax.swing.JInternalFrame {
         int numeroRow = jtbListaCliente.getSelectedRow();
         if (numeroRow < 0) {
             jtbListaCliente.setRowSelectionInterval(0, 0);
-            numeroRow = jtbListaCliente.getSelectedRow();
         }
         else {
-            String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-            abrirVentanaModificacionCliente();
-            Administrador.Ventanas.ModificacionClientes.txtDocumento.setText(cedula);
+            String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+            String tipo_persona = partes[0];
+            String numero_identificacion_persona = partes[1]; 
+            
+            abrirVentanaModificacionCliente(tipo_persona, numero_identificacion_persona);
         }
     }
 

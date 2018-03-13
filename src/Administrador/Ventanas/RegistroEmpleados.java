@@ -6,8 +6,6 @@
 package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
-import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.Modelos.ModeloEmpleado;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;

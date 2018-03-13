@@ -5,10 +5,18 @@
  */
 package Administrador.Ventanas;
 
+import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.Modelos.ModeloEmpleado;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 /**
  *
@@ -17,12 +25,11 @@ import java.util.HashMap;
 public class ModificacionEmpleados extends javax.swing.JInternalFrame {
 
     private Admin admin;
-    private MenuPrincipal menuPrincipal;
-    //private ObjetoBaseDatos obd;
-    private Object ObjetoBaseDatos;
-    private Object txtNombre;
+    private ObjetoBaseDatos obd;
+    private HashMap<String, Integer> cargos;
+    
     Object panel;
-
+    
     /**
      * Creates new form RegistroEmpleados
      *
@@ -30,28 +37,30 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
      */
     public ModificacionEmpleados(Admin admin) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         txtDocumento.getText();
         txtNombres.getText();
         txtApellido.getText();
         txtTelefono.getText();
         txtCorreo.getText();
-        //crearHotKeys();
+        crearHotKeys();
+        setCargos();
     }
 
     /**
      * Creates new form RegistroEmpleados
      *
      * @param admin Ventana de admin.
-     * @param identificador Indicador del combobox. J,V,E,P.
-     * @param documento Cedula, RIF o número de pasaporte de la persona
+     * @param tipo_persona Indicador del combobox. J,V,E,P.
+     * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public ModificacionEmpleados(Admin admin, char identificador, String documento) {
+    public ModificacionEmpleados(Admin admin, String tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
         initComponents();
-        //crearHotKeys();
-        //cmbTipoDocumento.setSelectedItem(identificador);
-        //txtDocumento.setText(documento);
+        crearHotKeys();
+        setCargos();
+        setEmpleado(tipo_persona, numero_identificacion_persona);
     }
 
     /**
@@ -77,12 +86,13 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         txtTelefono = new javax.swing.JTextField();
         lblCorreo = new javax.swing.JLabel();
         txtCorreo = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JTextField();
-        cmbCargoId = new javax.swing.JComboBox();
+        jClave = new javax.swing.JPasswordField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDireccion = new javax.swing.JTextArea();
+        lblDireccion = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
+        cmbCargoId = new javax.swing.JComboBox();
         lblCargo = new javax.swing.JLabel();
-        lblDepartamento = new javax.swing.JLabel();
-        txtDepartamento = new javax.swing.JTextField();
 
         setClosable(true);
         setTitle("Saphiro - Modificar empleado");
@@ -147,7 +157,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
 
         lblTelefono.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
-        lblTelefono.setText("Telefono:");
+        lblTelefono.setText("Teléfono:");
 
         txtTelefono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTelefono.addActionListener(new java.awt.event.ActionListener() {
@@ -177,48 +187,23 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             }
         });
 
-        txtPassword.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
-        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPasswordKeyTyped(evt);
-            }
-        });
+        jClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        cmbCargoId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3" }));
-        cmbCargoId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCargoIdActionPerformed(evt);
-            }
-        });
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        jScrollPane1.setViewportView(txtDireccion);
+
+        lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        lblDireccion.setForeground(new java.awt.Color(255, 255, 255));
+        lblDireccion.setText("Dirección");
 
         lblPassword.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("Password:");
+        lblPassword.setText("Contraseña:");
 
         lblCargo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblCargo.setForeground(new java.awt.Color(255, 255, 255));
         lblCargo.setText("Cargo");
-
-        lblDepartamento.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
-        lblDepartamento.setForeground(new java.awt.Color(255, 255, 255));
-        lblDepartamento.setText("Departamento:");
-
-        txtDepartamento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDepartamento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDepartamentoActionPerformed(evt);
-            }
-        });
-        txtDepartamento.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDepartamentoKeyTyped(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -235,28 +220,31 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                                     .addComponent(lblNombre)
                                     .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblCorreo)
-                                    .addComponent(lblPassword))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTelefono)
-                            .addComponent(lblCargo)
-                            .addComponent(lblDepartamento))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtDepartamento)
-                    .addComponent(cmbCargoId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtCorreo)
-                    .addComponent(txtTelefono)
-                    .addComponent(txtApellido)
-                    .addComponent(txtNombres)
-                    .addComponent(txtPassword)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTelefono))
+                                .addGap(0, 33, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCorreo)
+                            .addComponent(txtTelefono)
+                            .addComponent(txtApellido)
+                            .addComponent(txtNombres)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblCargo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPassword)
+                            .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jClave, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -285,19 +273,17 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                     .addComponent(lblCorreo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPassword))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDireccion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDepartamento))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblPassword)
+                    .addComponent(jClave, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblCargo))
-                .addContainerGap())
+                    .addComponent(lblCargo)
+                    .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
@@ -310,7 +296,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
+                        .addGap(133, 133, 133)
                         .addComponent(btnModificarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -318,10 +304,10 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnModificarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -339,7 +325,6 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModificarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarEmpleadosActionPerformed
-
         modificarEmpleado();
         admin.actualizarTabla();
     }//GEN-LAST:event_btnModificarEmpleadosActionPerformed
@@ -429,48 +414,81 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_txtCorreoKeyTyped
 
-    private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordKeyTyped
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
-    private void cmbCargoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCargoIdActionPerformed
-
-    }//GEN-LAST:event_cmbCargoIdActionPerformed
-
-    private void txtDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartamentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDepartamentoActionPerformed
-
-    private void txtDepartamentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepartamentoKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDepartamentoKeyTyped
-
     private void cerrarVentana() {
         this.dispose();
     }
+    
+    private void crearHotKeys() {
+        Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerrarVentana();
+            }
+        };
+        Action actRegistrar = new AbstractAction("actionModificar") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modificarEmpleado();
+            }
+        };
 
+        actCerrarVentana.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+        actRegistrar.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+
+        pnlContenedor.getActionMap().put("actionCerrarVentanaCaja", actCerrarVentana);
+        pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCerrarVentana.getValue(Action.ACTION_COMMAND_KEY), "actionCerrarVentanaCaja");
+
+        pnlContenedor.getActionMap().put("actionModificar", actRegistrar);
+        pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actRegistrar.getValue(Action.ACCELERATOR_KEY), "actionModificar");
+
+        InternalFrameAdapter listener = new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                try {
+                    admin.getTxtDocumento().requestFocus();
+                } catch (Exception E) {
+                }
+            }
+        };
+
+        this.addInternalFrameListener(listener);
+
+    }
+    
+    private void setCargos() {
+        this.cargos = this.obd.getMapCargos();
+        
+        for (Map.Entry<String, Integer> entry : this.cargos.entrySet()) {   
+            cmbCargoId.addItem(entry.getKey());
+        }
+    }
+    
+    private void setEmpleado(String tipo_persona, String numero_identificacion_persona) {
+        cmbTipoDocumento.setSelectedItem(tipo_persona);
+        txtDocumento.setText(numero_identificacion_persona);
+    }
+    
     private void modificarEmpleado() {
-        String cedula, nombre, apellido, telefono, correo, password;
-        char nacionalidad;
+        String numero_identificacion, nombre, apellido, telefono, email, direccion, clave;
+        char tipo;
         int idEmpleado, cargo_id;
 
-        boolean modificado;
-
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        cedula = txtDocumento.getText();
+        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        numero_identificacion = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
         telefono = txtTelefono.getText();
-        correo = txtCorreo.getText();
-        password = txtPassword.getText();
-        cargo_id = Integer.valueOf((String) cmbCargoId.getSelectedItem());
+        email = txtCorreo.getText();
+        direccion = txtDireccion.getText();
+        clave = String.valueOf(jClave.getPassword());
 
-//        txtDocumento.setEnabled(false);
-//        cmbCargoId.setEnabled(false);
+        cargo_id = cargos.get((String) cmbCargoId.getSelectedItem());
+
+        if (numero_identificacion.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtDocumento.requestFocus();
+            return;
+        }
         if (nombre.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtNombres.requestFocus();
@@ -486,50 +504,32 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             txtTelefono.requestFocus();
             return;
         }
-        if (correo.isEmpty()) {
+        if (clave.isEmpty()) {
             Utilidades.Sonidos.beep();
-            txtCorreo.requestFocus();
-            return;
-        }
-        if (password.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtPassword.requestFocus();
+            jClave.requestFocus();
             return;
         }
 
-        /*idEmpleado = admin.menuPrincipal.getOBD().modificarEmpleado(nombre, apellido, cedula, telefono, correo, cargo_id, password);
+        /*idEmpleado = this.obd.modificarEmpleado(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email, clave, cargo_id);
 
         if (idEmpleado > 0) {
-            HashMap<String, String> mapEmpleado = admin.menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-
-            ModeloEmpleado empleado = new ModeloEmpleado(mapEmpleado);
-
-            correo = txtCorreo.getText();
-            if (!correo.isEmpty()) {
-                empleado.setCorreo(correo);
-            }
-            telefono = txtTelefono.getText();
-            if (!telefono.isEmpty()) {
-                empleado.setTelefono(telefono);
-            }
-
             this.cerrarVentana();
-
         } else {
             Utilidades.Sonidos.beep();
         }*/
     }
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificarEmpleados;
-    public static javax.swing.JComboBox cmbCargoId;
+    private javax.swing.JComboBox cmbCargoId;
     private javax.swing.JComboBox cmbTipoDocumento;
+    private javax.swing.JPasswordField jClave;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApellido;
     private javax.swing.JLabel lblCargo;
     private javax.swing.JLabel lblCorreo;
-    private javax.swing.JLabel lblDepartamento;
+    private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDocumento;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPassword;
@@ -537,10 +537,9 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnlContenedor;
     public static javax.swing.JTextField txtApellido;
     public static javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtDepartamento;
+    private javax.swing.JTextArea txtDireccion;
     public static javax.swing.JTextField txtDocumento;
     public static javax.swing.JTextField txtNombres;
-    public static javax.swing.JTextField txtPassword;
     public static javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }
