@@ -52,10 +52,14 @@ public class ObjetoBaseDatos {
         //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "asdf", 1);
         //obd.eliminarEmpleado("admin");
         //LISTO//obd.crearCierreCaja(5,4);
-        obd.crearCorteCaja(100.00, 0.00, 0.00, 1, 2);
+        //obd.crearCorteCaja(100.00, 0.00, 0.00, 1, 2);
         //obd.seleccionarCargo();
-        //LISTO//Empleado empleado = obd.getDatosEmpleado(2);
+        //LISTO//Empleado empleado = obd.getDatosEmpleadoId(2);
+        //LISTO//Empleado empleado = obd.getDatosEmpleadoCedula("admin");
         //System.out.println(empleado.getNombre());
+        //System.out.println(empleado.getApellido());
+        //System.out.println(empleado.getNacionalidad());
+        //System.out.println(empleado.getCedula());
         
     }
     
@@ -291,7 +295,7 @@ public class ObjetoBaseDatos {
      * @param idEmpleado
      * @return Empleado resultado de la consulta o null en caso de fallar.
      */
-    public Empleado getDatosEmpleado(int idEmpleado) {
+    public Empleado getDatosEmpleadoId(int idEmpleado) {
         ResultSet rs;
         Empleado emple = new Empleado();
 
@@ -300,6 +304,44 @@ public class ObjetoBaseDatos {
                         "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
                         "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE id_empleado =" + idEmpleado;
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(query);
+            while (rs.next()) {
+                emple.setId(rs.getString("id_empleado"));
+                emple.setNombre(rs.getString("nombre_persona"));
+                emple.setApellido(rs.getString("apellido_persona"));
+                emple.setNacionalidad(rs.getString("tipo_persona"));
+                emple.setCedula(rs.getString("numero_identificacion_persona"));
+                emple.setCorreo(rs.getString("email_persona"));
+                emple.setTelefono(rs.getString("telefono_persona"));
+                emple.setDireccion(rs.getString("direccion_persona"));
+                //emple.setPassword(rs.getString("clave"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return emple;
+    }
+    
+     /**
+     * Consulta los datos del Empleado en la tabla spve.empleado.
+     *
+     * @param cedulaEmpleado
+     * @return Empleado resultado de la consulta o null en caso de fallar.
+     */
+    public Empleado getDatosEmpleadoCedula(String cedulaEmpleado) {
+        ResultSet rs;
+        Empleado emple = new Empleado();
+
+        String query = "SELECT persona.nombre_persona, persona.apellido_persona, persona.tipo_persona, persona.numero_identificacion_persona, \n" +
+                        "persona.telefono_persona, persona.email_persona, \n" +
+                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
+                        "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
+                        "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE numero_identificacion_persona = '" + cedulaEmpleado +"'";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
@@ -389,7 +431,7 @@ public class ObjetoBaseDatos {
      * @param numero_identificacion_persona_viejo
      * @return
      */
-    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String clave, String departamento, String numero_identificacion_persona_viejo) {
+    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, String departamento, String numero_identificacion_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         
@@ -419,6 +461,7 @@ public class ObjetoBaseDatos {
      * @param cedula Cedula del empleado que se desee eliminar.
      * @return
      */
+    //REVISAR
     public int eliminarEmpleado(String cedula) {
         ResultSet result;
         int id = -1;
