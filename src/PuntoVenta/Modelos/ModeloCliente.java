@@ -6,21 +6,15 @@
 package PuntoVenta.Modelos;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class ModeloCliente {
 
     private final int id;
     private String nombre;
-    private String direccion;
     private String apellido;
-    private String fechaNacimiento;
-    private String genero;
-    private String correo;
-    private String twitter;
-    private String facebook;
-    private List<String> listaTelefonos;
+    private String direccion;
     private String telefono;
+    private String correo;
 
     public ModeloCliente(HashMap<String, String> map) {
         if (map == null) {
@@ -30,13 +24,12 @@ public class ModeloCliente {
                 e.printStackTrace();
             }
         }
-        this.id = Integer.parseInt(map.get("id"));
-        this.nombre = map.get("nombre");
-        this.apellido = map.get("apellido");
-        this.genero = map.get("sexo");
-        this.fechaNacimiento = map.get("fechaNacimiento");
-        this.direccion = map.get("direccion");
-        this.correo = map.get("correo");
+        this.id = Integer.parseInt(map.get("id_persona"));
+        this.nombre = map.get("nombre_persona");
+        this.apellido = map.get("apellido_persona");
+        this.direccion = map.get("direccion_persona");
+        this.telefono = map.get("telefono_persona");
+        this.correo = map.get("email_persona");
     }
 
     /**
@@ -51,20 +44,6 @@ public class ModeloCliente {
      */
     public String getNombre() {
         return nombre;
-    }
-
-    /**
-     * @return the sexo
-     */
-    public String getSexo() {
-        return getGenero();
-    }
-
-    /**
-     * @return the fechaNacimiento
-     */
-    public String getFechaNacimiento() {
-        return fechaNacimiento;
     }
 
     /**
@@ -115,27 +94,6 @@ public class ModeloCliente {
     }
 
     /**
-     * @param fechaNacimiento the fechaNacimiento to set
-     */
-    public void setFechaNacimiento(String fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    /**
-     * @return the genero
-     */
-    public String getGenero() {
-        return genero;
-    }
-
-    /**
-     * @param genero the genero to set
-     */
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    /**
      * @param correo the correo to set
      */
     public void setCorreo(String correo) {
@@ -143,58 +101,16 @@ public class ModeloCliente {
     }
     
     /**
-     * @param telefono the telefono to get
+     * @return 
      */
     public String getTelefono() {
         return telefono;
     }
+    
     /**
      * @param telefono the telefono to set
      */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-    
-    /**
-     * @return the listaTelefonos
-     */
-    public List<String> getListaTelefonos() {
-        return listaTelefonos;
-    }
-
-    /**
-     * @param listaTelefonos the listaTelefonos to set
-     */
-    public void setListaTelefonos(List<String> listaTelefonos) {
-        this.listaTelefonos = listaTelefonos;
-    }
-
-    /**
-     * @return the twitter
-     */
-    public String getTwitter() {
-        return twitter;
-    }
-
-    /**
-     * @param twitter the twitter to set
-     */
-    public void setTwitter(String twitter) {
-        this.twitter = twitter;
-    }
-
-    /**
-     * @return the facebook
-     */
-    public String getFacebook() {
-        return facebook;
-    }
-
-    /**
-     * @param facebok the facebook to set
-     */
-    public void setFacebook(String facebok) {
-        this.facebook = facebok;
-    }
-
 }

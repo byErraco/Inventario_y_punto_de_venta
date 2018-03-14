@@ -16,7 +16,7 @@ public class EstadoCajaTableModel extends ArrayListTableModel{
     
     enum Columnas {
 
-        EmpleadoApertura("Empleado", "empleado_apertura"),
+        EmpleadoApertura("Empleado", "empleado"),
         FechaApertura("Fecha apertura", "fecha_apertura"),
         FechaCierre("Fecha corte", "fecha_corte");
         

@@ -186,7 +186,7 @@ CREATE TABLE IF NOT EXISTS spve.venta (
   cambio_venta DECIMAL(10,0) NOT NULL,
   codigo_factura VARCHAR(45) NOT NULL,
   fecha_venta DATE NOT NULL,
-  estado_venta VARCHAR(45) NOT NULL,
+  estado_venta INT NOT NULL,
   id_persona INT NOT NULL,
   activo_venta SMALLINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id_venta),

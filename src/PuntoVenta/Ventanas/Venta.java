@@ -1192,8 +1192,8 @@ public class Venta extends javax.swing.JInternalFrame {
             return;
         }
 
-        //Konstanza: agregar esta línea cuando se tenga la función getMapPersona: HashMap map = menuPrincipal.getOBD().getMapPersona(tipo_persona, numero_identificacion_persona);
-        HashMap map = null;
+        HashMap map = menuPrincipal.getOBD().getMapPersona(tipo_persona, numero_identificacion_persona);
+        
         if (map != null && !map.isEmpty()) {
             ModeloCliente cliente = new ModeloCliente(map);
             this.setIdVenta(menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
@@ -1547,7 +1547,7 @@ public class Venta extends javax.swing.JInternalFrame {
 
     /*
     Metodo para descontar la cantidad del producto
-     */
+    *
     private void descontarProducto() throws SQLException {
         int idProducto;
         double cantidad;
@@ -1568,7 +1568,7 @@ public class Venta extends javax.swing.JInternalFrame {
             Utilidades.Sonidos.beep();
         }
 
-    }
+    }*/
 
     /**
      * @return the txtIdProducto
