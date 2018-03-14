@@ -90,6 +90,27 @@ public class PostgreSQL {
         
         return null;
     }
+    
+    
+    public boolean ejecutarDelete(String sql) {
+        /* Konstanza:
+            - Revisar para que funciona XSQLException
+            - Eliminar el if: si no hay conexión debería ir a catch no retornar null
+            - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
+              cuando puede dar otro error como que no haya un campo o una tabla
+        */
+        System.out.println(sql);
+        try {
+            if (this.conexion == null || this.conexion.isClosed()) {
+                return false; 
+            }
+            sentencia.executeQuery(sql);
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            this.desconectar();
+        }
+        return true;
+    }
 
     /**
      * Método para ejecutar INSERT, UPDATE o DELETE. Solo se debe pasar una (1)

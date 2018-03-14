@@ -1,0 +1,2 @@
+﻿SELECT id_empleado FROM spve.empleado WHERE EXISTS (SELECT tipo_persona, numero_identificacion_persona 
+FROM spve.persona WHERE tipo_persona = 'V' AND numero_identificacion_persona = '25491458');

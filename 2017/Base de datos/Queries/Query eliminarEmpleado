@@ -1,0 +1,2 @@
+﻿UPDATE spve.empleado SET activo_empleado = 0 WHERE EXISTS (SELECT numero_identificacion_persona FROM spve.persona 
+WHERE persona.numero_identificacion_persona = '25491458');
