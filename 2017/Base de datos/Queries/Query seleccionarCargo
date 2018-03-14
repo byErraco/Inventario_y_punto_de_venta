@@ -1,0 +1,1 @@
+﻿SELECT nombre_cargo FROM spve.cargo WHERE id_cargo = 1
