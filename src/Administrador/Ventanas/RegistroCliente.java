@@ -64,16 +64,16 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * para uso por el módulo de administración
      * 
      * @param admin Ventana de admin.
-     * @param identificador Indicador del combobox. J,V,E,P.
-     * @param documento Cedula, RIF o número de pasaporte de la persona
+     * @param tipo_persona Indicador del combobox. J,V,E,P.
+     * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public RegistroCliente(Admin admin, char identificador, String documento) {
+    public RegistroCliente(Admin admin, char tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
-        cmbTipoDocumento.setSelectedItem(identificador);
-        txtDocumento.setText(documento);
+        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
+        txtDocumento.setText(numero_identificacion_persona);
     }
     
     /**
@@ -81,16 +81,16 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * para uso por el módulo de ventas
      * 
      * @param venta Ventana de venta.
-     * @param identificador Indicador del combobox. J,V,E,P.
-     * @param documento Cedula, RIF o número de pasaporte de la persona
+     * @param tipo_persona Indicador del combobox. J,V,E,P.
+     * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public RegistroCliente(Venta venta, char identificador, String documento) {
+    public RegistroCliente(Venta venta, char tipo_persona, String numero_identificacion_persona) {
         this.venta = venta;
         this.obd = venta.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
-        cmbTipoDocumento.setSelectedItem(identificador);
-        txtDocumento.setText(documento);
+        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
+        txtDocumento.setText(numero_identificacion_persona);
     }
 
     /**
@@ -544,7 +544,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             
             if(venta != null) {
                 venta.crearVenta(tipo, numero_identificacion);
-                venta.getCmbTipoDocumento().setSelectedItem(tipo);
+                venta.getCmbTipoDocumento().setSelectedItem(String.valueOf(tipo));
                 venta.getTxtDocumento().setText(numero_identificacion);
             }
         } else {

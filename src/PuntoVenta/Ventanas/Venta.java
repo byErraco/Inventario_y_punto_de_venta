@@ -747,9 +747,9 @@ public class Venta extends javax.swing.JInternalFrame {
             actualizarTabla();
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            char identificador = getCmbTipoDocumento().getSelectedItem().toString().charAt(0);
-            String documento = getTxtDocumento().getText();
-            crearVenta(identificador, documento);
+            char tipo_persona = getCmbTipoDocumento().getSelectedItem().toString().charAt(0);
+            String numero_identificacion_persona = getTxtDocumento().getText();
+            crearVenta(tipo_persona, numero_identificacion_persona);
         }
     }//GEN-LAST:event_txtDocumentoKeyPressed
 
@@ -1088,15 +1088,15 @@ public class Venta extends javax.swing.JInternalFrame {
      * Abre la ventana de registro simple. Utiliza el char como identificador
      * del comboBox y el String para llenar el campo de cedula.
      *
-     * @param identificador
-     * @param documento
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      */
-    private void abrirVentanaRegistroSimpleCliente(char identificador, String documento) {
+    private void abrirVentanaRegistroSimpleCliente(char tipo_persona, String numero_identificacion_persona) {
         if (menuPrincipal.estacerrado(registroCliente)) {
-            if (documento.isEmpty()) {
+            if (numero_identificacion_persona.isEmpty()) {
                 registroCliente = new RegistroCliente(this);
             } else {
-                registroCliente = new RegistroCliente(this, identificador, documento);
+                registroCliente = new RegistroCliente(this, tipo_persona, numero_identificacion_persona);
             }
 
             Dimension desktopSize = menuPrincipal.panel.getSize();
@@ -1171,12 +1171,12 @@ public class Venta extends javax.swing.JInternalFrame {
      * RIF) y un id (cedula o RIF)), en caso de encontrarlo crea un registro de
      * venta a nombre de este usuario y le asigna un estado de "en proceso".
      *
-     * @param identificador
-     * @param documento
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      */
-    public void crearVenta(char identificador, String documento) {
+    public void crearVenta(char tipo_persona, String numero_identificacion_persona) {
         //El documento no puede ser null o estar vacio ""
-        if (documento == null || documento.isEmpty()) {
+        if (numero_identificacion_persona == null || numero_identificacion_persona.isEmpty()) {
             Utilidades.Sonidos.beep();
             this.setClienteAsociadoFactura(false);
             return;
@@ -1192,7 +1192,8 @@ public class Venta extends javax.swing.JInternalFrame {
             return;
         }
 
-        HashMap map = menuPrincipal.getOBD().getMapCliente(identificador, documento);
+        //Konstanza: agregar esta línea cuando se tenga la función getMapPersona: HashMap map = menuPrincipal.getOBD().getMapPersona(tipo_persona, numero_identificacion_persona);
+        HashMap map = null;
         if (map != null && !map.isEmpty()) {
             ModeloCliente cliente = new ModeloCliente(map);
             this.setIdVenta(menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
@@ -1207,9 +1208,9 @@ public class Venta extends javax.swing.JInternalFrame {
             actualizarTabla();
         } else {
             this.setClienteAsociadoFactura(false);
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa registrar a este cliente?", "Este cliente no existe");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea registrar a este cliente?", "Este cliente no existe");
             if (seleccion == 0) {
-                abrirVentanaRegistroSimpleCliente(identificador, documento);
+                abrirVentanaRegistroSimpleCliente(tipo_persona, numero_identificacion_persona);
             }
         }
     }
@@ -1345,7 +1346,7 @@ public class Venta extends javax.swing.JInternalFrame {
             numeroRow = jtbVenta.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el articulo: " + jtbVenta.getModel().getValueAt(numeroRow, 1) + " de la venta?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el artículo " + jtbVenta.getModel().getValueAt(numeroRow, 1) + " de la venta?", "Eliminar artículo");
 
             if (seleccion == 0) {
 
@@ -1363,7 +1364,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * productos asociados a la venta? o guardarlos como registro?
      */
     private void cancelarVenta() {
-        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa cancelar la venta actual?", "Cancelar venta");
+        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea cancelar la venta actual?", "Cancelar venta");
         if (seleccion == 0) {
             menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Cancelada);
             this.setIdVenta(-1);
@@ -1376,7 +1377,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * Método para pausar la venta actual.
      */
     private void pausarVenta() {
-        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa pausar la venta actual?", "Pausar venta");
+        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea pausar la venta actual?", "Pausar venta");
         if (seleccion == 0) {
             menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Pausada);
             this.setIdVenta(-1);
