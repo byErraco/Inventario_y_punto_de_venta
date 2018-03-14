@@ -46,10 +46,10 @@ public class ObjetoBaseDatos {
     public static void main(String[] args){
         ObjetoBaseDatos obd = new ObjetoBaseDatos("jdbc:postgresql://localhost:5432/stpv", "inverdata", "C1234567c");
         System.out.println(obd);
-        //LISTO//obd.crearPersona("Jose", "Gonzalez", 'V', "1234567", "mcbo", "7654321", "asdf@gmail.com");
+        //LISTOobd.crearPersona("Administrador", "", 'V', "0", "", "", "", "admin", 1);
         //LISTO//obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
         //LISTO//obd.eliminarPersona("25491458");
-        //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "asdf", 1);
+        //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "admin", 1);
         //LISTO//obd.eliminarPersona('V',"25491458");
         //LISTO//obd.eliminarEmpleado('V',"25491458");
         //LISTO//obd.crearCierreCaja(5,4);
@@ -65,7 +65,11 @@ public class ObjetoBaseDatos {
         //System.out.println(empleado.getCedula());
         //LISTO//obd.getIdEstadoCaja(1);
         //LISTO//obd.getMapPersona('V',"25491458");
-        //LISTO//obd.crearVenta(10, 1);
+        //obd.crearVenta(1, 1);
+        //LISTO//obd.getMapCargos();
+        //LISTO//obd.getMapCajas();
+        //LISTO//obd.crearCaja("caja 1");
+        obd.eliminarProductoEnVenta(1, "1234");
         
     }
     
@@ -134,7 +138,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(correo).append("', ")
                 .append("'").append(telefono).append("');");
 
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
 
         return resultado;
     }
@@ -170,7 +174,7 @@ public class ObjetoBaseDatos {
                 .append(numero_identificacion_persona_viejo)
                 .append("';");
         
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
         
         return resultado;
     }
@@ -264,7 +268,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(resultado).append("', ")
                 .append("'").append(id_cargo)
                 .append("');");
-                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+                resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
             }
         }
         else{
@@ -276,7 +280,7 @@ public class ObjetoBaseDatos {
                 .append("'").append(resultado).append("', ")
                 .append("'").append(id_cargo)
                 .append("');");
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+            resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
         }
         
         return resultado;
@@ -559,7 +563,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         
-                resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+                resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
                 if(resultado > 0){
                 modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
                 sqlQuery.append("UPDATE ")
@@ -810,7 +814,7 @@ public class ObjetoBaseDatos {
         int resultado;
             modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
             modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, clave, departamento, numero_identificacion_persona_viejo);
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "empleado");
+            resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
        
         return resultado;
     }
@@ -819,7 +823,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
         return resultado;
     }
 
@@ -838,7 +842,7 @@ public class ObjetoBaseDatos {
         /*StringBuilder sqlQuery = new StringBuilder(ModeloCliente cliente, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona){
         int resultado;
         modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
         return resultado;
 
     }*/
@@ -1328,43 +1332,69 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-                
+        System.out.println(cargos);
         return cargos;
     }
     
     /**
-     * Utiliza el id de la caja para buscar en la base de datos y crear un
-     * map<k, v> de la tabla caja
-     *
-     * @param id
+     * Método para agregar una caja al sistema
+     * @param descripcion_caja
      * @return
      */
-    public HashMap<String, String> getMapCaja(int id) {
+    public int crearCaja(String descripcion_caja){
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, String> map = new HashMap<>();
-        ResultSet rs;
+        int resultado;
+        
+        sqlQuery.append("INSERT INTO ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("caja"))
+                .append("(descripcion_caja)")
+                .append(" VALUES ")
+                .append("('").append(descripcion_caja)
+                .append("');");
+        
+        resultado = ejecutarCreate(sqlQuery.toString(), "caja");
 
+        return resultado;
+        
+    }
+    
+    /**
+     * Método para eliminar una caja del sistema
+     */
+    
+    /**
+     * Busca en la base de datos y crea un
+     * map<k, v> de las cajas activas
+     *
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getMapCajas(){
+        StringBuilder sqlQuery = new StringBuilder();
+        HashMap<String, Integer> cajas = new HashMap<>();
+        ResultSet rs;
+        
         sqlQuery.append("SELECT id_caja, descripcion_caja FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("caja"))
-                .append(" WHERE id_caja=").append(id)
-                .append(" LIMIT 1;");
+                .append(" WHERE activo_caja = 1;");
+        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
-            String descripcion;
-            if (rs.next()) {
-                descripcion = rs.getString("descripcion_caja");
-                map.put("id_caja", String.valueOf(id));
-                map.put("descripcion_caja", descripcion);
+            
+            while (rs.next()) {
+                cajas.put(rs.getString("descripcion_caja"), rs.getInt("id_caja"));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            map = null;
+            cajas = null;
         } finally {
             postgreSQL.desconectar();
         }
-        return map;
+        System.out.println(cajas);
+        return cajas;
     }
 
     /**
@@ -1988,7 +2018,7 @@ public class ObjetoBaseDatos {
         
         crearPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona);
 
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "persona");
+        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
 
         return resultado;
     }
@@ -2009,7 +2039,7 @@ public class ObjetoBaseDatos {
         }
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
-        int cantidadTelefonos = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
+        int cantidadTelefonos = ejecutarCreate(sqlQuery.toString());
         for (int i = 0; i < resultado.length; i++) {
             resultado[i] = cantidadTelefonos + i;
             sqlQuery = new StringBuilder();
@@ -2019,7 +2049,7 @@ public class ObjetoBaseDatos {
                     .append("(cliente_id,telefono_id) VALUES ")
                     .append("('").append(idCliente).append("',")
                     .append("'").append(resultado[i]).append("');");
-            int idTabla = ejecutarManipulacionDeDatosSimple(sqlQuery.toString());
+            int idTabla = ejecutarCreate(sqlQuery.toString());
         }
         return resultado;
     }*/
@@ -2027,8 +2057,8 @@ public class ObjetoBaseDatos {
     /**
      * Realiza un INSERT a la tabla venta-
      *
-     * @param idCliente
-     * @param idEstadoCaja
+     * @param idPersona
+     * @param idEstadoVenta
      * @return
      */
     public int crearVenta(int idPersona, int idEstadoVenta) {
@@ -2076,7 +2106,7 @@ public class ObjetoBaseDatos {
         }
         try {
             postgreSQL.conectar();
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
+            resultado = ejecutarCreate(sqlQuery.toString(), "venta");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -2225,7 +2255,7 @@ public class ObjetoBaseDatos {
                 .append(idEmpleado)
                 .append(");");
 
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "corte_caja");
+        resultado = ejecutarCreate(sqlQuery.toString(), "corte_caja");
         return resultado;
     }
 
@@ -2248,7 +2278,7 @@ public class ObjetoBaseDatos {
                 .append(idCorteCaja).append(", ")
                 .append(monto).append(",' ")
                 .append(tipo).append("');");
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "desglose_caja");
+        resultado = ejecutarCreate(sqlQuery.toString(), "desglose_caja");
   
         return resultado;
     }
@@ -2325,7 +2355,7 @@ public class ObjetoBaseDatos {
                 //.append(idMoneda).append(", ")
                 //.append(cantidadMoneda).append(", ")
                 //.append(monto).append(");");
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "cierre_caja");
+        resultado = ejecutarCreate(sqlQuery.toString(), "cierre_caja");
        
         return resultado;
     }
@@ -2350,7 +2380,7 @@ public class ObjetoBaseDatos {
                 .append(monto.toString()).append(", ")
                 .append(idTipoPago).append(", '")
                 .append(new Timestamp(date.getTime())).append("');");
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "pago");
+            resultado = ejecutarCreate(sqlQuery.toString(), "pago");
         return resultado;
     }
 
@@ -2375,7 +2405,7 @@ public class ObjetoBaseDatos {
                 .append("(id_pago, id_venta) VALUES (")
                 .append(idPago).append(", ")
                 .append(idVenta).append(");");
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
+        resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
         return resultado;
     }
 
@@ -2428,7 +2458,7 @@ public class ObjetoBaseDatos {
                     .append(idProducto).append(", ")
                     .append(idVenta).append(", ")
                     .append(cantidadProducto).append(");");
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(),"venta_producto");
+            resultado = ejecutarCreate(sqlQuery.toString(),"venta_producto");
         
     }
         return resultado;
@@ -2507,7 +2537,7 @@ public class ObjetoBaseDatos {
                     .append(idVenta).append(", ")
                     .append(cantidadProducto).append(");");
         }
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
+            resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
       
         return resultado;
     }
@@ -2523,17 +2553,46 @@ public class ObjetoBaseDatos {
      * @param codigoBarra Codigo del producto que se desee eliminar.
      * @return
      */
-    public int eliminarProductoEnVenta(int idVenta, String codigoBarra) {
+    public boolean eliminarProductoEnVenta(int idVenta, String codigoBarra) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado;
-        String idProducto = "(SELECT id_producto FROM spve.producto WHERE codigo_venta_producto='" + codigoBarra + "' LIMIT 1)";
-        sqlQuery.append("DELETE FROM ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("venta_producto"))
-                .append(" WHERE id_venta=").append(idVenta)
-                .append(" AND id_producto=").append(idProducto).append(";");
-    
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta_producto");
+        boolean resultado = false;
+        ResultSet rs;
+        int idProducto = -1;
+        String queryIdProducto = "SELECT MAX(id_producto) FROM spve.producto WHERE codigo_venta_producto='" + codigoBarra + "' AND activo_producto = 1;";
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(queryIdProducto);
+            
+            if(rs.next()){
+                idProducto = rs.getInt("max");
+            }
+            
+            if(idProducto > -1){
+                sqlQuery.append("DELETE FROM ")
+                        .append(mapSchema.get("spve")).append(".")
+                        .append(mapTabla.get("venta_producto"))
+                        .append(" WHERE EXISTS (")
+                        .append("SELECT venta_producto.id_producto, cantidad_producto, codigo_venta_producto")
+                        .append(" FROM ")
+                        .append(mapSchema.get("spve"))
+                        .append(".").append(mapTabla.get("venta_producto"))
+                        .append(" INNER JOIN ")
+                        .append("spve.producto ")
+                        .append(" ON venta_producto.id_producto = producto.id_producto")
+                        .append(" WHERE ").append("codigo_venta_producto = '"+codigoBarra+"'")
+                        .append(" AND venta_producto.id_venta = ")
+                        .append(idVenta)
+                        .append(" AND venta_producto.id_producto =").append(idProducto).append(");");
+
+                resultado = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
         return resultado;
     }
 
@@ -2570,7 +2629,7 @@ public class ObjetoBaseDatos {
                     .append(" WHERE id=").append(idEstadoCaja)
                     .append(";");
         }
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "estado_caja");
+            resultado = ejecutarCreate(sqlQuery.toString(), "estado_caja");
         return resultado;
     }
     
@@ -2599,7 +2658,7 @@ public class ObjetoBaseDatos {
                     .append(id_empleado).append(", ")
                     .append(id_caja).append(");");
         
-        resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "estado_caja");
+        resultado = ejecutarCreate(sqlQuery.toString(), "estado_caja");
         
         return resultado;
     }
@@ -2626,7 +2685,7 @@ public class ObjetoBaseDatos {
                 .append(";");
 
       
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "corte_caja");
+            resultado = ejecutarCreate(sqlQuery.toString(), "corte_caja");
         return resultado;
     }
 
@@ -2649,7 +2708,7 @@ public class ObjetoBaseDatos {
                 .append(";");
 
        
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
+            resultado = ejecutarCreate(sqlQuery.toString(), "venta");
         return resultado;
     }
 
@@ -2763,7 +2822,7 @@ public class ObjetoBaseDatos {
                 .append("WHERE id_venta=").append(idVenta)
                 .append(";");
       
-            resultado = ejecutarManipulacionDeDatosSimple(sqlQuery.toString(), "venta");
+            resultado = ejecutarCreate(sqlQuery.toString(), "venta");
         return resultado;
     }
 
@@ -2920,12 +2979,12 @@ public class ObjetoBaseDatos {
         return query;
     }
 
-    private int ejecutarManipulacionDeDatosSimple(String query, String tabla) {
+    private int ejecutarCreate(String query, String tabla) {
         int resultado = -1;
         
         try {
             postgreSQL.conectar();
-            resultado = postgreSQL.ejecutarManipulacionDeDatosSimple(query, tabla);
+            resultado = postgreSQL.ejecutarCreate(query, tabla);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

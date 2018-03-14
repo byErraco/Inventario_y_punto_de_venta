@@ -125,7 +125,7 @@ public class PostgreSQL {
      * @return id del row resultante del INSERT o UPDATE
      * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
-    public synchronized int ejecutarManipulacionDeDatosSimple(String sql, String tabla) throws XSQLException {
+    public synchronized int ejecutarCreate(String sql, String tabla) throws XSQLException {
         int resultado = -1;
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
