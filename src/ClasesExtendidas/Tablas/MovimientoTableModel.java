@@ -13,8 +13,8 @@ public class MovimientoTableModel extends ArrayListTableModel {
     enum Columnas {
 
         Producto("Producto", "producto"),                           //nombre del producto
-        CantidadRegistrada("Cantidad", "cantidad_registrada"),      // cantidad registrada
-        CantidadMovida("Cantidad", "cantidad_movida"),              // catidad movida
+        CantidadRegistrada("Cantidad", "cantidad"),      // cantidad registrada
+        CantidadMovida("Cantidad", "cantidad"),              // catidad movida
         Tipo("Tipo", "tipo"),                                       // tipo deproducto
         FechaMovimiento("Fecha","fecha"),                           // fecha de movimiento del producto
         Usuario("Usuario","usuario");                               //  usuario 
@@ -37,11 +37,18 @@ public class MovimientoTableModel extends ArrayListTableModel {
    
     public MovimientoTableModel(ArrayList<HashMap<String, String>> Movimiento) {
         super(Movimiento,
-        new String[]{Columnas.Producto.getHeader(),Columnas.CantidadRegistrada.getHeader(),
-        Columnas.CantidadMovida.getHeader(),Columnas.Tipo.getHeader(),Columnas.FechaMovimiento.getHeader(),
-        Columnas.Usuario.getHeader()},
-        new String[]{Columnas.Producto.getColumna(),Columnas.CantidadRegistrada.getColumna(),Columnas.CantidadMovida.getColumna(),
-        Columnas.Tipo.getColumna(),Columnas.FechaMovimiento.getColumna(),Columnas.Usuario.getColumna()});
+        new String[]{Columnas.Producto.getHeader(),
+                     Columnas.CantidadRegistrada.getHeader(),
+                     Columnas.CantidadMovida.getHeader(),
+                     Columnas.Tipo.getHeader(),
+                     Columnas.FechaMovimiento.getHeader(),
+                     Columnas.Usuario.getHeader()},
+        new String[]{Columnas.Producto.getColumna(),
+                     Columnas.CantidadRegistrada.getColumna(),
+                     Columnas.CantidadMovida.getColumna(),
+                     Columnas.Tipo.getColumna(),
+                     Columnas.FechaMovimiento.getColumna(),
+                     Columnas.Usuario.getColumna()});
     }
     
     

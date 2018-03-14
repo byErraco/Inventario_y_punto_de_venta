@@ -669,6 +669,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
     
     public void abrirVentanaMovimientos(){
+        movimiento =  new Movimientos(this);
+        Dimension desktopSize = panel.getSize();
+        Dimension jInternalFrameSize = producto.getSize();
+        movimiento.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
+                (desktopSize.height - jInternalFrameSize.height )/ 2);
+                panel.add(movimiento);
+                movimiento.show();
       
     }
 

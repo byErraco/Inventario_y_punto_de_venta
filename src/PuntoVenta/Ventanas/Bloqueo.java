@@ -220,7 +220,7 @@ public class Bloqueo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresarKeyPressed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-         cerrarbloq();
+          cerrarbloq();
       //  ingresarSistema();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
