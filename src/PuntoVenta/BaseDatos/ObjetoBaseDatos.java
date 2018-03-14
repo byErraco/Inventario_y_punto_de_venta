@@ -910,7 +910,7 @@ public class ObjetoBaseDatos {
                 postgreSQL.conectar();
                 rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
                 if (rs.next()) {
-                    idEstadoCaja = rs.getInt("id_estado_caja");
+                    idEstadoCaja = rs.getInt("max");
                     System.out.println(idEstadoCaja);
                 }
             } catch (Exception e) {
