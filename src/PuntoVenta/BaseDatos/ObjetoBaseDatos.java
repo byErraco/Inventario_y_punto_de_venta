@@ -63,8 +63,9 @@ public class ObjetoBaseDatos {
         //System.out.println(empleado.getApellido());
         //System.out.println(empleado.getNacionalidad());
         //System.out.println(empleado.getCedula());
-        obd.getIdEstadoCaja(1);
+        //LISTO//obd.getIdEstadoCaja(1);
         //LISTO//obd.getMapPersona('V',"25491458");
+        //LISTO//obd.crearVenta(10, 1);
         
     }
     
@@ -2036,11 +2037,10 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
 
-        sqlQuery.append("SELECT id_venta FROM ")
+        sqlQuery.append("SELECT id_venta, estado_venta FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE id_cliente=").append(idPersona)
-                .append(" AND id_estado_venta in (").append(EstadoVenta.EnProceso)
+                .append(" WHERE estado_venta IN (").append(EstadoVenta.EnProceso)
                 .append(",").append(EstadoVenta.Pausada).append(");");
         try {
             postgreSQL.conectar();
@@ -2069,7 +2069,7 @@ public class ObjetoBaseDatos {
                     .append(mapTabla.get("venta"))
                     .append("(id_persona, estado_venta, fecha_venta) VALUES (")
                     .append(idPersona).append(", ")
-                    .append(idEstadoVenta).append(", ")
+                    //.append(idEstadoVenta).append(", ")
                     .append(EstadoVenta.EnProceso).append(", ")
                     .append("'").append(new Timestamp(date.getTime()))
                     .append("');");
