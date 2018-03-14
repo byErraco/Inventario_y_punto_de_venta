@@ -50,7 +50,8 @@ public class ObjetoBaseDatos {
         //LISTO//obd.modificarPersona("ernesto", "rincon", 'E', "20944806", "zulia", "7654321", "erincongil@gmail.com", "1234567");
         //LISTO//obd.eliminarPersona("25491458");
         //LISTO//obd.crearEmpleado("luis", "rincon", 'V', "25491458", "san jose", "04167662633", "luisjuanito@gmail.com", "asdf", 1);
-        //LISTO//obd.eliminarEmpleado("25491458");
+        //LISTO//obd.eliminarPersona('V',"25491458");
+        //LISTO//obd.eliminarEmpleado('V',"25491458");
         //LISTO//obd.crearCierreCaja(5,4);
         //obd.crearCorteCaja(100.00, 0.00, 0.00, 1, 2);
         //LISTO//obd.seleccionarCargo(1);
@@ -62,8 +63,8 @@ public class ObjetoBaseDatos {
         //System.out.println(empleado.getApellido());
         //System.out.println(empleado.getNacionalidad());
         //System.out.println(empleado.getCedula());
-        //LISTO//obd.getIdEstadoCaja(1);
-        obd.getMapPersona('V',"25491458");
+        obd.getIdEstadoCaja(1);
+        //LISTO//obd.getMapPersona('V',"25491458");
         
     }
     
@@ -179,10 +180,11 @@ public class ObjetoBaseDatos {
      * no se guarda su id, sino la cedula.
      *
      *
+     * @param tipo_persona
      * @param numero_identificacion_persona Cedula del empleado que se desee eliminar.
      * @return 
      */
-    public boolean eliminarPersona(String numero_identificacion_persona) {
+    public boolean eliminarPersona(char tipo_persona, String numero_identificacion_persona) {
         boolean result = false;
 
         StringBuilder sqlQuery = new StringBuilder();
@@ -190,13 +192,15 @@ public class ObjetoBaseDatos {
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("persona"))
                 .append(" SET ").append("activo_persona = 0")
-                .append(" WHERE numero_identificacion_persona='")
+                .append(" WHERE tipo_persona = '")
+                .append("' AND ")
+                .append("numero_identificacion_persona='")
                 .append(numero_identificacion_persona)
                 .append("';");
 
         try {
             postgreSQL.conectar();
-            result = postgreSQL.ejecutarDelete(sqlQuery.toString());
+            result = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
             System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -577,11 +581,12 @@ public class ObjetoBaseDatos {
      * empleados no se guarda su id, sino la cedula.
      *
      *
+     * @param tipo_persona
      * @param cedula Cedula del empleado que se desee eliminar.
      * @return
      */
     //REVISAR
-    public boolean eliminarEmpleado(String cedula) {
+    public boolean eliminarEmpleado(char tipo_persona, String cedula) {
         boolean result = false;
         
         StringBuilder sqlQuery = new StringBuilder();
@@ -590,17 +595,19 @@ public class ObjetoBaseDatos {
                 .append(".").append(mapTabla.get("empleado"))
                 .append(" SET ").append("activo_empleado = 0")
                 .append(" WHERE EXISTS (")
-                .append("SELECT numero_identificacion_persona")
+                .append("SELECT tipo_persona, numero_identificacion_persona")
                 .append(" FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append("persona")
-                .append(" WHERE numero_identificacion_persona='")
+                .append(" WHERE tipo_persona ='")
+                .append("' AND ")
+                .append("numero_identificacion_persona='")
                 .append(cedula)
                 .append("');");
 
         try {
             postgreSQL.conectar();
-            result = postgreSQL.ejecutarDelete(sqlQuery.toString());
+            result = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -891,27 +898,27 @@ public class ObjetoBaseDatos {
     public int getIdEstadoCaja(int idCaja) {
         int idEstadoCaja = -1;
         ResultSet rs;
-        //String fecha_cierre = "";
-        isCajaAbierta(idCaja);
-        StringBuilder sqlQuery = new StringBuilder();
-        sqlQuery.append("SELECT MAX(id_estado_caja) FROM ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("estado_caja"))
-                .append(" WHERE ").append("id_estado_caja = "+idCaja+"")
-                .append(";");
-        try {
-            postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
-            if (rs.next()) {
-                idEstadoCaja = rs.getInt(idCaja);
-                //fecha_cierre = rs.getString("fecha_cierre");
-                System.out.println(idEstadoCaja);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            idEstadoCaja = -1;
-        } finally {
-            postgreSQL.desconectar();
+ 
+        if(isCajaAbierta(idCaja)){
+            StringBuilder sqlQuery = new StringBuilder();
+            sqlQuery.append("SELECT MAX(id_estado_caja) FROM ")
+                    .append(mapSchema.get("spve"))
+                    .append(".").append(mapTabla.get("estado_caja"))
+                    .append(" WHERE ").append("id_caja = "+idCaja)
+                    .append(";");
+            try {
+                postgreSQL.conectar();
+                rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+                if (rs.next()) {
+                    idEstadoCaja = rs.getInt("id_estado_caja");
+                    System.out.println(idEstadoCaja);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                idEstadoCaja = -1;
+            } finally {
+                postgreSQL.desconectar();
+            }   
         }
         return idEstadoCaja;
     }
@@ -1364,10 +1371,10 @@ public class ObjetoBaseDatos {
      * map<k, v> de la tabla cliente
      *
      * @param tipo_persona
-     * @param cedula
+     * @param numero_identificacion_persona
      * @return
      */
-    public HashMap<String, String> getMapPersona(char tipo_persona, String cedula) {
+    public HashMap<String, String> getMapPersona(char tipo_persona, String numero_identificacion_persona) {
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs = null;
@@ -1384,7 +1391,7 @@ public class ObjetoBaseDatos {
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("persona")).append(" AS c ")
                 .append(" WHERE c.tipo_persona='").append(tipo_persona).append("'")
-                .append(" AND c.numero_identificacion_persona='").append(cedula).append("'")
+                .append(" AND c.numero_identificacion_persona='").append(numero_identificacion_persona).append("'")
                 .append(";");
 
         try {
@@ -2023,7 +2030,7 @@ public class ObjetoBaseDatos {
      * @param idEstadoCaja
      * @return
      */
-    public int crearVenta(int idCliente, int idEstadoCaja) {
+    public int crearVenta(int idPersona, int idEstadoVenta) {
         ResultSet rs;
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
@@ -2032,7 +2039,7 @@ public class ObjetoBaseDatos {
         sqlQuery.append("SELECT id_venta FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE id_cliente=").append(idCliente)
+                .append(" WHERE id_cliente=").append(idPersona)
                 .append(" AND id_estado_venta in (").append(EstadoVenta.EnProceso)
                 .append(",").append(EstadoVenta.Pausada).append(");");
         try {
@@ -2053,16 +2060,16 @@ public class ObjetoBaseDatos {
             sqlQuery.append("UPDATE ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append(" SET estado_venta=").append(idEstadoCaja)
-                    .append(" WHERE id=").append(resultado)
+                    .append(" SET estado_venta=").append(idEstadoVenta)
+                    .append(" WHERE id_venta=").append(resultado)
                     .append(";");
         } else {
             sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append("(id_cliente, estado_venta, fecha_venta) VALUES (")
-                    .append(idCliente).append(", ")
-                    .append(idEstadoCaja).append(", ")
+                    .append("(id_persona, estado_venta, fecha_venta) VALUES (")
+                    .append(idPersona).append(", ")
+                    .append(idEstadoVenta).append(", ")
                     .append(EstadoVenta.EnProceso).append(", ")
                     .append("'").append(new Timestamp(date.getTime()))
                     .append("');");

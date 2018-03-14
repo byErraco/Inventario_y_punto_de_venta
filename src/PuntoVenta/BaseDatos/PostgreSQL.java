@@ -91,8 +91,12 @@ public class PostgreSQL {
         return null;
     }
     
-    
-    public boolean ejecutarDelete(String sql) {
+    /**
+     * Método para verificar si el query retorna algún resultado
+     * @param sql
+     * @return 
+     */
+    public boolean ejecutarQuerySinResultado(String sql) {
         /* Konstanza:
             - Revisar para que funciona XSQLException
             - Eliminar el if: si no hay conexión debería ir a catch no retornar null
