@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS spve.venta_producto (
   cantidad_producto VARCHAR(45) NOT NULL,
   id_venta INT NOT NULL,
   id_producto INT NOT NULL,
-  activo_producto SMALLINT NOT NULL DEFAULT 1,
+  activo_venta_producto SMALLINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id_venta_producto),
   CONSTRAINT fk_venta_producto_venta1
     FOREIGN KEY (id_venta)

@@ -69,7 +69,8 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
-        obd.eliminarProductoEnVenta(1, "1234");
+        //LISTO//obd.eliminarProductoEnVenta(1, "1234");
+        obd.agregarProductoEnVenta(1, "1234", 4);
         
     }
     
@@ -458,10 +459,11 @@ public class ObjetoBaseDatos {
      /**
      * Consulta los datos del Empleado en la tabla spve.empleado.
      *
-     * @param cedulaEmpleado
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      * @return Empleado resultado de la consulta o null en caso de fallar.
      */
-    public Empleado getDatosEmpleadoCedula(String cedulaEmpleado) {
+    public Empleado getDatosEmpleadoIdentificacion(char tipo_persona, String numero_identificacion_persona) {
         ResultSet rs;
         Empleado emple = new Empleado();
 
@@ -469,7 +471,7 @@ public class ObjetoBaseDatos {
                         "persona.telefono_persona, persona.email_persona, \n" +
                         "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
-                        "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE numero_identificacion_persona = '" + cedulaEmpleado +"'";
+                        "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE numero_identificacion_persona = '" + numero_identificacion_persona +"' AND tipo_persona='"+tipo_persona+"'";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
@@ -2470,35 +2472,25 @@ public class ObjetoBaseDatos {
      * contrario se hace un INSERT
      *
      * @param idVenta
-     * @param codigoProducto
+     * @param codigo_venta_producto
      * @param cantidadProducto
      * @return
      */
-    public int incluirProductoEnVenta(int idVenta, String codigoProducto, double cantidadProducto) {
+    public int agregarProductoEnVenta(int idVenta, String codigo_venta_producto, double cantidadProducto) {
         StringBuilder sqlQuery = new StringBuilder();
-        ResultSet rs;
+        ResultSet rs = null;
         double cantidadAnterior = 0.00;
-        int resultado;
+        boolean existe = false;
+        int resultado = -1;
         int idProducto = -1;
 
-        sqlQuery.append("SELECT vp.producto_id AS idProducto, vp.cantidad_producto AS cantidad FROM ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta__producto")).append(" AS vp ")
-                .append(" LEFT JOIN ")
-                .append(mapSchema.get("inventario")).append(".")
-                .append(mapTabla.get("producto")).append(" AS p ")
-                .append(" ON vp.producto_id=p.id")
-                .append(" WHERE venta_id=").append(idVenta)
-                .append(" AND ");
-        try {
-//            int id = Integer.parseInt(codigoProducto);
-            //sqlQuery.append("(p.id='").append(codigoProducto).append("'");
-            sqlQuery.append("p.codigo_barra='").append(codigoProducto).append("'");
-//        } catch (NumberFormatException e) {
-//            sqlQuery.append("p.codigo_barra='").append(codigoProducto).append("'");
-        } finally {
-            sqlQuery.append(";");
-        }
+        sqlQuery.append("SELECT id_venta, id_producto, cantidad_producto FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" WHERE id_venta=").append(idVenta)
+                .append(" AND ")
+                .append("id_producto=")
+                .append(idProducto).append(";");
 
         try {
             postgreSQL.conectar();
@@ -2506,6 +2498,7 @@ public class ObjetoBaseDatos {
             if (rs.next()) {
                 idProducto = rs.getInt("idProducto");
                 cantidadAnterior = rs.getDouble("cantidad");
+                existe = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2514,35 +2507,69 @@ public class ObjetoBaseDatos {
         }
 
         sqlQuery = new StringBuilder();
-        if (idProducto > 0) {
+        if (idProducto > -1) {
             sqlQuery.append("UPDATE ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta_producto"))
                     .append(" SET cantidad_producto=").append(cantidadProducto + cantidadAnterior)
-                    .append(" WHERE venta_id=").append(idVenta)
-                    .append(" AND producto_id=").append(idProducto)
+                    .append(" WHERE id_venta=").append(idVenta)
+                    .append(" AND id_producto=").append(idProducto)
                     .append(";");
+            try{
+                postgreSQL.conectar();
+                existe = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
+                if(rs.next()){
+                    resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
+                }
+            }catch (Exception e) {
+            e.printStackTrace();
+            } finally {
+            postgreSQL.desconectar();
+        }
+            
         } else {
             StringBuilder queryID = new StringBuilder();
             queryID.append("SELECT id_producto FROM ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("producto"))
-                    .append(" WHERE codigo_venta_producto='").append(codigoProducto).append("'");
-
+                    .append(" WHERE codigo_venta_producto='").append(codigo_venta_producto).append("'");
+            try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(queryID.toString());
+            if (rs.next()) {
+                idProducto = rs.getInt("id_producto");
+            }
+            } catch (Exception e) { 
+                e.printStackTrace();
+            } finally {
+                postgreSQL.desconectar();
+            }
+           
             sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta_producto"))
-                    .append("(id_producto, id_venta, cantidad_producto) VALUES ((")
-                    .append(queryID).append("), ")
+                    .append("(id_producto, id_venta, cantidad_producto) VALUES (")
+                    .append(idProducto).append(", ")
                     .append(idVenta).append(", ")
                     .append(cantidadProducto).append(");");
-        }
+            
             resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
-      
+        }
+            
         return resultado;
     }
         
-
+    /**
+     * Agrega un producto a una venta pausada o en proceso
+     * 
+     * @param idVenta id de la venta que este activa
+     * @param codigoBarra código del producto que se desea agregar
+     * @return
+     */
+    
+    
+    
+    
     /**
      * Elimina un producto incluido en una venta, dado un idVenta y el código de
      * barra del producto. El código de barra es utilizado para sacar el id del
