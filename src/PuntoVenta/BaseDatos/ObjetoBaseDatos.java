@@ -67,12 +67,13 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapPersona('V',"25491458");
         //obd.crearVenta(1, 1);
         //LISTO//obd.getMapCargos();
+        obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
         //LISTO//obd.agregarProductoEnVenta(1, "1234", 4);
         //LISTO//obd.getArrayListEmpleado();
-        obd.getArrayListEstadoCaja(1);
+        //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
     }
     
@@ -1059,7 +1060,7 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Método que busca los desglose de moneda y devulve el id, el valor y la
+     * Método que busca los desgloses de moneda y devuelve el id, el valor y la
      * descripcion.
      *
      *
@@ -1372,9 +1373,32 @@ public class ObjetoBaseDatos {
         
     }
     
-    /**
-     * Método para eliminar una caja del sistema
-     */
+    public HashMap<String, Integer> getMapCaja(int id_caja){
+        StringBuilder sqlQuery = new StringBuilder();
+        HashMap<String, Integer> cajas = new HashMap<>();
+        ResultSet rs;
+        
+        sqlQuery.append("SELECT id_caja, descripcion_caja FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("caja"))
+                .append(" WHERE id_caja = "+id_caja+" AND activo_caja = 1;");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            while (rs.next()) {
+                cajas.put(rs.getString("descripcion_caja"), rs.getInt("id_caja"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            cajas = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        System.out.println(cajas);
+        return cajas;
+    }
     
     /**
      * Busca en la base de datos y crea un

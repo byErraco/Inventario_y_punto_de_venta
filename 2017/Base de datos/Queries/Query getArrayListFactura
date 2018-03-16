@@ -1,0 +1,3 @@
+﻿SELECT v.codigo_factura, CONCAT (p.nombre_persona,' ',p.apellido_persona) AS nombre, v.fecha_venta, v.total_venta 
+FROM spve.persona p INNER JOIN spve.venta v on v.id_persona= p.id_persona 
+WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC
