@@ -70,8 +70,10 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
-        obd.agregarProductoEnVenta(1, "1234", 4);
-        
+        //LISTO//obd.agregarProductoEnVenta(1, "1234", 4);
+        //LISTO//obd.getArrayListEmpleado();
+        obd.getArrayListEstadoCaja(1);
+        //LISTO//obd.getArrayListFactura();
     }
     
     /**
@@ -960,6 +962,7 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
+        System.out.println(resultado);
         return resultado;
     }
 
@@ -990,6 +993,7 @@ public class ObjetoBaseDatos {
                 //.append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
                 .append(" WHERE ec.id_caja = ")
                 .append(idCaja)
+                .append(" AND activo_caja = 1")
                 //.append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, fecha_cierre")
                 .append(" ORDER BY fecha_apertura DESC;");
         
@@ -1008,15 +1012,21 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
+        System.out.println(resultado);
         return resultado;
     }
-
+/** Ernesto:
+ * Método para obtener una lista de las facturas relacionadas a ventas activas
+ * @return 
+ */
     public ArrayList<HashMap<String, String>> getArrayListFactura() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
 //        StringBuilder sqlQuery = new StringBuilder();
 //        String[] columnas = {"codigo_factura", "cliente", "fecha_hora", "monto"};
-        String sql1 = "SELECT v.codigo_factura,CONCAT(c.nombre,' ',c.apellido) AS nombre, v.fecha_hora,v.total FROM stpv.cliente c INNER JOIN stpv.venta v on v.cliente_id= c.id ORDER BY v.codigo_factura DESC";
+        String sql1 = "SELECT v.codigo_factura, CONCAT (p.nombre_persona,' ',p.apellido_persona) AS nombre, v.fecha_venta, v.total_venta \n" +
+                        "FROM spve.persona p INNER JOIN spve.venta v on v.id_persona= p.id_persona \n" +
+                        "WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC";
 
         try {
             postgreSQL.conectar();
@@ -1044,6 +1054,7 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
+        System.out.println(resultado);
         return resultado;
     }
 
