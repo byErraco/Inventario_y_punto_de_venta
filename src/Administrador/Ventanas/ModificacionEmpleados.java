@@ -5,6 +5,7 @@
  */
 package Administrador.Ventanas;
 
+import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import java.awt.event.ActionEvent;
@@ -55,8 +56,9 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
      * @param tipo_persona Indicador del combobox. J,V,E,P.
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public ModificacionEmpleados(Admin admin, String tipo_persona, String numero_identificacion_persona) {
+    public ModificacionEmpleados(Admin admin, char tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
         setCargos();
@@ -474,8 +476,8 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         }
     }
     
-    private void setEmpleado(String tipo_persona, String numero_identificacion_persona) {
-        cmbTipoDocumento.setSelectedItem(tipo_persona);
+    private void setEmpleado(char tipo_persona, String numero_identificacion_persona) {
+        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
     }
     

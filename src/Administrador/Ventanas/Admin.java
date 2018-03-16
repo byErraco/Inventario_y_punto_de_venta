@@ -811,12 +811,12 @@ public class Admin extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField3KeyReleased
 
     public void actualizarTabla() {
-        ArrayList<HashMap<String, String>> lista = menuPrincipal.getOBD().getArrayListEmpleado();
-        EmpleadosTableModel model = new EmpleadosTableModel(lista);
+        ArrayList<HashMap<String, String>> listaEmpleados = menuPrincipal.getOBD().getArrayListEmpleado();
+        EmpleadosTableModel model = new EmpleadosTableModel(listaEmpleados);
         jtbListaEmpleado.setModel(model);
 
-        ArrayList<HashMap<String, String>> lista2 = menuPrincipal.getOBD().getArrayListClientes();
-        ClienteTableModel model2 = new ClienteTableModel(lista2);
+        ArrayList<HashMap<String, String>> listaClientes = menuPrincipal.getOBD().getArrayListClientes();
+        ClienteTableModel model2 = new ClienteTableModel(listaClientes);
         jtbListaCliente.setModel(model2);
     }
 
@@ -832,7 +832,7 @@ public class Admin extends javax.swing.JInternalFrame {
         registroEmpleados.show();
     }
 
-    public void abrirVentanaModificacionEmpleados(String tipo_persona, String numero_identificacion_persona) {
+    public void abrirVentanaModificacionEmpleados(char tipo_persona, String numero_identificacion_persona) {
         modificacionEmpleados = new ModificacionEmpleados(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionEmpleados.getSize();
@@ -854,7 +854,7 @@ public class Admin extends javax.swing.JInternalFrame {
         registroCliente.show();
     }
 
-    public void abrirVentanaModificacionCliente(String tipo_persona, String numero_identificacion_persona) {
+    public void abrirVentanaModificacionCliente(char tipo_persona, String numero_identificacion_persona) {
         modificacionClientes = new ModificacionClientes(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
@@ -927,9 +927,11 @@ public class Admin extends javax.swing.JInternalFrame {
         }
         if (numeroRow >= 0) {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
+            
             if (seleccion == 0) {
-                String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarEmpleado(cedula);
+                String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarEmpleado(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -946,10 +948,8 @@ public class Admin extends javax.swing.JInternalFrame {
         else {
             String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
             String[] partes = identificacion.split("-");
-            String tipo_persona = partes[0];
-            String numero_identificacion_persona = partes[1]; 
 
-            abrirVentanaModificacionEmpleados(tipo_persona, numero_identificacion_persona);
+            abrirVentanaModificacionEmpleados(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -961,10 +961,8 @@ public class Admin extends javax.swing.JInternalFrame {
         else {
             String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
             String[] partes = identificacion.split("-");
-            String tipo_persona = partes[0];
-            String numero_identificacion_persona = partes[1]; 
             
-            abrirVentanaModificacionCliente(tipo_persona, numero_identificacion_persona);
+            abrirVentanaModificacionCliente(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -977,8 +975,9 @@ public class Admin extends javax.swing.JInternalFrame {
         if (numeroRow >= 0) {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
-                String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarPersona(cedula);
+                String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarPersona(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -1034,14 +1033,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         btnParametros.getActionMap().put(Admin.Modulo.PARAMETROS.getAction(), actParametros);
         btnParametros.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actParametros.getValue(Action.ACCELERATOR_KEY), Admin.Modulo.PARAMETROS.getAction());
-    }
-
-    private void cerrarVentana() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private String getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private enum Modulo {

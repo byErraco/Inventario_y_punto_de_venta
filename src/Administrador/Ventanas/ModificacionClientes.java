@@ -7,8 +7,15 @@ package Administrador.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 /**
  *
@@ -36,7 +43,7 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         txtApellido.getText();
         txtTelefono.getText();
         txtCorreo.getText();
-        //crearHotKeys();
+        crearHotKeys();
     }
 
     /**
@@ -46,10 +53,10 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
      * @param tipo_persona Indicador del combobox. J,V,E,P.
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public ModificacionClientes(Admin admin, String tipo_persona, String numero_identificacion_persona) {
+    public ModificacionClientes(Admin admin, char tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
         initComponents();
-        //crearHotKeys();
+        crearHotKeys();
         setCliente(tipo_persona, numero_identificacion_persona);
     }
 
@@ -381,12 +388,48 @@ public class ModificacionClientes extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
 
+    private void crearHotKeys() {
+        Action actCerrarVentana = new AbstractAction("actionCerrarVentana") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerrarVentana();
+            }
+        };
+        Action actModificar = new AbstractAction("actionModificar") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modificarCliente();
+            }
+        };
+
+        actCerrarVentana.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
+        actModificar.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+
+        pnlContenedor.getActionMap().put("actionCerrarVentana", actCerrarVentana);
+        pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCerrarVentana.getValue(Action.ACTION_COMMAND_KEY), "actionCerrarVentana");
+
+        pnlContenedor.getActionMap().put("actionModificar", actModificar);
+        pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actModificar.getValue(Action.ACCELERATOR_KEY), "actionModificar");
+
+        InternalFrameAdapter listener = new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                try {
+                    admin.getTxtDocumento().requestFocus();
+                } catch (Exception E) {
+                }
+            }
+        };
+
+        this.addInternalFrameListener(listener);
+    }
+    
     private void cerrarVentana() {
         this.dispose();
     }
     
-    private void setCliente(String tipo_persona, String numero_identificacion_persona){
-        cmbTipoDocumento.setSelectedItem(tipo_persona);
+    private void setCliente(char tipo_persona, String numero_identificacion_persona){
+        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
     }
     
