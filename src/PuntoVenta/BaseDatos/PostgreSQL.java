@@ -92,9 +92,10 @@ public class PostgreSQL {
     }
     
     /**
-     * Método para verificar si el query retorna algún resultado
+     * Ejecuta un query que no devuelve ningún resultado
+     * 
      * @param sql
-     * @return 
+     * @return true si se ejecutó el query 
      */
     public boolean ejecutarQuerySinResultado(String sql) {
         /* Konstanza:

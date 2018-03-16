@@ -160,9 +160,9 @@ public class ObjetoBaseDatos {
      * @param numero_identificacion_persona_viejo
      * @return id del cliente resultado del INSERT o -1 en caso de fallar.
      */
-    public int modificarPersona(String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String numero_identificacion_persona_viejo) {
+    public boolean modificarPersona(String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String numero_identificacion_persona_viejo, char tipo_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado;
+        boolean resultado;
         
         sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
@@ -176,9 +176,11 @@ public class ObjetoBaseDatos {
                 .append("', email_persona='").append(email_persona)
                 .append("' WHERE numero_identificacion_persona='")
                 .append(numero_identificacion_persona_viejo)
-                .append("';");
+                .append(" AND ").append("tipo_persona='")
+                .append(tipo_persona_viejo).append("'")
+                .append(";");
         
-        resultado = ejecutarCreate(sqlQuery.toString(), "persona");
+        resultado = ejecutarQuerySinResultado(sqlQuery.toString());
         
         return resultado;
     }
@@ -566,25 +568,29 @@ public class ObjetoBaseDatos {
      * @param numero_identificacion_persona_viejo
      * @return
      */
-    public int modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, String departamento, String numero_identificacion_persona_viejo) {
+    public boolean modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, String departamento, String numero_identificacion_persona_viejo, char tipo_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado;
+        boolean resultado;
         
-                resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
-                if(resultado > 0){
-                modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
-                sqlQuery.append("UPDATE ")
+        resultado = modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo, tipo_persona_viejo);
+            
+        if(resultado){
+            sqlQuery.append("UPDATE ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("empleado"))
-                .append(" SET id_cargo ='").append(id_cargo)
+                .append(" SET id_cargo_empleado ='").append(id_cargo)
                 .append("', clave='").append(clave)
-                .append("' WHERE numero_identificacion_persona='")
-                .append(numero_identificacion_persona_viejo)
+                .append(" FROM spve.empleado AS e")
+                .append(" INNER JOIN spve.persona ON e.id_persona = persona.id_persona")
+                .append("' WHERE numero_identificacion_persona='").append("'")
+                .append(numero_identificacion_persona)
+                .append(" AND ").append("tipo_persona ='")
                 .append("';");
-                
-                
-                }
-                return resultado;
+            
+            resultado = ejecutarQuerySinResultado(sqlQuery.toString());
+        }
+        
+       return resultado;
     }
 
     /**
@@ -816,20 +822,20 @@ public class ObjetoBaseDatos {
         return id;
     }
 
-    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String clave, String departamento, String numero_identificacion_persona_viejo) {
+    public int actualizarEmpleado(ModeloEmpleado empleado, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String id_cargo, String clave, String departamento, String numero_identificacion_persona_viejo, char tipo_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
-            modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
-            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, clave, departamento, numero_identificacion_persona_viejo);
+            modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo, tipo_persona_viejo);
+            modificarEmpleado(id_cargo, nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, telefono_persona, email_persona, direccion_persona, clave, departamento, numero_identificacion_persona_viejo, tipo_persona_viejo);
             resultado = ejecutarCreate(sqlQuery.toString(), "empleado");
        
         return resultado;
     }
 
-    public int actualizarCliente(ModeloCliente cliente, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String numero_identificacion_persona_viejo) {
+    public int actualizarCliente(ModeloCliente cliente, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona, String numero_identificacion_persona_viejo, char tipo_persona_viejo) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
-        modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo);
+        modificarPersona(nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona_viejo, tipo_persona_viejo);
         resultado = ejecutarCreate(sqlQuery.toString(), "persona");
         return resultado;
     }
@@ -3044,6 +3050,27 @@ public class ObjetoBaseDatos {
         return query;
     }
 
+    /**
+     * Ejecuta un query que no devuelve ningún resultado
+     * 
+     * @param query
+     * @return true si se ejecutó el query 
+     */
+    private boolean ejecutarQuerySinResultado(String query){
+        boolean resultado = false;
+        
+        try {
+            postgreSQL.conectar();
+            resultado = postgreSQL.ejecutarQuerySinResultado(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+
+      return resultado;
+    }
+    
     private int ejecutarCreate(String query, String tabla) {
         int resultado = -1;
         
