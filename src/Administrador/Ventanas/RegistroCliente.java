@@ -32,6 +32,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private Admin admin;
     private Venta venta;
     private ObjetoBaseDatos obd;
+    private final boolean modificarCliente;
 
     /**
      * Crea una ventana de RegistroCliente
@@ -42,6 +43,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     public RegistroCliente(Admin admin) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
+        modificarCliente = false;
         initComponents();
         crearHotKeys();
     }
@@ -55,6 +57,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     public RegistroCliente(Venta venta) {
         this.venta = venta;
         this.obd = venta.menuPrincipal.getOBD();
+        modificarCliente = false;
         initComponents();
         crearHotKeys();
     }
@@ -66,14 +69,21 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * @param admin Ventana de admin.
      * @param tipo_persona Indicador del combobox. J,V,E,P.
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
+     * @param modificarCliente Indica si la ventana es de registro (false) o modificación (true).
      */
-    public RegistroCliente(Admin admin, char tipo_persona, String numero_identificacion_persona) {
+    public RegistroCliente(Admin admin, char tipo_persona, String numero_identificacion_persona, boolean modificarCliente) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
+        this.modificarCliente = modificarCliente;
         initComponents();
         crearHotKeys();
         cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
+        
+        if(modificarCliente) {
+            setTitle("Saphiro - Modificar cliente");
+            btnRegistrarEmpleados.setText("<html><center>Modificar<br>F2</center></html>");
+        }
     }
     
     /**
@@ -87,6 +97,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     public RegistroCliente(Venta venta, char tipo_persona, String numero_identificacion_persona) {
         this.venta = venta;
         this.obd = venta.menuPrincipal.getOBD();
+        modificarCliente = false;
         initComponents();
         crearHotKeys();
         cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
@@ -330,7 +341,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadosActionPerformed
-        registrarCliente();
+        if(modificarCliente) modificarCliente();
+        else registrarCliente();
         if(admin != null) admin.actualizarTabla();
     }//GEN-LAST:event_btnRegistrarEmpleadosActionPerformed
 
@@ -452,7 +464,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
-
+    
     private void crearHotKeys() {
         Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
             @Override
@@ -463,7 +475,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         Action actRegistrar = new AbstractAction("actionRegistrar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                registrarCliente();
+                if(modificarCliente) modificarCliente();
+                else registrarCliente();
             }
         };
 
@@ -550,6 +563,55 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         } else {
             Utilidades.Sonidos.beep();
         }
+    }
+    
+    private void modificarCliente() {
+        String cedula, nombre, apellido, telefono, correo, direccion;
+        char nacionalidad;
+        int idCliente;
+        
+        nombre = txtNombres.getText();
+        apellido = txtApellido.getText();
+        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        cedula = txtDocumento.getText();
+        direccion = txtDireccion.getText();
+        telefono = txtTelefono.getText();
+        correo = txtCorreo.getText();
+        
+        if (nombre.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtNombres.requestFocus();
+            return;
+        }
+        if (apellido.isEmpty() && !cmbTipoDocumento.getSelectedItem().toString().equalsIgnoreCase("J")) {
+            Utilidades.Sonidos.beep();
+            txtApellido.requestFocus();
+            return;
+        }
+        if (telefono.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtTelefono.requestFocus();
+            return;
+        }
+        if (correo.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtCorreo.requestFocus();
+            return;
+        }
+        if (direccion.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtDireccion.requestFocus();
+            return;
+        }
+
+        idCliente = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo, cedula);
+
+        if (idCliente > 0) {
+            this.cerrarVentana();
+        } else {
+            Utilidades.Sonidos.beep();
+        }
+
     }
 
 

@@ -50,7 +50,7 @@ public class Admin extends javax.swing.JInternalFrame {
     private ModificacionEmpleados modificacionEmpleados;
     private static String ruta = "";
     private RegistroCliente registroCliente;
-    private ModificacionClientes modificacionClientes;
+    private RegistroCliente modificacionClientes;
 
     /**
      * Creates new form Admin
@@ -855,7 +855,7 @@ public class Admin extends javax.swing.JInternalFrame {
     }
 
     public void abrirVentanaModificacionCliente(char tipo_persona, String numero_identificacion_persona) {
-        modificacionClientes = new ModificacionClientes(this, tipo_persona, numero_identificacion_persona);
+        modificacionClientes = new RegistroCliente(this, tipo_persona, numero_identificacion_persona, true);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
         modificacionClientes.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
