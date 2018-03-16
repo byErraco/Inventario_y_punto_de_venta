@@ -67,7 +67,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapPersona('V',"25491458");
         //obd.crearVenta(1, 1);
         //LISTO//obd.getMapCargos();
-        //LISTO//obd.getMapCaja(1);
+        obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -1373,9 +1373,9 @@ public class ObjetoBaseDatos {
         
     }
     
-    public HashMap<String, Integer> getMapCaja(int id_caja){
+    public HashMap<String, String> getMapCaja(int id_caja){
         StringBuilder sqlQuery = new StringBuilder();
-        HashMap<String, Integer> cajas = new HashMap<>();
+        HashMap<String, String> cajas = new HashMap<>();
         ResultSet rs;
         
         sqlQuery.append("SELECT id_caja, descripcion_caja FROM ")
@@ -1388,8 +1388,8 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             
             while (rs.next()) {
-                cajas.put("id_caja", rs.getInt("id_caja"));
-                cajas.put("descripcion_caja", rs.getInt("descripcion_caja"));
+                cajas.put("id_caja", rs.getString("id_caja"));
+                cajas.put("descripcion_caja", rs.getString("descripcion_caja"));
             }
         } catch (Exception e) {
             e.printStackTrace();
