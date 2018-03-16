@@ -67,7 +67,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapPersona('V',"25491458");
         //obd.crearVenta(1, 1);
         //LISTO//obd.getMapCargos();
-        obd.getMapCaja(1);
+        //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -1388,7 +1388,8 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             
             while (rs.next()) {
-                cajas.put(rs.getString("descripcion_caja"), rs.getInt("id_caja"));
+                cajas.put("id_caja", rs.getInt("id_caja"));
+                cajas.put("descripcion_caja", rs.getInt("descripcion_caja"));
             }
         } catch (Exception e) {
             e.printStackTrace();
