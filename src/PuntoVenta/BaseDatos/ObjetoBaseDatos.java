@@ -67,7 +67,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapPersona('V',"25491458");
         //obd.crearVenta(1, 1);
         //LISTO//obd.getMapCargos();
-        obd.getMapCaja(1);
+        //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -433,7 +433,7 @@ public class ObjetoBaseDatos {
 
         String query = "SELECT persona.nombre_persona, persona.apellido_persona, persona.tipo_persona, persona.numero_identificacion_persona, \n" +
                         "persona.telefono_persona, persona.email_persona, \n" +
-                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
+                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo, cargo.id_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
                         "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE id_empleado =" + idEmpleado;
         try {
@@ -448,7 +448,8 @@ public class ObjetoBaseDatos {
                 emple.setCorreo(rs.getString("email_persona"));
                 emple.setTelefono(rs.getString("telefono_persona"));
                 emple.setDireccion(rs.getString("direccion_persona"));
-                //emple.setPassword(rs.getString("clave"));
+                emple.setCargo_id(rs.getString("id_cargo"));
+                //emple.setCargo_id(rs.getString("nombre_cargo"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -472,7 +473,7 @@ public class ObjetoBaseDatos {
 
         String query = "SELECT persona.nombre_persona, persona.apellido_persona, persona.tipo_persona, persona.numero_identificacion_persona, \n" +
                         "persona.telefono_persona, persona.email_persona, \n" +
-                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo \n" +
+                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo, cargo-id_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
                         "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE numero_identificacion_persona = '" + numero_identificacion_persona +"' AND tipo_persona='"+tipo_persona+"'";
         try {
@@ -487,6 +488,7 @@ public class ObjetoBaseDatos {
                 emple.setCorreo(rs.getString("email_persona"));
                 emple.setTelefono(rs.getString("telefono_persona"));
                 emple.setDireccion(rs.getString("direccion_persona"));
+                emple.setCargo_id(rs.getString("id_cargo"));
                 //emple.setPassword(rs.getString("clave"));
             }
         } catch (Exception e) {

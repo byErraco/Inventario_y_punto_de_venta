@@ -1,0 +1,20 @@
+﻿/*SELECT codigo_venta_producto, descripcion_producto, base_imponible*impuesto_producto/100, 
+cantidad_producto, precio_venta_publico
+FROM spve.producto INNER JOIN spve.venta_producto 
+ON producto.id_producto = venta_producto.id_producto 
+INNER JOIN spve.venta ON venta.id_venta = venta_producto.id_venta
+WHERE venta_producto.id_venta = 1*/
+
+SELECT CAST(
+		CASE
+			WHEN impuesto_producto IS NOT NULL
+				THEN 1
+			ELSE 0
+		END AS bit) AS taxable, producto.id_producto, codigo_venta_producto, 
+		descripcion_producto, precio_venta_publico, 
+		base_imponible, impuesto_producto, cantidad_producto, venta.id_venta
+		
+	FROM spve.producto INNER JOIN spve.venta_producto
+	ON producto.id_producto = venta_producto.id_producto
+	INNER JOIN spve.venta ON venta.id_venta = venta_producto.id_venta
+	WHERE venta.id_venta = 1
