@@ -18,6 +18,8 @@ import PuntoVenta.Ventanas.Venta;
 import PuntoVenta.Ventanas.Cierre_Caja;
 import PuntoVenta.Ventanas.Productos;
 import PuntoVenta.Ventanas.Movimientos;
+import PuntoVenta.Ventanas.AgregarProducto;
+import PuntoVenta.Ventanas.ModificarProducto;
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -66,8 +68,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private boolean estadoCaja;
     private ModeloCaja modeloCaja;
     private Factura factura;
-    private Productos prod; // añadido para producto
-    private Movimientos mov;// añadido para movimiento
+    private AgregarProducto agregar;
+    private ModificarProducto modificar;
     private Acerca acerca = new Acerca();
     private Ayuda ayuda = new Ayuda();
     private int idEstadoCaja;
@@ -593,7 +595,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
-  //revisar   PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
+         //   PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
          //   PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
 
             bloqueo = new Bloqueo(this);
@@ -655,7 +657,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
     
-    
+    //revisar
     public void abrirVentanaProd(){
         producto =  new Productos(this);
         Dimension desktopSize = panel.getSize();
@@ -671,7 +673,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public void abrirVentanaMovimientos(){
         movimiento =  new Movimientos(this);
         Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = producto.getSize();
+        Dimension jInternalFrameSize = movimiento.getSize();
         movimiento.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
                 panel.add(movimiento);

@@ -8,7 +8,7 @@ import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.ProductoTableModel;
 import PuntoVenta.Modelos.ModeloProducto;
 import PuntoVenta.Ventanas.Productos;
-import PuntoVenta.Inicio.MenuPrincipal;;
+import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,35 +17,40 @@ import java.util.HashMap;
  *
  * @author David Chavez
  */
-public class Detalles extends javax.swing.JInternalFrame {
+public class ModificarProducto extends javax.swing.JInternalFrame {
 public final MenuPrincipal menuPrincipal;
-private final Productos producto;
+private final Productos prod;
 private ObjetoBaseDatos obd;
-    /**
-     * Creates new form Detalles
-     */
-    public Detalles(MenuPrincipal menuPrincipal, Productos producto) {
-        initComponents();
+   
+public ModificarProducto(Productos producto, MenuPrincipal menuPrincipal) {
         this.menuPrincipal = menuPrincipal;
-        this.setTitle("Saphiro - Detalles del Producto");
-        this.producto = producto;
+        this.prod = producto;
+        this.setTitle("Saphiro - Modificar Producto");
+        initComponents();
         crearHotKeys();
         actualizarTabla();
     }
 
-    Detalles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  /*  public ModificarProducto(Productos producto, MenuPrincipal menuPrincipal) {
+        initComponents();
+        this.menuPrincipal = menuPrincipal;
+        this.prod = producto;
+        this.setTitle("Saphiro - Modificar Producto");
+        crearHotKeys();
+        actualizarTabla();
+    }*/
 
+   
+
+   
+    
    public void crearHotKeys(){
    
    }
    public void actualizarTabla(){
-        String[] headers = {"Código", "Descripción","Codigo Barras","Unidad","Tipo","Venta x Peso","Activo", "Precio","Costo","Impuesto","Margen","Excento","Costo Promedio"};
-        String[] columnas = {"id","descripcion","codigo_barra","cantidad","tipo","costoxunidad","activo_producto","precio","pvp","impuesto","margendeganacia","baseimponible","costo_promedio"};
         ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
-        ArrayListTableModel model = new ArrayListTableModel(Producto, headers, columnas);
-      //  jtbDetalle.setModel(model);
+        ProductoTableModel model = new ProductoTableModel(Producto);
+        jtbComponentes.setModel(model);
    
    }
     @SuppressWarnings("unchecked")
@@ -60,7 +65,7 @@ private ObjetoBaseDatos obd;
         panelDescripcion = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtbDescripcion = new javax.swing.JTable();
-        btnAceptar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         btnDescripcion = new javax.swing.JButton();
         btnComponente = new javax.swing.JButton();
@@ -72,8 +77,11 @@ private ObjetoBaseDatos obd;
         jLabel1.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
         jLabel1.setText("DETALLES");
 
+        panelDeltalle.setBackground(new java.awt.Color(32, 182, 155));
         panelDeltalle.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelDeltalle.setLayout(new java.awt.CardLayout());
+
+        panelComponentes.setBackground(new java.awt.Color(32, 182, 155));
 
         jtbComponentes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -106,6 +114,8 @@ private ObjetoBaseDatos obd;
         );
 
         panelDeltalle.add(panelComponentes, "card2");
+
+        panelDescripcion.setBackground(new java.awt.Color(32, 182, 155));
 
         jtbDescripcion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -143,9 +153,9 @@ private ObjetoBaseDatos obd;
 
         panelDeltalle.add(panelDescripcion, "card3");
 
-        btnAceptar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnAceptar.setText("<html><font size=2><center>Aceptar</center></font></html>");
-        btnAceptar.setBorder(null);
+        btnModificar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnModificar.setText("<html><font size=2><center>Modificar</center></font></html>");
+        btnModificar.setBorder(null);
 
         jToolBar1.setBackground(new java.awt.Color(32, 182, 155));
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -206,7 +216,7 @@ private ObjetoBaseDatos obd;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(172, 172, 172)))
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -226,7 +236,7 @@ private ObjetoBaseDatos obd;
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panelDeltalle, javax.swing.GroupLayout.PREFERRED_SIZE, 386, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12))
         );
 
@@ -260,42 +270,12 @@ private ObjetoBaseDatos obd;
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Detalles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Detalles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Detalles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Detalles.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Detalles().setVisible(true);
-            }
-        });
-    }
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnComponente;
     private javax.swing.JButton btnDescripcion;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
