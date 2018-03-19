@@ -220,7 +220,7 @@ CREATE SEQUENCE spve.pago_seq;
 
 CREATE TABLE IF NOT EXISTS spve.pago (
   id_pago INT NOT NULL DEFAULT NEXTVAL ('spve.pago_seq'),
-  monto_pago DECIMAL(10,0) NOT NULL,
+  monto_pago REAL NOT NULL,
   fecha_pago TIMESTAMP(0) NOT NULL,
   id_tipo_pago INT NOT NULL,
   id_venta INT NOT NULL,
@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS spve.producto (
   codigo_venta_producto VARCHAR(45) NOT NULL,
   limite_venta_persona DECIMAL(10,0),
   descripcion_empaque VARCHAR(45) NOT NULL,
-  cantidad_disponible DECIMAL(10,0) NOT NULL,
+  cantidad_disponible REAL NOT NULL,
   balanza SMALLINT NOT NULL,
   producto_pre_fabricado SMALLINT NOT NULL,
   id_precio_producto INT NOT NULL,
@@ -317,7 +317,7 @@ CREATE SEQUENCE spve.venta_producto_seq;
 
 CREATE TABLE IF NOT EXISTS spve.venta_producto (
   id_venta_producto INT NOT NULL DEFAULT NEXTVAL ('spve.venta_producto_seq'),
-  cantidad_producto VARCHAR(45) NOT NULL,
+  cantidad_producto REAL NOT NULL,
   id_venta INT NOT NULL,
   id_producto INT NOT NULL,
   activo_producto SMALLINT NOT NULL DEFAULT 1,

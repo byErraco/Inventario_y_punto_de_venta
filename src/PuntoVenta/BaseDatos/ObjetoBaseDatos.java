@@ -71,12 +71,14 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCajas();
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
-        //LISTO//obd.agregarProductoEnVenta(1, "1234", 4);
+        //LISTO//obd.agregarProductoEnVenta(1, "4321", 6);
         //LISTO//obd.getArrayListEmpleado();
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        obd.getArrayListProductosEnVenta(1);
+        //LISTO//obd.getArrayListProductosEnVenta(1);
+        //LISTO//obd.crearPago(100.504, 1, 1);
+        //LISTO//obd.getTotalPagadoVenta(2);
     }
     
     /**
@@ -1158,7 +1160,6 @@ public class ObjetoBaseDatos {
                         map.put(columna, rs.getString(columna));
                     }
                 }
-                System.out.println(map);
                 resultado.add(map);
             }
         } catch (Exception e) {
@@ -2414,14 +2415,14 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Registra un pago en la base de datos. ATENCION: Este pago no se asocia a
-     * ninguna otra tabla, debe hacerse manualmente. Ver crearPagoVenta();
+     * Registra el pago de una venta en la base de datos
      *
      * @param monto
      * @param idTipoPago
+     * @param idVenta
      * @return El id del pago creado.
      */
-    public int crearPago(XBigDecimal monto, int idTipoPago) {
+    public int crearPago(double monto, int idTipoPago, int idVenta) {
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
@@ -2429,22 +2430,54 @@ public class ObjetoBaseDatos {
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("pago"))
-                .append("(monto_pago, id_tipo_pago, fecha_pago) VALUES (")
-                .append(monto.toString()).append(", ")
-                .append(idTipoPago).append(", '")
-                .append(new Timestamp(date.getTime())).append("');");
-            resultado = ejecutarCreate(sqlQuery.toString(), "pago");
+                .append(" (monto_pago, fecha_pago, id_tipo_pago, id_venta) VALUES (")
+                .append(monto).append(", '")
+                .append(new Timestamp(date.getTime())).append("', ")
+                .append(idTipoPago).append(", ")
+                .append(idVenta).append(");");
+                
+        resultado = ejecutarCreate(sqlQuery.toString(), "pago");
+        
         return resultado;
     }
 
+    
     /**
+     * Método para calcular el total pagado de una venta
+     * @param id_venta
+     * @return 
+     */
+    public double getTotalPagadoVenta(int id_venta){
+        ResultSet rs;
+        StringBuilder sqlQuery = new StringBuilder();
+        double resultado = 0;
+        
+        sqlQuery.append("SELECT SUM(monto_pago) FROM spve.pago WHERE id_venta ="+id_venta+";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            while (rs.next()) {
+                resultado = rs.getDouble("sum");
+                System.out.println(resultado);
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
+    
+    /*
+     * 
      * Método para asociar un pago a una venta.
      *
      * @param idPago
      * @param idVenta
      * @return
      */
-    public int asociarPagoVenta(int idPago, int idVenta) {
+    /*public int asociarPagoVenta(int idPago, int idVenta) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
 
@@ -2460,9 +2493,10 @@ public class ObjetoBaseDatos {
                 .append(idVenta).append(");");
         resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
         return resultado;
-    }
+    }*/
 
-    /**
+    
+    /*
      * Método para crear un
      *
      * @param idVenta
@@ -2470,8 +2504,8 @@ public class ObjetoBaseDatos {
      * @param cantidadProducto
      * @deprecated
      * @return
-     */
-    public int incluirProductoEnVenta(int idVenta, int idProducto, int cantidadProducto) {
+    */
+    /*public int incluirProductoEnVenta(int idVenta, int idProducto, int cantidadProducto) {
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         int cantidadAnterior = 0;
@@ -2515,7 +2549,7 @@ public class ObjetoBaseDatos {
         
     }
         return resultado;
-    }
+    }*/
 
     /**
      * Método para incluir un producto en una venta. Si existe un producto del
@@ -2529,84 +2563,86 @@ public class ObjetoBaseDatos {
      */
     public int agregarProductoEnVenta(int idVenta, String codigo_venta_producto, double cantidadProducto) {
         StringBuilder sqlQuery = new StringBuilder();
-        ResultSet rs = null;
+        ResultSet rs;
         double cantidadAnterior = 0.00;
-        boolean existe = false;
         int resultado = -1;
-        int idProducto = -1;
+        int idVentaProducto = -1, idProducto;
 
-        sqlQuery.append("SELECT id_venta, id_producto, cantidad_producto FROM ")
+        sqlQuery.append("SELECT id_venta_producto, producto.id_producto, cantidad_producto FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta_producto"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" ON venta_producto.id_producto = producto.id_producto")
                 .append(" WHERE id_venta=").append(idVenta)
                 .append(" AND ")
-                .append("id_producto=")
-                .append(idProducto).append(";");
+                .append("codigo_venta_producto='")
+                .append(codigo_venta_producto).append("'")
+                .append(" AND producto.activo_producto = 1;");
 
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
             if (rs.next()) {
-                idProducto = rs.getInt("idProducto");
-                cantidadAnterior = rs.getDouble("cantidad");
-                existe = true;
+                idVentaProducto = rs.getInt("id_venta_producto");
+                cantidadAnterior = rs.getDouble("cantidad_producto");
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             postgreSQL.desconectar();
         }
-
-        sqlQuery = new StringBuilder();
-        if (idProducto > -1) {
+        
+        if (idVentaProducto > -1) {
+            sqlQuery = new StringBuilder();
             sqlQuery.append("UPDATE ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta_producto"))
                     .append(" SET cantidad_producto=").append(cantidadProducto + cantidadAnterior)
-                    .append(" WHERE id_venta=").append(idVenta)
-                    .append(" AND id_producto=").append(idProducto)
+                    .append(" WHERE id_venta_producto=").append(idVentaProducto)
                     .append(";");
             try{
                 postgreSQL.conectar();
-                existe = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
-                if(rs.next()){
-                    resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
-                }
+                postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
             }catch (Exception e) {
-            e.printStackTrace();
+                e.printStackTrace();
             } finally {
-            postgreSQL.desconectar();
-        }
-            
+                postgreSQL.desconectar();
+            }
         } else {
             StringBuilder queryID = new StringBuilder();
             queryID.append("SELECT id_producto FROM ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("producto"))
-                    .append(" WHERE codigo_venta_producto='").append(codigo_venta_producto).append("'");
+                    .append(" WHERE codigo_venta_producto='").append(codigo_venta_producto).append("'")
+                    .append(" AND activo_producto = 1;");
             try {
-            postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(queryID.toString());
-            if (rs.next()) {
-                idProducto = rs.getInt("id_producto");
-            }
+                postgreSQL.conectar();
+                rs = postgreSQL.ejecutarSelect(queryID.toString());
+                
+                if (rs.next()) {
+                    idProducto = rs.getInt("id_producto");
+                    
+                    StringBuilder queryCrearVentaProducto = new StringBuilder();
+                    
+                    queryCrearVentaProducto.append("INSERT INTO ")
+                        .append(mapSchema.get("spve")).append(".")
+                        .append(mapTabla.get("venta_producto"))
+                        .append("(id_producto, id_venta, cantidad_producto) VALUES (")
+                        .append(idProducto).append(", ")
+                        .append(idVenta).append(", ")
+                        .append(cantidadProducto).append(");");
+            
+                    resultado = ejecutarCreate(queryCrearVentaProducto.toString(), "venta_producto");
+                }
             } catch (Exception e) { 
                 e.printStackTrace();
             } finally {
                 postgreSQL.desconectar();
             }
-           
-            sqlQuery.append("INSERT INTO ")
-                    .append(mapSchema.get("spve")).append(".")
-                    .append(mapTabla.get("venta_producto"))
-                    .append("(id_producto, id_venta, cantidad_producto) VALUES (")
-                    .append(idProducto).append(", ")
-                    .append(idVenta).append(", ")
-                    .append(cantidadProducto).append(");");
-            
-            resultado = ejecutarCreate(sqlQuery.toString(), "venta_producto");
         }
-            
         return resultado;
     }
         
