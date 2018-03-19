@@ -57,7 +57,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.seleccionarCargo(1);
         //LISTO//obd.personaExiste('V', "25491458");
         //LISTO//obd.empleadoExiste('V', "254914581");
-        //LISTO//Empleado empleado = obd.getDatosEmpleadoId(2);
+        //LISTO//Empleado empleado = obd.getDatosEmpleadoId(1);
         //LISTO//Empleado empleado = obd.getDatosEmpleadoCedula("admin");
         //System.out.println(empleado.getNombre());
         //System.out.println(empleado.getApellido());
@@ -75,6 +75,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getArrayListEmpleado();
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
+        obd.getArrayListProductos();
     }
     
     /**
@@ -105,6 +106,8 @@ public class ObjetoBaseDatos {
         mapTabla.put("produccion", "produccion");
         mapTabla.put("compra", "compra");
         mapTabla.put("producto_componente", "producto_componente");
+        mapTabla.put("precio_producto", "precio_producto");
+        mapTabla.put("periodo_venta_producto", "periodo_venta_producto");
         //mapTabla.put("usuario", "usuario_sistema");
         
         //mapTabla.put("venta__pago", "venta__pago");
@@ -1179,15 +1182,19 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnaProducto = {"id", "codigo_barra", "descripcion", "stockminimo", "stockmaximo", "limitedeventaporpersona", "puntodepedido", "costoxunidad", "margendeganancia", "baseimponible", "fecha_actualizacion", "impuesto", "pvp"};
-
+        String[] columnaProducto = {"descripcion_producto", "codigo_venta_producto", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "p.id_periodo_venta_producto AS id_periodo_venta_producto", "fecha_registro_precio", "margen_ganancia", "impuesto_producto", "precio_venta_publico", "base_imponible", "producto_exento"};
         sqlQuery.append("SELECT ");
-        sqlQuery = addColumnasAlQuery(columnaProducto, "p.", sqlQuery);
+        sqlQuery = addColumnasAlQuery(columnaProducto, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("inventario")).append(".")
-                .append(mapTabla.get("producto")).append(" AS p;");
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto")).append(" AS p")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("precio_producto")).append(" AS pp")
+                .append(" ON ").append("p.id_precio_producto = pp.id_precio_producto")
+                .append(" WHERE activo_producto = 1 AND activo_precio_producto = 1;");
 
         try {
             postgreSQL.conectar();
@@ -1198,6 +1205,7 @@ public class ObjetoBaseDatos {
                     map.put(columna, rs.getString(columna));
                 }
                 resultado.add(map);
+                System.out.println(map);
             }
         } catch (Exception e) {
             e.printStackTrace();
