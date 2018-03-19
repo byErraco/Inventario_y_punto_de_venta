@@ -75,7 +75,8 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getArrayListEmpleado();
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
-        obd.getArrayListProductos();
+        //LISTO//obd.getArrayListProductos();
+        obd.getArrayListProductosEnVenta(1);
     }
     
     /**
@@ -1121,45 +1122,43 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnaProducto = {"codigo_barra", "descripcion", "pvp-(pvp*impuesto) AS pvp", "pvp*cantidad_producto AS total", "pvp*impuesto AS impuesto"};
-        String[] columnaProductoVenta = {"cantidad_producto"};
+        String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
+                                        "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
+                                        "    ELSE base_imponible\n" +
+                                        "END) AS subtotal", "(CASE\n" +
+                                        "    WHEN producto_exento = 1 THEN 0\n" +
+                                        "    ELSE impuesto_producto\n" +
+                                        "END) AS impuesto_producto", "precio_venta_publico"};
 
         sqlQuery.append("SELECT ");
-        sqlQuery = addColumnasAlQuery(columnaProducto, "p.", sqlQuery);
-        sqlQuery = addColumnasAlQuery(columnaProductoVenta, "vp.", sqlQuery);
+        sqlQuery = addColumnasAlQuery(columnaProductos, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("inventario")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto")).append(" AS p")
                 .append(" LEFT JOIN ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta__producto")).append(" AS vp")
-                .append(" ON p.id=vp.producto_id")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("precio_producto")).append(" AS pp")
+                .append(" ON p.id_precio_producto=pp.id_precio_producto")
                 .append(" LEFT JOIN ")
-                .append(mapSchema.get("stpv")).append(".")
-                .append(mapTabla.get("venta")).append(" AS v")
-                .append(" ON vp.venta_id=v.id")
-                .append(" WHERE v.id=").append(idVenta).append(";");
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto")).append(" AS vp")
+                .append(" ON vp.id_producto=p.id_producto")
+                .append(" WHERE id_venta=").append(idVenta).append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
                 map = new HashMap<>();
-                for (String columna : columnaProducto) {
-                    if (("total".equals(columna) || "impuesto".equals(columna) || "pvp".equals(columna))) {
+                for (String columna : columnaProductos) {
+                    if (("subtotal".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
                     }
                 }
-                for (String columna : columnaProductoVenta) {
-                    if (rs.getString(columna).endsWith(".00")) {
-                        map.put(columna, rs.getString(columna).substring(0, rs.getString(columna).length() - 3));
-                    } else {
-                        map.put(columna, rs.getString(columna));
-                    }
-                }
+                System.out.println(map);
                 resultado.add(map);
             }
         } catch (Exception e) {
