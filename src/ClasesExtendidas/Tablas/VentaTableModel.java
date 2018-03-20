@@ -16,12 +16,12 @@ public class VentaTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Codigo("Código", "codigo_barra"),
-        Descripcion("Descripción", "descripcion"),
+        Codigo("Código", "codigo_venta_producto"),
+        Descripcion("Descripción", "descripcion_producto"),
         Cantidad("Cantidad", "cantidad_producto"),
-        PrecioBase("Precio base", "pvp"),
-        Impuesto("Impuesto", "impuesto"),
-        Precio("Precio final", "total");
+        PrecioBase("Subtotal", "subtotal"),
+        Impuesto("Impuesto", "impuesto_producto"),
+        Precio("Total", "precio_venta_publico");
 
         String header;
         String columna;
