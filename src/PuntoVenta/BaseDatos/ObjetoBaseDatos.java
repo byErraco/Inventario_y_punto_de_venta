@@ -69,6 +69,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
+        //LISTO//obd.getMapEmpleado(1);
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
         //LISTO//obd.agregarProductoEnVenta(1, "4321", 6);
@@ -1554,12 +1555,8 @@ public class ObjetoBaseDatos {
         String[] columnaCargo = new String[]{"id_cargo", "nombre_cargo"};
 
         sqlQuery.append("SELECT ");
-        for (String columna : columnaEmpleado) {
-            sqlQuery.append(columna).append(",");
-        }
-        for (String columna : columnaCargo) {
-            sqlQuery.append(columna).append(",");
-        }
+        addColumnasAlQuery(columnaEmpleado, "", sqlQuery);
+        addColumnasAlQuery(columnaCargo, "c.", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
@@ -1572,7 +1569,8 @@ public class ObjetoBaseDatos {
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("cargo"))
-                .append(" ON e.id_cargo=id_cargo")
+                .append(" AS c")
+                .append(" ON e.id_cargo=c.id_cargo")
                 .append(" WHERE id_empleado=").append(id)
                 .append(";");
         
