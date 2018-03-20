@@ -5,6 +5,6 @@ ON venta.id_venta = venta_producto.id_venta
 INNER JOIN spve.persona
 ON venta.id_persona = persona.id_persona
 INNER JOIN spve.producto
-ON venta_producto.id_producto = producto.id_producto
+ON venta_producto.id_producto = producto.id_producto 
 WHERE tipo_persona = 'V' AND numero_identificacion_persona = '0' AND activo_persona = 1
 AND codigo_venta_producto = '4321' AND activo_producto = 1;

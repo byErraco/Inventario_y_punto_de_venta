@@ -79,6 +79,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
+        //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
     }
     
     /**
@@ -1571,7 +1572,7 @@ public class ObjetoBaseDatos {
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("cargo"))
-                .append(" ON id_cargo_empleado=id_cargo")
+                .append(" ON e.id_cargo=id_cargo")
                 .append(" WHERE id_empleado=").append(id)
                 .append(";");
         
@@ -2647,14 +2648,56 @@ public class ObjetoBaseDatos {
     }
         
     /**
-     * Agrega un producto a una venta pausada o en proceso
+     * Método para obtener la última fecha en la que una persona compró un 
+     * producto dado
      * 
-     * @param idVenta id de la venta que este activa
-     * @param codigoBarra código del producto que se desea agregar
-     * @return
+     * @param tipo_persona
+     * @param numero_identificacion_persona
+     * @param codigo_venta_producto
+     * @return 
      */
-    
-    
+    public Date getUltimaFechaVentaProducto(char tipo_persona, String numero_identificacion_persona, String codigo_venta_producto){
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        Date resultado = null;
+        
+        sqlQuery.append("SELECT MAX(fecha_venta)")
+                .append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" ON venta.id_venta = venta_producto.id_venta")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
+                .append(" ON venta.id_persona = persona.id_persona")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" ON venta_producto.id_producto = producto.id_producto")
+                .append(" WHERE ").append("tipo_persona='"+tipo_persona+"'")
+                .append(" AND ").append("numero_identificacion_persona='"+numero_identificacion_persona+"'")
+                .append(" AND ").append("activo_persona = 1")
+                .append(" AND ").append("codigo_venta_producto = '"+codigo_venta_producto+"'")
+                .append(" AND ").append("activo_producto = 1");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            if(rs.next()){
+                resultado = rs.getDate("max");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
     
     
     /**
