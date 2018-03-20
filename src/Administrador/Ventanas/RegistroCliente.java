@@ -558,11 +558,6 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txtDireccion.requestFocus();
             return;
         }
-        if (telefono.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtTelefono.requestFocus();
-            return;
-        }
         
         idCliente = obd.crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email);
 
@@ -582,18 +577,23 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
     
     private void modificarCliente() {
-        String cedula, nombre, apellido, telefono, correo, direccion;
+        String numero_identificacion, nombre, apellido, telefono, correo, direccion;
         char nacionalidad;
         boolean clienteModificado;
         
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
         nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        cedula = txtDocumento.getText();
+        numero_identificacion = txtDocumento.getText();
         direccion = txtDireccion.getText();
         telefono = txtTelefono.getText();
         correo = txtCorreo.getText();
         
+        if (numero_identificacion.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtDocumento.requestFocus();
+            return;
+        }
         if (nombre.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtNombres.requestFocus();
@@ -604,23 +604,13 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txtApellido.requestFocus();
             return;
         }
-        if (telefono.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtTelefono.requestFocus();
-            return;
-        }
-        if (correo.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtCorreo.requestFocus();
-            return;
-        }
         if (direccion.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtDireccion.requestFocus();
             return;
         }
 
-        clienteModificado = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo, this.numero_identificacion_persona, this.tipo_persona);
+        clienteModificado = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, numero_identificacion, direccion, telefono, correo, this.numero_identificacion_persona, this.tipo_persona);
 
         if (clienteModificado) {
             this.cerrarVentana();
