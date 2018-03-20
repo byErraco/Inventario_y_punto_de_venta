@@ -33,6 +33,8 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private Venta venta;
     private ObjetoBaseDatos obd;
     private final boolean modificarCliente;
+    private char tipo_persona;
+    private String numero_identificacion_persona;
 
     /**
      * Crea una ventana de RegistroCliente
@@ -83,6 +85,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         if(modificarCliente) {
             setTitle("Saphiro - Modificar cliente");
             btnRegistrarEmpleados.setText("<html><center>Modificar<br>F2</center></html>");
+            setCliente(tipo_persona, numero_identificacion_persona);
         }
     }
     
@@ -508,6 +511,11 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private void cerrarVentana() {
         this.dispose();
     }
+    
+    private void setCliente(char tipo_persona, String numero_identificacion_persona){
+        this.tipo_persona = tipo_persona;
+        this.numero_identificacion_persona = numero_identificacion_persona;
+    }
 
     private void registrarCliente() {
         String nombre, apellido, numero_identificacion, direccion, telefono, email;
@@ -568,7 +576,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private void modificarCliente() {
         String cedula, nombre, apellido, telefono, correo, direccion;
         char nacionalidad;
-        int idCliente;
+        boolean clienteModificado;
         
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
@@ -604,9 +612,9 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             return;
         }
 
-        idCliente = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo, cedula);
+        clienteModificado = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, cedula, direccion, telefono, correo, this.numero_identificacion_persona, this.tipo_persona);
 
-        if (idCliente > 0) {
+        if (clienteModificado) {
             this.cerrarVentana();
         } else {
             Utilidades.Sonidos.beep();

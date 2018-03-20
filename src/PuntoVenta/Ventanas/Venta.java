@@ -780,7 +780,7 @@ public class Venta extends javax.swing.JInternalFrame {
             if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
                 JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
             } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), canticomp)) {
-                menuPrincipal.getOBD().incluirProductoEnVenta(this.getIdVenta(), productoPorAsociar.getCodigoBarra(), d);
+                menuPrincipal.getOBD().agregarProductoEnVenta(this.getIdVenta(), productoPorAsociar.getCodigoBarra(), d);
 //                try {
 //                    descontarProducto();
 //                } catch (SQLException ex) {
@@ -1430,7 +1430,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param cantidad
      */
     private void modificarCantidadProducto(String codigoBarra, XBigDecimal cantidad) {
-        menuPrincipal.getOBD().incluirProductoEnVenta(idVenta, codigoBarra, cantidad.intValue());
+        menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, codigoBarra, cantidad.doubleValue());
     }
 
     /**
