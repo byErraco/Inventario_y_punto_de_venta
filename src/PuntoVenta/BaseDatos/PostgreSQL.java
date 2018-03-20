@@ -92,9 +92,10 @@ public class PostgreSQL {
     }
     
     /**
-     * Método para verificar si el query retorna algún resultado
+     * Ejecuta un query que no devuelve ningún resultado
+     * 
      * @param sql
-     * @return 
+     * @return true si se ejecutó el query 
      */
     public boolean ejecutarQuerySinResultado(String sql) {
         /* Konstanza:
@@ -125,7 +126,7 @@ public class PostgreSQL {
      * @return id del row resultante del INSERT o UPDATE
      * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
-    public synchronized int ejecutarManipulacionDeDatosSimple(String sql, String tabla) throws XSQLException {
+    public synchronized int ejecutarCreate(String sql, String tabla) throws XSQLException {
         int resultado = -1;
         try {
             if (this.conexion == null || this.conexion.isClosed()) {

@@ -1,0 +1,1 @@
+﻿SELECT MAX(id_producto) FROM spve.producto WHERE codigo_venta_producto='1234' AND activo_producto = 1;

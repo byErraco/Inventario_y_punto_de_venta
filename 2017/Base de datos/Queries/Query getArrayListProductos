@@ -1,0 +1,7 @@
+﻿SELECT descripcion_producto, codigo_venta_producto, limite_venta_persona,
+descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado,
+id_periodo_venta_producto, fecha_registro_precio, margen_ganancia, impuesto_producto,
+precio_venta_publico, base_imponible, producto_exento FROM spve.producto AS p 
+INNER JOIN spve.precio_producto AS pp
+ON p.id_precio_producto = pp.id_precio_producto
+WHERE activo_producto = 1 AND activo_precio_producto = 1
