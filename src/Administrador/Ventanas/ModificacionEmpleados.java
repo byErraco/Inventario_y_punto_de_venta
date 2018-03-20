@@ -469,9 +469,9 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     }
     
     private void setCargos() {
-        this.cargos = this.obd.getMapCargos();
+        cargos = obd.getMapCargos();
         
-        for (Map.Entry<String, Integer> entry : this.cargos.entrySet()) {   
+        for (Map.Entry<String, Integer> entry : cargos.entrySet()) {   
             cmbCargoId.addItem(entry.getKey());
         }
     }
@@ -479,6 +479,19 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     private void setEmpleado(char tipo_persona, String numero_identificacion_persona) {
         cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
+        
+        Empleado empleadoSeleccionado = obd.getDatosEmpleadoIdentificacion(tipo_persona, numero_identificacion_persona);
+        
+        txtNombres.setText(empleadoSeleccionado.getNombre());
+        txtApellido.setText(empleadoSeleccionado.getApellido());
+        txtTelefono.setText(empleadoSeleccionado.getTelefono());
+        txtCorreo.setText(empleadoSeleccionado.getCorreo());
+        txtDireccion.setText(empleadoSeleccionado.getDireccion());
+        
+        for (Map.Entry<String, Integer> entry : cargos.entrySet()) {   
+            if(entry.getValue().toString().equals(empleadoSeleccionado.getCargo_id())) 
+                cmbCargoId.setSelectedItem(entry.getKey());
+        }
     }
     
     private void modificarEmpleado() {
