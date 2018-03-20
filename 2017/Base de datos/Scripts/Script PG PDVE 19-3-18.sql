@@ -176,12 +176,6 @@ CREATE SEQUENCE spve.venta_seq;
 
 CREATE TABLE IF NOT EXISTS spve.venta (
   id_venta INT NOT NULL DEFAULT NEXTVAL ('spve.venta_seq'),
-  total_previo_venta REAL NOT NULL,
-  impuesto_venta REAL NOT NULL,
-  total_exento REAL NOT NULL,
-  abono_venta REAL NOT NULL,
-  total_venta REAL NOT NULL,
-  cambio_venta DECIMAL(10,0) NOT NULL,
   codigo_factura VARCHAR(45) NOT NULL,
   fecha_venta DATE NOT NULL,
   estado_venta INT NOT NULL,

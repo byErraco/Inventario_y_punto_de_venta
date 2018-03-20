@@ -481,7 +481,7 @@ public class ObjetoBaseDatos {
 
         String query = "SELECT persona.nombre_persona, persona.apellido_persona, persona.tipo_persona, persona.numero_identificacion_persona, \n" +
                         "persona.telefono_persona, persona.email_persona, \n" +
-                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo, cargo-id_cargo \n" +
+                        "persona.direccion_persona, empleado.id_empleado, cargo.nombre_cargo, cargo.id_cargo \n" +
                         "FROM spve.persona INNER JOIN spve.empleado ON persona.id_persona = empleado.id_persona \n" +
                         "INNER JOIN spve.cargo ON empleado.id_cargo_empleado = cargo.id_cargo WHERE numero_identificacion_persona = '" + numero_identificacion_persona +"' AND tipo_persona='"+tipo_persona+"'";
         try {
