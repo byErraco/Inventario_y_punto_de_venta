@@ -668,7 +668,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             Utilidades.Sonidos.beep();
             focusPuntoInteres();
         } else {
-            int idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(caja.menuPrincipal.getIdEstadoCaja(), montoCorte, excedente, restante);
+            int idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(montoCorte.doubleValue(), excedente.doubleValue(), restante.doubleValue(), caja.menuPrincipal.getIdEstadoCaja(), caja.menuPrincipal.getEmpleado().getId());
             caja.menuPrincipal.getOBD().ActualizarCorteEnVenta(caja.menuPrincipal.getIdEstadoCaja());
             XBigDecimal montoEnTabla;
             for (int i = 0; i < model.getRowCount(); i++) {
