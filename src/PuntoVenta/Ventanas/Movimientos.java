@@ -10,6 +10,9 @@ import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.MovimientoTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Modelos.ModeloProducto;
+import PuntoVenta.Ventanas.Compra;
+import PuntoVenta.Ventanas.Fabricacion;
+import PuntoVenta.Ventanas.Ajuste;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -31,18 +34,25 @@ import javax.swing.table.TableRowSorter;
  * @author David Chavez
  */
 public class Movimientos extends javax.swing.JInternalFrame {
-private final MenuPrincipal menuPrincipal;
+public MenuPrincipal menuPrincipal;
+private Compra compra;
+private Fabricacion fabricacion;
+private Ajuste ajuste;
+
     /**
      * Creates new form Productos
      */
     public Movimientos(MenuPrincipal menuPrincipal) {
        initComponents();
        this.menuPrincipal = menuPrincipal;
+       this.ajuste = new Ajuste();
+       this.compra = new Compra();
+       this.fabricacion = new Fabricacion();
        this.setTitle("Saphiro - Movimientos de productos");
        //  crearHotKeys();
          actualizarTabla();
-        
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -236,15 +246,18 @@ private final MenuPrincipal menuPrincipal;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
-      // compras();
+      compra = new Compra();
+      compra.setVisible(true);
     }//GEN-LAST:event_btnCompraActionPerformed
 
     private void btnFabricacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFabricacionActionPerformed
-      // Fabricacion();
+      fabricacion = new Fabricacion();
+      fabricacion.setVisible(true);
     }//GEN-LAST:event_btnFabricacionActionPerformed
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
-            //Ajuste();        
+            ajuste = new Ajuste();    
+            ajuste.setVisible(true);
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed

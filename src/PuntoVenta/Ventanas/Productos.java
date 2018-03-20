@@ -140,7 +140,6 @@ public class Productos extends javax.swing.JInternalFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setNormalBounds(new java.awt.Rectangle(0, 0, 57, 0));
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -312,7 +311,7 @@ public class Productos extends javax.swing.JInternalFrame {
 
     private void Agregar(){
               
-                agregar = new AgregarProducto(produc,menuPrincipal);
+                agregar = new AgregarProducto(produc);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
                 agregar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -323,7 +322,7 @@ public class Productos extends javax.swing.JInternalFrame {
     }
     private void Modificar(){
     
-     modificar = new ModificarProducto(produc, menuPrincipal);
+     modificar = new ModificarProducto(produc);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = modificar.getSize();
                 modificar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
