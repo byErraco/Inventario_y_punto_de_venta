@@ -515,6 +515,14 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private void setCliente(char tipo_persona, String numero_identificacion_persona){
         this.tipo_persona = tipo_persona;
         this.numero_identificacion_persona = numero_identificacion_persona;
+        
+        HashMap<String, String> clienteSeleccionado = obd.getMapPersona(tipo_persona, numero_identificacion_persona);
+        
+        txtNombres.setText(clienteSeleccionado.get("nombre_persona"));
+        txtApellido.setText(clienteSeleccionado.get("apellido_persona"));
+        txtTelefono.setText(clienteSeleccionado.get("telefono_persona"));
+        txtCorreo.setText(clienteSeleccionado.get("email_persona"));
+        txtDireccion.setText(clienteSeleccionado.get("direccion_persona"));
     }
 
     private void registrarCliente() {
