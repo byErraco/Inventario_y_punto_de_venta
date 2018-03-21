@@ -69,6 +69,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
+        obd.getMapProducto("4321");
         //LISTO//obd.getMapEmpleado(1);
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -77,7 +78,7 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        obd.getArrayListProductosEnVenta(1);
+        //LISTO//obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
@@ -1636,42 +1637,44 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Utiliza el id o el codigo de barras de un prodcuto para buscar en el
-     * schema inventario y crear un map<k, v> de la tabla producto
+     * Utiliza el codigo de barras de un prodcuto para 
+     * crear un map<k, v> de la tabla producto
      *
-     * @param codigoBarra
+     * @param codigo_venta_producto
      * @return
      */
-    public HashMap<String, String> getMapProducto(String codigoBarra) {
+    public HashMap<String, String> getMapProducto(String codigo_venta_producto) {
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
-        String[] columnaProducto = {"id", "codigo_barra", "descripcion", "stockminimo", "stockmaximo", "limitedeventaporpersona", "puntodepedido", "costoxunidad", "margendeganancia", "baseimponible", "fecha_actualizacion", "impuesto", "pvp"};
+        String[] columnaProducto = {"id_producto", "descripcion_producto", "codigo_venta_producto", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
 
         sqlQuery.append("SELECT ");
-        addColumnasAlQuery(columnaProducto, "p.", sqlQuery);
+        addColumnasAlQuery(columnaProducto, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("inventario")).append(".")
+                .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto")).append(" AS p ")
                 .append(" WHERE ");
         try {
 //            int id = Integer.parseInt(codigoBarra);
             //sqlQuery.append("p.id=").append(id);
-            sqlQuery.append("p.codigo_barra='").append(codigoBarra).append("'");
+            sqlQuery.append("codigo_venta_producto='").append(codigo_venta_producto).append("'")
+                    .append(" AND activo_producto = 1;");
 //        } catch (NumberFormatException e) {
 //            sqlQuery.append("p.codigo_barra='").append(codigoBarra).append("'");
         } finally {
-            sqlQuery.append(" LIMIT 1;");
+            //sqlQuery.append(" LIMIT 1;");
         }
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
                 for (String columna : columnaProducto) {
+                    
                     map.put(columna, rs.getString(columna));
-                }
+                }System.out.println(map);
             }
         } catch (Exception e) {
             e.printStackTrace();
