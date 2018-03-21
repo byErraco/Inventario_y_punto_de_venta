@@ -1,0 +1,4 @@
+﻿SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp
+INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto
+INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto
+WHERE producto_exento = 0 AND id_venta = 1;
