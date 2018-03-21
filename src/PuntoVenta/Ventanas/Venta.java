@@ -19,8 +19,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -56,6 +61,25 @@ public class Venta extends javax.swing.JInternalFrame {
     private int idVenta = -1;
     public Pago totalizarVenta;
 
+    public static class PeriodoLimite {
+        
+        /**
+         * Devuelve la descripción de un periodo según su id
+         * 
+         * @param id_periodo_venta_producto
+         * @return String con la descripción del período
+         */
+        public static String getDescripcion(int id_periodo_venta_producto) {
+            switch (id_periodo_venta_producto) {
+                case 1:
+                    return "Diario";
+                case 2:
+                    return "Semanal";
+            }
+            return "";
+        }
+    }
+    
     public Venta(MenuPrincipal menuPrincipal) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
@@ -820,7 +844,7 @@ public class Venta extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
             abrirVentanaBuscarProductos();
-            String nom = txtProductoNombre.getText().toString();
+            String nom = txtProductoNombre.getText();
             PuntoVenta.Ventanas.ListaProductos.txtCampoDescripcion.setText(nom);
 
         }
@@ -888,11 +912,10 @@ public class Venta extends javax.swing.JInternalFrame {
                     cantidadCompra = "" + (Double.parseDouble(cantidadCompra) + Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()));
                 }
             }
-            double d = cantidad.doubleValue();
-            if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
-                JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
+            if (!sePuedeVender(productoPorAsociar.getCodigoBarra())) {
+                JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
             } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), cantidadCompra)) {
-                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), d);
+                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), cantidad.doubleValue());
 //                try {
 //                    descontarProducto();
 //                } catch (SQLException ex) {
@@ -966,21 +989,26 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param serial
      * @return
      */
-    private boolean comprobarLimiteMaximo(String serial) {
-        XBigDecimal cantExistente = new XBigDecimal(0);
-        XBigDecimal cantNueva = new XBigDecimal(getTxtCantidad().getText());
-        for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-            if (jtbVenta.getValueAt(i, 0).toString().equals(serial)) {
-                cantExistente = new XBigDecimal(jtbVenta.getValueAt(i, 3).toString());
-                break;
-            }
+    private boolean sePuedeVender(String serial) {
+        // Konstanza: Falta terminar esta función, ya que no se está tomando en cuenta la cantidad vendida en el periodo del producto
+        
+        if(productoPorAsociar.getLimiteVentaPorPersona() <= 0)  return true;
+        
+        java.sql.Date ultimaVentaProducto = (java.sql.Date) menuPrincipal.getOBD().getUltimaFechaVentaProducto(cmbTipoDocumento.getSelectedItem().toString().charAt(0), txtDocumento.getText(), serial);
+        LocalDate ultimaVentaProductoLocal = ultimaVentaProducto.toLocalDate();
+        
+        LocalDate actual = LocalDate.now();
+        
+        Period p = Period.between(ultimaVentaProductoLocal, actual);
+        long diasDiferencia = ChronoUnit.DAYS.between(ultimaVentaProductoLocal, actual);
+        
+        if(productoPorAsociar.getIdPeriodoLimiteVenta() == 1){
+            if(diasDiferencia >= 1) return true;
+        } else if(productoPorAsociar.getIdPeriodoLimiteVenta() == 2){
+            if(diasDiferencia >= 7) return true;
         }
-        XBigDecimal cantidadTotal = new XBigDecimal(cantExistente.add(cantNueva).toString());
-        if (cantidadTotal.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0) {
-            return false;
-        } else {
-            return true;
-        }
+    
+        return false;
     }
 
     /**
@@ -1312,19 +1340,8 @@ public class Venta extends javax.swing.JInternalFrame {
 
         //Actualizar subtotal, total e Iva.
         if (listaProductoEnVenta != null) {
-            double subtotal = 0;
-            double total = 0;
-            double impuesto = 0;
-            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-                impuesto = impuesto + (Double.parseDouble(jtbVenta.getValueAt(i, 4).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-                subtotal = subtotal + (Double.parseDouble(jtbVenta.getValueAt(i, 2).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-                total = total + (Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-            }
-            lblTotalValor.setText(redondeo.format(total).replace(",", "."));
-            lblImpuestoValor.setText(redondeo.format(impuesto).replace(",", "."));
-            lblSubtotalValor.setText(redondeo.format(subtotal).replace(",", "."));
-//            actualizarLblSubtotal(listaProductoEnVenta);
-//            actualizarLblImpuesto(listaProductoEnVenta);
+            actualizarLblSubtotal();
+            actualizarLblImpuesto();
             actualizarLblTotal();
         } else {
             this.lblTotalValor.setText("0.00");
@@ -1408,8 +1425,8 @@ public class Venta extends javax.swing.JInternalFrame {
                     if (productoTabla.get(codigoBarra) == null) {
                         productoTabla.put(codigoBarra, menuPrincipal.getOBD().getLimiteMaximoProducto(codigoBarra));
                     }
-                    if (cantidadNueva.compareTo(new BigDecimal(productoTabla.get(codigoBarra))) > 0) {
-                        JOptionPane.showMessageDialog(null, "El limite de '" + jtbVenta.getModel().getValueAt(rowNumber, 1) + "' maximo permitido por persona es de " + productoTabla.get(codigoBarra) + "", "Error", JOptionPane.ERROR_MESSAGE);
+                    if (!sePuedeVender(codigoBarra)) {
+                        JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         modificarCantidadProducto(codigoBarra, new XBigDecimal(cantidadNueva.add(cantidadAnterior.negate()).toString()));
                         actualizarTabla();
@@ -1462,45 +1479,32 @@ public class Venta extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Actualiza el lblSubtotalValor con el precio de todos los productos
-     * includos en la venta.
+     * Actualiza el lblSubtotalValor con la suma de los precios bases de todos los productos
+     * incluidos en la venta.
      *
-     * @param listaProductoEnVenta
      */
-    public void actualizarLblSubtotal(final ArrayList<HashMap<String, String>> listaProductoEnVenta) {
-        XBigDecimal montoTotal = new XBigDecimal(0);
-        XBigDecimal totalProducto;
-
-        for (HashMap<String, String> producto : listaProductoEnVenta) {
-            totalProducto = new XBigDecimal(producto.get("pvp"));
-            montoTotal = new XBigDecimal(montoTotal.add(totalProducto).toString());
-        }
-        this.getLblSubtotalValor().setText(montoTotal.setScale(2, RoundingMode.HALF_EVEN).toString());
+    public void actualizarLblSubtotal() {
+        Double montoSubtotal = 0.0; // Konstanza: falta agregar la función nueva de la base de datos
+        XBigDecimal monto = new XBigDecimal(montoSubtotal.toString());
+        this.getLblSubtotalValor().setText(monto.setScale(2, RoundingMode.HALF_EVEN).toString());
     }
 
     /**
-     * Actualiza el lblImpuestoValor con el precio de todos los productos
-     * includos en la venta.
+     * Actualiza el lblImpuestoValor con el suma del impuesto de todos los productos
+     * incluidos en la venta.
      *
-     * @param listaProductoEnVenta
      */
-    public void actualizarLblImpuesto(final ArrayList<HashMap<String, String>> listaProductoEnVenta) {
-        XBigDecimal montoTotal = new XBigDecimal(0);
-        XBigDecimal totalProducto;
-
-        for (HashMap<String, String> producto : listaProductoEnVenta) {
-            totalProducto = new XBigDecimal(producto.get("impuesto"));
-            montoTotal = new XBigDecimal(montoTotal.add(totalProducto).toString());
-        }
-//        System.out.println("montototal=" + montoTotal);
-        this.getLblImpuestoValor().setText(montoTotal.setScale(2, RoundingMode.HALF_EVEN).toString());
+    public void actualizarLblImpuesto() {
+        Double montoImpuesto = menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta);
+        System.out.println("MONTO IMPUESTO: "+montoImpuesto);
+        XBigDecimal monto = new XBigDecimal(montoImpuesto.toString());
+        this.getLblImpuestoValor().setText(monto.setScale(2, RoundingMode.HALF_EVEN).toString());
     }
 
     /**
      * Actualiza el lblTotalValor con el precio de todos los productos includos
      * en la venta.
      *
-     * @param listaProductoEnVenta
      */
     public void actualizarLblTotal() {
         XBigDecimal montoSubtotal = new XBigDecimal(getLblSubtotalValor().getText());

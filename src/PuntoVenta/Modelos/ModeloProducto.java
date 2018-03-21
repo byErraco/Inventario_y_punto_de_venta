@@ -11,6 +11,7 @@ public class ModeloProducto {
     private String pvp;
     private String isva;
     private int limiteVentaPorPersona;
+    private int idPeriodoLimiteVenta;
 
     /**
      * Utiliza el HashMap para asignar los valores al objeto producto. Los campos
@@ -21,6 +22,7 @@ public class ModeloProducto {
         try {
             this.id = Integer.parseInt(map.get("id_producto"));
             this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
+            this.idPeriodoLimiteVenta = Integer.parseInt(map.get("id_periodo_venta_producto"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,6 +80,13 @@ public class ModeloProducto {
      */
     public int getLimiteVentaPorPersona() {
         return limiteVentaPorPersona;
+    }
+    
+    /**
+     * @return idPeriodoLimiteVenta
+     */
+    public int getIdPeriodoLimiteVenta() {
+        return idPeriodoLimiteVenta;
     }
 
 }
