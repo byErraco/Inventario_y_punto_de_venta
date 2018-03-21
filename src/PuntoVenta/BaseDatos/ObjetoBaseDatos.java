@@ -66,10 +66,11 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getIdEstadoCaja(1);
         //LISTO//obd.getMapPersona('V',"25491458");
         //obd.crearVenta(1, 1);
+        //..........obd.crearPago(100, 1, 1);
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
-        obd.getMapProducto("1234");
+        //LISTO//obd.getMapProducto("1234");
         //LISTO//obd.getMapEmpleado(1);
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -78,7 +79,7 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        //LISTO//obd.getArrayListProductosEnVenta(1);
+        obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
@@ -1136,7 +1137,7 @@ public class ObjetoBaseDatos {
                                         "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
                                         "    ELSE impuesto_producto\n" +
-                                        "END) AS impuesto_producto", "precio_venta_publico"};
+                                        "END) AS impuesto_producto", "precio_venta_publico", "(vp.cantidad_producto*pp.precio_venta_publico) AS total"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnaProductos, "", sqlQuery);
@@ -1160,7 +1161,7 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnaProductos) {
-                    if (("subtotal".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna))) {
+                    if (("subtotal".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
