@@ -768,34 +768,7 @@ public class Venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void txtCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER && productoPorAsociar != null) {
-            XBigDecimal cantidad = new XBigDecimal(getTxtCantidad().getText());
-            String canticomp = txtCantidad.getText();
-            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-                if (jtbVenta.getValueAt(i, 0).toString().equals(txtProductoId.getText())) {
-                    canticomp = "" + (Integer.parseInt(canticomp) + Integer.parseInt(jtbVenta.getValueAt(i, 3).toString()));
-                }
-            }
-            double d = cantidad.doubleValue();
-            if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
-                JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), canticomp)) {
-                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), d);
-//                try {
-//                    descontarProducto();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-
-                actualizarTabla();
-                productoTabla.put(productoPorAsociar.getCodigoBarra(), productoPorAsociar.getLimiteVentaPorPersona());
-                productoPorAsociar = null;
-                limpiarCamposProductoTxt();
-            } else {
-                JOptionPane.showMessageDialog(null, "La cantidad que se desea vender no esta disponible en el inventario", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        }
+        
     }//GEN-LAST:event_txtCantidadKeyPressed
 
     public void limpiarVenta() {
@@ -907,7 +880,34 @@ public class Venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
-        // TODO add your handling code here:
+        if (productoPorAsociar != null) {
+            XBigDecimal cantidad = new XBigDecimal(getTxtCantidad().getText());
+            String cantidadCompra = txtCantidad.getText();
+            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
+                if (jtbVenta.getValueAt(i, 0).toString().equals(txtProductoId.getText())) {
+                    cantidadCompra = "" + (Double.parseDouble(cantidadCompra) + Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()));
+                }
+            }
+            double d = cantidad.doubleValue();
+            if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
+                JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
+            } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), cantidadCompra)) {
+                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), d);
+//                try {
+//                    descontarProducto();
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+
+                actualizarTabla();
+                productoTabla.put(productoPorAsociar.getCodigoBarra(), productoPorAsociar.getLimiteVentaPorPersona());
+                productoPorAsociar = null;
+                limpiarCamposProductoTxt();
+            } else {
+                JOptionPane.showMessageDialog(null, "La cantidad que se desea vender no esta disponible en el inventario", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
     }//GEN-LAST:event_txtCantidadActionPerformed
 
     private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
