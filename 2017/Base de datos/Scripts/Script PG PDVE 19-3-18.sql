@@ -173,10 +173,11 @@ CREATE TABLE IF NOT EXISTS spve.desglose_caja (
 DROP TABLE IF EXISTS spve.venta ;
 
 CREATE SEQUENCE spve.venta_seq;
+CREATE SEQUENCE spve.codigo_factura_seq;
 
 CREATE TABLE IF NOT EXISTS spve.venta (
   id_venta INT NOT NULL DEFAULT NEXTVAL ('spve.venta_seq'),
-  codigo_factura VARCHAR(45) NOT NULL,
+  codigo_factura INT NOT NULL DEFAULT NEXTVAL('spve.codigo_factura_seq'),
   fecha_venta DATE NOT NULL,
   estado_venta INT NOT NULL,
   id_persona INT NOT NULL,
