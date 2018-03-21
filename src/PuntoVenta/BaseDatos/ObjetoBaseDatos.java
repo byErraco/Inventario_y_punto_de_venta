@@ -79,13 +79,14 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        obd.getArrayListProductosEnVenta(1);
+        //obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
         //LISTO//System.out.println(obd.getTotalExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalImpuestoVenta(1));
+        System.out.println(obd.getTotalBaseImponibleVenta(1));
     }
     
     /**
@@ -2538,6 +2539,38 @@ public class ObjetoBaseDatos {
     }
     
     /**
+     * Método para obtener la base imponible total
+     * de una venta
+     * 
+     * @param id_venta
+     * @return
+     */
+    public double getTotalBaseImponibleVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        double resultado = 0;
+        ResultSet rs;
+        
+        sqlQuery.append("SELECT SUM(base_imponible*cantidad_producto) AS total_base_imponible FROM spve.precio_producto AS pp\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
+                        "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
+                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("total_base_imponible");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
+    
+    /**
      * Método para obtener el impuesto total de una venta
      * 
      * @param id_venta
@@ -2546,7 +2579,7 @@ public class ObjetoBaseDatos {
     public double getTotalImpuestoVenta(int id_venta){
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
-        double resultado = -1;
+        double resultado = 0;
         
         sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
                         "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
