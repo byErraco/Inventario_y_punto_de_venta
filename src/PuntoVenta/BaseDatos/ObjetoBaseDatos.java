@@ -83,6 +83,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
         //LISTO//System.out.println(obd.getTotalExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
+        System.out.println(obd.getTotalImpuestoVenta(1));
     }
     
     /**
@@ -2504,7 +2505,7 @@ public class ObjetoBaseDatos {
     }
     
     /**
-     * Método para obtener el total de productos no exentos de
+     * Método para obtener el total no exento de
      * una venta
      * 
      * @param id_venta
@@ -2525,6 +2526,37 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
             if (rs.next()) {
                 resultado = rs.getDouble("total_no_exento");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
+    
+    /**
+     * Método para obtener el impuesto total de una venta
+     * 
+     * @param id_venta
+     * @return
+     */
+    public double getTotalImpuestoVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        double resultado = -1;
+        
+        sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
+                        "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
+                        "WHERE producto_exento = 0 AND id_venta = 1;");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("total_impuesto");
                 
             }
         } catch (Exception e) {
