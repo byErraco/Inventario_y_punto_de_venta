@@ -780,7 +780,7 @@ public class Venta extends javax.swing.JInternalFrame {
             if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
                 JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
             } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), canticomp)) {
-                menuPrincipal.getOBD().agregarProductoEnVenta(this.getIdVenta(), productoPorAsociar.getCodigoBarra(), d);
+                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), d);
 //                try {
 //                    descontarProducto();
 //                } catch (SQLException ex) {
@@ -1278,7 +1278,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * la lista, en vez de hacer un query directo mejore el rendimiento.
      */
     public void actualizarTabla() {
-        ArrayList<HashMap<String, String>> listaProductoEnVenta = menuPrincipal.getOBD().getArrayListProductosEnVenta(this.getIdVenta());
+        ArrayList<HashMap<String, String>> listaProductoEnVenta = menuPrincipal.getOBD().getArrayListProductosEnVenta(idVenta);
         VentaTableModel model = new VentaTableModel(listaProductoEnVenta);
         jtbVenta.setModel(model);
         jtbVenta.setFont(new Font("Arial", Font.BOLD, 16));
@@ -1351,7 +1351,7 @@ public class Venta extends javax.swing.JInternalFrame {
             if (seleccion == 0) {
 
                 String serial = jtbVenta.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarProductoEnVenta(this.getIdVenta(), serial);
+                menuPrincipal.getOBD().eliminarProductoEnVenta(idVenta, serial);
                 actualizarTabla();
             } else {
                 jtbVenta.requestFocus();
@@ -1366,7 +1366,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private void cancelarVenta() {
         int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea cancelar la venta actual?", "Cancelar venta");
         if (seleccion == 0) {
-            menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Cancelada);
+            menuPrincipal.getOBD().setEstadoVenta(idVenta, ObjetoBaseDatos.EstadoVenta.Cancelada);
             this.setIdVenta(-1);
             limpiarCamposTxt();
             actualizarTabla();
@@ -1379,7 +1379,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private void pausarVenta() {
         int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea pausar la venta actual?", "Pausar venta");
         if (seleccion == 0) {
-            menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Pausada);
+            menuPrincipal.getOBD().setEstadoVenta(idVenta, ObjetoBaseDatos.EstadoVenta.Pausada);
             this.setIdVenta(-1);
             limpiarCamposTxt();
             actualizarTabla();
