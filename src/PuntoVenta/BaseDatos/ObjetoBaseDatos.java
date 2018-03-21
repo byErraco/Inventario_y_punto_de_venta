@@ -69,6 +69,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
+        //LISTO//obd.getMapEmpleado(1);
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
         //LISTO//obd.agregarProductoEnVenta(1, "4321", 6);
@@ -79,6 +80,9 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
+        //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
+        //LISTO//System.out.println(obd.getTotalExentoVenta(1));
+        //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
     }
     
     /**
@@ -1553,12 +1557,8 @@ public class ObjetoBaseDatos {
         String[] columnaCargo = new String[]{"id_cargo", "nombre_cargo"};
 
         sqlQuery.append("SELECT ");
-        for (String columna : columnaEmpleado) {
-            sqlQuery.append(columna).append(",");
-        }
-        for (String columna : columnaCargo) {
-            sqlQuery.append(columna).append(",");
-        }
+        addColumnasAlQuery(columnaEmpleado, "", sqlQuery);
+        addColumnasAlQuery(columnaCargo, "c.", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
@@ -1571,7 +1571,8 @@ public class ObjetoBaseDatos {
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("cargo"))
-                .append(" ON id_cargo_empleado=id_cargo")
+                .append(" AS c")
+                .append(" ON e.id_cargo=c.id_cargo")
                 .append(" WHERE id_empleado=").append(id)
                 .append(";");
         
@@ -2052,6 +2053,8 @@ public class ObjetoBaseDatos {
 //        System.out.println("Total corte bddd: " + resultado);
         return resultado;
     }
+    
+    
 
     /**
      * Inserta un cliente en la tabla stpv.cliente.
@@ -2469,6 +2472,68 @@ public class ObjetoBaseDatos {
         return resultado;
     }
     
+    /**
+     * Método para obtener el total exento de una venta
+     * 
+     * @param id_venta
+     * @return
+     */
+    public double getTotalExentoVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        double resultado = -1;
+        ResultSet rs;
+        
+        sqlQuery.append("SELECT SUM(precio_venta_publico*cantidad_producto) AS total_exento FROM spve.precio_producto AS pp\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
+                        "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
+                        "WHERE producto_exento = 1 AND id_venta = "+id_venta+";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("total_exento");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
+    
+    /**
+     * Método para obtener el total de productos no exentos de
+     * una venta
+     * 
+     * @param id_venta
+     * @return
+     */
+    public double getTotalNoExentoVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        double resultado = -1;
+        ResultSet rs;
+        
+        sqlQuery.append("SELECT SUM(precio_venta_publico*cantidad_producto) AS total_no_exento FROM spve.precio_producto AS pp\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
+                        "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
+                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("total_no_exento");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
     /*
      * 
      * Método para asociar un pago a una venta.
@@ -2647,14 +2712,56 @@ public class ObjetoBaseDatos {
     }
         
     /**
-     * Agrega un producto a una venta pausada o en proceso
+     * Método para obtener la última fecha en la que una persona compró un 
+     * producto dado
      * 
-     * @param idVenta id de la venta que este activa
-     * @param codigoBarra código del producto que se desea agregar
-     * @return
+     * @param tipo_persona
+     * @param numero_identificacion_persona
+     * @param codigo_venta_producto
+     * @return 
      */
-    
-    
+    public Date getUltimaFechaVentaProducto(char tipo_persona, String numero_identificacion_persona, String codigo_venta_producto){
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        Date resultado = null;
+        
+        sqlQuery.append("SELECT MAX(fecha_venta)")
+                .append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" ON venta.id_venta = venta_producto.id_venta")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("persona"))
+                .append(" ON venta.id_persona = persona.id_persona")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" ON venta_producto.id_producto = producto.id_producto")
+                .append(" WHERE ").append("tipo_persona='"+tipo_persona+"'")
+                .append(" AND ").append("numero_identificacion_persona='"+numero_identificacion_persona+"'")
+                .append(" AND ").append("activo_persona = 1")
+                .append(" AND ").append("codigo_venta_producto = '"+codigo_venta_producto+"'")
+                .append(" AND ").append("activo_producto = 1");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            if(rs.next()){
+                resultado = rs.getDate("max");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
     
     
     /**
