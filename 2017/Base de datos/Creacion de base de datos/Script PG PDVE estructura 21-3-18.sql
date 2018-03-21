@@ -286,7 +286,7 @@ CREATE SEQUENCE spve.venta_producto_seq;
 
 CREATE TABLE IF NOT EXISTS spve.venta_producto (
   id_venta_producto INT NOT NULL DEFAULT NEXTVAL ('spve.venta_producto_seq'),
-  cantidad_producto INT NOT NULL,
+  cantidad_producto REAL NOT NULL,
   id_venta INT NOT NULL,
   id_producto INT NOT NULL,
   activo_venta_producto SMALLINT NOT NULL DEFAULT 1,
