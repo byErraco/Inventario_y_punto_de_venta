@@ -1647,7 +1647,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
-        String[] columnaProducto = {"descripcion_producto", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
+        String[] columnaProducto = {"p.id_producto AS id_producto","descripcion_producto", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
         sqlQuery.append("SELECT ");
         addColumnasAlQuery(columnaProducto, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
