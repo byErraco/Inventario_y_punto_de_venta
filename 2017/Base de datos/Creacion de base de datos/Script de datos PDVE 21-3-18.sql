@@ -61,7 +61,8 @@ SELECT pg_catalog.setval('caja_seq', 1, false);
 INSERT INTO cargo (id_cargo, nombre_cargo, activo_cargo) VALUES (1, 'Administrador', 1);
 INSERT INTO cargo (id_cargo, nombre_cargo, activo_cargo) VALUES (2, 'Gerente', 1);
 INSERT INTO cargo (id_cargo, nombre_cargo, activo_cargo) VALUES (3, 'Cajero', 1);
-
+INSERT INTO persona (id_persona, nombre_persona, apellido_persona, numero_identificacion_persona, direccion_persona, tipo_persona, email_persona, telefono_persona, activo_persona) VALUES (1, 'Administrador', 'Prueba', '0', 'Direccion', 'V', 'Correo', '0', 1);
+INSERT INTO empleado (id_empleado, clave, id_cargo, id_persona, activo_empleado) VALUES (1, 'admin', 1, 1, 1);
 
 --
 -- TOC entry 2385 (class 0 OID 0)
@@ -155,7 +156,7 @@ SELECT pg_catalog.setval('desglose_caja_seq', 1, false);
 -- Data for Name: empleado; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
 
-INSERT INTO empleado (id_empleado, clave, id_cargo, id_persona, activo_empleado) VALUES (1, 'admin', 1, 1, 1);
+
 
 
 --
@@ -189,7 +190,14 @@ SELECT pg_catalog.setval('estado_caja_seq', 1, false);
 -- Dependencies: 200
 -- Data for Name: pago; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
-
+INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (1, 1234, '2018-03-19', 1, 1, 1);
+INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (2, 4321, '2018-03-19', 1, 1, 1);
+INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (3, 7890, '2018-03-23', 1, 1, 1);
+INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (4, 0, '2018-03-12', 1, 1, 1);
+INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (1, 'Efectivo', 1);
+INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (2, 'Débito', 1);
+INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (3, 'Crédito', 1);
+INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (4, 'CestaTicket', 1);
 INSERT INTO pago (id_pago, monto_pago, fecha_pago, id_tipo_pago, id_venta, activo_pago) VALUES (2, 100, '2018-03-19 14:22:26', 1, 1, 1);
 INSERT INTO pago (id_pago, monto_pago, fecha_pago, id_tipo_pago, id_venta, activo_pago) VALUES (3, 101, '2018-03-19 14:30:11', 1, 1, 1);
 INSERT INTO pago (id_pago, monto_pago, fecha_pago, id_tipo_pago, id_venta, activo_pago) VALUES (4, 100.503998, '2018-03-19 14:30:58', 1, 1, 1);
@@ -230,7 +238,6 @@ SELECT pg_catalog.setval('periodo_venta_producto_seq', 1, false);
 -- Data for Name: persona; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
 
-INSERT INTO persona (id_persona, nombre_persona, apellido_persona, numero_identificacion_persona, direccion_persona, tipo_persona, email_persona, telefono_persona, activo_persona) VALUES (1, 'Administrador', 'Prueba', '0', 'Direccion', 'V', 'Correo', '0', 1);
 
 
 --
@@ -248,10 +255,7 @@ SELECT pg_catalog.setval('persona_seq', 1, false);
 -- Data for Name: precio_producto; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
 
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto) VALUES (1, '2018-03-19', 30, 12, 112, 100, 0, 1, 12);
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto) VALUES (2, '2018-03-19', 30, 6, 56, 50, 0, 1, 12);
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto) VALUES (4, '2018-03-20', 30, NULL, 200, 0, 1, 1, 0);
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto) VALUES (3, '2018-03-19', 30, NULL, 75, 0, 1, 1, 0);
+
 
 
 --
@@ -285,11 +289,15 @@ SELECT pg_catalog.setval('produccion_seq', 1, false);
 -- Dependencies: 206
 -- Data for Name: producto; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
+INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_periodo_venta_producto, activo_producto) VALUES (1, 'Jugo de manzana', '1234', 1, 'Los Andes', 100, 1, 0, 1, 1);
+INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_periodo_venta_producto, activo_producto) VALUES (2, 'Jugo de naranja', '4321', 2, 'Frica', 50, 1, 0, 2, 1);
+INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_periodo_venta_producto, activo_producto) VALUES (3, 'Jugo de pera', '6789', NULL, 'Del valle', 200, 1, 0, NULL, 1);
+INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_periodo_venta_producto, activo_producto) VALUES (4, 'Jugo de mamon', '7893', NULL, 'Sur del lago', 100, 1, 0, NULL, 1);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (1, '2018-03-19', 30, 12, 112, 100, 0, 1, 12, 1);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (2, '2018-03-19', 30, 6, 56, 50, 0, 1, 12, 2);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (4, '2018-03-20', 30, NULL, 200, 0, 1, 1, 0, 3);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (3, '2018-03-19', 30, NULL, 75, 0, 1, 1, 0, 4);
 
-INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_precio_producto, id_periodo_venta_producto, activo_producto) VALUES (1, 'Jugo de manzana', '1234', 1, 'Los Andes', 100, 1, 0, 1, 1, 1);
-INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_precio_producto, id_periodo_venta_producto, activo_producto) VALUES (2, 'Jugo de naranja', '4321', 2, 'Frica', 50, 1, 0, 2, 2, 1);
-INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_precio_producto, id_periodo_venta_producto, activo_producto) VALUES (3, 'Jugo de pera', '6789', NULL, 'Del valle', 200, 1, 0, 3, NULL, 1);
-INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_precio_producto, id_periodo_venta_producto, activo_producto) VALUES (4, 'Jugo de mamon', '7893', NULL, 'Sur del lago', 100, 1, 0, 4, NULL, 1);
 
 
 --
@@ -324,10 +332,7 @@ SELECT pg_catalog.setval('producto_seq', 1, false);
 -- Data for Name: tipo_pago; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
 
-INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (1, 'Efectivo', 1);
-INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (2, 'Débito', 1);
-INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (3, 'Crédito', 1);
-INSERT INTO tipo_pago (id_tipo_pago, descripcion_pago, activo_tipo_pago) VALUES (4, 'CestaTicket', 1);
+
 
 
 --
@@ -345,10 +350,7 @@ SELECT pg_catalog.setval('tipo_pago_seq', 1, false);
 -- Data for Name: venta; Type: TABLE DATA; Schema: spve; Owner: postgres
 --
 
-INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (1, 1234, '2018-03-19', 1, 1, 1);
-INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (2, 4321, '2018-03-19', 1, 1, 1);
-INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (3, 7890, '2018-03-23', 1, 1, 1);
-INSERT INTO venta (id_venta, codigo_factura, fecha_venta, estado_venta, id_persona, activo_venta) VALUES (4, 0, '2018-03-12', 1, 1, 1);
+
 
 
 --
