@@ -77,13 +77,13 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        //LISTO//obd.getArrayListProductosEnVenta(1);
+        obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
         //LISTO//System.out.println(obd.getTotalExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
-        System.out.println(obd.getTotalImpuestoVenta(1));
+        //LISTO//System.out.println(obd.getTotalImpuestoVenta(1));
     }
     
     /**
@@ -1132,7 +1132,7 @@ public class ObjetoBaseDatos {
         String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
                                         "    ELSE base_imponible\n" +
-                                        "END) AS subtotal", "(CASE\n" +
+                                        "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
                                         "    ELSE impuesto_producto\n" +
                                         "END) AS impuesto_producto", "precio_venta_publico"};
@@ -1147,7 +1147,7 @@ public class ObjetoBaseDatos {
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("precio_producto")).append(" AS pp")
-                .append(" ON p.id_precio_producto=pp.id_precio_producto")
+                .append(" ON p.id_producto=pp.id_producto")
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta_producto")).append(" AS vp")
@@ -1165,6 +1165,7 @@ public class ObjetoBaseDatos {
                         map.put(columna, rs.getString(columna));
                     }
                 }
+                System.out.println(map);
                 resultado.add(map);
             }
         } catch (Exception e) {
@@ -1198,7 +1199,7 @@ public class ObjetoBaseDatos {
                 .append(" INNER JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("precio_producto")).append(" AS pp")
-                .append(" ON ").append("p.id_precio_producto = pp.id_precio_producto")
+                .append(" ON ").append("p.id_producto = pp.id_producto")
                 .append(" WHERE activo_producto = 1 AND activo_precio_producto = 1;");
 
         try {
