@@ -69,7 +69,7 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getMapCargos();
         //LISTO//obd.getMapCaja(1);
         //LISTO//obd.getMapCajas();
-        obd.getMapProducto("4321");
+        obd.getMapProducto("1234");
         //LISTO//obd.getMapEmpleado(1);
         //LISTO//obd.crearCaja("caja 1");
         //LISTO//obd.eliminarProductoEnVenta(1, "1234");
@@ -1647,8 +1647,7 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
-        String[] columnaProducto = {"id_producto", "descripcion_producto", "codigo_venta_producto", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
-
+        String[] columnaProducto = {"descripcion_producto", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
         sqlQuery.append("SELECT ");
         addColumnasAlQuery(columnaProducto, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
@@ -1656,17 +1655,14 @@ public class ObjetoBaseDatos {
         sqlQuery.append(" FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto")).append(" AS p ")
-                .append(" WHERE ");
-        try {
-//            int id = Integer.parseInt(codigoBarra);
-            //sqlQuery.append("p.id=").append(id);
-            sqlQuery.append("codigo_venta_producto='").append(codigo_venta_producto).append("'")
-                    .append(" AND activo_producto = 1;");
-//        } catch (NumberFormatException e) {
-//            sqlQuery.append("p.codigo_barra='").append(codigoBarra).append("'");
-        } finally {
-            //sqlQuery.append(" LIMIT 1;");
-        }
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("precio_producto")).append(" AS pp ")
+                .append(" ON p.id_producto = pp.id_producto")
+                .append(" WHERE ")
+                .append("codigo_venta_producto='").append(codigo_venta_producto).append("'")
+                .append(" AND activo_producto = 1;");
+       
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
