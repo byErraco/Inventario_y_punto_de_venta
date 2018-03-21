@@ -2483,7 +2483,7 @@ public class ObjetoBaseDatos {
      */
     public double getTotalExentoVenta(int id_venta){
         StringBuilder sqlQuery = new StringBuilder();
-        double resultado = -1;
+        double resultado = 0;
         ResultSet rs;
         
         sqlQuery.append("SELECT SUM(precio_venta_publico*cantidad_producto) AS total_exento FROM spve.precio_producto AS pp\n" +
@@ -2515,7 +2515,7 @@ public class ObjetoBaseDatos {
      */
     public double getTotalNoExentoVenta(int id_venta){
         StringBuilder sqlQuery = new StringBuilder();
-        double resultado = -1;
+        double resultado = 0;
         ResultSet rs;
         
         sqlQuery.append("SELECT SUM(precio_venta_publico*cantidad_producto) AS total_no_exento FROM spve.precio_producto AS pp\n" +
