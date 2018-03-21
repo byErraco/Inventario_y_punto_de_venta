@@ -632,7 +632,7 @@ ALTER TABLE venta_seq OWNER TO postgres;
 
 CREATE TABLE venta (
     id_venta integer DEFAULT nextval('venta_seq'::regclass) NOT NULL,
-    codigo_factura integer NOT NULL,
+    codigo_factura integer DEFAULT nextval('codigo_factura_seq'::regclass) NOT NULL,
     fecha_venta date NOT NULL,
     estado_venta integer NOT NULL,
     id_persona integer NOT NULL,
