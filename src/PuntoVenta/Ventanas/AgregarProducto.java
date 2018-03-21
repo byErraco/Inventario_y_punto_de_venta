@@ -40,9 +40,9 @@ private ObjetoBaseDatos obd;
    public AgregarProducto(Productos producto) {
          
         this.setTitle("Saphiro - Agregar producto");
-       // this.menuPrincipal = menuPrincipal;
+        this.menuPrincipal = menuPrincipal;
         this.producto = producto;
-        crearHotKeys();
+       // crearHotKeys();
         actualizarTabla();
         initComponents();
     }
@@ -50,11 +50,11 @@ private ObjetoBaseDatos obd;
      
 
   
-   public void crearHotKeys(){
+ //  public void crearHotKeys(){
        
        
    
-   }
+   //}
    public void actualizarTabla(){
         ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
         ProductoTableModel model = new ProductoTableModel(Producto);
@@ -172,4 +172,20 @@ private ObjetoBaseDatos obd;
     private javax.swing.JPanel panelPrincipal;
     // End of variables declaration//GEN-END:variables
 
+   /*  public void agregarProducto() {
+        if (producto.getId() > 0) {
+            int row = jtbAgregar.getSelectedRow();
+            if (row >= 0) {
+                String codigoBarra = jtbAgregar.getValueAt(row, 0).toString();
+                cerrarVentana();
+                producto.getCodigoBarra();
+            } else {
+                Utilidades.Sonidos.beep();
+            }
+        } else {
+            Utilidades.Sonidos.beep();
+        } 
+*/
+    
+    
 }

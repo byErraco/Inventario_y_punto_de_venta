@@ -35,8 +35,8 @@ private Productos prod;
 private ObjetoBaseDatos obd;
    
 public ModificarProducto(Productos producto) {
-      //  this.menuPrincipal = menuPrincipal;
-        this.prod = producto;
+          this.menuPrincipal = menuPrincipal;
+          this.prod = producto;
         this.setTitle("Saphiro - Modificar producto");
         initComponents();
         crearHotKeys();

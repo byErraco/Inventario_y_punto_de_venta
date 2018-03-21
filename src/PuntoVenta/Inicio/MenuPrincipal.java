@@ -16,10 +16,14 @@ import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
 import PuntoVenta.Ventanas.Cierre_Caja;
-import PuntoVenta.Ventanas.Productos;
-import PuntoVenta.Ventanas.Movimientos;
-import PuntoVenta.Ventanas.AgregarProducto;
-import PuntoVenta.Ventanas.ModificarProducto;
+import PuntoVenta.Ventanas.Productos; //añadido
+import PuntoVenta.Ventanas.Movimientos;//añadido
+import PuntoVenta.Ventanas.Detalles; //añadido para productos
+import PuntoVenta.Ventanas.Compra; //añadido para movimientos
+import PuntoVenta.Ventanas.Fabricacion;//añadido para movimientos
+import PuntoVenta.Ventanas.Ajuste;//añadido para movimientos
+import PuntoVenta.Ventanas.AgregarProducto; //añadido para productos
+import PuntoVenta.Ventanas.ModificarProducto; //añadido para productos
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -70,6 +74,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Factura factura;
     private AgregarProducto agregar;
     private ModificarProducto modificar;
+    private Detalles detalles;
+    private Fabricacion fabricacion;
+    private Compra compra;
+    private Ajuste ajuste;
     private Acerca acerca = new Acerca();
     private Ayuda ayuda = new Ayuda();
     private int idEstadoCaja;
@@ -544,8 +552,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
     public static javax.swing.JButton btnFacturas;
-    private javax.swing.JButton btnMovimientos;
-    private javax.swing.JButton btnProductos;
+    public static javax.swing.JButton btnMovimientos;
+    public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
     public javax.swing.JButton btnbloqueo;
@@ -595,8 +603,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
             PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
             PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
-         //   PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
-         //   PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
+            PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
+            PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
 
             bloqueo = new Bloqueo(this);
             Dimension desktopSize = panel.getSize();
@@ -657,7 +665,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
     
-    //revisar
+   
     public void abrirVentanaProd(){
         producto =  new Productos(this);
         Dimension desktopSize = panel.getSize();

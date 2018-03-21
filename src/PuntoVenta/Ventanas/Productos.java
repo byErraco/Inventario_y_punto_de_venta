@@ -62,16 +62,16 @@ public class Productos extends javax.swing.JInternalFrame {
 
     public void crearHotKeys() {
         
-     /*    Action actAgregar = new AbstractAction("actionAgregar") {
+      /*   Action actAgregar = new AbstractAction("actionAgregar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-//               agregarProducto();
+             // Agregar();
             }
         };
         Action actModificar = new AbstractAction("actionModificar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-      //         modificarProducto();
+              // Modificar();
             }
         }; 
        
@@ -84,9 +84,9 @@ public class Productos extends javax.swing.JInternalFrame {
             }
         };
         
-        actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1,0));
-        actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2,0));
-        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F3,0));
+        actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+        actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         
         btnAgregar.getActionMap().put("actionAgregar", actAgregar);
         btnAgregar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionAgregar");
@@ -101,20 +101,7 @@ public class Productos extends javax.swing.JInternalFrame {
     
     
 
- /* public void agregarProducto() {
-        if (producto.getId() > 0) {
-            int row = jtbProducto.getSelectedRow();
-            if (row >= 0) {
-                String codigoBarra = jtbProducto.getValueAt(row, 0).toString();
-                cerrarVentana();
-                producto.getCodigoBarra();
-            } else {
-                Utilidades.Sonidos.beep();
-            }
-        } else {
-            Utilidades.Sonidos.beep();
-        } 
-*/
+ 
     
     
     
@@ -301,22 +288,21 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameClosing
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-     Agregar();
-      
+      //  Agregar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        Modificar();
+     //   Modificar();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void Agregar(){
-              
+               
                 agregar = new AgregarProducto(produc);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
                 agregar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                         (desktopSize.height - jInternalFrameSize.height) / 2);
-                menuPrincipal.panel.add(agregar);
+                 menuPrincipal.panel.add(agregar);
                 agregar.show();
     
     }
@@ -330,8 +316,8 @@ public class Productos extends javax.swing.JInternalFrame {
                 menuPrincipal.panel.add(modificar);
                 modificar.show();
     
-     
-    }
+   
+    }  
     
      private void cerrarVentana() {
         this.dispose();

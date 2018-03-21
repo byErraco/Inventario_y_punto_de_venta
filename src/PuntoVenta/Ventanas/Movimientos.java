@@ -246,18 +246,15 @@ private Ajuste ajuste;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
-      compra = new Compra();
-      compra.setVisible(true);
+     
     }//GEN-LAST:event_btnCompraActionPerformed
 
     private void btnFabricacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFabricacionActionPerformed
-      fabricacion = new Fabricacion();
-      fabricacion.setVisible(true);
+    
     }//GEN-LAST:event_btnFabricacionActionPerformed
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
-            ajuste = new Ajuste();    
-            ajuste.setVisible(true);
+          
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
@@ -288,17 +285,67 @@ private Ajuste ajuste;
     /**
      * @param args the command line arguments
      */
+    public void creaHotKeys(){
     
+        Action actCompra = new AbstractAction("actionCompra"){
+         @Override
+            public void actionPerformed(ActionEvent e){
+        
+           }
+
+       };
+        
+        Action actFabricacion = new AbstractAction("actionFabricacion"){
+         @Override
+            public void actionPerformed(ActionEvent e){
+        
+           }
+
+       };
+        
+        Action actAjuste = new AbstractAction("actionAjuste"){
+         @Override
+            public void actionPerformed(ActionEvent e){
+        
+           }
+
+       };
+        
+        Action actReporte = new AbstractAction("actionReporte"){
+         @Override
+            public void actionPerformed(ActionEvent e){
+        
+           }
+
+       };
+    
+       actCompra.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+       actFabricacion.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+       actAjuste.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+       actReporte.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+       
+       
+       btnCompra.getActionMap().put("actionCompra", actCompra);
+       btnCompra.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actCompra.getValue(Action.ACCELERATOR_KEY), "actionCompra");
+       
+       btnFabricacion.getActionMap().put("acionFabricacion", actFabricacion);
+       btnFabricacion.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actFabricacion.getValue(Action.ACCELERATOR_KEY), "actionFabricacion");
+       
+       btnAjuste.getActionMap().put("actionAjuste", actAjuste);
+       btnAjuste.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAjuste.getValue(Action.ACCELERATOR_KEY), "actionAjuste");
+       
+       btnReporte.getActionMap().put("actionReporte", actReporte);
+       btnReporte.getInputMap().put((KeyStroke) actReporte.getValue(Action.ACCELERATOR_KEY), "actionReporte");
+       
+       
+    }
     public void actualizarTabla(){
         ArrayList<HashMap<String, String>> Movimiento = menuPrincipal.getOBD().getArrayListProductos();
        MovimientoTableModel model = new MovimientoTableModel(Movimiento);
         jtbMovimiento.setModel(model);
     }
     
-    //public void TipoProd(){
-   // String [] columnas = {"producto_pre_fabricado"};
-    
- //   }
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAjuste;

@@ -1,6 +1,7 @@
 package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
+import static PuntoVenta.Ventanas.bloqueo2.pass;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -16,18 +17,14 @@ public class Bloqueo extends javax.swing.JFrame {
     String contrasena = "";
     int vali=0;
     public Bloqueo(MenuPrincipal menuPrincipal) {
-         
-
         initComponents();
-   
         this.menuPrincipal = menuPrincipal;
-
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/PuntoVenta/Iconos/acerca.png")));
         
-        txtCedula.setText("");
+       // txtCedula.setText("");
         this.setTitle("Saphiro - Bloqueo de caja");
         ingresarSistema();
-        this.setVisible(true);
+       this.setVisible(true);
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -104,8 +101,8 @@ public class Bloqueo extends javax.swing.JFrame {
                     .addComponent(lblContrasena))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpwContrasena)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                    .addComponent(txtCedula))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnCamposLoginLayout.setVerticalGroup(
@@ -292,8 +289,44 @@ public class Bloqueo extends javax.swing.JFrame {
     }
     public void ingresarSistema() {
         entrarProgramador2();
+       // entrarProgramador();
         
-        String cedula = txtCedula.getText();
+          String cedula = txtCedula.getText();
+        char[] arrayPassword = jpwContrasena.getPassword();
+
+        if (cedula.isEmpty()) {
+            Utilidades.Sonidos.beep();
+            txtCedula.requestFocus();
+            return;
+        }
+        if (arrayPassword.length <= 0) {
+            Utilidades.Sonidos.beep();
+           jpwContrasena.requestFocus();
+            return;
+        }
+        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+             if (idEmpleado != -1) {
+            HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
+            menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
+            menuPrincipal.setVisible(true);
+            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
+           this.dispose();
+      PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
+        } else {
+            Utilidades.Sonidos.beep();
+            txtCedula.setText("");
+            jpwContrasena.setText("");
+            txtCedula.requestFocus();
+        }
+        
+        
+       /* String cedula = txtCedula.getText();
         char[] arrayPassword = jpwContrasena.getPassword();
         System.out.println(cedula+"  "+arrayPassword);
         if (cedula.isEmpty()) {
@@ -319,12 +352,12 @@ public class Bloqueo extends javax.swing.JFrame {
             txtCedula.setText("");
             jpwContrasena.setText("");
             txtCedula.requestFocus();
+        */
+       return;
         }
     }
 
-    public void setMaximum(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
     
     
-}
+
