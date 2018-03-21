@@ -1446,8 +1446,8 @@ public class Venta extends javax.swing.JInternalFrame {
         if (!map.isEmpty()) {
             productoPorAsociar = new ModeloProducto(map);
             lblProductoPrecio.setVisible(true);
-            lblProductoPrecioValor.setText(map.get("pvp"));
-            txtProductoNombre.setText(map.get("descripcion"));
+            lblProductoPrecioValor.setText(map.get("precio_venta_publico"));
+            txtProductoNombre.setText(map.get("descripcion_producto"));
             txtCantidad.setText("1");
             txtCantidad.setSelectionStart(0);
             txtCantidad.setSelectionEnd(txtCantidad.getText().length());

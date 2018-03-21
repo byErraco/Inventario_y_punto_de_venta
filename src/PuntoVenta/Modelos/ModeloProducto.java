@@ -20,7 +20,7 @@ public class ModeloProducto {
     public ModeloProducto(HashMap<String, String> map) {
         try {
             this.id = Integer.parseInt(map.get("id_producto"));
-            this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona").replace(".00", ""));
+            this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
         } catch (Exception e) {
             e.printStackTrace();
         }
