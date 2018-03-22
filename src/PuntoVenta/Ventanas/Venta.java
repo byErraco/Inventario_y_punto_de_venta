@@ -906,15 +906,18 @@ public class Venta extends javax.swing.JInternalFrame {
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
         if (productoPorAsociar != null) {
             XBigDecimal cantidad = new XBigDecimal(getTxtCantidad().getText());
-            String cantidadCompra = txtCantidad.getText();
+            String cantidadVenta = txtCantidad.getText();
+            
             for (int i = 0; i < jtbVenta.getRowCount(); i++) {
                 if (jtbVenta.getValueAt(i, 0).toString().equals(txtProductoId.getText())) {
-                    cantidadCompra = "" + (Double.parseDouble(cantidadCompra) + Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()));
+                    cantidadVenta = "" + (Double.parseDouble(cantidadVenta) + Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()));
                 }
             }
-            if (!sePuedeVender(productoPorAsociar.getCodigoBarra())) {
+            
+            if (!sePuedeVender(productoPorAsociar.getCodigoBarra(), Double.parseDouble(cantidadVenta))) {
                 JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), cantidadCompra)) {
+            } 
+            else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), cantidadVenta)) {
                 menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), cantidad.doubleValue());
 //                try {
 //                    descontarProducto();
@@ -1227,16 +1230,24 @@ public class Venta extends javax.swing.JInternalFrame {
         
         if (map != null && !map.isEmpty()) {
             ModeloCliente cliente = new ModeloCliente(map);
-            this.setIdVenta(menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
-            txtNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
-            txtNumeroFactura.setText(menuPrincipal.getOBD().numeroFactura(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
-            setClienteAsociadoFactura(true);
-            setBotonesVentaEnabled(true);
-
-            txtProductoId.setEditable(true);
-            getTxtCantidad().setEditable(true);
-            txtProductoId.requestFocus();
-            actualizarTabla();
+            int idVentaNuevo = menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja());
+            this.setIdVenta(idVentaNuevo);
+            
+            if(idVentaNuevo > -1){
+                txtNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
+                txtNumeroFactura.setText(menuPrincipal.getOBD().getCodigoFactura(idVentaNuevo));
+                setClienteAsociadoFactura(true);
+                setBotonesVentaEnabled(true);
+            
+                txtProductoId.setEditable(true);
+                getTxtCantidad().setEditable(true);
+                txtProductoId.requestFocus();
+                actualizarTabla();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar crear la factura", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+                    
         } else {
             this.setClienteAsociadoFactura(false);
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea registrar a este cliente?", "Este cliente no existe");
@@ -1258,7 +1269,7 @@ public class Venta extends javax.swing.JInternalFrame {
         totalizarVenta.requestFocus();
 
     }
-
+    
     /**
      * Todos los campos del formulario se ponen en blanco excepto el documento y
      * se deshabilitan los de txtIdProducto y txtCantidad.
@@ -1414,15 +1425,17 @@ public class Venta extends javax.swing.JInternalFrame {
     private void modificarCantidadProductoSeleccionado() {
         if (jtbVenta.getRowCount() > 0) {
             int rowNumber = jtbVenta.getSelectedRow();
+            
             if (rowNumber < 0) {
                 jtbVenta.setRowSelectionInterval(0, 0);
                 rowNumber = jtbVenta.getSelectedRow();
             }
+            
             String cantidadNuevaString = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad de " + jtbVenta.getModel().getValueAt(rowNumber, 1), jtbVenta.getModel().getValueAt(rowNumber, 5));
+            
             if (!cantidadNuevaString.isEmpty()) {
-
                 XBigDecimal cantidadNueva = new XBigDecimal(cantidadNuevaString);
-                XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 3).toString());
+                XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 5).toString());
                 if (cantidadNueva.compareTo(new XBigDecimal(0)) > 0) {
                     String codigoBarra = jtbVenta.getModel().getValueAt(rowNumber, 0).toString();
                     if (productoTabla.get(codigoBarra) == null) {
@@ -1646,6 +1659,11 @@ public class Venta extends javax.swing.JInternalFrame {
      */
     public void setClienteAsociadoFactura(final boolean clienteAsociadoFactura) {
         btnClientes.setEnabled(!clienteAsociadoFactura);
+        cmbTipoDocumento.setEnabled(!clienteAsociadoFactura);
+        txtDocumento.setEnabled(!clienteAsociadoFactura);
+        txtNombreCliente.setEnabled(!clienteAsociadoFactura);
+        txtNumeroFactura.setEnabled(!clienteAsociadoFactura);
+        
         this.clienteAsociadoFactura = clienteAsociadoFactura;
     }
 
