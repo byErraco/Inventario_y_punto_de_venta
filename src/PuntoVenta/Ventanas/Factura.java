@@ -1,6 +1,7 @@
 package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.FacturaTableModel;
 import PuntoVenta.Inicio.MenuPrincipal;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -49,11 +50,8 @@ public class Factura extends javax.swing.JInternalFrame {
      * Cierra la ventana con dispose().
      */
     private void LlenarTabla() {
-        ArrayList ListaFactura;
-        String[] columnas = {"Codigo Factura", "Cliente", "Fecha/Hora", "Monto"};
-        String[] campos = {"codigo_factura", "nombre", "fecha_hora", "total"};
-        ListaFactura = menuPrincipal.getOBD().getArrayListFactura();
-        ArrayListTableModel model = new ArrayListTableModel(ListaFactura, columnas, campos);
+        ArrayList ListaFactura = menuPrincipal.getOBD().getArrayListFactura();
+        FacturaTableModel model = new FacturaTableModel(ListaFactura);
         getTblResultadoBusqueda().setModel(model);
         getTblResultadoBusqueda().setFont(new Font("Arial", Font.BOLD, 12));
         getTblResultadoBusqueda().getColumnModel().getColumn(0).setPreferredWidth(150);

@@ -1027,22 +1027,27 @@ public class Venta extends javax.swing.JInternalFrame {
         if(cantidadVenta > productoPorAsociar.getLimiteVentaPorPersona()) return false;
         
         java.sql.Date ultimaVentaProducto = (java.sql.Date) menuPrincipal.getOBD().getUltimaFechaVentaProducto(cmbTipoDocumento.getSelectedItem().toString().charAt(0), txtDocumento.getText(), serial);
-        LocalDate ultimaVentaProductoLocal = ultimaVentaProducto.toLocalDate();
         
-        LocalDate actual = LocalDate.now();
-        
-        Period p = Period.between(ultimaVentaProductoLocal, actual);
-        long diasDiferencia = ChronoUnit.DAYS.between(ultimaVentaProductoLocal, actual);
-        
-        if(productoPorAsociar.getIdPeriodoLimiteVenta() == 1){
-            if(diasDiferencia >= 1) return true;
-            // Falta conocer la cantidad que se vendió el último día
-        } else if(productoPorAsociar.getIdPeriodoLimiteVenta() == 2){
-            if(diasDiferencia >= 7) return true;
-            // Falta conocer la cantidad que se vendió la última semana
+        if(ultimaVentaProducto != null){
+            LocalDate ultimaVentaProductoLocal = ultimaVentaProducto.toLocalDate();
+
+            LocalDate actual = LocalDate.now();
+
+            Period p = Period.between(ultimaVentaProductoLocal, actual);
+            long diasDiferencia = ChronoUnit.DAYS.between(ultimaVentaProductoLocal, actual);
+
+            if(productoPorAsociar.getIdPeriodoLimiteVenta() == 1){
+                if(diasDiferencia >= 1) return true;
+                // Falta conocer la cantidad que se vendió el último día
+            } else if(productoPorAsociar.getIdPeriodoLimiteVenta() == 2){
+                if(diasDiferencia >= 7) return true;
+                // Falta conocer la cantidad que se vendió la última semana
+            }
+
+            return false;
         }
         
-        return false;
+        return true;
     }
 
     /**
@@ -1260,7 +1265,7 @@ public class Venta extends javax.swing.JInternalFrame {
             ModeloCliente cliente = new ModeloCliente(map);
             int idVentaNuevo = menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja());
             this.setIdVenta(idVentaNuevo);
-            
+            System.out.println("ID VENTA NUEVO "+idVentaNuevo);
             if(idVentaNuevo > -1){
                 txtNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
                 HashMap<String, String> venta = menuPrincipal.getOBD().getMapVenta(idVentaNuevo);

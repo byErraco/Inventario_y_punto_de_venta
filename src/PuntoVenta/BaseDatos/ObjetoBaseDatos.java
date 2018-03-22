@@ -1040,21 +1040,29 @@ public class ObjetoBaseDatos {
     }
 /** Ernesto:
  * Método para obtener una lista de las facturas relacionadas a ventas activas
+ * 
+ * Konstanza: función no terminada, falta devolver el total de la venta y el código agregando sus '0'
  * @return 
  */
     public ArrayList<HashMap<String, String>> getArrayListFactura() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
-//        StringBuilder sqlQuery = new StringBuilder();
-//        String[] columnas = {"codigo_factura", "cliente", "fecha_hora", "monto"};
-        String sql1 = "SELECT v.codigo_factura, CONCAT (p.nombre_persona,' ',p.apellido_persona) AS nombre, v.fecha_venta, v.total_venta \n" +
-                        "FROM spve.persona p INNER JOIN spve.venta v on v.id_persona= p.id_persona \n" +
-                        "WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC";
-
+        
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        String[] columnas = {"codigo_factura", "CONCAT (nombre_persona,' ', apellido_persona) AS identificacion_persona", "fecha_venta", "estado_venta"};
+        
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnas, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        
+        sqlQuery.append(" FROM spve.persona p INNER JOIN spve.venta v ON v.id_persona= p.id_persona WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC;");
+        
         try {
             postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(sql1);
-            ResultSetMetaData meta = rs.getMetaData();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            /*ResultSetMetaData meta = rs.getMetaData();
             while (rs.next()) {
                 HashMap<String, String> row = new HashMap<>();
                 for (int i = 1; i < meta.getColumnCount() + 1; i++) {
@@ -1070,6 +1078,14 @@ public class ObjetoBaseDatos {
                     }
                 }
 
+                resultado.add(row);
+            }*/
+            
+            while (rs.next()) {
+                HashMap<String, String> row = new HashMap<>();
+                for (String columna : columnas) {
+                    row.put(columna, rs.getString(columna));
+                }
                 resultado.add(row);
             }
         } catch (Exception e) {

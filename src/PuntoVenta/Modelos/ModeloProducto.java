@@ -21,16 +21,26 @@ public class ModeloProducto {
     public ModeloProducto(HashMap<String, String> map) {
         try {
             this.id = Integer.parseInt(map.get("id_producto"));
-            this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
-            this.idPeriodoLimiteVenta = Integer.parseInt(map.get("id_periodo_venta_producto"));
+            
+            String limiteVenta = map.get("limite_venta_persona");
+            
+            if(limiteVenta != null){
+                this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
+                this.idPeriodoLimiteVenta = Integer.parseInt(map.get("id_periodo_venta_producto"));
+            }
+            else {
+                this.limiteVentaPorPersona = -1;
+                this.idPeriodoLimiteVenta = -1;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-      this.codigoBarra = map.get("codigo_venta_producto");
-       this.descripcion = map.get("descripcion_producto");
-       this.baseImponible = map.get("base_imponible");
+        
+        this.codigoBarra = map.get("codigo_venta_producto");
+        this.descripcion = map.get("descripcion_producto");
+        this.baseImponible = map.get("base_imponible");
         this.pvp = map.get("precio_venta");
-       this.isva = map.get("impuesto_producto");
+        this.isva = map.get("impuesto_producto");
     }
 
     /**

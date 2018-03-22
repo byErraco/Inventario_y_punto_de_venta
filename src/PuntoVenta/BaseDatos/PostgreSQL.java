@@ -76,7 +76,7 @@ public class PostgreSQL {
             - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
               cuando puede dar otro error como que no haya un campo o una tabla
         */
-        System.out.println(sql);
+        System.out.println(sql+"\n");
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return null; 
