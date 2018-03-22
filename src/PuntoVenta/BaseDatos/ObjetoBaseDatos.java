@@ -966,8 +966,8 @@ public class ObjetoBaseDatos {
         sqlQuery = addColumnasAlQuery(columnasEmpleado, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM ")
-                .append("spve.persona as p INNER JOIN spve.empleado as e ON p.id_persona = e.id_persona")
-                .append(" LEFT JOIN spve.cargo ON id_cargo_empleado = id_cargo WHERE activo_empleado = 1; ");
+                .append("spve.persona AS p INNER JOIN spve.empleado AS e ON p.id_persona = e.id_persona")
+                .append(" LEFT JOIN spve.cargo AS c ON e.id_cargo = c.id_cargo WHERE activo_empleado = 1;");
          
         try {
             postgreSQL.conectar();
