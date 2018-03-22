@@ -37,6 +37,7 @@ public class Bloqueo extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         lblContrasena = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
         btnIngresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -69,7 +70,7 @@ public class Bloqueo extends javax.swing.JFrame {
 
         lblUsuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        lblUsuario.setText("CEDULA:");
+        lblUsuario.setText("IDENTIFICACIÓN:");
         lblUsuario.setAutoscrolls(true);
         lblUsuario.setFocusable(false);
         lblUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
@@ -90,33 +91,39 @@ public class Bloqueo extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setName("jComboBox1"); // NOI18N
+
         javax.swing.GroupLayout jpnCamposLoginLayout = new javax.swing.GroupLayout(jpnCamposLogin);
         jpnCamposLogin.setLayout(jpnCamposLoginLayout);
         jpnCamposLoginLayout.setHorizontalGroup(
             jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(24, 24, 24)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblContrasena))
+                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jpwContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                    .addComponent(txtCedula))
+                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpnCamposLoginLayout.createSequentialGroup()
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnCamposLoginLayout.setVerticalGroup(
             jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnCamposLoginLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
         btnIngresar.setBackground(new java.awt.Color(204, 204, 204));
@@ -163,7 +170,7 @@ public class Bloqueo extends javax.swing.JFrame {
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addGap(54, 54, 54)
+                .addGap(69, 69, 69)
                 .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,19 +179,19 @@ public class Bloqueo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jpnCamposLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpnPrincipalLayout.createSequentialGroup()
+                .addGap(162, 162, 162)
                 .addComponent(jLabel1)
-                .addGap(153, 153, 153))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnPrincipalLayout.setVerticalGroup(
             jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -201,7 +208,7 @@ public class Bloqueo extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Salir - SINAMC", JOptionPane.YES_NO_OPTION);
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
 
         if (g == JOptionPane.YES_OPTION) {
             System.exit(0);
@@ -245,6 +252,7 @@ public class Bloqueo extends javax.swing.JFrame {
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup14;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jpnCamposLogin;
     private javax.swing.JPanel jpnPrincipal;
@@ -311,18 +319,19 @@ public class Bloqueo extends javax.swing.JFrame {
             menuPrincipal.setVisible(true);
             menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
            this.dispose();
-      PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
-      PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
+      PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
+      PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
         } else {
             Utilidades.Sonidos.beep();
             txtCedula.setText("");
             jpwContrasena.setText("");
             txtCedula.requestFocus();
+            return;
         }
         
         
@@ -353,8 +362,12 @@ public class Bloqueo extends javax.swing.JFrame {
             jpwContrasena.setText("");
             txtCedula.requestFocus();
         */
-       return;
+      
         }
+
+    public void setMaximum(boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     }
 
   

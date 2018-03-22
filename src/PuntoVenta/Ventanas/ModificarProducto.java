@@ -34,9 +34,9 @@ public  MenuPrincipal menuPrincipal;
 private Productos prod;
 private ObjetoBaseDatos obd;
    
-public ModificarProducto(Productos producto) {
+public ModificarProducto(MenuPrincipal menuPrincipal) {
           this.menuPrincipal = menuPrincipal;
-          this.prod = producto;
+         // this.prod = producto;
         this.setTitle("Saphiro - Modificar producto");
         initComponents();
         crearHotKeys();
@@ -60,8 +60,8 @@ public ModificarProducto(Productos producto) {
    
    }
    public void actualizarTabla(){
-        ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
-        ProductoTableModel model = new ProductoTableModel(Producto);
+        ArrayList<HashMap<String, String>> Modificar = menuPrincipal.getOBD().getArrayListProductos();
+        ProductoTableModel model = new ProductoTableModel(Modificar);
         jtbModificar.setModel(model);
    
    }

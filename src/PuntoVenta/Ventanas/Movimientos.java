@@ -133,8 +133,7 @@ private Ajuste ajuste;
         jPanel1.setBackground(new java.awt.Color(32, 182, 155));
 
         btnReporte.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. factura.png"))); // NOI18N
-        btnReporte.setText("<html><font size=4><center>Reporte</center></font></html> ");
+        btnReporte.setText("<html><font size=4><center>Reporte<br>XX</center></font></html> ");
         btnReporte.setMaximumSize(new java.awt.Dimension(150, 45));
         btnReporte.setMinimumSize(new java.awt.Dimension(150, 45));
         btnReporte.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -145,8 +144,7 @@ private Ajuste ajuste;
         });
 
         btnFabricacion.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnFabricacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01.parametros.png"))); // NOI18N
-        btnFabricacion.setText("<html><font size=4><center>Fabricacion<br></center></font></html>");
+        btnFabricacion.setText("<html><font size=4><center>Fabricación<br>XX</center></font></html>");
         btnFabricacion.setMaximumSize(new java.awt.Dimension(150, 45));
         btnFabricacion.setMinimumSize(new java.awt.Dimension(1750, 45));
         btnFabricacion.setPreferredSize(new java.awt.Dimension(150, 545));
@@ -157,8 +155,7 @@ private Ajuste ajuste;
         });
 
         btnAjuste.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnAjuste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/shap_ajustes_azul.png"))); // NOI18N
-        btnAjuste.setText("<html><font size=4><center>Ajuste</center></font></html> ");
+        btnAjuste.setText("<html><font size=4><center>Ajúste<br>XX</center></font></html> ");
         btnAjuste.setMaximumSize(new java.awt.Dimension(150, 45));
         btnAjuste.setMinimumSize(new java.awt.Dimension(150, 45));
         btnAjuste.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -169,8 +166,7 @@ private Ajuste ajuste;
         });
 
         btnCompra.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnCompra.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Tips.png"))); // NOI18N
-        btnCompra.setText("<html><font size=4><center>Compra<br></center></font></html>");
+        btnCompra.setText("<html><font size=4><center>Compra<br>XX</center></font></html>");
         btnCompra.setMaximumSize(new java.awt.Dimension(150, 45));
         btnCompra.setMinimumSize(new java.awt.Dimension(150, 45));
         btnCompra.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -186,25 +182,24 @@ private Ajuste ajuste;
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
-                .addComponent(btnFabricacion, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(btnAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 122, Short.MAX_VALUE)
-                .addGap(27, 27, 27)
-                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(btnCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(btnFabricacion, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addComponent(btnAjuste, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAjuste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnFabricacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnReporte, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAjuste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCompra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnReporte, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 

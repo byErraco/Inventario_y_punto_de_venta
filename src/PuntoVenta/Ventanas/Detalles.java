@@ -24,7 +24,7 @@ public class Detalles extends javax.swing.JInternalFrame {
     /**
      * Creates new form Detalles
      */
-    public Detalles(Productos producto) {
+    public Detalles(MenuPrincipal menuPrincipal) {
         this.setTitle("Saphiro - Detalles de producto");
         this.menuPrincipal = menuPrincipal;
         this.producto = producto;
@@ -42,12 +42,12 @@ public class Detalles extends javax.swing.JInternalFrame {
    
    //revisar
    public void actualizarTabla(){
-        ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
-        ProductoTableModel model = new ProductoTableModel(Producto);
+        ArrayList<HashMap<String, String>> Descripcion = menuPrincipal.getOBD().getArrayListProductos();
+        ProductoTableModel model = new ProductoTableModel(Descripcion);
         jtbDescripcion.setModel(model);
        
-         ArrayList<HashMap<String, String>> Producto2 = menuPrincipal.getOBD().getArrayListProductos();
-        ProductoTableModel model2 = new ProductoTableModel(Producto2);
+         ArrayList<HashMap<String, String>> Componente = menuPrincipal.getOBD().getArrayListProductos();
+        ProductoTableModel model2 = new ProductoTableModel(Componente);
         jtbComponente.setModel(model2);
    
    }
@@ -67,9 +67,8 @@ public class Detalles extends javax.swing.JInternalFrame {
         btnDescripcion = new javax.swing.JButton();
         btnComponente = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(32, 182, 155));
-        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panelDetalles.setBackground(new java.awt.Color(32, 182, 155));
         panelDetalles.setLayout(new java.awt.CardLayout());
@@ -218,6 +217,8 @@ public class Detalles extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        btnAceptar.getAccessibleContext().setAccessibleName("<html><font size=4><center>Aceptar<br>XX</center></font></html>");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -234,13 +235,13 @@ public class Detalles extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnDescripcionActionPerformed
   
     private void btnComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComponenteActionPerformed
-       componente();
+      componente();
     }//GEN-LAST:event_btnComponenteActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
        this.dispose();
     }//GEN-LAST:event_btnAceptarActionPerformed
-  private void descripcion() {
+ private void descripcion() {
         CardLayout card = (CardLayout) panelDetalles.getLayout();
         card.show(panelDetalles, "panelDescripcion");
        // txtFiltro.requestFocus();

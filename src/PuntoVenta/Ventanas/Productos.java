@@ -38,6 +38,7 @@ public class Productos extends javax.swing.JInternalFrame {
  
     
  public MenuPrincipal menuPrincipal;
+ public Detalles detalles;
  public  AgregarProducto agregar;
  public ModificarProducto modificar;
  public  Productos produc;
@@ -51,8 +52,8 @@ public class Productos extends javax.swing.JInternalFrame {
    
     public Productos(MenuPrincipal menuPrincipal) {
         this.menuPrincipal = menuPrincipal;
-        this.agregar = agregar;
-        this.modificar = modificar;
+       // this.agregar = agregar;
+      //  this.modificar = modificar;
         this.setTitle("Saphiro - Administración de productos");
         crearHotKeys();
         actualizarTabla();
@@ -61,11 +62,11 @@ public class Productos extends javax.swing.JInternalFrame {
     }
 
     public void crearHotKeys() {
-        
-      /*   Action actAgregar = new AbstractAction("actionAgregar") {
+      /*  
+         Action actAgregar = new AbstractAction("actionAgregar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-             // Agregar();
+              Agregar();
             }
         };
         Action actModificar = new AbstractAction("actionModificar") {
@@ -83,12 +84,12 @@ public class Productos extends javax.swing.JInternalFrame {
                 EliminarProductos();
             }
         };
+          */
+       // actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+      //  actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+      //  actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         
-        actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-        actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-        
-        btnAgregar.getActionMap().put("actionAgregar", actAgregar);
+    /*    btnAgregar.getActionMap().put("actionAgregar", actAgregar);
         btnAgregar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionAgregar");
         
         btnModificar.getActionMap().put("actionModificar", actAgregar);
@@ -96,7 +97,7 @@ public class Productos extends javax.swing.JInternalFrame {
         
         btnEliminar.getActionMap().put("actionEliminar", actAgregar);
         btnEliminar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionEliminar");
-        */
+      */
     }
     
     
@@ -153,8 +154,7 @@ public class Productos extends javax.swing.JInternalFrame {
         jPanel1.setMaximumSize(new java.awt.Dimension(327, 327));
 
         btnAgregar.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/add-icon.png"))); // NOI18N
-        btnAgregar.setText("<html><font size=4><center>Agregar<br></center></font></html>");
+        btnAgregar.setText("<html><font size=4><center>Agregar<br>XX</center></font></html>");
         btnAgregar.setMaximumSize(new java.awt.Dimension(150, 45));
         btnAgregar.setMinimumSize(new java.awt.Dimension(150, 45));
         btnAgregar.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -165,8 +165,7 @@ public class Productos extends javax.swing.JInternalFrame {
         });
 
         btnModificar.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/pdv_nuevo_doc.png"))); // NOI18N
-        btnModificar.setText("<html><font size=4><center>Modificar<br></center></font></html>");
+        btnModificar.setText("<html><font size=4><center>Modificar<br>XX</center></font></html>");
         btnModificar.setMaximumSize(new java.awt.Dimension(150, 45));
         btnModificar.setMinimumSize(new java.awt.Dimension(150, 45));
         btnModificar.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -177,8 +176,7 @@ public class Productos extends javax.swing.JInternalFrame {
         });
 
         btnEliminar.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Delete-icon.png"))); // NOI18N
-        btnEliminar.setText("<html><font size=4><center>Eliminar<br></center></font></html>");
+        btnEliminar.setText("<html><font size=4><center>Eliminar<br>XX</center></font></html>");
         btnEliminar.setMaximumSize(new java.awt.Dimension(150, 45));
         btnEliminar.setMinimumSize(new java.awt.Dimension(150, 45));
         btnEliminar.setPreferredSize(new java.awt.Dimension(150, 45));
@@ -189,12 +187,12 @@ public class Productos extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(106, 106, 106)
-                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(112, 112, 112)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -288,7 +286,7 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_formInternalFrameClosing
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-      //  Agregar();
+        Agregar();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -296,19 +294,20 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void Agregar(){
-               
-                agregar = new AgregarProducto(produc);
+                agregar = new AgregarProducto(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
                 agregar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                         (desktopSize.height - jInternalFrameSize.height) / 2);
                  menuPrincipal.panel.add(agregar);
-                agregar.show();
+                agregar.show(); 
     
     }
+    
+    
     private void Modificar(){
     
-     modificar = new ModificarProducto(produc);
+                modificar = new ModificarProducto(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = modificar.getSize();
                 modificar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -324,9 +323,9 @@ public class Productos extends javax.swing.JInternalFrame {
     }
 // revisar
     private void actualizarTabla() {
-     /*   ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
-        ProductoTableModel model = new ProductoTableModel(Producto);
-        jtbProducto.setModel(model); */
+     //   ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
+       // ProductoTableModel model = new ProductoTableModel(Producto);
+       // jtbProducto.setModel(model); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
