@@ -989,10 +989,11 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param serial
      * @return
      */
-    private boolean sePuedeVender(String serial) {
+    private boolean sePuedeVender(String serial, double cantidadVenta) {
         // Konstanza: Falta terminar esta función, ya que no se está tomando en cuenta la cantidad vendida en el periodo del producto
         
         if(productoPorAsociar.getLimiteVentaPorPersona() <= 0)  return true;
+        if(cantidadVenta > productoPorAsociar.getLimiteVentaPorPersona()) return false;
         
         java.sql.Date ultimaVentaProducto = (java.sql.Date) menuPrincipal.getOBD().getUltimaFechaVentaProducto(cmbTipoDocumento.getSelectedItem().toString().charAt(0), txtDocumento.getText(), serial);
         LocalDate ultimaVentaProductoLocal = ultimaVentaProducto.toLocalDate();
@@ -1004,10 +1005,12 @@ public class Venta extends javax.swing.JInternalFrame {
         
         if(productoPorAsociar.getIdPeriodoLimiteVenta() == 1){
             if(diasDiferencia >= 1) return true;
+            // Falta conocer la cantidad que se vendió el último día
         } else if(productoPorAsociar.getIdPeriodoLimiteVenta() == 2){
             if(diasDiferencia >= 7) return true;
+            // Falta conocer la cantidad que se vendió la última semana
         }
-    
+        
         return false;
     }
 
@@ -1415,17 +1418,17 @@ public class Venta extends javax.swing.JInternalFrame {
                 jtbVenta.setRowSelectionInterval(0, 0);
                 rowNumber = jtbVenta.getSelectedRow();
             }
-            String cant = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad de " + jtbVenta.getModel().getValueAt(rowNumber, 1), jtbVenta.getModel().getValueAt(rowNumber, 3));
-            if (!cant.isEmpty()) {
+            String cantidadNuevaString = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad de " + jtbVenta.getModel().getValueAt(rowNumber, 1), jtbVenta.getModel().getValueAt(rowNumber, 5));
+            if (!cantidadNuevaString.isEmpty()) {
 
-                XBigDecimal cantidadNueva = new XBigDecimal(cant);
+                XBigDecimal cantidadNueva = new XBigDecimal(cantidadNuevaString);
                 XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 3).toString());
                 if (cantidadNueva.compareTo(new XBigDecimal(0)) > 0) {
                     String codigoBarra = jtbVenta.getModel().getValueAt(rowNumber, 0).toString();
                     if (productoTabla.get(codigoBarra) == null) {
                         productoTabla.put(codigoBarra, menuPrincipal.getOBD().getLimiteMaximoProducto(codigoBarra));
                     }
-                    if (!sePuedeVender(codigoBarra)) {
+                    if (!sePuedeVender(codigoBarra, Double.parseDouble(cantidadNuevaString))) {
                         JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
                         modificarCantidadProducto(codigoBarra, new XBigDecimal(cantidadNueva.add(cantidadAnterior.negate()).toString()));
@@ -1484,9 +1487,13 @@ public class Venta extends javax.swing.JInternalFrame {
      *
      */
     public void actualizarLblSubtotal() {
-        Double montoSubtotal = 0.0; // Konstanza: falta agregar la función nueva de la base de datos
-        XBigDecimal monto = new XBigDecimal(montoSubtotal.toString());
-        this.getLblSubtotalValor().setText(monto.setScale(2, RoundingMode.HALF_EVEN).toString());
+        Double montoExento = menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta);
+        Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
+        
+        XBigDecimal montoExentoDecimal = new XBigDecimal(montoExento.toString());
+        XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
+        
+        this.getLblSubtotalValor().setText(montoExentoDecimal.add(montoBaseImponibleDecimal).setScale(2, RoundingMode.HALF_EVEN).toString());
     }
 
     /**
