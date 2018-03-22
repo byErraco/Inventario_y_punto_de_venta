@@ -2192,18 +2192,20 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Obtiene el código de factura según un id de venta
+     * Obtiene el código y fecha de una factura según un id de venta
      * 
      * @param idVenta
      * @return 
      */
-    public String getCodigoFactura(int idVenta) {
+    public HashMap<String, String> getMapVenta(int idVenta) {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String resultado = "";
-        int codigoFactura; 
+        String codigoFactura = "";
+        int codigo_factura;
         
-        sqlQuery.append("SELECT codigo_factura FROM ")
+        HashMap<String, String> venta = new HashMap();
+        
+        sqlQuery.append("SELECT codigo_factura, fecha_venta FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
                 .append(" WHERE id_venta=").append(idVenta)
@@ -2211,19 +2213,25 @@ public class ObjetoBaseDatos {
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
             if (rs.next()) {
-                codigoFactura = rs.getInt("codigo_factura");
-                resultado += codigoFactura;
+                venta.put("fecha_venta", rs.getString("fecha_venta"));
+                codigo_factura = rs.getInt("codigo_factura");
+                codigoFactura += codigo_factura;
             }
         } catch (Exception e) {
             //e.printStackTrace();
         } finally {
             postgreSQL.desconectar();
         }
-        while (resultado.length() < 10) {
-            resultado = "0" + resultado;
+        
+        while (codigoFactura.length() < 10) {
+            codigoFactura = "0" + codigoFactura;
         }
-        return resultado;
+        
+        venta.put("codigo_factura", codigoFactura);
+        
+        return venta;
     }
 
     /**
