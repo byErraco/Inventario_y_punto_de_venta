@@ -11,17 +11,7 @@ public class ModeloProducto {
     private String pvp;
     private String isva;
     private int limiteVentaPorPersona;
-
-    public ModeloProducto(String id, String codigoBarra, String descripcion, String idGalpon,
-            String descripcionGalpon, String cantidad, String precio, String iva, String limite) {
-      //  this.id = Integer.parseInt(id);
-       // this.codigoBarra = codigoBarra;
-       // this.descripcion = descripcion;
-       // this.baseImponible = descripcionGalpon;
-       // this.pvp = precio;
-       // this.isva = iva;
-       // this.limiteVentaPorPersona = Integer.parseInt(limite);
-    }
+    private int idPeriodoLimiteVenta;
 
     /**
      * Utiliza el HashMap para asignar los valores al objeto producto. Los campos
@@ -30,16 +20,27 @@ public class ModeloProducto {
      */
     public ModeloProducto(HashMap<String, String> map) {
         try {
-            this.id = Integer.parseInt(map.get("id"));
-            this.limiteVentaPorPersona = Integer.parseInt(map.get("limitedeventaporpersona").replace(".00", ""));
+            this.id = Integer.parseInt(map.get("id_producto"));
+            
+            String limiteVenta = map.get("limite_venta_persona");
+            
+            if(limiteVenta != null){
+                this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
+                this.idPeriodoLimiteVenta = Integer.parseInt(map.get("id_periodo_venta_producto"));
+            }
+            else {
+                this.limiteVentaPorPersona = -1;
+                this.idPeriodoLimiteVenta = -1;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-      this.codigoBarra = map.get("codigo_barra");
-       this.descripcion = map.get("descripcion");
-       this.baseImponible = map.get("descripcion_g");
-        this.pvp = map.get("pvp");
-       this.isva = map.get("iva");
+        
+        this.codigoBarra = map.get("codigo_venta_producto");
+        this.descripcion = map.get("descripcion_producto");
+        this.baseImponible = map.get("base_imponible");
+        this.pvp = map.get("precio_venta");
+        this.isva = map.get("impuesto_producto");
     }
 
     /**
@@ -89,6 +90,13 @@ public class ModeloProducto {
      */
     public int getLimiteVentaPorPersona() {
         return limiteVentaPorPersona;
+    }
+    
+    /**
+     * @return idPeriodoLimiteVenta
+     */
+    public int getIdPeriodoLimiteVenta() {
+        return idPeriodoLimiteVenta;
     }
 
 }

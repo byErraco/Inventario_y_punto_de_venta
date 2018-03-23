@@ -415,16 +415,17 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Empresa emp = new Empresa();
 
-        String query = "SELECT * FROM stpv.empresa";
+        String query = "SELECT * FROM spve.persona";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
             while (rs.next()) {
-                emp.setNombre(rs.getString("nombre"));
-                emp.setRif(rs.getString("rif"));
-                emp.setTelefono(rs.getString("telefono"));
-                emp.setDireccion(rs.getString("direccion"));
-                emp.setMoneda(rs.getString("moneda_utilizada"));
+                emp.setNombre(rs.getString("nombre_persona"));
+                emp.setNombre(rs.getString("apellido_persona"));
+                emp.setRif(rs.getString("numero_identificacion_persona"));
+                emp.setTelefono(rs.getString("telefono_persona"));
+                emp.setDireccion(rs.getString("direccion_persona"));
+                //emp.setMoneda(rs.getString("moneda_utilizada"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -966,8 +967,8 @@ public class ObjetoBaseDatos {
         sqlQuery = addColumnasAlQuery(columnasEmpleado, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM ")
-                .append("spve.persona as p INNER JOIN spve.empleado as e ON p.id_persona = e.id_persona")
-                .append(" LEFT JOIN spve.cargo ON id_cargo_empleado = id_cargo WHERE activo_empleado = 1; ");
+                .append("spve.persona AS p INNER JOIN spve.empleado AS e ON p.id_persona = e.id_persona")
+                .append(" LEFT JOIN spve.cargo AS c ON e.id_cargo = c.id_cargo WHERE activo_empleado = 1;");
          
         try {
             postgreSQL.conectar();
@@ -1040,21 +1041,29 @@ public class ObjetoBaseDatos {
     }
 /** Ernesto:
  * Método para obtener una lista de las facturas relacionadas a ventas activas
+ * 
+ * Konstanza: función no terminada, falta devolver el total de la venta y el código agregando sus '0'
  * @return 
  */
     public ArrayList<HashMap<String, String>> getArrayListFactura() {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
-//        StringBuilder sqlQuery = new StringBuilder();
-//        String[] columnas = {"codigo_factura", "cliente", "fecha_hora", "monto"};
-        String sql1 = "SELECT v.codigo_factura, CONCAT (p.nombre_persona,' ',p.apellido_persona) AS nombre, v.fecha_venta, v.total_venta \n" +
-                        "FROM spve.persona p INNER JOIN spve.venta v on v.id_persona= p.id_persona \n" +
-                        "WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC";
-
+        
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        String[] columnas = {"codigo_factura", "CONCAT (nombre_persona,' ', apellido_persona) AS identificacion_persona", "fecha_venta", "estado_venta"};
+        
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnas, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        
+        sqlQuery.append(" FROM spve.persona p INNER JOIN spve.venta v ON v.id_persona= p.id_persona WHERE activo_venta = 1 ORDER BY v.codigo_factura DESC;");
+        
         try {
             postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(sql1);
-            ResultSetMetaData meta = rs.getMetaData();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            /*ResultSetMetaData meta = rs.getMetaData();
             while (rs.next()) {
                 HashMap<String, String> row = new HashMap<>();
                 for (int i = 1; i < meta.getColumnCount() + 1; i++) {
@@ -1070,6 +1079,14 @@ public class ObjetoBaseDatos {
                     }
                 }
 
+                resultado.add(row);
+            }*/
+            
+            while (rs.next()) {
+                HashMap<String, String> row = new HashMap<>();
+                for (String columna : columnas) {
+                    row.put(columna, rs.getString(columna));
+                }
                 resultado.add(row);
             }
         } catch (Exception e) {
@@ -1133,7 +1150,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
         String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
-                                        "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
+                                        "    WHEN producto_exento = 0 THEN precio_venta_publico\n" +
                                         "    ELSE base_imponible\n" +
                                         "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
@@ -2128,28 +2145,37 @@ public class ObjetoBaseDatos {
     }*/
 
     /**
-     * Realiza un INSERT a la tabla venta-
+     * Crea una venta asociada a una persona según su id 
+     * si no tiene ventas en proceso o pausadas, en caso contrario
+     * se obtiene el id de su última venta no finalizada y se actualiza 
+     * con el nuevo estado de venta
+     * 
      *
      * @param idPersona
      * @param idEstadoVenta
-     * @return
+     * @return id de la última venta al cliente o -1 si no se pudo crear ni actualizar
      */
     public int crearVenta(int idPersona, int idEstadoVenta) {
         ResultSet rs;
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
-        int resultado = -1;
+        int resultado;
+        int idVenta = -1;
+        boolean ventaActualizada = false;
 
         sqlQuery.append("SELECT id_venta, estado_venta FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE estado_venta IN (").append(EstadoVenta.EnProceso)
-                .append(",").append(EstadoVenta.Pausada).append(");");
+                .append(" WHERE id_persona = ")
+                .append(idPersona)
+                .append(" AND estado_venta IN (").append(EstadoVenta.EnProceso)
+                .append(",").append(EstadoVenta.Pausada)
+                .append(") AND activo_venta = 1;");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             if (rs.next()) {
-                resultado = rs.getInt("id_venta");
+                idVenta = rs.getInt("id_venta");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -2159,13 +2185,25 @@ public class ObjetoBaseDatos {
 
         sqlQuery = new StringBuilder();
 
-        if (resultado != -1) {
+        if (idVenta > -1) {
             sqlQuery.append("UPDATE ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
                     .append(" SET estado_venta=").append(idEstadoVenta)
-                    .append(" WHERE id_venta=").append(resultado)
+                    .append(" WHERE id_venta=").append(idVenta)
                     .append(";");
+            
+            try {
+                postgreSQL.conectar();
+                ventaActualizada = ejecutarQuerySinResultado(sqlQuery.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                postgreSQL.desconectar();
+            }
+            
+            if(!ventaActualizada) resultado = -1;
+            else resultado = idVenta;
         } else {
             sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
@@ -2176,44 +2214,54 @@ public class ObjetoBaseDatos {
                     .append(EstadoVenta.EnProceso).append(", ")
                     .append("'").append(new Timestamp(date.getTime()))
                     .append("');");
-        }
-        try {
-            postgreSQL.conectar();
+            
             resultado = ejecutarCreate(sqlQuery.toString(), "venta");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
         }
+        
         return resultado;
     }
 
-    public String numeroFactura(int idCliente, int idEstadoCaja) {
-        ResultSet res;
+    /**
+     * Obtiene el código y fecha de una factura según un id de venta
+     * 
+     * @param idVenta
+     * @return 
+     */
+    public HashMap<String, String> getMapVenta(int idVenta) {
+        ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String resultado = "";
-        sqlQuery.append("SELECT * FROM ")
+        String codigoFactura = "";
+        int codigo_factura;
+        
+        HashMap<String, String> venta = new HashMap();
+        
+        sqlQuery.append("SELECT codigo_factura, fecha_venta FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta"))
-                .append(" WHERE id_cliente=").append(idCliente)
-                .append(" AND (estado_venta = ").append(EstadoVenta.EnProceso)
-                .append(" OR estado_venta = ").append(EstadoVenta.Pausada).append(");");
+                .append(" WHERE id_venta=").append(idVenta)
+                .append(";");
         try {
-            //System.out.println(sqlQuery.toString());
             postgreSQL.conectar();
-            res = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
-            if (res.next()) {
-                resultado = res.getString("codigo_factura");
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            
+            if (rs.next()) {
+                venta.put("fecha_venta", rs.getString("fecha_venta"));
+                codigo_factura = rs.getInt("codigo_factura");
+                codigoFactura += codigo_factura;
             }
         } catch (Exception e) {
             //e.printStackTrace();
         } finally {
             postgreSQL.desconectar();
         }
-        while (resultado.length() < 10) {
-            resultado = "0" + resultado;
+        
+        while (codigoFactura.length() < 10) {
+            codigoFactura = "0" + codigoFactura;
         }
-        return resultado;
+        
+        venta.put("codigo_factura", codigoFactura);
+        
+        return venta;
     }
 
     /**
@@ -2595,7 +2643,7 @@ public class ObjetoBaseDatos {
         double resultado = 0;
         
         sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
-                        "INNER JOIN spve.producto AS p ON pp.id_producto = p.id_producto\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
                         "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
                         "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
         
@@ -3046,11 +3094,17 @@ public class ObjetoBaseDatos {
 //            Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-    public boolean consultastock(String codp, String cantcomp) {
+    
+    /**
+     * Consulta si hay cantidad disponible para vender un producto.
+     * 
+     * @param codigo_venta_producto - Codigo del producto a vender.
+     * @param cantidad_venta - Cantidad del producto a vender.
+     * @return 
+     */
+    public boolean consultastock(String codigo_venta_producto, String cantidad_venta) {
         ResultSet result;
-        int cantidad = 0;
-        int stock = 0;
-        String sql1 = "SELECT * FROM  inventario.producto WHERE codigo_barra = '" + codp + "';";
+        String sql1 = "SELECT cantidad_disponible FROM  spve.producto WHERE codigo_venta_producto = '" + codigo_venta_producto + "';";
 
         try {
             postgreSQL.conectar();
@@ -3058,12 +3112,11 @@ public class ObjetoBaseDatos {
             result = postgreSQL.getSentencia().executeQuery(sql1);
 
             if (result.next()) {
-                stock = result.getInt("stockminimo");
-                cantidad = result.getInt("cantidad");
+                if ( result.getInt("cantidad_disponible") < Integer.parseInt(cantidad_venta)) {
+                    return false;
+                }
             }
-            if ((cantidad - stock) < Integer.parseInt(cantcomp)) {
-                return false;
-            }
+            
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3321,10 +3374,10 @@ public class ObjetoBaseDatos {
         try {
             postgreSQL.conectar();
             ResultSet result;
-            String sql = "SELECT * FROM stpv.cliente WHERE cedula='" + cedula + "';";
+            String sql = "SELECT numero_identificacion_persona FROM spve.persona WHERE numero_identificacion_persona='" + cedula + "';";
             result = postgreSQL.ejecutarSelect(sql);
             if (result.next()) {
-                direccion = result.getString("direccion");
+                direccion = result.getString("direccion_persona");
             }
         } catch (Exception e) {
             e.printStackTrace();

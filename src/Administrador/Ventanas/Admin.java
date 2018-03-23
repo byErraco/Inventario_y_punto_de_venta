@@ -50,7 +50,7 @@ public class Admin extends javax.swing.JInternalFrame {
     private ModificacionEmpleados modificacionEmpleados;
     private static String ruta = "";
     private RegistroCliente registroCliente;
-    private ModificacionClientes modificacionClientes;
+    private RegistroCliente modificacionClientes;
 
     /**
      * Creates new form Admin
@@ -811,12 +811,12 @@ public class Admin extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField3KeyReleased
 
     public void actualizarTabla() {
-        ArrayList<HashMap<String, String>> lista = menuPrincipal.getOBD().getArrayListEmpleado();
-        EmpleadosTableModel model = new EmpleadosTableModel(lista);
+        ArrayList<HashMap<String, String>> listaEmpleados = menuPrincipal.getOBD().getArrayListEmpleado();
+        EmpleadosTableModel model = new EmpleadosTableModel(listaEmpleados);
         jtbListaEmpleado.setModel(model);
 
-        ArrayList<HashMap<String, String>> lista2 = menuPrincipal.getOBD().getArrayListClientes();
-        ClienteTableModel model2 = new ClienteTableModel(lista2);
+        ArrayList<HashMap<String, String>> listaClientes = menuPrincipal.getOBD().getArrayListClientes();
+        ClienteTableModel model2 = new ClienteTableModel(listaClientes);
         jtbListaCliente.setModel(model2);
     }
 
@@ -832,8 +832,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroEmpleados.show();
     }
 
-    public void abrirVentanaModificacionEmpleados() {
-        modificacionEmpleados = new ModificacionEmpleados(this);
+    public void abrirVentanaModificacionEmpleados(char tipo_persona, String numero_identificacion_persona) {
+        modificacionEmpleados = new ModificacionEmpleados(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionEmpleados.getSize();
         modificacionEmpleados.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -841,8 +841,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionEmpleados);
         modificacionEmpleados.show();
-        String cedula = null;
-
     }
 
     public void abrirVentanaRegistroCliente() {
@@ -856,8 +854,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroCliente.show();
     }
 
-    public void abrirVentanaModificacionCliente() {
-        modificacionClientes = new ModificacionClientes(this);
+    public void abrirVentanaModificacionCliente(char tipo_persona, String numero_identificacion_persona) {
+        modificacionClientes = new RegistroCliente(this, tipo_persona, numero_identificacion_persona, true);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
         modificacionClientes.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -865,8 +863,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionClientes);
         modificacionClientes.show();
-        String cedula = null;
-
     }
 
     public static void conseguirRuta() {
@@ -931,9 +927,11 @@ public class Admin extends javax.swing.JInternalFrame {
         }
         if (numeroRow >= 0) {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
+            
             if (seleccion == 0) {
-                String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarEmpleado(cedula);
+                String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarEmpleado(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -948,9 +946,10 @@ public class Admin extends javax.swing.JInternalFrame {
             jtbListaEmpleado.setRowSelectionInterval(0, 0);
         }
         else {
-            String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-            abrirVentanaModificacionEmpleados();
-            Administrador.Ventanas.ModificacionEmpleados.txtDocumento.setText(cedula);
+            String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+
+            abrirVentanaModificacionEmpleados(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -958,12 +957,12 @@ public class Admin extends javax.swing.JInternalFrame {
         int numeroRow = jtbListaCliente.getSelectedRow();
         if (numeroRow < 0) {
             jtbListaCliente.setRowSelectionInterval(0, 0);
-            numeroRow = jtbListaCliente.getSelectedRow();
         }
         else {
-            String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-            abrirVentanaModificacionCliente();
-            Administrador.Ventanas.ModificacionClientes.txtDocumento.setText(cedula);
+            String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+            
+            abrirVentanaModificacionCliente(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -976,8 +975,9 @@ public class Admin extends javax.swing.JInternalFrame {
         if (numeroRow >= 0) {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
-                String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarPersona(cedula);
+                String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarPersona(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -1033,14 +1033,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         btnParametros.getActionMap().put(Admin.Modulo.PARAMETROS.getAction(), actParametros);
         btnParametros.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actParametros.getValue(Action.ACCELERATOR_KEY), Admin.Modulo.PARAMETROS.getAction());
-    }
-
-    private void cerrarVentana() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private String getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private enum Modulo {

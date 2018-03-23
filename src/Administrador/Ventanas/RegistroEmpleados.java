@@ -6,8 +6,6 @@
 package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
-import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.Modelos.ModeloEmpleado;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -188,6 +186,11 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
         txtDireccion.setColumns(20);
         txtDireccion.setRows(5);
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDireccionKeyTyped(evt);
+            }
+        });
         jScrollPane1.setViewportView(txtDireccion);
 
         lblCorreo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
@@ -375,6 +378,12 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     private void cmbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoDocumentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
+
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        if (txtDireccion.getText().length() > 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
 
 
     private void crearHotKeys() {

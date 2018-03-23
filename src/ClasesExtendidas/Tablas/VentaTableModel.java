@@ -16,12 +16,13 @@ public class VentaTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Codigo("Código", "codigo_barra"),
-        Descripcion("Descripción", "descripcion"),
+        Codigo("Código", "codigo_venta_producto"),
+        Descripcion("Descripción", "descripcion_producto"),
+        PrecioBase("Precio base unitario", "precio_base_unitario"),
+        Impuesto("Impuesto unitario", "impuesto_producto"),
+        Precio("Total unitario", "precio_venta_publico"),
         Cantidad("Cantidad", "cantidad_producto"),
-        PrecioBase("Precio base", "pvp"),
-        Impuesto("Impuesto", "impuesto"),
-        Precio("Precio final", "total");
+        Total("Total", "total");
 
         String header;
         String columna;
@@ -56,9 +57,9 @@ public class VentaTableModel extends ArrayListTableModel {
     public VentaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
                 new String[]{Columnas.Codigo.getHeader(), Columnas.Descripcion.getHeader(), Columnas.PrecioBase.getHeader(),
-                    Columnas.Cantidad.getHeader(), Columnas.Impuesto.getHeader(), Columnas.Precio.getHeader()},
+                    Columnas.Impuesto.getHeader(), Columnas.Precio.getHeader(), Columnas.Cantidad.getHeader(), Columnas.Total.getHeader()},
                 new String[]{Columnas.Codigo.getColumna(), Columnas.Descripcion.getColumna(), Columnas.PrecioBase.getColumna(),
-                    Columnas.Cantidad.getColumna(), Columnas.Impuesto.getColumna(), Columnas.Precio.getColumna()});
+                    Columnas.Impuesto.getColumna(), Columnas.Precio.getColumna(), Columnas.Cantidad.getColumna(), Columnas.Total.getColumna()});
     }
 
     @Override

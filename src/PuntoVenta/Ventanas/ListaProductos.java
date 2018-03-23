@@ -1,6 +1,7 @@
 package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.ListaProductosCajeroTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -187,7 +188,7 @@ public class ListaProductos extends JInternalFrame {
         });
 
         btnSalir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        btnSalir.setText("<html><font size=4><center>Salir<br>Esc</font></center></html>");
+        btnSalir.setText("<html><center>Salir<br>Alt + Q</center></html>");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
@@ -294,10 +295,8 @@ public class ListaProductos extends JInternalFrame {
     }
 
     private void actualizarTabla() {
-        String[] headers = {"Código", "Descripción", "Precio"};
-        String[] columnas = {"codigo_barra", "descripcion", "pvp"};
         ArrayList<HashMap<String, String>> listaProductos = venta.menuPrincipal.getOBD().getArrayListProductos();
-        ArrayListTableModel model = new ArrayListTableModel(listaProductos, headers, columnas);
+        ListaProductosCajeroTableModel model = new ListaProductosCajeroTableModel(listaProductos);
         jtbProductos.setModel(model);
     }
 

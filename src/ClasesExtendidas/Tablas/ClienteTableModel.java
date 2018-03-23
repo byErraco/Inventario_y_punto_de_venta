@@ -16,8 +16,7 @@ public class ClienteTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Tipo("Tipo", "tipo_persona"),
-        Identificacion("Identificación", "numero_identificacion_persona"),
+        Identificacion("Identificación", "identificacion_persona"),
         Nombre("Nombre", "nombre_persona");
 
         String header;
@@ -42,8 +41,8 @@ public class ClienteTableModel extends ArrayListTableModel {
 
     public ClienteTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Tipo.getHeader(), Columnas.Identificacion.getHeader(), Columnas.Nombre.getHeader()},
-                new String[]{Columnas.Tipo.getColumna(), Columnas.Identificacion.getColumna(), Columnas.Nombre.getColumna()});
+                new String[]{Columnas.Identificacion.getHeader(), Columnas.Nombre.getHeader()},
+                new String[]{Columnas.Identificacion.getColumna(), Columnas.Nombre.getColumna()});
     }
 
 }
