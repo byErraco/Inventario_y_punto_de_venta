@@ -1,0 +1,7 @@
+﻿--UPDATE spve.producto SET activo_producto = 0 WHERE codigo_venta_producto = '1234'
+SELECT EXISTS(SELECT codigo_venta_producto FROM spve.producto WHERE codigo_venta_producto = '1234');
+
+INSERT INTO spve.precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, 
+porcentaje_impuesto_producto, impuesto_producto, precio_venta_publico, 
+base_imponible, producto_exento, activo_precio_producto, id_producto) 
+VALUES (5, current_date, 30, 12, 24, 224, 200, 0, 1, 1)

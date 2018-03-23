@@ -79,14 +79,14 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        //obd.getArrayListProductosEnVenta(1);
+        obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
         //LISTO//System.out.println(obd.getTotalExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
-        //LISTO//System.out.println(obd.getTotalImpuestoVenta(1));
-        System.out.println(obd.getTotalBaseImponibleVenta(1));
+        //System.out.println(obd.getTotalImpuestoVenta(1));
+        //LISTO//System.out.println(obd.getTotalBaseImponibleVenta(1));
     }
     
     /**
@@ -1398,6 +1398,19 @@ public class ObjetoBaseDatos {
         
     }
     
+    /**
+     * Método para crear un producto nuevo con su precio
+     * 
+     * 
+     */
+    
+    /**
+     * Método para obtener un mapa <k,v> dado un id_caja
+     * 
+     * @param id_caja
+     * @return 
+     */
+    
     public HashMap<String, String> getMapCaja(int id_caja){
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> cajas = new HashMap<>();
@@ -2582,9 +2595,9 @@ public class ObjetoBaseDatos {
         double resultado = 0;
         
         sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
-                        "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
+                        "INNER JOIN spve.producto AS p ON pp.id_producto = p.id_producto\n" +
                         "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
-                        "WHERE producto_exento = 0 AND id_venta = 1;");
+                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
         
         try {
             postgreSQL.conectar();
