@@ -1148,8 +1148,8 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
-                                        "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
+        String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(baseimponible*cantidad_producto) AS subtotal","(CASE\n" +
+                                        "    WHEN producto_exento = 0 THEN precio_venta_publico\n" +
                                         "    ELSE base_imponible\n" +
                                         "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
@@ -1178,7 +1178,7 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnaProductos) {
-                    if (("subtotal".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
+                    if (("subtotal".equals(columna) || "precio_base_unitario".equals(columna) ||"impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
@@ -2629,9 +2629,9 @@ public class ObjetoBaseDatos {
         double resultado = 0;
         
         sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
-                        "INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto\n" +
+                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
                         "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
-                        "WHERE producto_exento = 0 AND id_venta = 1;");
+                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
         
         try {
             postgreSQL.conectar();
@@ -3080,11 +3080,17 @@ public class ObjetoBaseDatos {
 //            Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-    public boolean consultastock(String codp, String cantcomp) {
+    
+    /**
+     * Consulta si hay cantidad disponible para vender un producto.
+     * 
+     * @param codigo_venta_producto - Codigo del producto a vender.
+     * @param cantidad_venta - Cantidad del producto a vender.
+     * @return 
+     */
+    public boolean consultastock(String codigo_venta_producto, String cantidad_venta) {
         ResultSet result;
-        int cantidad = 0;
-        int stock = 0;
-        String sql1 = "SELECT * FROM  inventario.producto WHERE codigo_barra = '" + codp + "';";
+        String sql1 = "SELECT cantidad_disponible FROM  spve.producto WHERE codigo_venta_producto = '" + codigo_venta_producto + "';";
 
         try {
             postgreSQL.conectar();
@@ -3092,12 +3098,11 @@ public class ObjetoBaseDatos {
             result = postgreSQL.getSentencia().executeQuery(sql1);
 
             if (result.next()) {
-                stock = result.getInt("stockminimo");
-                cantidad = result.getInt("cantidad");
+                if ( result.getInt("cantidad_disponible") < Integer.parseInt(cantidad_venta)) {
+                    return false;
+                }
             }
-            if ((cantidad - stock) < Integer.parseInt(cantcomp)) {
-                return false;
-            }
+            
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
