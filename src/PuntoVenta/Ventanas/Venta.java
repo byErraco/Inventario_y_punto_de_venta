@@ -1526,18 +1526,18 @@ public class Venta extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Actualiza el lblSubtotalValor con la suma de los precios bases de todos los productos
-     * incluidos en la venta.
+     * Actualiza el lblSubtotalValor con la suma de los productos no exentos
+     * menos los impuestos de todos los productos incluidos en la venta.
      *
      */
     public void actualizarLblSubtotal() {
-        Double montoExento = menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta);
-        Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
+        Double subtotal = menuPrincipal.getOBD().getSubtotalVenta(idVenta);
+        //Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
         
-        XBigDecimal montoExentoDecimal = new XBigDecimal(montoExento.toString());
-        XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
+        XBigDecimal subtotalDecimal = new XBigDecimal(subtotal.toString());
+        //XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
         
-        this.getLblSubtotalValor().setText(montoExentoDecimal.add(montoBaseImponibleDecimal).setScale(2, RoundingMode.HALF_EVEN).toString());
+        this.getLblSubtotalValor().setText(subtotalDecimal.toString());
     }
 
     /**
