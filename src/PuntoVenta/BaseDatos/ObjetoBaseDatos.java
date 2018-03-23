@@ -79,7 +79,7 @@ public class ObjetoBaseDatos {
         //REALIZAR PRUEBAS//obd.getArrayListEstadoCaja(1);
         //LISTO//obd.getArrayListFactura();
         //LISTO//obd.getArrayListProductos();
-        obd.getArrayListProductosEnVenta(1);
+        //obd.getArrayListProductosEnVenta(1);
         //LISTO//obd.crearPago(100.504, 1, 1);
         //LISTO//obd.getTotalPagadoVenta(2);
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
@@ -87,6 +87,7 @@ public class ObjetoBaseDatos {
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
         //System.out.println(obd.getTotalImpuestoVenta(1));
         //LISTO//System.out.println(obd.getTotalBaseImponibleVenta(1));
+        //System.out.println(obd.getSubtotalVenta(1));
     }
     
     /**
@@ -2652,6 +2653,39 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
             if (rs.next()) {
                 resultado = rs.getDouble("total_impuesto");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }
+    
+    /**
+     * Método para obtener el subtotal de una venta
+     * 
+     * @param id_venta
+     * @return
+     */
+    
+    public double getSubtotalVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        double resultado = 0;
+        
+        sqlQuery.append("SELECT (SUM(precio_venta_publico *cantidad_producto) -SUM(impuesto_producto *cantidad_producto)) AS subtotal \n" +
+                        "FROM spve.precio_producto AS pp \n" +
+                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
+                        "INNER JOIN spve.venta_producto AS vp ON p.id_producto = vp.id_producto\n" +
+                        "WHERE id_venta = "+id_venta+";");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("subtotal");
                 
             }
         } catch (Exception e) {
