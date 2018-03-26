@@ -34,7 +34,7 @@ public class Compra extends javax.swing.JInternalFrame {
      * Creates new form Compra
      */
     public Compra() {
-        this.setTitle("Saphiro - Compras realizadas");
+        this.setTitle("Saphiro - Compras");
         initComponents();
     }
 
@@ -166,7 +166,7 @@ public class Compra extends javax.swing.JInternalFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(179, 179, 179)
+                        .addGap(134, 134, 134)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );

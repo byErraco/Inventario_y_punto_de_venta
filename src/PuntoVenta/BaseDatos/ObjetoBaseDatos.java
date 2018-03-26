@@ -173,6 +173,36 @@ public class ObjetoBaseDatos {
         return id;
     }
 
+    
+    //  se crea para eliminar productos en la ventana "productos"(solo por metodo de prueba)
+    //REVISAR:
+    public int eliminarProducto(String codigo){
+        ResultSet result;
+        int id = -1;
+        
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append("DELETE FROM ")
+                .append(mapSchema.get("inventario"))
+                .append(".").append(mapTabla.get("producto"))
+                .append(" WHERE codigo_barra='")
+                .append(codigo)
+                .append("';");
+        try {
+            postgreSQL.conectar();
+            result = postgreSQL.ejecutarSelect(sqlQuery.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+
+        return id;
+    
+    } 
+    
+    
+    
+    
     /**
      * Inserta un empleado en la tabla stpv.empleado.
      *

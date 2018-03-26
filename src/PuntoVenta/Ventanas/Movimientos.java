@@ -333,6 +333,16 @@ private Ajuste ajuste;
        btnReporte.getInputMap().put((KeyStroke) actReporte.getValue(Action.ACCELERATOR_KEY), "actionReporte");
        
        
+      
+      InternalFrameAdapter listener = new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                menuPrincipal.requestFocus();
+            }
+        };
+
+        this.addInternalFrameListener(listener);
+      
     }
     public void actualizarTabla(){
         ArrayList<HashMap<String, String>> Movimiento = menuPrincipal.getOBD().getArrayListProductos();

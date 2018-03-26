@@ -10,7 +10,6 @@ import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Ventanas.AgregarProducto;
 import PuntoVenta.Ventanas.ModificarProducto;
-import PuntoVenta.Ventanas.Detalles;
 import PuntoVenta.Modelos.ModeloProducto;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -42,6 +41,7 @@ public class Productos extends javax.swing.JInternalFrame {
  public  AgregarProducto agregar;
  public ModificarProducto modificar;
  public  Productos produc;
+ public ModeloProducto productos;
  
     /**
      *
@@ -54,7 +54,7 @@ public class Productos extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
        // this.agregar = agregar;
       //  this.modificar = modificar;
-        this.setTitle("Saphiro - Administración de productos");
+        this.setTitle("Saphiro - Consúlta de productos");
         crearHotKeys();
         actualizarTabla();
         initComponents();
@@ -62,7 +62,7 @@ public class Productos extends javax.swing.JInternalFrame {
     }
 
     public void crearHotKeys() {
-      /*  
+        
          Action actAgregar = new AbstractAction("actionAgregar") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,7 +72,7 @@ public class Productos extends javax.swing.JInternalFrame {
         Action actModificar = new AbstractAction("actionModificar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-              // Modificar();
+               Modificar();
             }
         }; 
        
@@ -84,12 +84,12 @@ public class Productos extends javax.swing.JInternalFrame {
                 EliminarProductos();
             }
         };
-          */
-       // actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-      //  actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-      //  actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+          
+        actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+        actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
+        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         
-    /*    btnAgregar.getActionMap().put("actionAgregar", actAgregar);
+        btnAgregar.getActionMap().put("actionAgregar", actAgregar);
         btnAgregar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionAgregar");
         
         btnModificar.getActionMap().put("actionModificar", actAgregar);
@@ -97,20 +97,22 @@ public class Productos extends javax.swing.JInternalFrame {
         
         btnEliminar.getActionMap().put("actionEliminar", actAgregar);
         btnEliminar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionEliminar");
-      */
-    }
-    
-    
+     
+      
+      
+      
+      InternalFrameAdapter listener = new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                menuPrincipal.requestFocus();
+            }
+        };
 
- 
-    
-    
-    
-    public void EliminarProductos(){
-    
-    
+        this.addInternalFrameListener(listener);
+      
+      
     }
-    
+       
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -180,6 +182,11 @@ public class Productos extends javax.swing.JInternalFrame {
         btnEliminar.setMaximumSize(new java.awt.Dimension(150, 45));
         btnEliminar.setMinimumSize(new java.awt.Dimension(150, 45));
         btnEliminar.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -290,8 +297,12 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-     //   Modificar();
+        Modificar();
     }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        EliminarProductos();
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void Agregar(){
                 agregar = new AgregarProducto(menuPrincipal);
@@ -318,14 +329,33 @@ public class Productos extends javax.swing.JInternalFrame {
    
     }  
     
-     private void cerrarVentana() {
-        this.dispose();
+     
+    public void EliminarProductos(){
+    
+        int numeroRow = jtbProducto.getSelectedRow();
+        if (numeroRow < 0) {
+            jtbProducto.setRowSelectionInterval(0, 0);
+            numeroRow = jtbProducto.getSelectedRow();
+        }
+        if (numeroRow >= 0) {
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el producto?: " + jtbProducto.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+            if (seleccion == 0) {
+                String codigo = jtbProducto.getValueAt(numeroRow, 0).toString();
+                menuPrincipal.getOBD().eliminarProducto(codigo);
+                actualizarTabla();
+
+            } else {
+                jtbProducto.requestFocus();
+            }
+        }
+    
     }
+   
 // revisar
     private void actualizarTabla() {
-     //   ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
-       // ProductoTableModel model = new ProductoTableModel(Producto);
-       // jtbProducto.setModel(model); 
+       ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
+       ProductoTableModel model = new ProductoTableModel(Producto);
+       jtbProducto.setModel(model); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

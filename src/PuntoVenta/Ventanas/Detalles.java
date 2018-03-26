@@ -142,8 +142,7 @@ public class Detalles extends javax.swing.JInternalFrame {
 
         panelDetalles.add(panelComponente, "card3");
 
-        btnAceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Aceptar3.png"))); // NOI18N
-        btnAceptar.setText("<html><font size=4><center>Aceptar<br></center></font></html>");
+        btnAceptar.setText("<html><font size=4><center>Modificar<br>XX</center></font></html>");
         btnAceptar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -216,8 +215,6 @@ public class Detalles extends javax.swing.JInternalFrame {
                 .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
-        btnAceptar.getAccessibleContext().setAccessibleName("<html><font size=4><center>Aceptar<br>XX</center></font></html>");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
