@@ -35,10 +35,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
@@ -487,7 +490,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdminActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        System.exit(0);
+        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+
+        if (g == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else {
+            this.setVisible(true);
+        }
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
@@ -667,7 +677,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
    
     public void abrirVentanaProd(){
-        producto =  new Productos(this);
+        producto = new Productos(this);
+        try{            
+            
+            if(producto.isShowing())
+            {
+                JOptionPane.showMessageDialog(null,"Ya Esta Habilitado!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }else{
+                    //producto =  new Productos(this);
         Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = producto.getSize();
         producto.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
@@ -675,17 +692,44 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 panel.add(producto);
                 producto.show();
              
-        
+                  }
+       } catch (Exception ex) {
+                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+      
+   
+          }
     }
     
     public void abrirVentanaMovimientos(){
         movimiento =  new Movimientos(this);
+          try{            
+            
+            if(movimiento.isSelected())
+            {
+                JOptionPane.showMessageDialog(null,"Ya Esta Habilitado!", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            }else{
+                   
         Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = movimiento.getSize();
         movimiento.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
                 panel.add(movimiento);
                 movimiento.show();
+                
+                  }
+       } catch (Exception ex) {
+                Logger.getLogger(Movimientos.class.getName()).log(Level.SEVERE, null, ex);
+      }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
       
     }
 
