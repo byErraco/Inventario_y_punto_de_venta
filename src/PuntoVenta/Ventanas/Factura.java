@@ -1,7 +1,7 @@
 package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Tablas.ArrayListTableModel;
-import ClasesExtendidas.Tablas.FacturaTableModel;
+import ClasesExtendidas.Tablas.VentaTableModel;
 import PuntoVenta.Inicio.MenuPrincipal;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -51,7 +51,7 @@ public class Factura extends javax.swing.JInternalFrame {
      */
     private void LlenarTabla() {
         ArrayList ListaFactura = menuPrincipal.getOBD().getArrayListFactura();
-        FacturaTableModel model = new FacturaTableModel(ListaFactura);
+        VentaTableModel model = new VentaTableModel(ListaFactura);
         getTblResultadoBusqueda().setModel(model);
         getTblResultadoBusqueda().setFont(new Font("Arial", Font.BOLD, 12));
         getTblResultadoBusqueda().getColumnModel().getColumn(0).setPreferredWidth(150);

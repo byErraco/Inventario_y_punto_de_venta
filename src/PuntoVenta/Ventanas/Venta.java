@@ -1,7 +1,7 @@
 package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Numeros.XBigDecimal;
-import ClasesExtendidas.Tablas.VentaTableModel;
+import ClasesExtendidas.Tablas.ProductoVentaTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
@@ -1023,6 +1023,11 @@ public class Venta extends javax.swing.JInternalFrame {
     private boolean sePuedeVender(String serial, double cantidadVenta) {
         // Konstanza: Falta terminar esta función, ya que no se está tomando en cuenta la cantidad vendida en el periodo del producto
         
+        
+        System.out.println("Serial se puede "+serial);
+        System.out.println("Cantidad se puede "+cantidadVenta);
+        System.out.println("asociar se puede "+productoPorAsociar);
+        System.out.println("limite se puede "+productoPorAsociar.getLimiteVentaPorPersona());
         if(productoPorAsociar.getLimiteVentaPorPersona() <= 0)  return true;
         if(cantidadVenta > productoPorAsociar.getLimiteVentaPorPersona()) return false;
         
@@ -1356,7 +1361,7 @@ public class Venta extends javax.swing.JInternalFrame {
      */
     public void actualizarTabla() {
         ArrayList<HashMap<String, String>> listaProductoEnVenta = menuPrincipal.getOBD().getArrayListProductosEnVenta(idVenta);
-        VentaTableModel model = new VentaTableModel(listaProductoEnVenta);
+        ProductoVentaTableModel model = new ProductoVentaTableModel(listaProductoEnVenta);
         jtbVenta.setModel(model);
         jtbVenta.setFont(new Font("Arial", Font.BOLD, 16));
         jtbVenta.setBackground(Color.white);
@@ -1469,15 +1474,17 @@ public class Venta extends javax.swing.JInternalFrame {
                 XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 5).toString());
                 if (cantidadNueva.compareTo(new XBigDecimal(0)) > 0) {
                     String codigoBarra = jtbVenta.getModel().getValueAt(rowNumber, 0).toString();
-                    if (productoTabla.get(codigoBarra) == null) {
+                    
+                    /*if (productoTabla.get(codigoBarra) == null) {
                         productoTabla.put(codigoBarra, menuPrincipal.getOBD().getLimiteMaximoProducto(codigoBarra));
-                    }
+                        }
                     if (!sePuedeVender(codigoBarra, Double.parseDouble(cantidadNuevaString))) {
                         JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
+                     */   
                         modificarCantidadProducto(codigoBarra, new XBigDecimal(cantidadNueva.add(cantidadAnterior.negate()).toString()));
                         actualizarTabla();
-                    }
+                   // }
                 } else {
                     Utilidades.Sonidos.beep();
                 }

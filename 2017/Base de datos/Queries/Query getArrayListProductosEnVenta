@@ -7,6 +7,6 @@ END) AS subtotal,
     WHEN producto_exento = 1 THEN 0
     ELSE impuesto_producto
 END) AS impuesto_producto, precio_venta_publico FROM spve.producto AS p
-LEFT JOIN spve.precio_producto AS pp ON p.id_precio_producto = pp.id_precio_producto
+LEFT JOIN spve.precio_producto AS pp ON p.id_producto = pp.id_producto
 LEFT JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto 
-WHERE id_venta = 1;
+WHERE id_venta = 9;

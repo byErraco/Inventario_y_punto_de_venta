@@ -1151,7 +1151,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
         String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
-                                        "    WHEN producto_exento = 0 THEN precio_venta_publico\n" +
+                                        "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
                                         "    ELSE base_imponible\n" +
                                         "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
@@ -2032,9 +2032,13 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado = -1;
 
-        sqlQuery.append("SELECT limitedeventaporpersona FROM ")
+        sqlQuery.append("SELECT periodo_venta_producto.id_periodo_venta_producto FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("periodo_venta_producto"))
+                .append(" INNER JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto"))
+                .append(" ON periodo_venta_producto.id_periodo_venta_producto = producto.id_periodo_venta_producto")
                 .append(" WHERE codigo_venta_producto = '").append(codigoBarra).append("'");
         try {
             postgreSQL.conectar();

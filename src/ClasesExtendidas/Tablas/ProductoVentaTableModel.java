@@ -10,16 +10,18 @@ import java.util.HashMap;
 
 /**
  *
- * @author inverdata
+ * @author Programador01
  */
-public class FacturaTableModel extends ArrayListTableModel {
+public class ProductoVentaTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Codigo("Código", "codigo_factura"),
-        Cliente("Cliente", "identificacion_persona"),
-        Fecha("Fecha", "fecha_venta"),
-        Estado("Estado", "estado_venta"),
+        Codigo("Código", "codigo_venta_producto"),
+        Descripcion("Descripción", "descripcion_producto"),
+        PrecioBase("Precio base unitario", "precio_base_unitario"),
+        Impuesto("Impuesto unitario", "impuesto_producto"),
+        Precio("Total unitario", "precio_venta_publico"),
+        Cantidad("Cantidad", "cantidad_producto"),
         Total("Total", "total");
 
         String header;
@@ -52,12 +54,12 @@ public class FacturaTableModel extends ArrayListTableModel {
         }
     }
 
-    public FacturaTableModel(ArrayList<HashMap<String, String>> contenido) {
+    public ProductoVentaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Codigo.getHeader(), Columnas.Cliente.getHeader(), Columnas.Fecha.getHeader(),
-                    Columnas.Estado.getHeader(), Columnas.Total.getHeader()},
-                new String[]{Columnas.Codigo.getColumna(), Columnas.Cliente.getColumna(), Columnas.Fecha.getColumna(),
-                    Columnas.Estado.getColumna(), Columnas.Total.getColumna()});
+                new String[]{Columnas.Codigo.getHeader(), Columnas.Descripcion.getHeader(), Columnas.PrecioBase.getHeader(),
+                    Columnas.Impuesto.getHeader(), Columnas.Precio.getHeader(), Columnas.Cantidad.getHeader(), Columnas.Total.getHeader()},
+                new String[]{Columnas.Codigo.getColumna(), Columnas.Descripcion.getColumna(), Columnas.PrecioBase.getColumna(),
+                    Columnas.Impuesto.getColumna(), Columnas.Precio.getColumna(), Columnas.Cantidad.getColumna(), Columnas.Total.getColumna()});
     }
 
     @Override
