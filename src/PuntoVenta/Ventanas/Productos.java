@@ -35,12 +35,9 @@ import javax.swing.table.TableRowSorter;
 //revisar
 public class Productos extends javax.swing.JInternalFrame {
  
-    
  public MenuPrincipal menuPrincipal;
- public Detalles detalles;
  public  AgregarProducto agregar;
  public ModificarProducto modificar;
- public  Productos produc;
  public ModeloProducto productos;
  
     /**

@@ -1,6 +1,14 @@
 package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
+import static PuntoVenta.Inicio.MenuPrincipal.btnAcerca;
+import static PuntoVenta.Inicio.MenuPrincipal.btnAdmin;
+import static PuntoVenta.Inicio.MenuPrincipal.btnAyuda;
+import static PuntoVenta.Inicio.MenuPrincipal.btnCaja;
+import static PuntoVenta.Inicio.MenuPrincipal.btnFacturas;
+import static PuntoVenta.Inicio.MenuPrincipal.btnMovimientos;
+import static PuntoVenta.Inicio.MenuPrincipal.btnProductos;
+import static PuntoVenta.Inicio.MenuPrincipal.btnVentas;
 import static PuntoVenta.Ventanas.bloqueo2.pass;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
@@ -15,7 +23,7 @@ public class Bloqueo extends javax.swing.JFrame {
     public MenuPrincipal menuPrincipal;
 
     String contrasena = "";
-    int vali=0;
+    int i =0;
     public Bloqueo(MenuPrincipal menuPrincipal) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
@@ -224,12 +232,14 @@ public class Bloqueo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresarKeyPressed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-          cerrarbloq();
-      //  ingresarSistema();
+         // cerrarbloq();
+        ingresarSistema();
+        this.menuPrincipal.deshabilitar();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
-        ingresarSistema();        // TODO add your handling code here:
+        ingresarSistema(); 
+         this.menuPrincipal.deshabilitar();
     }//GEN-LAST:event_btnIngresarMouseClicked
 
     private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
@@ -275,9 +285,15 @@ public class Bloqueo extends javax.swing.JFrame {
 
     // KONSTANZA NUEVA FUNCION
     private void entrarProgramador2() {
-        txtCedula.setText("1");
-        jpwContrasena.setText("1");
+        String ced ="1";
+        String pass = "1";
+        txtCedula.setText(ced);
+        jpwContrasena.setText(pass);
     }
+    
+     
+    
+    
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables
      * conf y ctrl utiliza las variable del menuPrincipal llamadas configuracion
@@ -290,44 +306,67 @@ public class Bloqueo extends javax.swing.JFrame {
     
     
      public void cerrarbloq(){
-         if(PuntoVenta.Inicio.MenuPrincipal.btnVentas.isEnabled()){
-        this.dispose(); 
-        }
-        
+      //   if(PuntoVenta.Inicio.MenuPrincipal.btnVentas.isEnabled()){
+         
+        //}
+        this.dispose();
     }
+   /*  public  void  habilitar(){
+        btnCaja.setEnabled(false);
+        btnVentas.setEnabled(false);
+        btnFacturas.setEnabled(false);
+        btnAyuda.setEnabled(false);
+        btnAcerca.setEnabled(false);
+        btnAdmin.setEnabled(false);
+        btnProductos.setEnabled(false);
+        btnMovimientos.setEnabled(false);
+   
+   }
+   public  void  deshabilitar(){
+       
+       if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
+        btnCaja.setEnabled(true);
+        btnVentas.setEnabled(true);
+        btnFacturas.setEnabled(true);
+        btnAyuda.setEnabled(true);
+        btnAcerca.setEnabled(true);
+        btnAdmin.setEnabled(true);
+        btnProductos.setEnabled(true);
+        btnMovimientos.setEnabled(true);
+       }
+   }*/
     public void ingresarSistema() {
         entrarProgramador2();
+        
        // entrarProgramador();
         
           String cedula = txtCedula.getText();
-        char[] arrayPassword = jpwContrasena.getPassword();
+          char[] arrayPassword = jpwContrasena.getPassword();
 
         if (cedula.isEmpty()) {
             Utilidades.Sonidos.beep();
+            JOptionPane.showMessageDialog(this, "Ingrese cedula");
             txtCedula.requestFocus();
             return;
         }
         if (arrayPassword.length <= 0) {
             Utilidades.Sonidos.beep();
+             JOptionPane.showMessageDialog(this, "Ingrese password");
            jpwContrasena.requestFocus();
             return;
         }
-        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+             int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
              if (idEmpleado != -1) {
             HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
             menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
             menuPrincipal.setVisible(true);
             menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
-           this.dispose();
-      PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
-      PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
-        } else {
+            this.menuPrincipal.deshabilitar();
+            cerrarbloq();
+            
+        } else {             
             Utilidades.Sonidos.beep();
+             JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
             txtCedula.setText("");
             jpwContrasena.setText("");
             txtCedula.requestFocus();
@@ -368,6 +407,8 @@ public class Bloqueo extends javax.swing.JFrame {
     public void setMaximum(boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+  
     }
 
   

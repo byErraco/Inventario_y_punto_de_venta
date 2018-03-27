@@ -501,19 +501,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
-        btnCaja.setEnabled(false);
-        btnVentas.setEnabled(false);
-        btnAyuda.setEnabled(false);
-        btnAcerca.setEnabled(false);
-        btnAdmin.setEnabled(false);
-        btnProductos.setEnabled(false);
-        btnMovimientos.setEnabled(false);
-        abrirVentanaBloqueo();
-
+      abrirVentanaBloqueo();
     }//GEN-LAST:event_btnbloqueoActionPerformed
 
     private void btnbloqueoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnbloqueoKeyPressed
-
+if (evt.getKeyCode() == KeyEvent.VK_F12) {
+           abrirVentanaBloqueo();
+        }
     }//GEN-LAST:event_btnbloqueoKeyPressed
 
     private void btnbloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbloqueoMouseClicked
@@ -522,7 +516,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnbloqueoMouseClicked
 
     private void btnVentasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVentasKeyPressed
-
+if (evt.getKeyCode() == KeyEvent.VK_F2) {
+           abrirVentanaVentas();
+        }
     }//GEN-LAST:event_btnVentasKeyPressed
 
     private void btnAdminKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAdminKeyPressed
@@ -553,7 +549,32 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btnMovimientosKeyPressed
-
+ public  void  habilitar(){
+      if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
+        btnCaja.setEnabled(false);
+        btnVentas.setEnabled(false);
+        btnFacturas.setEnabled(false);
+        btnAyuda.setEnabled(false);
+        btnAcerca.setEnabled(false);
+        btnAdmin.setEnabled(false);
+        btnProductos.setEnabled(false);
+        btnMovimientos.setEnabled(false);
+      }
+   }
+ 
+ public  void  deshabilitar(){
+       
+    //   if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
+        btnCaja.setEnabled(true);
+        btnVentas.setEnabled(true);
+        btnFacturas.setEnabled(true);
+        btnAyuda.setEnabled(true);
+        btnAcerca.setEnabled(true);
+        btnAdmin.setEnabled(true);
+        btnProductos.setEnabled(true);
+        btnMovimientos.setEnabled(true);
+     //  }
+   }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton btnAcerca;
@@ -566,7 +587,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
-    public javax.swing.JButton btnbloqueo;
+    public static javax.swing.JButton btnbloqueo;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
@@ -607,30 +628,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (estacerrado(bloqueo)) {
             
-           
-            PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(false);
-            PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(false);
-
             bloqueo = new Bloqueo(this);
             Dimension desktopSize = panel.getSize();
             Dimension jInternalFrameSize = bloqueo.getSize();
             bloqueo.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                    (desktopSize.height - jInternalFrameSize.height) / 2);
-
+                                (desktopSize.height - jInternalFrameSize.height) / 2);
             panel.add(bloqueo);
-            bloqueo.setMaximum(true);
+            this.habilitar();
+            
+           // bloqueo.setMaximum(true);
             bloqueo.show();
-
             setVentanaAbierta(Modulo.BLOQUEO);
-
+            
         } else if (estacerrado(bloqueo)) {
             bloqueo.requestFocus();
-
+            deshabilitar();
         }
 
     }
@@ -675,68 +687,45 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
     
+  
    
     public void abrirVentanaProd(){
-        producto = new Productos(this);
-        try{            
-            
-            if(producto.isShowing())
-            {
-                JOptionPane.showMessageDialog(null,"Ya Esta Habilitado!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }else{
-                    //producto =  new Productos(this);
-        Dimension desktopSize = panel.getSize();
+      
+        if (estacerrado(producto)) {
+             producto = new Productos(this);
+             Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = producto.getSize();
         producto.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
                 panel.add(producto);
                 producto.show();
-             
-                  }
-       } catch (Exception ex) {
-                Logger.getLogger(Productos.class.getName()).log(Level.SEVERE, null, ex);
+                setVentanaAbierta(Modulo.PRODUCTOS);
+        } else {
+            JOptionPane.showMessageDialog(this, "La ventana ya esta abierta...");
+        }
       
-   
-          }
     }
     
     public void abrirVentanaMovimientos(){
-        movimiento =  new Movimientos(this);
-          try{            
-            
-            if(movimiento.isSelected())
-            {
-                JOptionPane.showMessageDialog(null,"Ya Esta Habilitado!", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            }else{
-                   
-        Dimension desktopSize = panel.getSize();
+         if (estacerrado(movimiento)) {
+             movimiento =  new Movimientos(this);
+              Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = movimiento.getSize();
         movimiento.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
                 panel.add(movimiento);
                 movimiento.show();
-                
-                  }
-       } catch (Exception ex) {
-                Logger.getLogger(Movimientos.class.getName()).log(Level.SEVERE, null, ex);
-      }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      
+                setVentanaAbierta(Modulo.MOVIMIENTOS);
+        } else {
+            JOptionPane.showMessageDialog(this, "La ventana ya esta abierta...");
+        }
+       
     }
 
     public void setBotonesMenuPrincipalEnabled(boolean aFlag) {
         btnVentas.setEnabled(aFlag);
         btnFacturas.setEnabled(aFlag);
-    }
+   }
 
     /**
      * Método para crear y asignar HotKeys (accesos rápidos). Tiene 4 pasos: -
@@ -879,11 +868,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return btnCaja;
     }
     
-     public javax.swing.JButton getBtnProd() {
+     public javax.swing.JButton getBtnProducto() {
         return btnProductos;
     }
      
-      public javax.swing.JButton getBtnMov() {
+      public javax.swing.JButton getBtnMovimiento() {
         return btnMovimientos;
     }
 
