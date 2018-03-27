@@ -582,6 +582,7 @@ public class ObjetoBaseDatos {
      * @param departamento
      * @param direccion_persona
      * @param numero_identificacion_persona_viejo
+     * @param tipo_persona_viejo
      * @return
      */
     public boolean modificarEmpleado(String id_cargo, String nombre_persona, String apellido_persona, char tipo_persona, String numero_identificacion_persona, String direccion_persona, String telefono_persona, String email_persona, String clave, String departamento, String numero_identificacion_persona_viejo, char tipo_persona_viejo) {
@@ -3106,7 +3107,7 @@ public class ObjetoBaseDatos {
                     canti = result.getInt("cantidad_disponible");
                 }
                 String sql2 = "UPDATE spve.producto SET cantidad_disponible=" + (canti - articulo.getCantidad()) + " WHERE codigo_venta_producto='" + articulo.getCodigo_barra() + "';";
-                postgreSQL.getSentencia().executeQuery(sql2);
+                ejecutarCreate(sql2, "producto");
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
             } finally {

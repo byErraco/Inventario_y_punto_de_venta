@@ -1,6 +1,7 @@
 package ClasesObtenidas;
 
 //import PuntoVenta.BaseDatos.Sql;
+import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.deprecated.Configuracion;
 import java.security.CodeSource;
 import java.sql.Connection;
@@ -22,6 +23,7 @@ public class iFactura {
     //private conectate con = new conectate("");
     public Connection conn = null;
     private Configuracion conf;
+    public final MenuPrincipal menuPrincipal;
 //    Sql PgSql;
     String BARRA = System.getProperty("file.separator");
     String DIR_APP = System.getProperty("user.dir");
@@ -42,29 +44,33 @@ public class iFactura {
 // formateadores por defecto, de visualización y de edición
     DefaultFormatterFactory currFactory = new DefaultFormatterFactory(dnFormat, dnFormat, enFormat);
 
-    public iFactura(Configuracion conf /*, Sql PgSql*/) {
+    public iFactura(Configuracion conf, MenuPrincipal menuPrincipal /*, Sql PgSql*/) {
         this.conf = conf;
         this.conn = null;
+        this.menuPrincipal = menuPrincipal;
         //PgSql.
 
     }
 
-    public void ver_Factura(String NumFactura, String Total, String exento, String noexento, String iva, String SumaTotal) {
+    public void ver_Factura(String numero_identificacion, String nombre, String direccion, String NumFactura, int idVenta) {
 
         try {
             String archivo = directorioReportes() + BARRA + "reporte" + BARRA + "FacturaVenta.jasper";
 //            System.out.println(archivo);
             HashMap parametros = new HashMap();
             parametros.clear();
-            parametros.put("nom_empresa", conf.getEmpresa());
-            parametros.put("sucursal", "");
-            parametros.put("direccion", conf.getDireccion());
             parametros.put("rif", conf.getRif());
+            parametros.put("nom_empresa", conf.getEmpresa());
+            parametros.put("direccion", conf.getDireccion());
             parametros.put("NumFactura", NumFactura);
-            parametros.put("totalexento", exento);
-            parametros.put("totalnoexento", noexento);
-            parametros.put("iva", iva);
-            parametros.put("Total", SumaTotal);
+            parametros.put("totalexento", menuPrincipal.getOBD().getTotalExentoVenta(idVenta));
+            parametros.put("totalnoexento", menuPrincipal.getOBD().getTotalNoExentoVenta(idVenta));
+            parametros.put("iva", menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta));
+            parametros.put("Total", 
+                menuPrincipal.getOBD().getTotalNoExentoVenta(idVenta)+
+                menuPrincipal.getOBD().getTotalNoExentoVenta(idVenta)+
+                menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta)
+             );
             JasperPrint jasperPrint = JasperFillManager.fillReport(archivo, parametros, conn);
             if (!jasperPrint.getPages().isEmpty()) {
                 JasperViewer leap = new JasperViewer(jasperPrint, false);
@@ -87,7 +93,7 @@ public class iFactura {
             parameters.put("nom_empresa", conf.getEmpresa());
             parameters.put("direccion", conf.getDireccion());
             parameters.put("rif", conf.getRif());
-            parameters.put("idsesion", id);
+            //parameters.put("idsesion", id);
             JasperPrint jasperPrint = JasperFillManager.fillReport(archivo, parameters, conn);
 
             if (!jasperPrint.getPages().isEmpty()) {
