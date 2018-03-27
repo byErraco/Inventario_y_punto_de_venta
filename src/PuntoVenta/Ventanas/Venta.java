@@ -1023,11 +1023,6 @@ public class Venta extends javax.swing.JInternalFrame {
     private boolean sePuedeVender(String serial, double cantidadVenta) {
         // Konstanza: Falta terminar esta función, ya que no se está tomando en cuenta la cantidad vendida en el periodo del producto
         
-        
-        System.out.println("Serial se puede "+serial);
-        System.out.println("Cantidad se puede "+cantidadVenta);
-        System.out.println("asociar se puede "+productoPorAsociar);
-        System.out.println("limite se puede "+productoPorAsociar.getLimiteVentaPorPersona());
         if(productoPorAsociar.getLimiteVentaPorPersona() <= 0)  return true;
         if(cantidadVenta > productoPorAsociar.getLimiteVentaPorPersona()) return false;
         
@@ -1540,10 +1535,10 @@ public class Venta extends javax.swing.JInternalFrame {
     public void actualizarLblSubtotal() {
         Double subtotal = menuPrincipal.getOBD().getSubtotalVenta(idVenta);
         //Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
-        
+        System.out.println("subtotal "+subtotal);
         XBigDecimal subtotalDecimal = new XBigDecimal(subtotal.toString());
         //XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
-        
+        System.out.println("BIGsubtotal "+subtotalDecimal);
         this.getLblSubtotalValor().setText(subtotalDecimal.toString());
     }
 

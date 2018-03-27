@@ -1180,7 +1180,7 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnaProductos) {
-                    if (("subtotal".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
+                    if (("precio_base_unitario".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
@@ -2619,7 +2619,7 @@ public class ObjetoBaseDatos {
         sqlQuery.append("SELECT SUM(base_imponible*cantidad_producto) AS total_base_imponible FROM spve.precio_producto AS pp\n" +
                         "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
                         "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
-                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
+                        "WHERE id_venta = "+id_venta+";");
         
         try {
             postgreSQL.conectar();
@@ -2690,6 +2690,7 @@ public class ObjetoBaseDatos {
             rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
             if (rs.next()) {
                 resultado = rs.getDouble("subtotal");
+                System.out.println("resultado "+resultado);
                 
             }
         } catch (Exception e) {
