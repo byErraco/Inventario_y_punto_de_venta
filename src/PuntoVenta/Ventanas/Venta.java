@@ -1535,10 +1535,8 @@ public class Venta extends javax.swing.JInternalFrame {
     public void actualizarLblSubtotal() {
         Double subtotal = menuPrincipal.getOBD().getSubtotalVenta(idVenta);
         //Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
-        System.out.println("subtotal "+subtotal);
         XBigDecimal subtotalDecimal = new XBigDecimal(subtotal.toString());
         //XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
-        System.out.println("BIGsubtotal "+subtotalDecimal);
         this.getLblSubtotalValor().setText(subtotalDecimal.toString());
     }
 
