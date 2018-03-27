@@ -416,7 +416,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Empresa emp = new Empresa();
 
-        String query = "SELECT * FROM spve.persona";
+        String query = "SELECT * FROM spve.persona WHERE id_persona = 1";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
@@ -424,7 +424,7 @@ public class ObjetoBaseDatos {
                 emp.setNombre(rs.getString("nombre_persona"));
                 emp.setNombre(rs.getString("apellido_persona"));
                 emp.setRif(rs.getString("numero_identificacion_persona"));
-                emp.setTelefono(rs.getString("telefono_persona"));
+                //emp.setTelefono(rs.getString("telefono_persona"));
                 emp.setDireccion(rs.getString("direccion_persona"));
                 //emp.setMoneda(rs.getString("moneda_utilizada"));
             }
