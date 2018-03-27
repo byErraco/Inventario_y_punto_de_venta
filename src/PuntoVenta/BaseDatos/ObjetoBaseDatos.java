@@ -2958,18 +2958,13 @@ public class ObjetoBaseDatos {
                 sqlQuery.append("DELETE FROM ")
                         .append(mapSchema.get("spve")).append(".")
                         .append(mapTabla.get("venta_producto"))
-                        .append(" WHERE EXISTS (")
-                        .append("SELECT venta_producto.id_producto, cantidad_producto, codigo_venta_producto")
-                        .append(" FROM ")
-                        .append(mapSchema.get("spve"))
-                        .append(".").append(mapTabla.get("venta_producto"))
-                        .append(" INNER JOIN ")
-                        .append("spve.producto ")
-                        .append(" ON venta_producto.id_producto = producto.id_producto")
-                        .append(" WHERE ").append("codigo_venta_producto = '"+codigoBarra+"'")
-                        .append(" AND venta_producto.id_venta = ")
-                        .append(idVenta)
-                        .append(" AND venta_producto.id_producto =").append(idProducto).append(");");
+                        .append(" USING ")
+                        .append(mapSchema.get("spve")).append(".")
+                        .append(mapTabla.get("producto"))
+                        .append(" WHERE venta_producto.id_producto = producto.id_producto")
+                        .append(" AND ").append("codigo_venta_producto = '"+codigoBarra+"'")
+                        .append(" AND id_venta = ")
+                        .append(idVenta);
 
                 resultado = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
             }

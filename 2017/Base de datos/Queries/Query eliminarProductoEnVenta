@@ -1,6 +1,2 @@
-﻿DELETE FROM spve.venta_producto WHERE EXISTS(SELECT venta_producto.id_producto, cantidad_producto, codigo_venta_producto 
-FROM spve.venta_producto
-INNER JOIN spve.producto ON venta_producto.id_producto = producto.id_producto
-WHERE codigo_venta_producto = '1234'
-AND venta_producto.id_venta = 1
-AND venta_producto.id_producto = 1)
+﻿DELETE FROM spve.venta_producto USING spve.producto
+WHERE venta_producto.id_producto = producto.id_producto AND codigo_venta_producto = '4321' AND id_venta = 1;
