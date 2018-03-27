@@ -1156,7 +1156,7 @@ public class ObjetoBaseDatos {
                                         "END) AS precio_base_unitario", "(CASE\n" +
                                         "    WHEN producto_exento = 1 THEN 0\n" +
                                         "    ELSE impuesto_producto\n" +
-                                        "END) AS impuesto_producto", "precio_venta_publico", "(vp.cantidad_producto*pp.precio_venta_publico) AS total"};
+                                        "END) AS impuesto_producto", "precio_venta_publico AS precio_venta_publico", "(vp.cantidad_producto*pp.precio_venta_publico) AS total"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnaProductos, "", sqlQuery);
@@ -1180,13 +1180,14 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnaProductos) {
-                    if (("precio_base_unitario".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_producto".equals(columna) || "total".equals(columna))) {
+                    if (("precio_base_unitario".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_publico".equals(columna) || "total".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
+                        ;
                     }
                 }
-                System.out.println(map);
+                System.out.println("MAP "+map);
                 resultado.add(map);
             }
         } catch (Exception e) {
@@ -2410,8 +2411,7 @@ public class ObjetoBaseDatos {
     }
 
     public void ActualizarCorteEnVenta(int idEstadoCaja) {
-        //Ernesto:
-        //Agregar alias para "v"
+
         String sql = "UPDATE spve.venta v SET corte_caja = true WHERE v.id_estado_caja=" + idEstadoCaja;
 //        System.out.println(sql);
         try {
