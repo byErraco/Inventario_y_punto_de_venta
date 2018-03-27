@@ -3098,14 +3098,14 @@ public class ObjetoBaseDatos {
         ResultSet result;
         int canti = 0;
         for (ArticuloDescontar articulo : ad) {
-            String sql1 = "SELECT * FROM  inventario.producto WHERE codigo_barra = '" + articulo.getCodigo_barra() + "';";
+            String sql1 = "SELECT cantidad_disponible FROM  spve.producto WHERE codigo_venta_producto = '" + articulo.getCodigo_barra() + "';";
             try {
                 postgreSQL.conectar();
-                result = postgreSQL.getSentencia().executeQuery(sql1);
+                result = postgreSQL.ejecutarSelect(sql1.toString());;
                 if (result.next()) {
-                    canti = result.getInt("cantidad");
+                    canti = result.getInt("cantidad_disponible");
                 }
-                String sql2 = "UPDATE inventario.producto set cantidad=" + (canti - articulo.getCantidad()) + " WHERE codigo_barra='" + articulo.getCodigo_barra() + "';";
+                String sql2 = "UPDATE spve.producto SET cantidad_disponible=" + (canti - articulo.getCantidad()) + " WHERE codigo_venta_producto='" + articulo.getCodigo_barra() + "';";
                 postgreSQL.getSentencia().executeQuery(sql2);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
@@ -3408,7 +3408,7 @@ public class ObjetoBaseDatos {
         try {
             postgreSQL.conectar();
             ResultSet result;
-            String sql = "SELECT numero_identificacion_persona FROM spve.persona WHERE numero_identificacion_persona='" + cedula + "';";
+            String sql = "SELECT direccion_persona FROM spve.persona WHERE numero_identificacion_persona='" + cedula + "';";
             result = postgreSQL.ejecutarSelect(sql);
             if (result.next()) {
                 direccion = result.getString("direccion_persona");
