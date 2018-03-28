@@ -18,3 +18,4 @@ roadmap.docx
 *.form~
 *.java~
 *.odt#
+*/*.orig
