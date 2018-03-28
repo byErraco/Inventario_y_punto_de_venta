@@ -7,7 +7,8 @@ package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Numeros.XBigDecimal;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
-import ClasesExtendidas.Tablas.TipoMonedaTableModel;
+import ClasesExtendidas.Tablas.TipoPagoTableModel;
+import ClasesExtendidas.Tablas.CorteEstadoCajaTableModel;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Reporte2;
@@ -68,9 +69,10 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         txtFecha.setText(dia + "/" + mes + "/" + ano);
         txtNumeroCaja.setText(String.valueOf(this.caja.menuPrincipal.getModeloCaja().getId()));
         txtEmpleado.setText(this.caja.menuPrincipal.getEmpleado().getNombre() + " " + this.caja.menuPrincipal.getEmpleado().getApellido());
-        ArrayList<HashMap<String, String>> listaTiposMoneda = this.caja.menuPrincipal.getOBD().getArrayListTipoMoneda();
-        for (HashMap<String, String> row : listaTiposMoneda) {
-            cmbTipoMoneda.addItem(row.get("descripcion"));
+        
+        ArrayList<HashMap<String, String>> listaTiposPago = this.caja.menuPrincipal.getOBD().getArrayListTipoPago();
+        for (HashMap<String, String> row : listaTiposPago) {
+            cmbTipoPago.addItem(row.get("descripcion_pago"));
         }
 
         actualizarInformacionCaja();
@@ -163,7 +165,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         txtMonto = new javax.swing.JTextField();
         lblMonto = new javax.swing.JLabel();
-        cmbTipoMoneda = new javax.swing.JComboBox();
+        cmbTipoPago = new javax.swing.JComboBox();
         lblTipoMoneda = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -431,16 +433,16 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         lblMonto.setForeground(new java.awt.Color(255, 255, 255));
         lblMonto.setText("Monto:");
 
-        cmbTipoMoneda.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cmbTipoMoneda.addKeyListener(new java.awt.event.KeyAdapter() {
+        cmbTipoPago.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        cmbTipoPago.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                cmbTipoMonedaKeyPressed(evt);
+                cmbTipoPagoKeyPressed(evt);
             }
         });
 
         lblTipoMoneda.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTipoMoneda.setForeground(new java.awt.Color(255, 255, 255));
-        lblTipoMoneda.setText("Tipo de Moneda:");
+        lblTipoMoneda.setText("Tipo de pago:");
         lblTipoMoneda.setMaximumSize(new java.awt.Dimension(109, 15));
         lblTipoMoneda.setMinimumSize(new java.awt.Dimension(109, 15));
         lblTipoMoneda.setPreferredSize(new java.awt.Dimension(100, 15));
@@ -456,7 +458,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                     .addComponent(lblMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbTipoMoneda, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbTipoPago, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtMonto))
                 .addContainerGap())
         );
@@ -466,7 +468,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTipoMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbTipoMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbTipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMonto)
@@ -528,7 +530,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && Double.parseDouble(txtMonto.getText()) > 0) {
             XBigDecimal monto = new XBigDecimal(txtMonto.getText());
             PromptSupport.setPrompt("0.00", txtMonto);
-            agregarMontoAlCorte(cmbTipoMoneda.getSelectedItem().toString(), monto);
+            agregarMontoAlCorte(cmbTipoPago.getSelectedItem().toString(), monto);
             txtMonto.setText("0.00");
             txtMonto.requestFocus();
             txtMonto.setSelectionStart(0);
@@ -536,13 +538,13 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtMontoKeyPressed
 
-    private void cmbTipoMonedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbTipoMonedaKeyPressed
+    private void cmbTipoPagoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbTipoPagoKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtMonto.requestFocus();
             txtMonto.setSelectionStart(0);
             txtMonto.setSelectionEnd(txtMonto.getText().length());
         }
-    }//GEN-LAST:event_cmbTipoMonedaKeyPressed
+    }//GEN-LAST:event_cmbTipoPagoKeyPressed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         cerrarVentana();
@@ -582,7 +584,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox cmbTipoMoneda;
+    private javax.swing.JComboBox cmbTipoPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -619,7 +621,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         String tipoMonedaEnTabla;
         XBigDecimal montoEnTabla;
         XBigDecimal montoTotal;
-        TipoMonedaTableModel model = (TipoMonedaTableModel) tblResultadoCorte.getModel();
+        TipoPagoTableModel model = (TipoPagoTableModel) tblResultadoCorte.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             tipoMonedaEnTabla = model.getValueAt(i, 0).toString();
             if (tipoMonedaEnTabla.equalsIgnoreCase(tipoMoneda)) {
@@ -647,9 +649,9 @@ public class CorteCaja extends javax.swing.JInternalFrame {
      * interes para el usuario. cmbFormaPago -> tblTipoPago.
      */
     private void focusPuntoInteres() {
-        if (!cmbTipoMoneda.hasFocus()) {
-            cmbTipoMoneda.requestFocus();
-            cmbTipoMoneda.showPopup();
+        if (!cmbTipoPago.hasFocus()) {
+            cmbTipoPago.requestFocus();
+            cmbTipoPago.showPopup();
         } else {
             tblResultadoCorte.requestFocus();
             tblResultadoCorte.addColumnSelectionInterval(0, 0);
@@ -657,7 +659,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     }
 
     private void crearCorteCaja() {
-        TipoMonedaTableModel model = (TipoMonedaTableModel) tblResultadoCorte.getModel();
+        TipoPagoTableModel model = (TipoPagoTableModel) tblResultadoCorte.getModel();
         XBigDecimal montoCorte = new XBigDecimal(lblTotalValor.getText());
         XBigDecimal excedente = new XBigDecimal(txtExcedente.getText());
         XBigDecimal restante = new XBigDecimal(txtRestante.getText());
@@ -666,7 +668,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             Utilidades.Sonidos.beep();
             focusPuntoInteres();
         } else {
-            int idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(caja.menuPrincipal.getIdEstadoCaja(), montoCorte, excedente, restante);
+            int idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(montoCorte.doubleValue(), excedente.doubleValue(), restante.doubleValue(), caja.menuPrincipal.getIdEstadoCaja(), caja.menuPrincipal.getEmpleado().getId());
             caja.menuPrincipal.getOBD().ActualizarCorteEnVenta(caja.menuPrincipal.getIdEstadoCaja());
             XBigDecimal montoEnTabla;
             for (int i = 0; i < model.getRowCount(); i++) {
@@ -701,10 +703,12 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     private void actualizarInformacionCaja() {
         XBigDecimal totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
         txtTotalVentas.setText(totalVentas.setScale(2, RoundingMode.HALF_EVEN).toString());
+        
         ArrayList<HashMap<String, String>> cortesAnteriores = caja.menuPrincipal.getOBD().getArrayListCortesCaja(caja.menuPrincipal.getIdEstadoCaja());
-        ArrayListTableModel modelCortesCaja = new ArrayListTableModel(cortesAnteriores, new String[]{"ID", "Monto"}, new String[]{"nombre", "monto_corte"});
+        CorteEstadoCajaTableModel modelCortesCaja = new CorteEstadoCajaTableModel(cortesAnteriores);
         tblCortesAnteriores.setModel(modelCortesCaja);
-        TipoMonedaTableModel model = new TipoMonedaTableModel();
+        
+        TipoPagoTableModel model = new TipoPagoTableModel();
         tblResultadoCorte.setModel(model);
         cerrarVentana();
     }
@@ -722,9 +726,11 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         XBigDecimal totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
         listaid.addAll(menuPrincipal.getOBD().getListIDVentas(menuPrincipal.getIdEstadoCaja()));
         txtTotalVentas.setText(totalVentas.setScale(2, RoundingMode.HALF_EVEN).toString());
+        
         ArrayList<HashMap<String, String>> cortesAnteriores = caja.menuPrincipal.getOBD().getArrayListCortesCaja(caja.menuPrincipal.getIdEstadoCaja());
-        ArrayListTableModel modelCortesCaja = new ArrayListTableModel(cortesAnteriores, new String[]{"ID", "Monto"}, new String[]{"nombre", "monto_corte"});
+        CorteEstadoCajaTableModel modelCortesCaja = new CorteEstadoCajaTableModel(cortesAnteriores);
         tblCortesAnteriores.setModel(modelCortesCaja);
+        
         crearCorteCaja();
         actualizastes = false;
         for (int i = 0; i < tblResultadoCorte.getRowCount(); i++) {
@@ -742,13 +748,16 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             }
         }
         listavalor.addAll(menuPrincipal.getOBD().montoscorte(listaid));
+        
         for (ValorPagos valor : listavalor) {
             gtotal = gtotal + valor.getMontoD();
         }
+        
         for (ValorPagos valor : listavalor) {
             Reporte2 pr = new Reporte2(e, menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), valor.getTipo(), valor.getMonto(), "" + gtotal, "" + efectivo, "" + debito, "" + credito, "" + ctk);
             lista.add(pr);
         }
+        
         try {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/corte.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
@@ -757,7 +766,8 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         } catch (JRException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        TipoMonedaTableModel model = new TipoMonedaTableModel();
+        
+        TipoPagoTableModel model = new TipoPagoTableModel();
         tblResultadoCorte.setModel(model);
         cerrarVentana();
     }

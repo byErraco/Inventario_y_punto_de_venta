@@ -1,0 +1,8 @@
+﻿SELECT (SELECT SUM(precio_venta_publico*cantidad_producto) AS total_exento FROM spve.precio_producto AS pp
+INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto
+INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto
+WHERE impuesto_producto IS NULL AND id_venta = 1);
+SELECT (SELECT SUM(precio_venta_publico*cantidad_producto) AS total_no_exento FROM spve.precio_producto AS pp
+INNER JOIN spve.producto AS p ON p.id_precio_producto = pp.id_precio_producto
+INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto
+WHERE impuesto_producto IS NOT NULL AND id_venta = 1);

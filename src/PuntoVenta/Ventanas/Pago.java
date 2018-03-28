@@ -6,7 +6,7 @@ package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Numeros.XBigDecimal;
 import ClasesExtendidas.Tablas.PagoTableModel;
-import ClasesExtendidas.Tablas.TipoMonedaTableModel;
+import ClasesExtendidas.Tablas.TipoPagoTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import static PuntoVenta.Ventanas.Venta.jtbVenta;
@@ -76,7 +76,7 @@ public class Pago extends javax.swing.JInternalFrame {
             cmbBoxBancos.setEnabled(false);
         }
 
-        TipoMonedaTableModel model = new TipoMonedaTableModel();
+        TipoPagoTableModel model = new TipoPagoTableModel();
         tblTipoPago.setModel(model);
         crearHotKeys();
         montoVenta = new XBigDecimal(venta.getLblTotalValor().getText());
@@ -1169,7 +1169,7 @@ public class Pago extends javax.swing.JInternalFrame {
         String tipoMonedaEnTabla;
         XBigDecimal montoEnTabla;
         XBigDecimal cambio;
-        TipoMonedaTableModel model = (TipoMonedaTableModel) tblTipoPago.getModel();
+        TipoPagoTableModel model = (TipoPagoTableModel) tblTipoPago.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             tipoMonedaEnTabla = model.getValueAt(i, 0).toString();
             if (tipoMonedaEnTabla.equalsIgnoreCase(tipoMoneda)) {

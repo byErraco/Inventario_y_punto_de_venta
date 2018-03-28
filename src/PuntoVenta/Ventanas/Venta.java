@@ -1,13 +1,15 @@
 package PuntoVenta.Ventanas;
 
 import ClasesExtendidas.Numeros.XBigDecimal;
-import ClasesExtendidas.Tablas.VentaTableModel;
+import ClasesExtendidas.Tablas.ProductoVentaTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Modelos.ModeloProducto;
-import java.awt.Color;
 
+import Administrador.Ventanas.RegistroCliente;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -17,8 +19,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -41,7 +48,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private DecimalFormat redondeo = new DecimalFormat("0.00");
     public final MenuPrincipal menuPrincipal;
     public String impuesto;
-    public RegistroCliente registroSimpleCliente;
+    public RegistroCliente registroCliente;
     public ListaClientes ventanaCliente;
     private boolean clienteAsociadoFactura;
     ModeloProducto productoPorAsociar;
@@ -54,6 +61,25 @@ public class Venta extends javax.swing.JInternalFrame {
     private int idVenta = -1;
     public Pago totalizarVenta;
 
+    public static class PeriodoLimite {
+        
+        /**
+         * Devuelve la descripción de un periodo según su id
+         * 
+         * @param id_periodo_venta_producto
+         * @return String con la descripción del período
+         */
+        public static String getDescripcion(int id_periodo_venta_producto) {
+            switch (id_periodo_venta_producto) {
+                case 1:
+                    return "Diario";
+                case 2:
+                    return "Semanal";
+            }
+            return "";
+        }
+    }
+    
     public Venta(MenuPrincipal menuPrincipal) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
@@ -191,6 +217,8 @@ public class Venta extends javax.swing.JInternalFrame {
         txtNombreCliente = new javax.swing.JTextField();
         lblNombres = new javax.swing.JLabel();
         cmbTipoDocumento = new javax.swing.JComboBox();
+        lblFechaFactura = new javax.swing.JLabel();
+        lblValorFechaFactura = new javax.swing.JLabel();
         pnlInformacionProducto = new javax.swing.JPanel();
         lblIdProducto = new javax.swing.JLabel();
         txtProductoId = new javax.swing.JTextField();
@@ -287,24 +315,38 @@ public class Venta extends javax.swing.JInternalFrame {
         cmbTipoDocumento.setToolTipText("");
         cmbTipoDocumento.setName(""); // NOI18N
 
+        lblFechaFactura.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        lblFechaFactura.setForeground(new java.awt.Color(255, 255, 255));
+        lblFechaFactura.setText("Fecha de factura:");
+
+        lblValorFechaFactura.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        lblValorFechaFactura.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout pnlInformacionVentaLayout = new javax.swing.GroupLayout(pnlInformacionVenta);
         pnlInformacionVenta.setLayout(pnlInformacionVentaLayout);
         pnlInformacionVentaLayout.setHorizontalGroup(
             pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInformacionVentaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblNombres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblNumeroFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNombreCliente)
                     .addGroup(pnlInformacionVentaLayout.createSequentialGroup()
-                        .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblNombres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblNumeroFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 119, Short.MAX_VALUE))
-                    .addComponent(txtNumeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNombreCliente)
+                            .addGroup(pnlInformacionVentaLayout.createSequentialGroup()
+                                .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 123, Short.MAX_VALUE))
+                            .addComponent(txtNumeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
+                    .addGroup(pnlInformacionVentaLayout.createSequentialGroup()
+                        .addComponent(lblFechaFactura)
+                        .addGap(12, 12, 12)
+                        .addComponent(lblValorFechaFactura)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlInformacionVentaLayout.setVerticalGroup(
@@ -324,6 +366,10 @@ public class Venta extends javax.swing.JInternalFrame {
                 .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNumeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNumeroFactura))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlInformacionVentaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFechaFactura)
+                    .addComponent(lblValorFechaFactura))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -379,7 +425,7 @@ public class Venta extends javax.swing.JInternalFrame {
 
         lblProductoPrecio.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
         lblProductoPrecio.setForeground(new java.awt.Color(255, 255, 255));
-        lblProductoPrecio.setText("Precio:");
+        lblProductoPrecio.setText("Precio unitario:");
 
         lblProductoPrecioValor.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         lblProductoPrecioValor.setForeground(new java.awt.Color(255, 255, 255));
@@ -426,7 +472,7 @@ public class Venta extends javax.swing.JInternalFrame {
                             .addComponent(txtProductoId, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtProductoNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlInformacionProductoLayout.createSequentialGroup()
-                                .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(error)
                                 .addGap(37, 37, 37))))))
@@ -668,7 +714,7 @@ public class Venta extends javax.swing.JInternalFrame {
                     .addGroup(pnlTotalLayout.createSequentialGroup()
                         .addComponent(lblImpuesto)
                         .addGap(18, 18, 18)
-                        .addComponent(lblImpuestoValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblImpuestoValor, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
                     .addGroup(pnlTotalLayout.createSequentialGroup()
                         .addComponent(lblSubtotal)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -718,7 +764,7 @@ public class Venta extends javax.swing.JInternalFrame {
                     .addComponent(pnlInformacionProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlInformacionVenta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlBotones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -745,9 +791,9 @@ public class Venta extends javax.swing.JInternalFrame {
             actualizarTabla();
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            char identificador = getCmbTipoDocumento().getSelectedItem().toString().charAt(0);
-            String documento = getTxtDocumento().getText();
-            crearVenta(identificador, documento);
+            char tipo_persona = getCmbTipoDocumento().getSelectedItem().toString().charAt(0);
+            String numero_identificacion_persona = getTxtDocumento().getText();
+            crearVenta(tipo_persona, numero_identificacion_persona);
         }
     }//GEN-LAST:event_txtDocumentoKeyPressed
 
@@ -766,41 +812,20 @@ public class Venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void txtCantidadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER && productoPorAsociar != null) {
-            XBigDecimal cantidad = new XBigDecimal(getTxtCantidad().getText());
-            String canticomp = txtCantidad.getText();
-            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-                if (jtbVenta.getValueAt(i, 0).toString().equals(txtProductoId.getText())) {
-                    canticomp = "" + (Integer.parseInt(canticomp) + Integer.parseInt(jtbVenta.getValueAt(i, 3).toString()));
-                }
-            }
-            double d = cantidad.doubleValue();
-            if (cantidad.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0 || !comprobarLimiteMaximo(productoPorAsociar.getCodigoBarra())) {
-                JOptionPane.showMessageDialog(null, "El limite de '" + productoPorAsociar.getDescripcion() + "' maximo permitido por persona es de " + productoPorAsociar.getLimiteVentaPorPersona() + "", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), canticomp)) {
-                menuPrincipal.getOBD().incluirProductoEnVenta(this.getIdVenta(), productoPorAsociar.getCodigoBarra(), d);
-//                try {
-//                    descontarProducto();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-
-                actualizarTabla();
-                productoTabla.put(productoPorAsociar.getCodigoBarra(), productoPorAsociar.getLimiteVentaPorPersona());
-                productoPorAsociar = null;
-                limpiarCamposProductoTxt();
-            } else {
-                JOptionPane.showMessageDialog(null, "La cantidad que se desea vender no esta disponible en el inventario", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        }
+        
     }//GEN-LAST:event_txtCantidadKeyPressed
-
+    
+    /**
+     * Devuelve todos los campos a su estado inicial para crear una nueva venta
+     */
     public void limpiarVenta() {
-        this.setIdVenta(-1);
+        setClienteAsociadoFactura(false);
+        idVenta = -1;
         limpiarCamposTxt();
-        actualizarTabla();
         txtDocumento.setText("");
+        lblValorFechaFactura.setText("");
+        actualizarTabla();
+        setBotonesVentaEnabled(false);
     }
 
     private void txtProductoIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProductoIdKeyPressed
@@ -845,7 +870,7 @@ public class Venta extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
 
             abrirVentanaBuscarProductos();
-            String nom = txtProductoNombre.getText().toString();
+            String nom = txtProductoNombre.getText();
             PuntoVenta.Ventanas.ListaProductos.txtCampoDescripcion.setText(nom);
 
         }
@@ -905,7 +930,36 @@ public class Venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEliminarMouseClicked
 
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
-        // TODO add your handling code here:
+        if (productoPorAsociar != null) {
+            XBigDecimal cantidad = new XBigDecimal(getTxtCantidad().getText());
+            String cantidadVenta = txtCantidad.getText();
+            
+            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
+                if (jtbVenta.getValueAt(i, 0).toString().equals(txtProductoId.getText())) {
+                    cantidadVenta = "" + (Double.parseDouble(cantidadVenta) + Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()));
+                }
+            }
+            
+            if (!sePuedeVender(productoPorAsociar.getCodigoBarra(), Double.parseDouble(cantidadVenta))) {
+                JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
+            } 
+            else if (menuPrincipal.getOBD().consultastock(txtProductoId.getText(), cantidadVenta)) {
+                menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, productoPorAsociar.getCodigoBarra(), cantidad.doubleValue());
+//                try {
+//                    descontarProducto();
+//                } catch (SQLException ex) {
+//                    Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+
+                actualizarTabla();
+                productoTabla.put(productoPorAsociar.getCodigoBarra(), productoPorAsociar.getLimiteVentaPorPersona());
+                productoPorAsociar = null;
+                limpiarCamposProductoTxt();
+            } else {
+                JOptionPane.showMessageDialog(null, "La cantidad que se desea vender no esta disponible en el inventario", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
     }//GEN-LAST:event_txtCantidadActionPerformed
 
     private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
@@ -930,6 +984,7 @@ public class Venta extends javax.swing.JInternalFrame {
     public static javax.swing.JTable jtbVenta;
     private javax.swing.JLabel lblCantidad1;
     private javax.swing.JLabel lblDocumento;
+    private javax.swing.JLabel lblFechaFactura;
     private javax.swing.JLabel lblIdProducto;
     private javax.swing.JLabel lblImpuesto;
     private javax.swing.JLabel lblImpuestoValor;
@@ -942,6 +997,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblSubtotalValor;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalValor;
+    private javax.swing.JLabel lblValorFechaFactura;
     private javax.swing.JPanel pnlBotones;
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JPanel pnlInformacionProducto;
@@ -964,21 +1020,34 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param serial
      * @return
      */
-    private boolean comprobarLimiteMaximo(String serial) {
-        XBigDecimal cantExistente = new XBigDecimal(0);
-        XBigDecimal cantNueva = new XBigDecimal(getTxtCantidad().getText());
-        for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-            if (jtbVenta.getValueAt(i, 0).toString().equals(serial)) {
-                cantExistente = new XBigDecimal(jtbVenta.getValueAt(i, 3).toString());
-                break;
+    private boolean sePuedeVender(String serial, double cantidadVenta) {
+        // Konstanza: Falta terminar esta función, ya que no se está tomando en cuenta la cantidad vendida en el periodo del producto
+        
+        if(productoPorAsociar.getLimiteVentaPorPersona() <= 0)  return true;
+        if(cantidadVenta > productoPorAsociar.getLimiteVentaPorPersona()) return false;
+        
+        java.sql.Date ultimaVentaProducto = (java.sql.Date) menuPrincipal.getOBD().getUltimaFechaVentaProducto(cmbTipoDocumento.getSelectedItem().toString().charAt(0), txtDocumento.getText(), serial);
+        
+        if(ultimaVentaProducto != null){
+            LocalDate ultimaVentaProductoLocal = ultimaVentaProducto.toLocalDate();
+
+            LocalDate actual = LocalDate.now();
+
+            Period p = Period.between(ultimaVentaProductoLocal, actual);
+            long diasDiferencia = ChronoUnit.DAYS.between(ultimaVentaProductoLocal, actual);
+
+            if(productoPorAsociar.getIdPeriodoLimiteVenta() == 1){
+                if(diasDiferencia >= 1) return true;
+                // Falta conocer la cantidad que se vendió el último día
+            } else if(productoPorAsociar.getIdPeriodoLimiteVenta() == 2){
+                if(diasDiferencia >= 7) return true;
+                // Falta conocer la cantidad que se vendió la última semana
             }
-        }
-        XBigDecimal cantidadTotal = new XBigDecimal(cantExistente.add(cantNueva).toString());
-        if (cantidadTotal.compareTo(new XBigDecimal(productoPorAsociar.getLimiteVentaPorPersona())) > 0) {
+
             return false;
-        } else {
-            return true;
         }
+        
+        return true;
     }
 
     /**
@@ -1086,24 +1155,24 @@ public class Venta extends javax.swing.JInternalFrame {
      * Abre la ventana de registro simple. Utiliza el char como identificador
      * del comboBox y el String para llenar el campo de cedula.
      *
-     * @param identificador
-     * @param documento
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      */
-    private void abrirVentanaRegistroSimpleCliente(char identificador, String documento) {
-        if (menuPrincipal.estacerrado(registroSimpleCliente)) {
-            if (documento.isEmpty()) {
-                registroSimpleCliente = new RegistroCliente(this);
+    private void abrirVentanaRegistroSimpleCliente(char tipo_persona, String numero_identificacion_persona) {
+        if (menuPrincipal.estacerrado(registroCliente)) {
+            if (numero_identificacion_persona.isEmpty()) {
+                registroCliente = new RegistroCliente(this);
             } else {
-                registroSimpleCliente = new RegistroCliente(this, identificador, documento);
+                registroCliente = new RegistroCliente(this, tipo_persona, numero_identificacion_persona);
             }
 
             Dimension desktopSize = menuPrincipal.panel.getSize();
-            Dimension jInternalFrameSize = registroSimpleCliente.getSize();
-            registroSimpleCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+            Dimension jInternalFrameSize = registroCliente.getSize();
+            registroCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                     (desktopSize.height - jInternalFrameSize.height) / 2);
 
-            menuPrincipal.panel.add(registroSimpleCliente);
-            registroSimpleCliente.show();
+            menuPrincipal.panel.add(registroCliente);
+            registroCliente.show();
         } else {
             JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
         }
@@ -1113,15 +1182,15 @@ public class Venta extends javax.swing.JInternalFrame {
      * Abre la ventana de registro simple.
      */
     private void abrirVentanaRegistroSimpleCliente() {
-        if (menuPrincipal.estacerrado(registroSimpleCliente)) {
-            registroSimpleCliente = new RegistroCliente(this);
+        if (menuPrincipal.estacerrado(registroCliente)) {
+            registroCliente = new RegistroCliente(this);
             Dimension desktopSize = menuPrincipal.panel.getSize();
-            Dimension jInternalFrameSize = registroSimpleCliente.getSize();
-            registroSimpleCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+            Dimension jInternalFrameSize = registroCliente.getSize();
+            registroCliente.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                     (desktopSize.height - jInternalFrameSize.height) / 2);
 
-            menuPrincipal.panel.add(registroSimpleCliente);
-            registroSimpleCliente.show();
+            menuPrincipal.panel.add(registroCliente);
+            registroCliente.show();
         } else {
             JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
         }
@@ -1169,45 +1238,56 @@ public class Venta extends javax.swing.JInternalFrame {
      * RIF) y un id (cedula o RIF)), en caso de encontrarlo crea un registro de
      * venta a nombre de este usuario y le asigna un estado de "en proceso".
      *
-     * @param identificador
-     * @param documento
+     * @param tipo_persona
+     * @param numero_identificacion_persona
      */
-    public void crearVenta(char identificador, String documento) {
+    public void crearVenta(char tipo_persona, String numero_identificacion_persona) {
         //El documento no puede ser null o estar vacio ""
-        if (documento == null || documento.isEmpty()) {
+        if (numero_identificacion_persona == null || numero_identificacion_persona.isEmpty()) {
             Utilidades.Sonidos.beep();
             this.setClienteAsociadoFactura(false);
             return;
         }
         //La caja no puede estar cerrada.
-        if (!menuPrincipal.isEstadoCaja()) {
+        if (!menuPrincipal.isCajaAbierta()) {
             Utilidades.Sonidos.beep();
             this.setClienteAsociadoFactura(false);
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "La caja está cerrada. ¿Deséa abirla?", "Caja cerrada");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "La caja está cerrada. ¿Desea abrirla?", "Caja cerrada");
             if (seleccion == 0) {
                 this.menuPrincipal.abrirVentanaCaja();
             }
             return;
         }
 
-        HashMap map = menuPrincipal.getOBD().getMapCliente(identificador, documento);
+        HashMap map = menuPrincipal.getOBD().getMapPersona(tipo_persona, numero_identificacion_persona);
+        
         if (map != null && !map.isEmpty()) {
             ModeloCliente cliente = new ModeloCliente(map);
-            this.setIdVenta(menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
-            txtNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
-            txtNumeroFactura.setText(menuPrincipal.getOBD().numeroFactura(cliente.getId(), menuPrincipal.getIdEstadoCaja()));
-            setClienteAsociadoFactura(true);
-            setBotonesVentaEnabled(true);
-
-            txtProductoId.setEditable(true);
-            getTxtCantidad().setEditable(true);
-            txtProductoId.requestFocus();
-            actualizarTabla();
+            int idVentaNuevo = menuPrincipal.getOBD().crearVenta(cliente.getId(), menuPrincipal.getIdEstadoCaja());
+            this.setIdVenta(idVentaNuevo);
+            System.out.println("ID VENTA NUEVO "+idVentaNuevo);
+            if(idVentaNuevo > -1){
+                txtNombreCliente.setText(cliente.getNombre() + " " + cliente.getApellido());
+                HashMap<String, String> venta = menuPrincipal.getOBD().getMapVenta(idVentaNuevo);
+                txtNumeroFactura.setText(venta.get("codigo_factura"));
+                lblValorFechaFactura.setText(venta.get("fecha_venta"));
+                setClienteAsociadoFactura(true);
+                setBotonesVentaEnabled(true);
+            
+                txtProductoId.setEditable(true);
+                getTxtCantidad().setEditable(true);
+                txtProductoId.requestFocus();
+                actualizarTabla();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar crear la factura", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+                    
         } else {
             this.setClienteAsociadoFactura(false);
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa registrar a este cliente?", "Este cliente no existe");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea registrar a este cliente?", "Este cliente no existe");
             if (seleccion == 0) {
-                abrirVentanaRegistroSimpleCliente(identificador, documento);
+                abrirVentanaRegistroSimpleCliente(tipo_persona, numero_identificacion_persona);
             }
         }
     }
@@ -1224,7 +1304,7 @@ public class Venta extends javax.swing.JInternalFrame {
         totalizarVenta.requestFocus();
 
     }
-
+    
     /**
      * Todos los campos del formulario se ponen en blanco excepto el documento y
      * se deshabilitan los de txtIdProducto y txtCantidad.
@@ -1275,8 +1355,8 @@ public class Venta extends javax.swing.JInternalFrame {
      * la lista, en vez de hacer un query directo mejore el rendimiento.
      */
     public void actualizarTabla() {
-        ArrayList<HashMap<String, String>> listaProductoEnVenta = menuPrincipal.getOBD().getArrayListProductosEnVenta(this.getIdVenta());
-        VentaTableModel model = new VentaTableModel(listaProductoEnVenta);
+        ArrayList<HashMap<String, String>> listaProductoEnVenta = menuPrincipal.getOBD().getArrayListProductosEnVenta(idVenta);
+        ProductoVentaTableModel model = new ProductoVentaTableModel(listaProductoEnVenta);
         jtbVenta.setModel(model);
         jtbVenta.setFont(new Font("Arial", Font.BOLD, 16));
         jtbVenta.setBackground(Color.white);
@@ -1309,19 +1389,8 @@ public class Venta extends javax.swing.JInternalFrame {
 
         //Actualizar subtotal, total e Iva.
         if (listaProductoEnVenta != null) {
-            double subtotal = 0;
-            double total = 0;
-            double impuesto = 0;
-            for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-                impuesto = impuesto + (Double.parseDouble(jtbVenta.getValueAt(i, 4).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-                subtotal = subtotal + (Double.parseDouble(jtbVenta.getValueAt(i, 2).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-                total = total + (Double.parseDouble(jtbVenta.getValueAt(i, 5).toString()) * (Double.parseDouble(jtbVenta.getValueAt(i, 3).toString())));
-            }
-            lblTotalValor.setText(redondeo.format(total).replace(",", "."));
-            lblImpuestoValor.setText(redondeo.format(impuesto).replace(",", "."));
-            lblSubtotalValor.setText(redondeo.format(subtotal).replace(",", "."));
-//            actualizarLblSubtotal(listaProductoEnVenta);
-//            actualizarLblImpuesto(listaProductoEnVenta);
+            actualizarLblSubtotal();
+            actualizarLblImpuesto();
             actualizarLblTotal();
         } else {
             this.lblTotalValor.setText("0.00");
@@ -1343,12 +1412,12 @@ public class Venta extends javax.swing.JInternalFrame {
             numeroRow = jtbVenta.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el articulo: " + jtbVenta.getModel().getValueAt(numeroRow, 1) + " de la venta?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el artículo " + jtbVenta.getModel().getValueAt(numeroRow, 1) + " de la venta?", "Eliminar artículo");
 
             if (seleccion == 0) {
 
                 String serial = jtbVenta.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarProductoEnVenta(this.getIdVenta(), serial);
+                menuPrincipal.getOBD().eliminarProductoEnVenta(idVenta, serial);
                 actualizarTabla();
             } else {
                 jtbVenta.requestFocus();
@@ -1361,28 +1430,24 @@ public class Venta extends javax.swing.JInternalFrame {
      * productos asociados a la venta? o guardarlos como registro?
      */
     private void cancelarVenta() {
-        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa cancelar la venta actual?", "Cancelar venta");
+        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea cancelar la venta actual?", "Cancelar venta");
         if (seleccion == 0) {
-            menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Cancelada);
-            this.setIdVenta(-1);
-            limpiarCamposTxt();
-            actualizarTabla();
+            menuPrincipal.getOBD().setEstadoVenta(idVenta, ObjetoBaseDatos.EstadoVenta.Cancelada);
+            limpiarVenta();
         }
     }
-
+       
     /**
      * Método para pausar la venta actual.
      */
     private void pausarVenta() {
-        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa pausar la venta actual?", "Pausar venta");
+        int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea pausar la venta actual?", "Pausar venta");
         if (seleccion == 0) {
-            menuPrincipal.getOBD().setEstadoVenta(this.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Pausada);
-            this.setIdVenta(-1);
-            limpiarCamposTxt();
-            actualizarTabla();
+            menuPrincipal.getOBD().setEstadoVenta(idVenta, ObjetoBaseDatos.EstadoVenta.Pausada);
+            limpiarVenta();
         }
     }
-
+    
     /**
      * Abre un JOptionPane para ingresar la nueva cantidad de productos. Si no
      * hay ninguno seleccionado, automáticamente selecciona el primer objeto de
@@ -1391,26 +1456,30 @@ public class Venta extends javax.swing.JInternalFrame {
     private void modificarCantidadProductoSeleccionado() {
         if (jtbVenta.getRowCount() > 0) {
             int rowNumber = jtbVenta.getSelectedRow();
+            
             if (rowNumber < 0) {
                 jtbVenta.setRowSelectionInterval(0, 0);
                 rowNumber = jtbVenta.getSelectedRow();
             }
-            String cant = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad de " + jtbVenta.getModel().getValueAt(rowNumber, 1), jtbVenta.getModel().getValueAt(rowNumber, 3));
-            if (!cant.isEmpty()) {
-
-                XBigDecimal cantidadNueva = new XBigDecimal(cant);
-                XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 3).toString());
+            
+            String cantidadNuevaString = JOptionPane.showInputDialog(this, "Ingrese la nueva cantidad de " + jtbVenta.getModel().getValueAt(rowNumber, 1), jtbVenta.getModel().getValueAt(rowNumber, 5));
+            
+            if (!cantidadNuevaString.isEmpty()) {
+                XBigDecimal cantidadNueva = new XBigDecimal(cantidadNuevaString);
+                XBigDecimal cantidadAnterior = new XBigDecimal(jtbVenta.getModel().getValueAt(rowNumber, 5).toString());
                 if (cantidadNueva.compareTo(new XBigDecimal(0)) > 0) {
                     String codigoBarra = jtbVenta.getModel().getValueAt(rowNumber, 0).toString();
-                    if (productoTabla.get(codigoBarra) == null) {
+                    
+                    /*if (productoTabla.get(codigoBarra) == null) {
                         productoTabla.put(codigoBarra, menuPrincipal.getOBD().getLimiteMaximoProducto(codigoBarra));
-                    }
-                    if (cantidadNueva.compareTo(new BigDecimal(productoTabla.get(codigoBarra))) > 0) {
-                        JOptionPane.showMessageDialog(null, "El limite de '" + jtbVenta.getModel().getValueAt(rowNumber, 1) + "' maximo permitido por persona es de " + productoTabla.get(codigoBarra) + "", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    if (!sePuedeVender(codigoBarra, Double.parseDouble(cantidadNuevaString))) {
+                        JOptionPane.showMessageDialog(null, "El limite máximo de '" + productoPorAsociar.getDescripcion() + "' permitido por persona es " + productoPorAsociar.getLimiteVentaPorPersona() + " en un periodo "+PeriodoLimite.getDescripcion(productoPorAsociar.getIdPeriodoLimiteVenta()), "Error", JOptionPane.ERROR_MESSAGE);
                     } else {
+                     */   
                         modificarCantidadProducto(codigoBarra, new XBigDecimal(cantidadNueva.add(cantidadAnterior.negate()).toString()));
                         actualizarTabla();
-                    }
+                   // }
                 } else {
                     Utilidades.Sonidos.beep();
                 }
@@ -1427,7 +1496,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param cantidad
      */
     private void modificarCantidadProducto(String codigoBarra, XBigDecimal cantidad) {
-        menuPrincipal.getOBD().incluirProductoEnVenta(idVenta, codigoBarra, cantidad.intValue());
+        menuPrincipal.getOBD().agregarProductoEnVenta(idVenta, codigoBarra, cantidad.doubleValue());
     }
 
     /**
@@ -1443,8 +1512,8 @@ public class Venta extends javax.swing.JInternalFrame {
         if (!map.isEmpty()) {
             productoPorAsociar = new ModeloProducto(map);
             lblProductoPrecio.setVisible(true);
-            lblProductoPrecioValor.setText(map.get("pvp"));
-            txtProductoNombre.setText(map.get("descripcion"));
+            lblProductoPrecioValor.setText(map.get("precio_venta_publico"));
+            txtProductoNombre.setText(map.get("descripcion_producto"));
             txtCantidad.setText("1");
             txtCantidad.setSelectionStart(0);
             txtCantidad.setSelectionEnd(txtCantidad.getText().length());
@@ -1459,45 +1528,34 @@ public class Venta extends javax.swing.JInternalFrame {
     }
 
     /**
-     * Actualiza el lblSubtotalValor con el precio de todos los productos
-     * includos en la venta.
+     * Actualiza el lblSubtotalValor con la suma de los productos no exentos
+     * menos los impuestos de todos los productos incluidos en la venta.
      *
-     * @param listaProductoEnVenta
      */
-    public void actualizarLblSubtotal(final ArrayList<HashMap<String, String>> listaProductoEnVenta) {
-        XBigDecimal montoTotal = new XBigDecimal(0);
-        XBigDecimal totalProducto;
-
-        for (HashMap<String, String> producto : listaProductoEnVenta) {
-            totalProducto = new XBigDecimal(producto.get("pvp"));
-            montoTotal = new XBigDecimal(montoTotal.add(totalProducto).toString());
-        }
-        this.getLblSubtotalValor().setText(montoTotal.setScale(2, RoundingMode.HALF_EVEN).toString());
+    public void actualizarLblSubtotal() {
+        Double subtotal = menuPrincipal.getOBD().getSubtotalVenta(idVenta);
+        //Double montoBaseImponible = menuPrincipal.getOBD().getTotalBaseImponibleVenta(idVenta);
+        XBigDecimal subtotalDecimal = new XBigDecimal(subtotal.toString());
+        //XBigDecimal montoBaseImponibleDecimal = new XBigDecimal(montoBaseImponible.toString());
+        this.getLblSubtotalValor().setText(subtotalDecimal.toString());
     }
 
     /**
-     * Actualiza el lblImpuestoValor con el precio de todos los productos
-     * includos en la venta.
+     * Actualiza el lblImpuestoValor con el suma del impuesto de todos los productos
+     * incluidos en la venta.
      *
-     * @param listaProductoEnVenta
      */
-    public void actualizarLblImpuesto(final ArrayList<HashMap<String, String>> listaProductoEnVenta) {
-        XBigDecimal montoTotal = new XBigDecimal(0);
-        XBigDecimal totalProducto;
-
-        for (HashMap<String, String> producto : listaProductoEnVenta) {
-            totalProducto = new XBigDecimal(producto.get("impuesto"));
-            montoTotal = new XBigDecimal(montoTotal.add(totalProducto).toString());
-        }
-//        System.out.println("montototal=" + montoTotal);
-        this.getLblImpuestoValor().setText(montoTotal.setScale(2, RoundingMode.HALF_EVEN).toString());
+    public void actualizarLblImpuesto() {
+        Double montoImpuesto = menuPrincipal.getOBD().getTotalImpuestoVenta(idVenta);
+        System.out.println("MONTO IMPUESTO: "+montoImpuesto);
+        XBigDecimal monto = new XBigDecimal(montoImpuesto.toString());
+        this.getLblImpuestoValor().setText(monto.setScale(2, RoundingMode.HALF_EVEN).toString());
     }
 
     /**
      * Actualiza el lblTotalValor con el precio de todos los productos includos
      * en la venta.
      *
-     * @param listaProductoEnVenta
      */
     public void actualizarLblTotal() {
         XBigDecimal montoSubtotal = new XBigDecimal(getLblSubtotalValor().getText());
@@ -1544,7 +1602,7 @@ public class Venta extends javax.swing.JInternalFrame {
 
     /*
     Metodo para descontar la cantidad del producto
-     */
+    *
     private void descontarProducto() throws SQLException {
         int idProducto;
         double cantidad;
@@ -1565,7 +1623,7 @@ public class Venta extends javax.swing.JInternalFrame {
             Utilidades.Sonidos.beep();
         }
 
-    }
+    }*/
 
     /**
      * @return the txtIdProducto
@@ -1632,6 +1690,11 @@ public class Venta extends javax.swing.JInternalFrame {
      */
     public void setClienteAsociadoFactura(final boolean clienteAsociadoFactura) {
         btnClientes.setEnabled(!clienteAsociadoFactura);
+        cmbTipoDocumento.setEnabled(!clienteAsociadoFactura);
+        txtDocumento.setEnabled(!clienteAsociadoFactura);
+        txtNombreCliente.setEnabled(!clienteAsociadoFactura);
+        txtNumeroFactura.setEnabled(!clienteAsociadoFactura);
+        
         this.clienteAsociadoFactura = clienteAsociadoFactura;
     }
 

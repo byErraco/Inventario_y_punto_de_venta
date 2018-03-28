@@ -17,8 +17,8 @@ public class ModeloCaja {
     private String descripcion;    
     
     public ModeloCaja(HashMap<String, String> map){
-        this.id = Integer.parseInt(map.get("id"));
-        this.descripcion = map.get("descripcion");
+        this.id = Integer.parseInt(map.get("id_caja"));
+        this.descripcion = map.get("descripcion_caja");
     }
 
     /**

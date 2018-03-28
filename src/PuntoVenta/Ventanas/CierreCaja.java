@@ -37,7 +37,7 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author inverdata
  */
-public class Cierre_Caja extends javax.swing.JInternalFrame {
+public class CierreCaja extends javax.swing.JInternalFrame {
 
     private Caja caja;
     public MenuPrincipal menuPrincipal;
@@ -48,7 +48,7 @@ public class Cierre_Caja extends javax.swing.JInternalFrame {
      *
      * @param caja
      */
-    public Cierre_Caja(Caja caja) {
+    public CierreCaja(Caja caja) {
         initComponents();
         this.caja = caja;
         this.menuPrincipal = caja.menuPrincipal;

@@ -12,7 +12,10 @@ reporte.zip
 test
 Registro de Cambios.docx
 roadmap.docx
+*.xcf
 *.dat
 *.log
 *.form~
 *.java~
+*.odt#
+*/*.orig

@@ -28,18 +28,15 @@ public class PostgreSQL {
     /**
      * Método para conectar a la base de datos PostgreSQL.
      *
-     * @param login
-     * @param password
      * @throws ClassNotFoundException
      * @throws SQLException
      */
     public void conectar() throws ClassNotFoundException, SQLException {
         Class.forName("org.postgresql.Driver");
-//        String np = password + "7";
         this.conexion = DriverManager.getConnection(this.path, login, password);
         this.sentencia = this.conexion.createStatement();
         this.setEstado(true);
-         }
+    }
 
     /**
      * Método para desconectar la base de datos PostgreSQL.
@@ -49,12 +46,12 @@ public class PostgreSQL {
      */
     public boolean desconectar() {
         try {
-            if (this.getConexion() == null || this.getConexion().isClosed()) {
+            if (this.conexion == null || this.conexion.isClosed()) {
                 this.setEstado(false);
                 return true;
             } else {
                 this.sentencia.close();
-                this.getConexion().close();
+                this.conexion.close();
                 this.setEstado(false);
                 return true;
             }
@@ -72,17 +69,52 @@ public class PostgreSQL {
      * @return ResulSet con el resultado del SELECon
      * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
-    public ResultSet ejecutarSelect(String sql) throws XSQLException {
+    public ResultSet ejecutarSelect(String sql) {
+        /* Konstanza:
+            - Revisar para que funciona XSQLException
+            - Eliminar el if: si no hay conexión debería ir a catch no retornar null
+            - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
+              cuando puede dar otro error como que no haya un campo o una tabla
+        */
+        System.out.println(sql+"\n");
         try {
-            if (this.getConexion() == null || this.getConexion().isClosed()) {
-                return null;
+            if (this.conexion == null || this.conexion.isClosed()) {
+                return null; 
             }
+            
             return sentencia.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();
             this.desconectar();
-            throw new XSQLException("La base de datos no está conectada.");
         }
+        
+        return null;
+    }
+    
+    /**
+     * Ejecuta un query que no devuelve ningún resultado
+     * 
+     * @param sql
+     * @return true si se ejecutó el query 
+     */
+    public boolean ejecutarQuerySinResultado(String sql) {
+        /* Konstanza:
+            - Revisar para que funciona XSQLException
+            - Eliminar el if: si no hay conexión debería ir a catch no retornar null
+            - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
+              cuando puede dar otro error como que no haya un campo o una tabla
+        */
+        System.out.println(sql);
+        try {
+            if (this.conexion == null || this.conexion.isClosed()) {
+                return false; 
+            }
+            sentencia.executeQuery(sql);
+        } catch (SQLException e) {
+            //e.printStackTrace();
+            this.desconectar();
+        }
+        return true;
     }
 
     /**
@@ -94,22 +126,23 @@ public class PostgreSQL {
      * @return id del row resultante del INSERT o UPDATE
      * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
-    public synchronized int ejecutarManipulacionDeDatosSimpple(String sql) throws XSQLException {
+    public synchronized int ejecutarCreate(String sql, String tabla) throws XSQLException {
         int resultado = -1;
         try {
-            if (this.getConexion() == null || this.getConexion().isClosed()) {
+            if (this.conexion == null || this.conexion.isClosed()) {
                 throw new XSQLException("La base de datos no está conectada.");
             }
+            System.out.println(sql);
             this.sentencia.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (this.sentencia.getGeneratedKeys().next()) {
-                resultado = this.sentencia.getGeneratedKeys().getInt("id");
+                resultado = this.sentencia.getGeneratedKeys().getInt("id_"+tabla);
             }
             this.sentencia.close();
         } catch (SQLException e) {
             e.printStackTrace();
             this.desconectar();
             resultado = -1;
-            throw new XSQLException("La base de datos no está conectada.");
+            //throw new XSQLException("La base de datos no está conectada.");
         }
         return resultado;
     }
@@ -148,7 +181,7 @@ public class PostgreSQL {
 
         try {
             return this.ejecutarSelect(sqlQuery.toString());
-        } catch (XSQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -177,6 +210,8 @@ public class PostgreSQL {
 
     /**
      * Exception para la clase PostgreSQL.
+     * 
+     * Konstanza: no le veo el uso a esta excepción
      */
     private static class XSQLException extends Exception {
 

@@ -6,6 +6,8 @@
 package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ import java.math.RoundingMode;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -26,16 +29,31 @@ public class Calculadora extends javax.swing.JInternalFrame {
      * Creates new form Calculadora
      */
     MenuPrincipal menu;
+    
+    private boolean agregarOperacion;
+    
+    public static void main(String[] args){
+    Calculadora calculadora = new Calculadora(null);
+    
+    JFrame frame = new JFrame("Calculadora");
+    frame.setSize(300,500);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.getContentPane().add(calculadora);
 
+    calculadora.show();
+    frame.setVisible(true);
+    }
+    
     public Calculadora(MenuPrincipal menu) {
         this.menu = menu;
+        this.agregarOperacion = false;
         initComponents();
+        
         this.setTitle("Calculadora");
 
         Action actBtnIgual = new AbstractAction("btnIgualAction") {
             @Override
             public void actionPerformed(ActionEvent e) {
- 
                 btnIgualActionPerformed(e);
             }
         };
@@ -152,8 +170,6 @@ public class Calculadora extends javax.swing.JInternalFrame {
             }
         };
         
-
-      
         actBtnIgual.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
         jPanel1.getActionMap().put("btnIgualAction", actBtnIgual);
         jPanel1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actBtnIgual.getValue(Action.ACTION_COMMAND_KEY), "btnIgualAction");
@@ -218,7 +234,7 @@ public class Calculadora extends javax.swing.JInternalFrame {
         jPanel1.getActionMap().put("btnIgualAction", actBtnIgual);
         jPanel1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actBtnIgual.getValue(Action.ACTION_COMMAND_KEY), "btnIgualAction");
 
-        actBtnPunto.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0));
+        actBtnPunto.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_DECIMAL, 0));
         jPanel1.getActionMap().put("btnPuntoAction", actBtnPunto);
         jPanel1.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actBtnPunto.getValue(Action.ACTION_COMMAND_KEY), "btnPuntoAction");
         
@@ -539,114 +555,118 @@ public class Calculadora extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cambiarEstadoBotonesOperaciones(Boolean estado){
+        btnSumar.setEnabled(estado);
+        btnRestar.setEnabled(estado);
+        btnMultiplicar.setEnabled(estado);
+        btnDividir.setEnabled(estado);
+        
+        this.agregarOperacion = estado;
+    }
+            
     private void btnCEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCEActionPerformed
         Pantalla.setText(null);
-        btnSumar.setEnabled(true);
-        btnRestar.setEnabled(true);
-        btnMultiplicar.setEnabled(true);
-        btnDividir.setEnabled(true);
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnCEActionPerformed
 
     private void btnDividirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDividirActionPerformed
-        String i = Pantalla.getText();
-        Pantalla.setText(i + " " + btnDividir.getText() + " ");
-        btnSumar.setEnabled(false);
-        btnRestar.setEnabled(false);
-        btnMultiplicar.setEnabled(false);
-        btnDividir.setEnabled(false);
+        if(agregarOperacion){
+            String i = Pantalla.getText();
+            Pantalla.setText(i + " " + btnDividir.getText() + " ");
+            cambiarEstadoBotonesOperaciones(false);
+        }
     }//GEN-LAST:event_btnDividirActionPerformed
 
     private void btnMultiplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiplicarActionPerformed
-        String i = Pantalla.getText();
-        Pantalla.setText(i + " " + btnMultiplicar.getText() + " ");
-        btnSumar.setEnabled(false);
-        btnRestar.setEnabled(false);
-        btnMultiplicar.setEnabled(false);
-        btnDividir.setEnabled(false);
+        if(agregarOperacion){
+            String i = Pantalla.getText();
+            Pantalla.setText(i + " " + btnMultiplicar.getText() + " ");
+            cambiarEstadoBotonesOperaciones(false);
+        }
     }//GEN-LAST:event_btnMultiplicarActionPerformed
 
     private void btnRestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestarActionPerformed
-        String i = Pantalla.getText();
-        Pantalla.setText(i + " " + btnRestar.getText() + " ");
-        btnSumar.setEnabled(false);
-        btnRestar.setEnabled(false);
-        btnMultiplicar.setEnabled(false);
-        btnDividir.setEnabled(false);
+        if(agregarOperacion){
+            String i = Pantalla.getText();
+            Pantalla.setText(i + " " + btnRestar.getText() + " ");
+            cambiarEstadoBotonesOperaciones(false);
+        }
     }//GEN-LAST:event_btnRestarActionPerformed
 
     private void btnSieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSieteActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "7");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnSieteActionPerformed
 
     private void btnOchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOchoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "8");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnOchoActionPerformed
 
     private void btnNueveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNueveActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "9");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnNueveActionPerformed
 
     private void btnSumarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumarActionPerformed
-        String i = Pantalla.getText();
-        Pantalla.setText(i + " " + btnSumar.getText() + " ");
-        btnSumar.setEnabled(false);
-        btnRestar.setEnabled(false);
-        btnMultiplicar.setEnabled(false);
-        btnDividir.setEnabled(false);
+        if(agregarOperacion){
+            String i = Pantalla.getText();
+            Pantalla.setText(i + " " + btnSumar.getText() + " ");
+            cambiarEstadoBotonesOperaciones(false);
+        }
     }//GEN-LAST:event_btnSumarActionPerformed
 
     private void btnCuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuatroActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "4");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnCuatroActionPerformed
 
     private void btnCincoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCincoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "5");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnCincoActionPerformed
 
     private void btnSeisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeisActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "6");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnSeisActionPerformed
 
     private void btnUnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "1");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnUnoActionPerformed
 
     private void btnDosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDosActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "2");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnDosActionPerformed
 
     private void btnTresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTresActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "3");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnTresActionPerformed
 
     private void btnCeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCeroActionPerformed
-        String i = "";
-        i = Pantalla.getText();
+        String i = Pantalla.getText();
         Pantalla.setText(i + "0");
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnCeroActionPerformed
 
     private void btnPuntoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPuntoActionPerformed
-        String i = "";
-        i = Pantalla.getText();
-        Pantalla.setText(i + ".");
+        if(agregarOperacion){
+            String i = Pantalla.getText();
+            Pantalla.setText(i + ".");
+            cambiarEstadoBotonesOperaciones(false);
+        }
     }//GEN-LAST:event_btnPuntoActionPerformed
 
     private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
@@ -680,10 +700,7 @@ public class Calculadora extends javax.swing.JInternalFrame {
                 }
             }
         }
-        btnSumar.setEnabled(true);
-        btnRestar.setEnabled(true);
-        btnMultiplicar.setEnabled(true);
-        btnDividir.setEnabled(true);
+        cambiarEstadoBotonesOperaciones(true);
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void jPanel1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyReleased

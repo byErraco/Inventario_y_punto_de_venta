@@ -1,0 +1,2 @@
+﻿DELETE FROM spve.venta_producto USING spve.producto
+WHERE venta_producto.id_producto = producto.id_producto AND codigo_venta_producto = '4321' AND id_venta = 1;

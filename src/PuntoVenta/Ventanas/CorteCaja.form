@@ -557,7 +557,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cmbTipoMoneda" max="32767" attributes="0"/>
+                          <Component id="cmbTipoPago" max="32767" attributes="0"/>
                           <Component id="txtMonto" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -570,7 +570,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblTipoMoneda" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbTipoMoneda" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="cmbTipoPago" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -606,7 +606,7 @@
                 <Property name="text" type="java.lang.String" value="Monto:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cmbTipoMoneda">
+            <Component class="javax.swing.JComboBox" name="cmbTipoPago">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="12" style="0"/>
@@ -616,7 +616,7 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="cmbTipoMonedaKeyPressed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="cmbTipoPagoKeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTipoMoneda">
@@ -627,7 +627,7 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Tipo de Moneda:"/>
+                <Property name="text" type="java.lang.String" value="Tipo de pago:"/>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[109, 15]"/>
                 </Property>

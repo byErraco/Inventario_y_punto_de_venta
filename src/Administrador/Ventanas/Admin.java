@@ -50,16 +50,16 @@ public class Admin extends javax.swing.JInternalFrame {
     private ModificacionEmpleados modificacionEmpleados;
     private static String ruta = "";
     private RegistroCliente registroCliente;
-    private ModificacionClientes modificacionClientes;
+    private RegistroCliente modificacionClientes;
 
     /**
      * Creates new form Admin
+     * @param menuPrincipal
      */
     public Admin(MenuPrincipal menuPrincipal) {
 
         initComponents();
         this.menuPrincipal = menuPrincipal;
-        this.setTitle("Saphiro - Administracion de Modulos");
         crearHotKeys();
         actualizarTabla();
     }
@@ -129,6 +129,7 @@ public class Admin extends javax.swing.JInternalFrame {
         setBackground(new java.awt.Color(32, 182, 155));
         setClosable(true);
         setForeground(java.awt.Color.cyan);
+        setTitle("Saphiro - Administración de módulos");
 
         jToolBarAdmin.setBackground(new java.awt.Color(32, 182, 155));
         jToolBarAdmin.setFloatable(false);
@@ -185,7 +186,7 @@ public class Admin extends javax.swing.JInternalFrame {
         btnParametros.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         btnParametros.setForeground(new java.awt.Color(0, 0, 0));
         btnParametros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01.parametros.png"))); // NOI18N
-        btnParametros.setText("<html><font size=2><center>Parametros<br>F3</center></font></html>");
+        btnParametros.setText("<html><font size=2><center>Parámetros<br>F3</center></font></html>");
         btnParametros.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnParametros.setBorderPainted(false);
         btnParametros.setFocusable(false);
@@ -397,7 +398,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
         jTextField1.setToolTipText("");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -416,7 +416,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 255));
         jTextField2.setToolTipText("");
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -427,7 +426,6 @@ public class Admin extends javax.swing.JInternalFrame {
             }
         });
 
-        jTextField4.setBackground(new java.awt.Color(255, 255, 255));
         jTextField4.setToolTipText("");
         jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -455,7 +453,6 @@ public class Admin extends javax.swing.JInternalFrame {
         Alerta.setForeground(new java.awt.Color(255, 0, 0));
         Alerta.setText("Ej: ####-#######");
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jTextArea1.setAutoscrolls(false);
@@ -472,7 +469,6 @@ public class Admin extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel6.setText("Moneda:");
 
-        jTextField3.setBackground(new java.awt.Color(255, 255, 255));
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField3KeyTyped(evt);
@@ -701,10 +697,9 @@ public class Admin extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Documentos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
             limpiar();
         } else {
-            menuPrincipal.getOBD().ingresoEmp(nombre, rif, telefono, direccion, moneda);
+            /*menuPrincipal.getOBD().ingresoEmp(nombre, rif, telefono, direccion, moneda);
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            limpiar();
-
+            limpiar();*/
         }
 
         //abrirVentanaUpload();
@@ -816,12 +811,12 @@ public class Admin extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField3KeyReleased
 
     public void actualizarTabla() {
-        ArrayList<HashMap<String, String>> lista = menuPrincipal.getOBD().getArrayListEmpleado();
-        EmpleadosTableModel model = new EmpleadosTableModel(lista);
+        ArrayList<HashMap<String, String>> listaEmpleados = menuPrincipal.getOBD().getArrayListEmpleado();
+        EmpleadosTableModel model = new EmpleadosTableModel(listaEmpleados);
         jtbListaEmpleado.setModel(model);
 
-        ArrayList<HashMap<String, String>> lista2 = menuPrincipal.getOBD().getArrayListClientes();
-        ClienteTableModel model2 = new ClienteTableModel(lista2);
+        ArrayList<HashMap<String, String>> listaClientes = menuPrincipal.getOBD().getArrayListClientes();
+        ClienteTableModel model2 = new ClienteTableModel(listaClientes);
         jtbListaCliente.setModel(model2);
     }
 
@@ -837,8 +832,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroEmpleados.show();
     }
 
-    public void abrirVentanaModificacionEmpleados() {
-        modificacionEmpleados = new ModificacionEmpleados(this);
+    public void abrirVentanaModificacionEmpleados(char tipo_persona, String numero_identificacion_persona) {
+        modificacionEmpleados = new ModificacionEmpleados(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionEmpleados.getSize();
         modificacionEmpleados.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -846,8 +841,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionEmpleados);
         modificacionEmpleados.show();
-        String cedula = null;
-
     }
 
     public void abrirVentanaRegistroCliente() {
@@ -861,8 +854,8 @@ public class Admin extends javax.swing.JInternalFrame {
         registroCliente.show();
     }
 
-    public void abrirVentanaModificacionCliente() {
-        modificacionClientes = new ModificacionClientes(this);
+    public void abrirVentanaModificacionCliente(char tipo_persona, String numero_identificacion_persona) {
+        modificacionClientes = new RegistroCliente(this, tipo_persona, numero_identificacion_persona, true);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
         modificacionClientes.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -870,8 +863,6 @@ public class Admin extends javax.swing.JInternalFrame {
 
         menuPrincipal.panel.add(modificacionClientes);
         modificacionClientes.show();
-        String cedula = null;
-
     }
 
     public static void conseguirRuta() {
@@ -935,10 +926,12 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaEmpleado.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el empleado?: " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
+            
             if (seleccion == 0) {
-                String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarEmpleado(cedula);
+                String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarEmpleado(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -951,17 +944,12 @@ public class Admin extends javax.swing.JInternalFrame {
         int numeroRow = jtbListaEmpleado.getSelectedRow();
         if (numeroRow < 0) {
             jtbListaEmpleado.setRowSelectionInterval(0, 0);
-            numeroRow = jtbListaEmpleado.getSelectedRow();
         }
-        if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa modificar el empleado?: " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Modificar Empleado");
-            if (seleccion == 0) {
-                String cedula = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
-                abrirVentanaModificacionEmpleados();
-                Administrador.Ventanas.ModificacionEmpleados.txtDocumento.setText(cedula);
-            } else {
-                jtbListaEmpleado.requestFocus();
-            }
+        else {
+            String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+
+            abrirVentanaModificacionEmpleados(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -969,18 +957,12 @@ public class Admin extends javax.swing.JInternalFrame {
         int numeroRow = jtbListaCliente.getSelectedRow();
         if (numeroRow < 0) {
             jtbListaCliente.setRowSelectionInterval(0, 0);
-            numeroRow = jtbListaCliente.getSelectedRow();
         }
-        if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa modificar el cliente?: " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Modificar cliente");
-            if (seleccion == 0) {
-                String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                abrirVentanaModificacionCliente();
-                Administrador.Ventanas.ModificacionClientes.txtDocumento.setText(cedula);
-
-            } else {
-                jtbListaEmpleado.requestFocus();
-            }
+        else {
+            String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+            String[] partes = identificacion.split("-");
+            
+            abrirVentanaModificacionCliente(partes[0].charAt(0), partes[1]);
         }
     }
 
@@ -991,10 +973,11 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaCliente.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el cliente?: " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
-                String cedula = jtbListaCliente.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarCliente(cedula);
+                String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarPersona(partes[0].charAt(0), partes[1]);
                 actualizarTabla();
 
             } else {
@@ -1052,34 +1035,6 @@ public class Admin extends javax.swing.JInternalFrame {
         btnParametros.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actParametros.getValue(Action.ACCELERATOR_KEY), Admin.Modulo.PARAMETROS.getAction());
     }
 
-    private void cerrarVentana() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private String getId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /* //metodo para agarrar datos de la tabla
-    private JTable jtbListaEmpleado;
-    private DefaultTableModel model;
- 
-    public tablaSeleccion()
-    {
-        model = new DefaultTableModel(rowData, columns);
-        table = new JTable(model);
- 
-        setLayout(new BorderLayout());
-        add(new JScrollPane(table), BorderLayout.CENTER);
-    }
-    
-    
-    public Object getSelectedValue()
-    {
-        int col = jtbListaEmpleado.getSelectedColumn();
-        int row = jtbListaEmpleado.getSelectedRow();
-        return jtbListaEmpleado.getModel().getValueAt(row, col);
-    }*/
     private enum Modulo {
 
         EMPLEADOS(1, "actionEmpleados"),

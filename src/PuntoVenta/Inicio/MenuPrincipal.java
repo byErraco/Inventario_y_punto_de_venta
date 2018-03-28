@@ -15,7 +15,7 @@ import PuntoVenta.Ventanas.Acerca;
 import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
-import PuntoVenta.Ventanas.Cierre_Caja;
+import PuntoVenta.Ventanas.CierreCaja;
 import PuntoVenta.Ventanas.Productos; //añadido
 import PuntoVenta.Ventanas.Movimientos;//añadido
 import PuntoVenta.Ventanas.Detalles; //añadido para productos
@@ -60,7 +60,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Admin admin;
     public Bloqueo bloqueo; // modificado de bloqueo2 --> Bloqueo
     public Empresa empresa;
-    public Cierre_Caja cierre;
+    public CierreCaja cierre;
     public Productos producto; //añadido
     public Movimientos movimiento;   // añadido
 
@@ -72,7 +72,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public fondo panel = new fondo();
 
     private ModeloEmpleado empleado;
-    private boolean estadoCaja;
+    private boolean cajaAbierta;
     private ModeloCaja modeloCaja;
     private Factura factura;
     private AgregarProducto agregar;
@@ -106,7 +106,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             Utilidades.CuadroMensaje.getMensajeError(panel, "Error al conectar con la base de datos. Verifique su conexión con el servidor: " + configuracion.get("bd_servidor"), "Error de conexión");
         }
         //Asignar modelo caja
-        HashMap<String, String> map = getOBD().getMapCaja(Integer.parseInt(this.configuracion.getProperty("id_caja")));
+        HashMap<String, String> map = this.obd.getMapCaja(Integer.parseInt(this.configuracion.getProperty("id_caja")));
         if (map != null && !map.isEmpty()) {
             this.modeloCaja = new ModeloCaja(map);
         } else {
@@ -114,14 +114,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
 
         this.setTitle("Saphiro - " + this.configuracion.getProperty("nombre_equipo"));
-        this.estadoCaja = this.getOBD().getEstadoCaja(this.modeloCaja.getId());
+        this.cajaAbierta = this.obd.isCajaAbierta(this.modeloCaja.getId());
 
-        this.idEstadoCaja = this.getOBD().getIdEstadoCaja(this.modeloCaja.getId());
+        this.idEstadoCaja = this.obd.getIdUltimoEstadoCaja(this.modeloCaja.getId());
         crearHotKeys();
         //Si la caja está cerrada, deshabilita los botones F2, F3, F4.
-        if (!this.isEstadoCaja()) {
-            this.setBotonesMenuPrincipalEnabled(this.isEstadoCaja());
-        }
+        this.setBotonesMenuPrincipalEnabled(this.cajaAbierta);
+            
         getContentPane().add(panel, java.awt.BorderLayout.CENTER);
 
         /**
@@ -413,7 +412,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnCalculadora);
 
         btnSalir.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnSalir.setText("<html><font size=2><center>Salir</center></font></html>");
+        btnSalir.setText("<html><font size=4><center>Salir<br></center></font></html>");
         btnSalir.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSalir.setFocusable(false);
         btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -991,15 +990,15 @@ if (evt.getKeyCode() == KeyEvent.VK_F2) {
     /**
      * @return the estadoCaja
      */
-    public boolean isEstadoCaja() {
-        return estadoCaja;
+    public boolean isCajaAbierta() {
+        return cajaAbierta;
     }
 
     /**
      * @param estadoCaja the estadoCaja to set
      */
     public void setEstadoCaja(boolean estadoCaja) {
-        this.estadoCaja = estadoCaja;
+        this.cajaAbierta = estadoCaja;
     }
 
     /**

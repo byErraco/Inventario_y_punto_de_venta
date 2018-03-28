@@ -1,0 +1,1 @@
+﻿SELECT tipo_persona, numero_identificacion_persona, nombre_persona||' '||apellido_persona AS nombre_persona, nombre_cargo FROM spve.persona as p INNER JOIN spve.empleado as e ON p.id_persona = e.id_persona LEFT JOIN spve.cargo ON id_cargo_empleado = id_cargo WHERE activo_empleado = 1; 

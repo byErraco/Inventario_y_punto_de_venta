@@ -1,0 +1,3 @@
+﻿SELECT pv.id_periodo_venta_producto FROM spve.periodo_venta_producto AS pv
+INNER JOIN spve.producto AS p ON pv.id_periodo_venta_producto = p.id_periodo_venta_producto
+WHERE codigo_venta_producto = '4321'

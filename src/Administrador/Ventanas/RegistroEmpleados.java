@@ -6,11 +6,10 @@
 package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
-import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.Modelos.ModeloEmpleado;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -28,22 +27,21 @@ import javax.swing.event.InternalFrameEvent;
 //¿?¿?¿?¿?¿?¿
 public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
-    private Admin admin;
-    private MenuPrincipal menuPrincipal;
-    private ObjetoBaseDatos obd;
-    private Object ObjetoBaseDatos;
-    private Object txtNombre;
-    private RegistroEmpleados registroEmpleados;
+    private final Admin admin;
+    private final ObjetoBaseDatos obd;
+    private HashMap<String, Integer> cargos;
 
     /**
      * Creates new form RegistroEmpleados
      *
-     * @param venta
+     * @param admin
      */
     public RegistroEmpleados(Admin admin) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
+        setCargos();
     }
 
     /**
@@ -55,6 +53,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
      */
     public RegistroEmpleados(Admin admin, char identificador, String documento) {
         this.admin = admin;
+        this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
         cmbTipoDocumento.setSelectedItem(identificador);
@@ -83,17 +82,18 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblApellido = new javax.swing.JLabel();
         lblTelefono = new javax.swing.JLabel();
         txtTelefono = new javax.swing.JTextField();
-        lblCorreo = new javax.swing.JLabel();
-        txtCorreo = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
         cmbCargoId = new javax.swing.JComboBox();
         lblCargo = new javax.swing.JLabel();
-        lblDepartamento = new javax.swing.JLabel();
-        txtDepartamento = new javax.swing.JTextField();
+        jClave = new javax.swing.JPasswordField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDireccion = new javax.swing.JTextArea();
+        txtCorreo = new javax.swing.JTextField();
+        lblCorreo = new javax.swing.JLabel();
+        lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Saphiro - Registro Empleados");
+        setTitle("Saphiro - Registrar empleado");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 
@@ -112,7 +112,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblDocumento.setForeground(new java.awt.Color(255, 255, 255));
         lblDocumento.setText("CI / RIF:");
 
-        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "J", "E", "P" }));
+        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "E" }));
         cmbTipoDocumento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTipoDocumentoActionPerformed(evt);
@@ -160,7 +160,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
         lblTelefono.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(255, 255, 255));
-        lblTelefono.setText("Telefono:");
+        lblTelefono.setText("Teléfono:");
 
         txtTelefono.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtTelefono.addActionListener(new java.awt.event.ActionListener() {
@@ -174,64 +174,32 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             }
         });
 
-        lblCorreo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
-        lblCorreo.setForeground(new java.awt.Color(255, 255, 255));
-        lblCorreo.setText("Correo:");
-
-        txtCorreo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtCorreo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCorreoActionPerformed(evt);
-            }
-        });
-        txtCorreo.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCorreoKeyTyped(evt);
-            }
-        });
-
         lblPassword.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblPassword.setForeground(new java.awt.Color(255, 255, 255));
-        lblPassword.setText("Password:");
-
-        txtPassword.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
-        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtPasswordKeyTyped(evt);
-            }
-        });
-
-        cmbCargoId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3" }));
-        cmbCargoId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCargoIdActionPerformed(evt);
-            }
-        });
+        lblPassword.setText("Contraseña:");
 
         lblCargo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
         lblCargo.setForeground(new java.awt.Color(255, 255, 255));
         lblCargo.setText("Cargo");
 
-        lblDepartamento.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
-        lblDepartamento.setForeground(new java.awt.Color(255, 255, 255));
-        lblDepartamento.setText("Departamento:");
+        jClave.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
 
-        txtDepartamento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtDepartamento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDepartamentoActionPerformed(evt);
-            }
-        });
-        txtDepartamento.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        txtDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtDepartamentoKeyTyped(evt);
+                txtDireccionKeyTyped(evt);
             }
         });
+        jScrollPane1.setViewportView(txtDireccion);
+
+        lblCorreo.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        lblCorreo.setForeground(new java.awt.Color(255, 255, 255));
+        lblCorreo.setText("Correo:");
+
+        lblDireccion.setFont(new java.awt.Font("Arial", 0, 16)); // NOI18N
+        lblDireccion.setForeground(new java.awt.Color(255, 255, 255));
+        lblDireccion.setText("Dirección");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -241,35 +209,35 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblCargo)
-                        .addGap(72, 72, 72))
+                        .addComponent(lblPassword)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(jClave, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblCargo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblNombre)
                                     .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblCorreo)
                                     .addComponent(lblTelefono)
-                                    .addComponent(lblPassword))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lblDepartamento)
+                                    .addComponent(lblCorreo)
+                                    .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtDepartamento)
-                    .addComponent(cmbCargoId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPassword)
-                    .addComponent(txtCorreo)
-                    .addComponent(txtTelefono)
-                    .addComponent(txtApellido)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtNombres))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCorreo)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(txtTelefono)
+                            .addComponent(txtApellido)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtNombres))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -297,17 +265,18 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
                     .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCorreo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPassword))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDireccion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDepartamento))
+                    .addComponent(lblPassword)
+                    .addComponent(jClave, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCargo)))
+                    .addComponent(lblCargo)
+                    .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
@@ -320,7 +289,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
-                        .addGap(136, 136, 136)
+                        .addGap(133, 133, 133)
                         .addComponent(btnRegistrarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -328,10 +297,10 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(btnRegistrarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -354,78 +323,15 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         admin.actualizarTabla();
     }//GEN-LAST:event_btnRegistrarEmpleadosActionPerformed
 
-
     private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
-        boolean valido = true;
-        if ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != KeyEvent.VK_MINUS))) {
+        if ((txtTelefono.getText().length() > 15) || ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != '-') && (evt.getKeyChar() != '+')))) {
             evt.consume();
-        } else if ((Character.isDigit(evt.getKeyChar())) && txtTelefono.getText().length() == 4) {
-            evt.consume();
-        } else if (txtTelefono.getText().length() != 4 && (evt.getKeyChar() == KeyEvent.VK_MINUS)) {
-            evt.consume();
-        } else if (txtTelefono.getText().length() > 11) {
-            evt.consume();
-        } else {
-            valido = false;
         }
-        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-            valido = false;
-        }
-        //Alerta.setVisible(valido);
     }//GEN-LAST:event_txtTelefonoKeyTyped
 
-    /*
-    public static boolean emailValido(String email)
-    {
-        boolean esValido = false;
-        
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence inputStr = email;
-        
-        Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-        if(matcher.matches())
-        {
-            esValido = true;
-        }
-        
-        return esValido;
-    }*/
-
-    private void txtCorreoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCorreoKeyTyped
-        /*
-        char aux=evt.getKeyChar();
-        String str=null;
-        int e=0;
-        try{
-            e=txtDocumento.getText().length();
-        }catch(Exception E){
-            
-        }
-        
-        System.out.println(e);
-         */
-        //if(!Character.isDigit(aux) || e==8) evt.consume();
-
-    }//GEN-LAST:event_txtCorreoKeyTyped
-
-    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
-        /*boolean esValido = false;
-        
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence email = null;
-        CharSequence inputStr = email;
-        
-   
-        
-        Pattern pattern = Pattern.compile(expression,Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-        if(matcher.matches())
-        {
-            esValido = true;
-        }
-         */
-    }//GEN-LAST:event_txtCorreoActionPerformed
+    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void txtApellidoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidoKeyTyped
         char c = evt.getKeyChar();
@@ -435,7 +341,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error: Solo se aceptan letras.");
 
         }
-
     }//GEN-LAST:event_txtApellidoKeyTyped
 
     private void txtNombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyTyped
@@ -463,41 +368,23 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Error: Solo se aceptan numeros.");
         }
 
-         */
-
+        */
     }//GEN-LAST:event_txtDocumentoKeyTyped
 
     private void txtDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDocumentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDocumentoActionPerformed
 
-    private void txtTelefonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTelefonoActionPerformed
-
     private void cmbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoDocumentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
+    private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
+        if (txtDireccion.getText().length() > 100) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtDireccionKeyTyped
 
-    private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordKeyTyped
-
-    private void cmbCargoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCargoIdActionPerformed
-
-    }//GEN-LAST:event_cmbCargoIdActionPerformed
-
-    private void txtDepartamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDepartamentoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDepartamentoActionPerformed
-
-    private void txtDepartamentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepartamentoKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDepartamentoKeyTyped
 
     private void crearHotKeys() {
         Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
@@ -536,30 +423,36 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         this.addInternalFrameListener(listener);
 
     }
-
+    
+    private void setCargos() {
+        this.cargos = this.obd.getMapCargos();
+        
+        for (Entry<String, Integer> entry : this.cargos.entrySet()) {   
+            cmbCargoId.addItem(entry.getKey());
+        }
+    }
+    
     private void cerrarVentana() {
         this.dispose();
     }
 
     private void registrarEmpleados() {
-        String documento, nombre, apellido, telefono, correo, password, departamento;
-        char nacionalidad;
+        String numero_identificacion, nombre, apellido, telefono, email, direccion, clave;
+        char tipo;
         int idEmpleado, cargo_id;
-        boolean registrado;
 
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
-        documento = txtDocumento.getText();
+        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        numero_identificacion = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
         telefono = txtTelefono.getText();
-        correo = txtCorreo.getText();
-        password = txtPassword.getText();
-        departamento = txtDepartamento.getText();
+        email = txtCorreo.getText();
+        direccion = txtDireccion.getText();
+        clave = String.valueOf(jClave.getPassword());
 
-        //cargo_id = cmbCargoId.getSelectedItem().toString().charAt(0);
-        cargo_id = Integer.valueOf((String) cmbCargoId.getSelectedItem());
+        cargo_id = cargos.get((String) cmbCargoId.getSelectedItem());
 
-        if (documento.isEmpty()) {
+        if (numero_identificacion.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtDocumento.requestFocus();
             return;
@@ -579,52 +472,19 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             txtTelefono.requestFocus();
             return;
         }
-        if (correo.isEmpty()) {
+        if (clave.isEmpty()) {
             Utilidades.Sonidos.beep();
-            txtCorreo.requestFocus();
-            return;
-        }
-        if (password.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtPassword.requestFocus();
-            return;
-        }
-        if (departamento.isEmpty()) {
-            Utilidades.Sonidos.beep();
-            txtDepartamento.requestFocus();
+            jClave.requestFocus();
             return;
         }
 
-        //¿???????
-        //try{
-        idEmpleado = admin.menuPrincipal.getOBD().crearEmpleado(nombre, apellido, nacionalidad, documento, telefono, correo, cargo_id, password, departamento);
+        idEmpleado = this.obd.crearEmpleado(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email, clave, cargo_id);
 
         if (idEmpleado > 0) {
-            HashMap<String, String> mapEmpleado = admin.menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-
-            ModeloEmpleado empleado = new ModeloEmpleado(mapEmpleado);
-
-            correo = txtCorreo.getText();
-            if (!correo.isEmpty()) {
-                empleado.setCorreo(correo);
-            }
-            telefono = txtTelefono.getText();
-            if (!telefono.isEmpty()) {
-                empleado.setTelefono(telefono);
-            }
-            int check = admin.menuPrincipal.getOBD().actualizarEmpleado(empleado);
-            if (check != idEmpleado) {
-//                System.err.println("ERROR GRAVE");
-            }
             this.cerrarVentana();
-
         } else {
             Utilidades.Sonidos.beep();
         }
-        /*}catch(java.lang.NullPointerException e){
-        System.out.print(e);
-        
-    }Z*/
     }
 
 
@@ -632,11 +492,13 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnRegistrarEmpleados;
     private javax.swing.JComboBox cmbCargoId;
     private javax.swing.JComboBox cmbTipoDocumento;
+    private javax.swing.JPasswordField jClave;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApellido;
     private javax.swing.JLabel lblCargo;
     private javax.swing.JLabel lblCorreo;
-    private javax.swing.JLabel lblDepartamento;
+    private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDocumento;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblPassword;
@@ -644,15 +506,9 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JTextField txtApellido;
     private javax.swing.JTextField txtCorreo;
-    private javax.swing.JTextField txtDepartamento;
+    private javax.swing.JTextArea txtDireccion;
     private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtNombres;
-    private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
-
-    /*
-    private void emailValido() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
 }

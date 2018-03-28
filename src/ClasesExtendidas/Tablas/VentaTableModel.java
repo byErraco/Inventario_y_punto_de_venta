@@ -10,18 +10,17 @@ import java.util.HashMap;
 
 /**
  *
- * @author Programador01
+ * @author inverdata
  */
 public class VentaTableModel extends ArrayListTableModel {
 
     enum Columnas {
 
-        Codigo("Código", "codigo_barra"),
-        Descripcion("Descripción", "descripcion"),
-        Cantidad("Cantidad", "cantidad_producto"),
-        PrecioBase("Precio base", "pvp"),
-        Impuesto("Impuesto", "impuesto"),
-        Precio("Precio final", "total");
+        Codigo("Código", "codigo_factura"),
+        Cliente("Cliente", "identificacion_persona"),
+        Fecha("Fecha", "fecha_venta"),
+        Estado("Estado", "estado_venta"),
+        Total("Total", "total");
 
         String header;
         String columna;
@@ -55,15 +54,15 @@ public class VentaTableModel extends ArrayListTableModel {
 
     public VentaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Codigo.getHeader(), Columnas.Descripcion.getHeader(), Columnas.PrecioBase.getHeader(),
-                    Columnas.Cantidad.getHeader(), Columnas.Impuesto.getHeader(), Columnas.Precio.getHeader()},
-                new String[]{Columnas.Codigo.getColumna(), Columnas.Descripcion.getColumna(), Columnas.PrecioBase.getColumna(),
-                    Columnas.Cantidad.getColumna(), Columnas.Impuesto.getColumna(), Columnas.Precio.getColumna()});
+                new String[]{Columnas.Codigo.getHeader(), Columnas.Cliente.getHeader(), Columnas.Fecha.getHeader(),
+                    Columnas.Estado.getHeader(), Columnas.Total.getHeader()},
+                new String[]{Columnas.Codigo.getColumna(), Columnas.Cliente.getColumna(), Columnas.Fecha.getColumna(),
+                    Columnas.Estado.getColumna(), Columnas.Total.getColumna()});
     }
 
     @Override
     public boolean isCellEditable(int row, int column) {
-        return column == Columnas.Cantidad.ordinal();
+        return false;
     }
 
 }

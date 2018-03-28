@@ -2,6 +2,7 @@ package PuntoVenta.Ventanas;
 
 import PuntoVenta.Inicio.MenuPrincipal;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.EstadoCajaTableModel;
 import Utilidades.Globales;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -26,9 +27,8 @@ public class Caja extends javax.swing.JInternalFrame {
     public String fecha;
     static DecimalFormat nf = new DecimalFormat("###,###,###,###.00");
 
-    private CorteCaja corteCaja;
-    private Cierre_Caja cierre;
-    private LogIn logIn;
+    private CorteCaja ventanaCorte;
+    private CierreCaja ventanaCierre;
 
     /**
      *
@@ -37,7 +37,7 @@ public class Caja extends javax.swing.JInternalFrame {
     public Caja(MenuPrincipal menuPrincipal) {
         initComponents();
         this.menuPrincipal = menuPrincipal;
-        this.setTitle("Saphiro - Gestion de la caja N°" + menuPrincipal.getModeloCaja().getId());
+        this.setTitle("Saphiro - Gestión de la caja N°" + menuPrincipal.getModeloCaja().getId());
 
         actualizarTabla();
 
@@ -48,18 +48,13 @@ public class Caja extends javax.swing.JInternalFrame {
      * Método para actualizar el contenido de la tabla en la ventana caja.
      */
     public void actualizarTabla() {
-        ArrayList estructuraCaja;
-        String[] columnas = {"ID", "Empleado", "Apertura", "Cierre"};
-        estructuraCaja = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja")));
-        ArrayListTableModel model = new ArrayListTableModel(estructuraCaja, columnas, columnas);
-        getTblResultadoBusqueda().setModel(model);
-        setBotonesCajaEnabled(menuPrincipal.isEstadoCaja());
+        ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja"))); 
+        EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList);
+        jtbResultadoBusqueda.setModel(estadoCajaTableModel);
+        
+        setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
 
-        getTblResultadoBusqueda().setFont(new Font("Arial", Font.PLAIN, 12));
-        getTblResultadoBusqueda().getColumnModel().getColumn(0).setPreferredWidth(50);
-        getTblResultadoBusqueda().getColumnModel().getColumn(1).setPreferredWidth(140);
-        getTblResultadoBusqueda().getColumnModel().getColumn(2).setPreferredWidth(200);
-        getTblResultadoBusqueda().getColumnModel().getColumn(3).setPreferredWidth(200);
+        jtbResultadoBusqueda.setFont(new Font("Arial", Font.PLAIN, 12));
     }
 
     /**
@@ -69,11 +64,11 @@ public class Caja extends javax.swing.JInternalFrame {
         this.dispose();
     }
 
-    public void crearHotKeys() {
+    private void crearHotKeys() {
         Action actAbrirCaja = new AbstractAction("actionAbrirCaja") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setEstadoCaja(true);
+                abrirCaja();
             }
         };
         Action actCerrarCaja = new AbstractAction("actionCerrarCaja") {
@@ -161,7 +156,7 @@ public class Caja extends javax.swing.JInternalFrame {
      * @param aFlag True para abrir una caja, false para cerrarla.
      */
     public void setEstadoCaja(boolean aFlag) {
-        if (aFlag && !menuPrincipal.isEstadoCaja()) {
+        if (aFlag && !menuPrincipal.isCajaAbierta()) {
             boolean aux;
             String montoInicial = "";
             do {
@@ -192,89 +187,81 @@ public class Caja extends javax.swing.JInternalFrame {
             } else {
                 Utilidades.Sonidos.beep();
             }
-        } else if (!aFlag && menuPrincipal.isEstadoCaja()) {
-            getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
+        } else if (!aFlag && menuPrincipal.isCajaAbierta()) {
+            jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
 
             abrirVentanaCierre();
         } else {
             Utilidades.Sonidos.beep();
         }
     }
-
+    
+    /**
+     * Abre la caja creando un nuevo estado de caja
+     */
+    public void abrirCaja() {
+        String montoApertura;
+        
+        if(!menuPrincipal.isCajaAbierta()){
+            do {
+                montoApertura = JOptionPane.showInputDialog(this, "Monto de apertura", 0);
+            } while (!montoApertura.matches(Globales.patronCantidad));
+            
+            int idEstadoCaja = menuPrincipal.getOBD().abrirCaja(menuPrincipal.getModeloCaja().getId(),
+                                                                menuPrincipal.getEmpleado().getId(),
+                                                                montoApertura);
+            
+            if(idEstadoCaja >= 0){
+                actualizarTabla();
+                menuPrincipal.setIdEstadoCaja(idEstadoCaja);
+                menuPrincipal.setEstadoCaja(true);
+                menuPrincipal.setBotonesMenuPrincipalEnabled(true);
+                setBotonesCajaEnabled(true);
+                if (jtbResultadoBusqueda.getSelectedRow() > 0) {
+                    btnImprimir.setEnabled(false);
+                }
+            }
+        }
+    }
+    
     /**
      * Crea un corte de caja.
      */
     public void abrirVentanaCorteCaja() {
-        if (menuPrincipal.isEstadoCaja()) {
-            boolean probar;
-            if (corteCaja != null) {
-                corteCaja.dispose();
-                probar = corteCaja.isClosed();
-            } else {
-                probar = true;
-            }
-            if (probar) {
-                corteCaja = new CorteCaja(this);
+        if (menuPrincipal.isCajaAbierta()) {
+            if (ventanaCorte != null) {
+                JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
+            } 
+            else {
+                ventanaCorte = new CorteCaja(this);
 
                 Dimension desktopSize = menuPrincipal.panel.getSize();
-                Dimension jInternalFrameSize = corteCaja.getSize();
-                corteCaja.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
-
-                menuPrincipal.panel.add(corteCaja);
-                corteCaja.show();
-            } else {
-                JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
+                Dimension jInternalFrameSize = ventanaCorte.getSize();
+                ventanaCorte.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                                         (desktopSize.height - jInternalFrameSize.height) / 2);
+                menuPrincipal.panel.add(ventanaCorte);
+                ventanaCorte.show();
             }
-
         } else {
             Utilidades.Sonidos.beep();
         }
     }
 
-    /**
-     * Desglosa Moneda.
-     */
-//    private void abrirVentanaDesgloseMoneda(boolean aFlag) {
-//        if (menuPrincipal.isEstadoCaja()) {
-//
-//            if (menuPrincipal.estacerrado(desgloseMoneda)) {
-//                desgloseMoneda = new DesgloseMoneda(this, aFlag);
-//
-//                Dimension desktopSize = menuPrincipal.panel.getSize();
-//                Dimension jInternalFrameSize = desgloseMoneda.getSize();
-//                desgloseMoneda.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-//                        (desktopSize.height - jInternalFrameSize.height) / 2);
-//
-//                menuPrincipal.panel.add(desgloseMoneda);
-//                desgloseMoneda.show();
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
-//            }
-//
-//        } else {
-//            Utilidades.Sonidos.beep();
-//        }
-//    }
     private void abrirVentanaCierre() {
-        if (menuPrincipal.isEstadoCaja()) {
-            //Cual es la pantalla para ver el flujo de la caja
-            if (menuPrincipal.estacerrado(cierre)) {
-                cierre = new Cierre_Caja(this);
-                Dimension desktopSize = menuPrincipal.panel.getSize();
-                Dimension jInternalFrameSize = cierre.getSize();
-                cierre.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
-//
-                menuPrincipal.panel.add(cierre);
-                cierre.show();
-            }
+        if (menuPrincipal.isCajaAbierta() && menuPrincipal.estacerrado(ventanaCierre)) {
+            ventanaCierre = new CierreCaja(this);
+            Dimension desktopSize = menuPrincipal.panel.getSize();
+            Dimension jInternalFrameSize = ventanaCierre.getSize();
+            ventanaCierre.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                                (desktopSize.height - jInternalFrameSize.height) / 2);
+            menuPrincipal.panel.add(ventanaCierre);
+            ventanaCierre.show();
         }
     }
 
     private void abrirVentanaFlujoCaja() {
-        getTblResultadoBusqueda().setRowSelectionInterval(0, 0);
-        if (menuPrincipal.isEstadoCaja()) {
+        jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
+        if (menuPrincipal.isCajaAbierta()) {
             //Cual es la pantalla para ver el flujo de la caja
         }
 
@@ -296,7 +283,8 @@ public class Caja extends javax.swing.JInternalFrame {
         btnCorte = new javax.swing.JButton();
 
         setClosable(true);
-        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+        // revisar funcionamiento de este bloque
+      /*  addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
@@ -312,7 +300,7 @@ public class Caja extends javax.swing.JInternalFrame {
             }
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
-        });
+        });*/
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
         pnlContenedor.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(172, 162, 162), null, null));
@@ -331,9 +319,6 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
         txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtFiltroKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtFiltroKeyReleased(evt);
             }
@@ -472,8 +457,9 @@ public class Caja extends javax.swing.JInternalFrame {
                         .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(btnAbrirCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnCerrarCaja, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnAbrirCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCerrarCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -503,7 +489,7 @@ public class Caja extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAbrirCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirCajaActionPerformed
-        setEstadoCaja(true);
+        abrirCaja();
     }//GEN-LAST:event_btnAbrirCajaActionPerformed
 
     private void btnFlujoCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFlujoCajaActionPerformed
@@ -525,25 +511,12 @@ public class Caja extends javax.swing.JInternalFrame {
         jtbResultadoBusqueda.setRowSorter(sorter);
     }//GEN-LAST:event_txtFiltroKeyReleased
 
-    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
-
-    }//GEN-LAST:event_formInternalFrameClosing
-
     private void btnCorteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorteActionPerformed
         abrirVentanaCorteCaja();
     }//GEN-LAST:event_btnCorteActionPerformed
 
-    private void txtFiltroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (jtbResultadoBusqueda.getRowCount() > 0) {
-                jtbResultadoBusqueda.requestFocus();
-                jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
-            }
-        }
-    }//GEN-LAST:event_txtFiltroKeyPressed
-
     private void txtFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltroActionPerformed
-        // TODO add your handling code here:
+        focusResultado();
     }//GEN-LAST:event_txtFiltroActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -569,8 +542,8 @@ public class Caja extends javax.swing.JInternalFrame {
     }
 
     private void imprimirFacturaCaja() {
-        if (getTblResultadoBusqueda().getSelectedRow() >= 0) {
-            int r = Integer.parseInt(getTblResultadoBusqueda().getValueAt(getTblResultadoBusqueda().getSelectedRow(), 0).toString().trim());
+        if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
+            int r = Integer.parseInt(jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString().trim());
             //btnImprimir.setEnabled(true);
 
 //    ctrl.VerFacturaCaja(conf, r);
@@ -590,26 +563,25 @@ public class Caja extends javax.swing.JInternalFrame {
     public javax.swing.JTextField getTxtFiltro() {
         return txtFiltro;
     }
-
+    
+    /** Konstanza: 
+     * Nueva funcion
+     * Cambia el focus a 'jtbResultadoBusqueda'
+     */
+    private void focusResultado() {
+        if (jtbResultadoBusqueda.getRowCount() > 0) {
+            jtbResultadoBusqueda.requestFocus();
+            jtbResultadoBusqueda.setRowSelectionInterval(0, 0);
+        }
+    }
+    
     private void focusPuntoInteres() {
         if (!this.txtFiltro.hasFocus()) {
             this.txtFiltro.requestFocus();
             this.txtFiltro.setSelectionStart(0);
             this.txtFiltro.setSelectionEnd(this.txtFiltro.getText().length());
         } else {
-            txtFiltroKeyPressed(new KeyEvent(this, 0, 0, 0, KeyEvent.VK_ENTER, ' '));
+            focusResultado();
         }
     }
-
-    private void abrirVentanaLogIn() {
-        logIn = new LogIn(menuPrincipal);
-        Dimension desktopSize = menuPrincipal.panel.getSize();
-        Dimension jInternalFrameSize = logIn.getSize();
-        logIn.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-
-        menuPrincipal.panel.add(logIn);
-        logIn.show();
-    }
-
 }

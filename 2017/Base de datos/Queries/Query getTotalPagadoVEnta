@@ -1,0 +1,1 @@
+﻿SELECT SUM(monto_pago) FROM spve.pago WHERE id_venta = 2

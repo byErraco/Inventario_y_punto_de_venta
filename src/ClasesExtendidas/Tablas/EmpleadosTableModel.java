@@ -16,9 +16,10 @@ import java.util.HashMap;
 public class EmpleadosTableModel extends ArrayListTableModel {
 
     enum Columnas {
-
-        Cedula("Cedula", "cedula"),
-        Nombre("Nombre", "nombre");
+        
+        Identificacion("Identificación", "identificacion_persona"),
+        Nombre("Nombre", "nombre_persona"),
+        Cargo("Cargo", "nombre_cargo");
 
         String header;
         String columna;
@@ -42,8 +43,8 @@ public class EmpleadosTableModel extends ArrayListTableModel {
 
     public EmpleadosTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Cedula.getHeader(), Columnas.Nombre.getHeader()},
-                new String[]{Columnas.Cedula.getColumna(), Columnas.Nombre.getColumna()});
+                new String[]{Columnas.Identificacion.getHeader(), Columnas.Nombre.getHeader(), Columnas.Cargo.getHeader()},
+                new String[]{Columnas.Identificacion.getColumna(), Columnas.Nombre.getColumna(), Columnas.Cargo.getColumna()});
         
     }
 

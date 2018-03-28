@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ArrayListTableModel extends DefaultTableModel {
 
-//    private DecimalFormat redondeo = new DecimalFormat("0.00");
     private int cantidadColumnas = 0;
     private final boolean isEditable = false;
 
