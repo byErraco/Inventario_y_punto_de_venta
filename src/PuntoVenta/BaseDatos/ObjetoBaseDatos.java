@@ -416,13 +416,14 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Empresa emp = new Empresa();
 
-        String query = "SELECT * FROM spve.persona WHERE id_persona = 1";
+        String query = "SELECT nombre_persona, apellido_persona, tipo_persona, numero_identificacion_persona, direccion_persona FROM spve.persona WHERE id_persona = 1";
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(query);
             while (rs.next()) {
                 emp.setNombre(rs.getString("nombre_persona"));
                 emp.setNombre(rs.getString("apellido_persona"));
+                emp.setTipoEmpresa(rs.getString("tipo_persona"));
                 emp.setRif(rs.getString("numero_identificacion_persona"));
                 //emp.setTelefono(rs.getString("telefono_persona"));
                 emp.setDireccion(rs.getString("direccion_persona"));
@@ -3426,7 +3427,7 @@ public class ObjetoBaseDatos {
         List lista = new ArrayList();
         Empresa emp;
         ResultSet rs;
-        emp = datosEmpresas();//Ernesto: /*REVISAR QUERY Faltan asignaciones de alias*/
+        emp = datosEmpresas();//Ernesto: /*REVISAR QUERY*/
         String sql = "SELECT DISTINCT CONCAT(c.nombre,' ',c.apellido) as nombre,c.cedula,c.direccion,"
                 + "ven.codigo_factura,ven.total_exento,ven.total_no_exento,ven.iva,ven.total,ven.totalpag,ven.cambio,"
                 + "pag.tipopago,pag.monto,vp.cantidad_producto, CONCAT (e.nombre,' ',e.apellido) as nombE,"
