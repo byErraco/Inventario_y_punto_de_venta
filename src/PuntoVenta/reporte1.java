@@ -34,7 +34,7 @@ public class reporte1 {
     private String vuelto;
     private String nombreemp;
 
-    public reporte1(String canti, String descri, String puni, String total, String gtotal, String nombre, String cedula, String direccion, String factura, String pagado, String tipo, String rifE, String nombreE, String direccionE, String telefonoE, String moneda, String totalexento, String totalnoexento, String impuesto, String vuelto, String nombreemp) {
+    public reporte1(String canti, String descri, String puni, String total, String gtotal, String nombre, String cedula, String direccion, String factura, String pagado, String tipo, String rifE, String nombreE, String direccionE, String telefonoE, String moneda, String totalexento, String impuesto, String vuelto, String nombreemp) {
         this.canti = canti;
         this.descri = descri;
         this.puni = puni;

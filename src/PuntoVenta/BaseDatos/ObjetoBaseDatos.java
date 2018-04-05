@@ -3463,10 +3463,10 @@ public class ObjetoBaseDatos {
                 }
                 pagado = "" + redondeo.format(Double.parseDouble(pagado));
                 if (rs.getString("impuesto").equals("0.00")) {
-                    PuntoVenta.reporte1 rp = new PuntoVenta.reporte1(rs.getString("cantidad_producto"), descrip + " (E)", rs.getString("pvp"), pagado, rs.getString("total"), rs.getString("nombre"), rs.getString("cedula"), rs.getString("direccion"), codigofac, rs.getString("totalpag"), rs.getString("tipopago"), emp.getRif(), emp.getNombre(), emp.getDireccion(), emp.getTelefono(), emp.getMoneda(), rs.getString("total_exento"), rs.getString("total_no_exento"), rs.getString("iva"), rs.getString("cambio"), rs.getString("nombE"));
+                    PuntoVenta.reporte1 rp = new PuntoVenta.reporte1(rs.getString("cantidad_producto"), descrip + " (E)", rs.getString("pvp"), pagado, rs.getString("total"), rs.getString("nombre"), rs.getString("cedula"), rs.getString("direccion"), codigofac, rs.getString("totalpag"), rs.getString("tipopago"), emp.getRif(), emp.getNombre(), emp.getDireccion(), emp.getTelefono(), emp.getMoneda(), rs.getString("total_exento"), rs.getString("iva"), rs.getString("cambio"), rs.getString("nombE"));
                     lista.add(rp);
                 } else {
-                   PuntoVenta.reporte1 rp = new PuntoVenta.reporte1(rs.getString("cantidad_producto"), descrip, rs.getString("pvp"), pagado, rs.getString("total"), rs.getString("nombre"), rs.getString("cedula"), rs.getString("direccion"), codigofac, rs.getString("totalpag"), rs.getString("tipopago"), emp.getRif(), emp.getNombre(), emp.getDireccion(), emp.getTelefono(), emp.getMoneda(), rs.getString("total_exento"), rs.getString("total_no_exento"), rs.getString("iva"), rs.getString("cambio"), rs.getString("nombE"));
+                   PuntoVenta.reporte1 rp = new PuntoVenta.reporte1(rs.getString("cantidad_producto"), descrip, rs.getString("pvp"), pagado, rs.getString("total"), rs.getString("nombre"), rs.getString("cedula"), rs.getString("direccion"), codigofac, rs.getString("totalpag"), rs.getString("tipopago"), emp.getRif(), emp.getNombre(), emp.getDireccion(), emp.getTelefono(), emp.getMoneda(), rs.getString("total_exento"), rs.getString("iva"), rs.getString("cambio"), rs.getString("nombE"));
                    lista.add(rp);
                 }
             }
