@@ -13,9 +13,23 @@ public class ModeloProducto {
     private String pvp;
     private String isva;
     private int limiteVentaPorPersona;
-    private int idPeriodoLimiteVenta;
+<<<<<<< HEAD
+
    
 
+    public ModeloProducto(String id, String codigoBarra, String descripcion, String idGalpon,
+            String descripcionGalpon, String cantidad, String precio, String iva, String limite) {
+      //  this.id = Integer.parseInt(id);
+       // this.codigoBarra = codigoBarra;
+       // this.descripcion = descripcion;
+       // this.baseImponible = descripcionGalpon;
+       // this.pvp = precio;
+       // this.isva = iva;
+       // this.limiteVentaPorPersona = Integer.parseInt(limite);
+    }
+=======
+    private int idPeriodoLimiteVenta;
+>>>>>>> origin/ernesto
 
     /**
      * Utiliza el HashMap para asignar los valores al objeto producto. Los campos
@@ -39,12 +53,22 @@ public class ModeloProducto {
         } catch (Exception e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
+      this.codigoBarra = map.get("codigo_barra");
+       this.descripcion = map.get("descripcion");
+       this.baseImponible = map.get("descripcion_g");
+       this.tipo = map.get("tipo"); //añadido
+       this.cantidad = Integer.parseInt(map.get("cantidad"));//añadido
+        this.pvp = map.get("pvp");
+       this.isva = map.get("iva");
+=======
         
         this.codigoBarra = map.get("codigo_venta_producto");
         this.descripcion = map.get("descripcion_producto");
         this.baseImponible = map.get("base_imponible");
         this.pvp = map.get("precio_venta");
         this.isva = map.get("impuesto_producto");
+>>>>>>> origin/ernesto
     }
 
     /**
@@ -96,19 +120,20 @@ public class ModeloProducto {
         return limiteVentaPorPersona;
     }
     
-    /**
-     * @return idPeriodoLimiteVenta
-     */
-    public int getIdPeriodoLimiteVenta() {
-        return idPeriodoLimiteVenta;
-    }
-    
+<<<<<<< HEAD
     
     
    // agregados al codigo:
 
     public int getCantidad() {
         return cantidad;
+=======
+    /**
+     * @return idPeriodoLimiteVenta
+     */
+    public int getIdPeriodoLimiteVenta() {
+        return idPeriodoLimiteVenta;
+>>>>>>> origin/ernesto
     }
 
     public String getTipo() {

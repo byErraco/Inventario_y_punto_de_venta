@@ -8,6 +8,7 @@ package PuntoVenta.BaseDatos;
 import ClasesExtendidas.Numeros.XBigDecimal;
 import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Modelos.ModeloEmpleado;
+import PuntoVenta.Modelos.ModeloProducto;
 import PuntoVenta.reporte1;
 import Utilidades.ArticuloDescontar;
 import Utilidades.Cripto;
@@ -237,6 +238,36 @@ public class ObjetoBaseDatos {
       return result;
     }
 
+    
+    //  se crea para eliminar productos en la ventana "productos"(solo por metodo de prueba)
+    //REVISAR:
+    public int eliminarProducto(String codigo){
+        ResultSet result;
+        int id = -1;
+        
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append("DELETE FROM ")
+                .append(mapSchema.get("inventario"))
+                .append(".").append(mapTabla.get("producto"))
+                .append(" WHERE codigo_barra='")
+                .append(codigo)
+                .append("';");
+        try {
+            postgreSQL.conectar();
+            result = postgreSQL.ejecutarSelect(sqlQuery.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            postgreSQL.desconectar();
+        }
+
+        return id;
+    
+    } 
+    
+    
+    
+    
     /**
      * Inserta un empleado en la tabla spve.empleado.
      *
@@ -738,8 +769,10 @@ public class ObjetoBaseDatos {
                 PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
-                PuntoVenta.Inicio.MenuPrincipal.jButton5.setEnabled(true);
+                PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
+              //  PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
+              //  PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
                 PuntoVenta.Ventanas.bloqueo2.jButton2.setEnabled(true);
                 PuntoVenta.Ventanas.bloqueo2.jButton2.requestFocus();
 

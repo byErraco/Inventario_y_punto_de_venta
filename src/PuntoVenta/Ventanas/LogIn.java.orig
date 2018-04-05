@@ -37,7 +37,9 @@ public class LogIn extends javax.swing.JFrame {
         btnEntrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Saphiro - Punto de Venta\n"); // NOI18N
+        setResizable(false);
 
         jpnPrincipal.setBackground(new java.awt.Color(32, 182, 155));
         jpnPrincipal.setName("jpnPrincipal"); // NOI18N
@@ -93,13 +95,19 @@ public class LogIn extends javax.swing.JFrame {
                     .addComponent(lblContrasena)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+<<<<<<< HEAD
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpnCamposLoginLayout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
-                    .addComponent(jpwClave))
-                .addContainerGap())
+                        .addComponent(txtCedula)))
+                .addContainerGap(41, Short.MAX_VALUE))
+=======
+                    .addComponent(jpwClave)
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+>>>>>>> origin/ernesto
         );
         jpnCamposLoginLayout.setVerticalGroup(
             jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,13 +153,15 @@ public class LogIn extends javax.swing.JFrame {
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpnPrincipalLayout.createSequentialGroup()
+                        .addGap(76, 76, 76)
                         .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(90, 90, 90)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(72, 72, 72)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnPrincipalLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnPrincipalLayout.setVerticalGroup(
@@ -175,14 +185,17 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+<<<<<<< HEAD
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int dialogo_salir = JOptionPane.showConfirmDialog(this, "Desea salir del Sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del Sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+=======
+        // Konstanza: ¿Qué es 'SINAMC'?
+        int dialogo = JOptionPane.showConfirmDialog(this, "¿Desea salir del sistema ahora?", "Salir - SINAMC", JOptionPane.YES_NO_OPTION);
+>>>>>>> origin/ernesto
 
-        if (dialogo_salir == JOptionPane.YES_OPTION) {
+        if (dialogo == JOptionPane.YES_OPTION) {
             System.exit(0);
-        } else {
-            this.setVisible(true);
-        }
+        } 
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
@@ -216,8 +229,8 @@ public class LogIn extends javax.swing.JFrame {
        las variables no están en la base de datos.
     */
     private void entrarProgramador() {
-        txtCedula.setText("");
-        jpwClave.setText("");
+        txtCedula.setText("0");
+        jpwClave.setText("admin");
     }
     
     /**

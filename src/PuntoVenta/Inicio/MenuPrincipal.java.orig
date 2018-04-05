@@ -15,7 +15,8 @@ import PuntoVenta.Ventanas.Acerca;
 import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
-import PuntoVenta.Ventanas.CierreCaja;
+<<<<<<< HEAD
+import PuntoVenta.Ventanas.Cierre_Caja;
 import PuntoVenta.Ventanas.Productos; //añadido
 import PuntoVenta.Ventanas.Movimientos;//añadido
 import PuntoVenta.Ventanas.Detalles; //añadido para productos
@@ -24,6 +25,9 @@ import PuntoVenta.Ventanas.Fabricacion;//añadido para movimientos
 import PuntoVenta.Ventanas.Ajuste;//añadido para movimientos
 import PuntoVenta.Ventanas.AgregarProducto; //añadido para productos
 import PuntoVenta.Ventanas.ModificarProducto; //añadido para productos
+=======
+import PuntoVenta.Ventanas.CierreCaja;
+>>>>>>> origin/ernesto
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -60,9 +64,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Admin admin;
     public Bloqueo bloqueo; // modificado de bloqueo2 --> Bloqueo
     public Empresa empresa;
-    public CierreCaja cierre;
+<<<<<<< HEAD
+    public Cierre_Caja cierre;
     public Productos producto; //añadido
     public Movimientos movimiento;   // añadido
+=======
+    public CierreCaja cierre;
+>>>>>>> origin/ernesto
 
     //OTRAS VENTANAS
     //UTILIZAR DESPUES PARA SISTEMA DE CAMBIO DE PANTALLAS
@@ -412,7 +420,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnCalculadora);
 
         btnSalir.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnSalir.setText("<html><font size=4><center>Salir<br></center></font></html>");
+        btnSalir.setText("<html><font size=2><center>Salir</center></font></html>");
         btnSalir.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSalir.setFocusable(false);
         btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
