@@ -745,7 +745,7 @@ public class Pago extends javax.swing.JInternalFrame {
         List<ArticuloDescontar> ad = new ArrayList();
         Double cambio = Double.parseDouble(pagado) - Double.parseDouble("" + cantidad);
         String vuelto = redondeo.format(cambio).replace(",", ".");
-        Double exento = 0.00;
+        Double exento = 0.00;//Ernesto: variable utilizada para calcular el total sin impuesto de una venta
         for (int i = 0; i < jtbVenta.getRowCount(); i++) {
             ad.add(new ArticuloDescontar(jtbVenta.getValueAt(i, 0).toString(), jtbVenta.getValueAt(i, 3).toString()));
             Double subtotal = pagoconiva - Double.parseDouble(venta.impuesto);
@@ -768,7 +768,7 @@ public class Pago extends javax.swing.JInternalFrame {
             total_previo = cantidad_producto * total_previo;
             String total_producto = total_previo.toString();
             
-            exento = exento + total_previo;
+            exento = exento + total_previo;//Ernesto: acumulador de los totales de cada producto
             String total_exento = exento.toString();
             System.out.println("total exento "+total_exento);
             if ("0.00".equals(jtbVenta.getValueAt(i, 4).toString())) {
@@ -776,20 +776,15 @@ public class Pago extends javax.swing.JInternalFrame {
                 PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), jtbVenta.getValueAt(i, 6).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
             } else {
-                System.out.println("cosa rara 0 "+jtbVenta.getValueAt(i, 0));
-                System.out.println("cosa rara 1 "+jtbVenta.getValueAt(i, 1));
-                System.out.println("cosa rara 2 "+jtbVenta.getValueAt(i, 2));
-                System.out.println("cosa rara 3 "+jtbVenta.getValueAt(i, 3));
-                System.out.println("cosa rara 4 "+jtbVenta.getValueAt(i, 4));
-                System.out.println("cosa rara 5 "+jtbVenta.getValueAt(i, 5));
-                System.out.println("cosa rara 6 "+jtbVenta.getValueAt(i, 6));
-                System.out.println("");
-                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+
+                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), "Bs.", "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(cantidad_productos.toString(), descrip, "" + pagouni.toString(), string_total_pago_producto,cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
                 System.out.println("pagosiniva "+pagosiniva);
                 System.out.println("vuelto "+vuelto);
                 System.out.println("subtotal "+subtotal);
+                System.out.println("tipo "+tipo);
+                System.out.println("moneda "+menuPrincipal.empresa.getMoneda());
             }
         }
 
