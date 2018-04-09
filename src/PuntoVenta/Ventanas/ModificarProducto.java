@@ -44,12 +44,12 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         this.setTitle("Saphiro - Modificar producto");
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;
-        crearHotKeys();
+     //   crearHotKeys();
         actualizarTabla();
         initComponents();
     }
 
-   public void crearHotKeys(){
+/*   public void crearHotKeys(){
       Action actDescripcion = new AbstractAction("actionDescripcion") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +98,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         this.addInternalFrameListener(listener);
       
    }
-   
+   */
    
    //revisar
    public void actualizarTabla(){
@@ -138,13 +138,10 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
 
         jtbDescripcion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jtbDescripcion);

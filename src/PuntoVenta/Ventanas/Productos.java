@@ -60,13 +60,13 @@ public class Productos extends javax.swing.JInternalFrame {
 
     public void crearHotKeys() {
         
-         Action actAgregar = new AbstractAction("actionAgregar") {
+         Action actAgregar = new AbstractAction(Productos.Modulo.AGREGAR.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
               Agregar();
             }
         };
-        Action actModificar = new AbstractAction("actionModificar") {
+        Action actModificar = new AbstractAction(Productos.Modulo.MODIFICAR.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
                Modificar();
@@ -74,7 +74,7 @@ public class Productos extends javax.swing.JInternalFrame {
         }; 
        
         
-        Action actEliminar = new AbstractAction("actionEliminar") {
+        Action actEliminar = new AbstractAction(Productos.Modulo.ELIMINAR.getAction()) {
             
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -86,14 +86,14 @@ public class Productos extends javax.swing.JInternalFrame {
         actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         
-        btnAgregar.getActionMap().put("actionAgregar", actAgregar);
+        btnAgregar.getActionMap().put(Productos.Modulo.AGREGAR.getAction(), actAgregar);
         btnAgregar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionAgregar");
         
-        btnModificar.getActionMap().put("actionModificar", actAgregar);
-        btnModificar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionModificar");
+        btnModificar.getActionMap().put(Productos.Modulo.MODIFICAR.getAction(), actModificar);
+        btnModificar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actModificar.getValue(Action.ACCELERATOR_KEY), "actionModificar");
         
-        btnEliminar.getActionMap().put("actionEliminar", actAgregar);
-        btnEliminar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionEliminar");
+        btnEliminar.getActionMap().put(Productos.Modulo.ELIMINAR.getAction(), actAgregar);
+        btnEliminar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actEliminar.getValue(Action.ACCELERATOR_KEY), "actionEliminar");
      
       
       
@@ -353,6 +353,31 @@ public class Productos extends javax.swing.JInternalFrame {
        ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
        ProductoTableModel model = new ProductoTableModel(Producto);
        jtbProducto.setModel(model); 
+    }
+    
+    
+    private enum Modulo {
+
+        AGREGAR(1, "actionAgregar"),
+        MODIFICAR(2, "actionModificar"),
+        ELIMINAR(3, "actionEliminar");
+
+        private final int id;
+        private final String action;
+
+        Modulo(int id, String action) {
+            this.id = id;
+            this.action = action;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        private String getAction() {
+            return this.action;
+        }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -44,14 +44,14 @@ public class AgregarProducto extends javax.swing.JInternalFrame {
       this.setTitle("Saphiro - Agregar producto");
         this.menuPrincipal = menuPrincipal;
       //  this.producto = new Productos();
-        crearHotKeys();
+     //   crearHotKeys();
         actualizarTabla();
         initComponents();
     }
 
-   public void crearHotKeys(){
+  /*  public void crearHotKeys(){
        
-   /*    
+      
    InternalFrameAdapter listener = new InternalFrameAdapter() {
             @Override
             public void internalFrameClosed(InternalFrameEvent e) {
@@ -59,9 +59,9 @@ public class AgregarProducto extends javax.swing.JInternalFrame {
             }
         };
 
-        this.addInternalFrameListener(listener); */
+        this.addInternalFrameListener(listener); 
    }
-   
+   */
    
    //revisar
    public void actualizarTabla(){

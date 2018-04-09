@@ -13,6 +13,7 @@ import PuntoVenta.Modelos.ModeloProducto;
 import PuntoVenta.Ventanas.Compra;
 import PuntoVenta.Ventanas.Fabricacion;
 import PuntoVenta.Ventanas.Ajuste;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.event.InternalFrameAdapter;
@@ -34,10 +36,12 @@ import javax.swing.table.TableRowSorter;
  * @author David Chavez
  */
 public class Movimientos extends javax.swing.JInternalFrame {
+    
 public MenuPrincipal menuPrincipal;
-private Compra compra;
-private Fabricacion fabricacion;
-private Ajuste ajuste;
+public Compra compra;
+public Fabricacion fabricacion;
+public Ajuste ajuste;
+public Reporte reporte;
 
     /**
      * Creates new form Productos
@@ -53,6 +57,18 @@ private Ajuste ajuste;
          actualizarTabla();
     }
     
+    public boolean estacerrado(Object obj) {
+        JInternalFrame[] activos = menuPrincipal.panel.getAllFrames();
+        boolean cerrado = true;
+        int i = 0;
+        while (i < activos.length && cerrado) {
+            if (activos[i] == obj) {
+                cerrado = false;
+            }
+            i++;
+        }
+        return cerrado;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -241,15 +257,15 @@ private Ajuste ajuste;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCompraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompraActionPerformed
-     
+     Compra();     
     }//GEN-LAST:event_btnCompraActionPerformed
 
     private void btnFabricacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFabricacionActionPerformed
-    
+    Fabricacion();
     }//GEN-LAST:event_btnFabricacionActionPerformed
 
     private void btnAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjusteActionPerformed
-          
+      Ajuste();    
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
@@ -282,34 +298,34 @@ private Ajuste ajuste;
      */
     public void creaHotKeys(){
     
-        Action actCompra = new AbstractAction("actionCompra"){
+        Action actCompra = new AbstractAction(Movimientos.Modulo.COMPRA.getAction()){
          @Override
             public void actionPerformed(ActionEvent e){
-        
+             Compra();
            }
 
        };
         
-        Action actFabricacion = new AbstractAction("actionFabricacion"){
+        Action actFabricacion = new AbstractAction(Movimientos.Modulo.FABRICACION.getAction()){
          @Override
             public void actionPerformed(ActionEvent e){
-        
+          Fabricacion();
            }
 
        };
         
-        Action actAjuste = new AbstractAction("actionAjuste"){
+        Action actAjuste = new AbstractAction(Movimientos.Modulo.AJUSTE.getAction()){
          @Override
             public void actionPerformed(ActionEvent e){
-        
+            Ajuste();
            }
 
        };
         
-        Action actReporte = new AbstractAction("actionReporte"){
+        Action actReporte = new AbstractAction(Movimientos.Modulo.REPORTE.getAction()){
          @Override
             public void actionPerformed(ActionEvent e){
-        
+             //Reporte();
            }
 
        };
@@ -350,7 +366,97 @@ private Ajuste ajuste;
         jtbMovimiento.setModel(model);
     }
     
+  private enum Modulo {
+
+        COMPRA(1, "actionCompra"),
+       FABRICACION(2, "actionFabricacion"),
+       AJUSTE(3, "actionAjuste"),
+       REPORTE(4,"actionReporte");
+
+        private final int id;
+        private final String action;
+
+        Modulo(int id, String action) {
+            this.id = id;
+            this.action = action;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        private String getAction() {
+            return this.action;
+        }
+
+    }
   
+  
+  public void Compra(){
+      
+    if(estacerrado(compra)){  
+        compra = new Compra();
+        Dimension desktopSize = menuPrincipal.panel.getSize();
+        Dimension jInternalFrameSize = compra.getSize();
+        compra.setLocation((desktopSize.width - jInternalFrameSize.width)/ 2,
+                           (desktopSize.height - jInternalFrameSize.height)/ 2);
+        menuPrincipal.panel.add(compra);
+        compra.show();
+        }else{
+           JOptionPane.showMessageDialog(this, "La ventana\n"+this.compra.getTitle()+ "\nse encuentra abierta...");
+           compra.toFront();
+      }
+  }
+  
+  public void Fabricacion(){
+     
+     if(estacerrado(fabricacion)) {
+        fabricacion = new Fabricacion();
+        Dimension desktopSize = menuPrincipal.panel.getSize();
+        Dimension jInternalFrameSize = fabricacion.getSize();
+        fabricacion.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
+                                (desktopSize.height - jInternalFrameSize.height) /2);
+        menuPrincipal.panel.add(fabricacion);
+        fabricacion.show();
+     }else{
+        JOptionPane.showMessageDialog(this, "La ventana\n"+this.fabricacion.getTitle()+"\nse encuentra abierta...");
+        fabricacion.toFront();
+     }
+  }
+  
+  public void Ajuste(){
+      if(estacerrado(ajuste)){
+      ajuste = new Ajuste();
+      Dimension desktopSize = menuPrincipal.panel.getSize();
+      Dimension jInternalFrameSize = ajuste.getSize();
+      ajuste.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
+                         (desktopSize.height -jInternalFrameSize.height)/2);
+      menuPrincipal.panel.add(ajuste);
+      ajuste.show();
+      }else{
+      JOptionPane.showMessageDialog(this, "La ventana\n"+this.ajuste.getTitle()+"\nse encuentra abierta...");
+      ajuste.toFront();
+      }
+  
+  }
+  
+  
+  public void Reporte(){
+      if(estacerrado(reporte)){
+            reporte= new Reporte();
+            Dimension desktopSize = menuPrincipal.panel.getSize();
+            Dimension jInternalFramsize = reporte.getSize();
+          //  reporte.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
+         //                      (desktopSize.height -jInternalFrameSize.height)/2);
+            menuPrincipal.panel.add(reporte);
+            reporte.show();
+      }else{
+         JOptionPane.showMessageDialog(this, "La ventana\n"+this.reporte.getTitle()+ "\nse encuentra abierta...");
+         
+      }
+  
+  }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAjuste;
