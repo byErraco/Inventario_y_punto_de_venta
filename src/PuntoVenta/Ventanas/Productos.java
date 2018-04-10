@@ -6,6 +6,7 @@
 package PuntoVenta.Ventanas;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.ProductoTableModel;
+import ClasesExtendidas.Tablas.ProductoVentaTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Ventanas.AgregarProducto;
@@ -34,7 +35,8 @@ import javax.swing.table.TableRowSorter;
 
 //revisar
 public class Productos extends javax.swing.JInternalFrame {
- 
+    
+ private Modulo ventanaAbierta; 
  public MenuPrincipal menuPrincipal;
  public  AgregarProducto agregar;
  public ModificarProducto modificar;
@@ -52,13 +54,28 @@ public class Productos extends javax.swing.JInternalFrame {
        // this.agregar = agregar;
       //  this.modificar = modificar;
         this.setTitle("Saphiro - Consúlta de productos");
-        crearHotKeys();
-        actualizarTabla();
+       // crearHotKeys();
+       // actualizarTabla();
         initComponents();
        
     }
+    
+    
+     public boolean estacerrado(Object obj) {
+        JInternalFrame[] activos = menuPrincipal.panel.getAllFrames();
+        boolean cerrado = true;
+        int i = 0;
+        while (i < activos.length && cerrado) {
+            if (activos[i] == obj) {
+                cerrado = false;
+            }
+            i++;
+        }
+        return cerrado;
+    }
 
-    public void crearHotKeys() {
+
+ /*   public void crearHotKeys() {
         
          Action actAgregar = new AbstractAction(Productos.Modulo.AGREGAR.getAction()) {
             @Override
@@ -84,15 +101,15 @@ public class Productos extends javax.swing.JInternalFrame {
           
         actAgregar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
         actModificar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));
-        
-        btnAgregar.getActionMap().put(Productos.Modulo.AGREGAR.getAction(), actAgregar);
+        actEliminar.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(0,0));    */
+    /*    
+        btnAgregar.getActionMap().put(Productos.Modulo.AGREGAR.getAction(),actAgregar);
         btnAgregar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAgregar.getValue(Action.ACCELERATOR_KEY), "actionAgregar");
         
-        btnModificar.getActionMap().put(Productos.Modulo.MODIFICAR.getAction(), actModificar);
+        btnModificar.getActionMap().put(Productos.Modulo.MODIFICAR.getAction(),actModificar);
         btnModificar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actModificar.getValue(Action.ACCELERATOR_KEY), "actionModificar");
         
-        btnEliminar.getActionMap().put(Productos.Modulo.ELIMINAR.getAction(), actAgregar);
+        btnEliminar.getActionMap().put(Productos.Modulo.ELIMINAR.getAction(),actEliminar);
         btnEliminar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actEliminar.getValue(Action.ACCELERATOR_KEY), "actionEliminar");
      
       
@@ -109,7 +126,7 @@ public class Productos extends javax.swing.JInternalFrame {
       
       
     }
-       
+       */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -309,6 +326,7 @@ public class Productos extends javax.swing.JInternalFrame {
                         (desktopSize.height - jInternalFrameSize.height) / 2);
                  menuPrincipal.panel.add(agregar);
                 agregar.show(); 
+                 setVentanaAbierta(Modulo.AGREGAR);
     
     }
     
@@ -322,6 +340,7 @@ public class Productos extends javax.swing.JInternalFrame {
                         (desktopSize.height - jInternalFrameSize.height) / 2);
                 menuPrincipal.panel.add(modificar);
                 modificar.show();
+                setVentanaAbierta(Modulo.MODIFICAR);
     
    
     }  
@@ -354,6 +373,18 @@ public class Productos extends javax.swing.JInternalFrame {
        ProductoTableModel model = new ProductoTableModel(Producto);
        jtbProducto.setModel(model); 
     }
+    
+    
+    
+      public Modulo getVentanaAbierta() {
+        return ventanaAbierta;
+    }
+
+    
+    public void setVentanaAbierta(Modulo ventanaAbierta) {
+        this.ventanaAbierta = ventanaAbierta;
+    }
+    
     
     
     private enum Modulo {

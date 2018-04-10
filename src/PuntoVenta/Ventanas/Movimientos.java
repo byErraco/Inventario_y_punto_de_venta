@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -36,7 +37,8 @@ import javax.swing.table.TableRowSorter;
  * @author David Chavez
  */
 public class Movimientos extends javax.swing.JInternalFrame {
-    
+
+private Modulo ventanaAbierta;    
 public MenuPrincipal menuPrincipal;
 public Compra compra;
 public Fabricacion fabricacion;
@@ -269,7 +271,7 @@ public Reporte reporte;
     }//GEN-LAST:event_btnAjusteActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
-        // Reporte();
+       Reporte();
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void txtMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMovimientoActionPerformed
@@ -365,6 +367,22 @@ public Reporte reporte;
        MovimientoTableModel model = new MovimientoTableModel(Movimiento);
         jtbMovimiento.setModel(model);
     }
+
+    
+    
+    
+    
+    
+    
+    
+      public Modulo getVentanaAbierta() {
+        return ventanaAbierta;
+    }
+
+    
+    public void setVentanaAbierta(Modulo ventanaAbierta) {
+        this.ventanaAbierta = ventanaAbierta;
+    }
     
   private enum Modulo {
 
@@ -395,47 +413,50 @@ public Reporte reporte;
   public void Compra(){
       
     if(estacerrado(compra)){  
-        compra = new Compra();
-        Dimension desktopSize = menuPrincipal.panel.getSize();
-        Dimension jInternalFrameSize = compra.getSize();
-        compra.setLocation((desktopSize.width - jInternalFrameSize.width)/ 2,
-                           (desktopSize.height - jInternalFrameSize.height)/ 2);
-        menuPrincipal.panel.add(compra);
-        compra.show();
-        }else{
-           JOptionPane.showMessageDialog(this, "La ventana\n"+this.compra.getTitle()+ "\nse encuentra abierta...");
-           compra.toFront();
+                compra = new Compra();
+                Dimension desktopSize = menuPrincipal.panel.getSize();
+                Dimension jInternalFrameSize = compra.getSize();
+                compra.setLocation((desktopSize.width - jInternalFrameSize.width)/ 2,
+                                   (desktopSize.height - jInternalFrameSize.height)/ 2);
+                menuPrincipal.panel.add(compra);
+                compra.show();
+               setVentanaAbierta(Modulo.COMPRA);
+                }else{
+                   JOptionPane.showMessageDialog(this, "La ventana\n"+this.compra.getTitle()+ "\nse encuentra abierta...");
+                  compra.toFront();
       }
   }
   
   public void Fabricacion(){
      
      if(estacerrado(fabricacion)) {
-        fabricacion = new Fabricacion();
-        Dimension desktopSize = menuPrincipal.panel.getSize();
-        Dimension jInternalFrameSize = fabricacion.getSize();
-        fabricacion.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
-                                (desktopSize.height - jInternalFrameSize.height) /2);
-        menuPrincipal.panel.add(fabricacion);
-        fabricacion.show();
-     }else{
-        JOptionPane.showMessageDialog(this, "La ventana\n"+this.fabricacion.getTitle()+"\nse encuentra abierta...");
-        fabricacion.toFront();
+                fabricacion = new Fabricacion();
+                Dimension desktopSize = menuPrincipal.panel.getSize();
+                Dimension jInternalFrameSize = fabricacion.getSize();
+                fabricacion.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
+                                        (desktopSize.height - jInternalFrameSize.height) /2);
+                menuPrincipal.panel.add(fabricacion);
+                fabricacion.show();
+                setVentanaAbierta(Modulo.FABRICACION);
+                }else{
+                   JOptionPane.showMessageDialog(this, "La ventana\n"+this.fabricacion.getTitle()+"\nse encuentra abierta...");
+                    fabricacion.toFront();
      }
   }
   
   public void Ajuste(){
       if(estacerrado(ajuste)){
-      ajuste = new Ajuste();
-      Dimension desktopSize = menuPrincipal.panel.getSize();
-      Dimension jInternalFrameSize = ajuste.getSize();
-      ajuste.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
-                         (desktopSize.height -jInternalFrameSize.height)/2);
-      menuPrincipal.panel.add(ajuste);
-      ajuste.show();
-      }else{
-      JOptionPane.showMessageDialog(this, "La ventana\n"+this.ajuste.getTitle()+"\nse encuentra abierta...");
-      ajuste.toFront();
+                ajuste = new Ajuste();
+                Dimension desktopSize = menuPrincipal.panel.getSize();
+                Dimension jInternalFrameSize = ajuste.getSize();
+                ajuste.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
+                                   (desktopSize.height -jInternalFrameSize.height)/2);
+                menuPrincipal.panel.add(ajuste);
+                ajuste.show();
+                 setVentanaAbierta(Modulo.AJUSTE);
+                }else{
+                    JOptionPane.showMessageDialog(this, "La ventana\n"+this.ajuste.getTitle()+"\nse encuentra abierta...");
+                     ajuste.toFront();
       }
   
   }
@@ -443,16 +464,17 @@ public Reporte reporte;
   
   public void Reporte(){
       if(estacerrado(reporte)){
-            reporte= new Reporte();
-            Dimension desktopSize = menuPrincipal.panel.getSize();
-            Dimension jInternalFramsize = reporte.getSize();
-          //  reporte.setLocation((desktopSize.width - jInternalFrameSize.width) /2,
-         //                      (desktopSize.height -jInternalFrameSize.height)/2);
-            menuPrincipal.panel.add(reporte);
-            reporte.show();
-      }else{
-         JOptionPane.showMessageDialog(this, "La ventana\n"+this.reporte.getTitle()+ "\nse encuentra abierta...");
-         
+                reporte = new Reporte();
+                Dimension desktopSize = menuPrincipal.panel.getSize();
+                Dimension jInternalFrameSize = reporte.getSize();
+                reporte.setLocation((desktopSize.width - jInternalFrameSize.width)/2,
+                                    (desktopSize.height -jInternalFrameSize.height)/2);
+                menuPrincipal.panel.add(reporte);
+                reporte.show();
+                setVentanaAbierta(Modulo.REPORTE);
+                }else{
+                    JOptionPane.showMessageDialog(this, "La ventana\n"+this.reporte.getTitle()+ "\nse encuentra abierta...");
+                      reporte.toFront();
       }
   
   }

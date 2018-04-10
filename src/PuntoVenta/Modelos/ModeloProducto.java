@@ -43,7 +43,7 @@ public class ModeloProducto {
         this.codigoBarra = map.get("codigo_venta_producto");
         this.descripcion = map.get("descripcion_producto");
         this.baseImponible = map.get("base_imponible");
-        this.pvp = map.get("precio_venta");
+        this.pvp = map.get("precio_venta_publico");
         this.isva = map.get("impuesto_producto");
     }
 

@@ -21,9 +21,9 @@ import java.util.HashMap;
 
           enum Columnas{
              
-              Codigo("Codigo","id"),
+              Codigo("Codigo","id_producto"),
               //CodigoBarra("Codigo Barra","codigo_barra"),
-              Descripcion("Descripcion","descripcion"),
+              Descripcion("Descripcion","descripcion_producto"),
               //Costo("Costo","precio"),
               //CostoUnidad("Costo x Unidad","costoxunidad"),
              // CostoPromedio("Costo Promedio","costo_promedio"),
@@ -34,9 +34,9 @@ import java.util.HashMap;
             //  PrecioCompra("Precio Compra","precio_compra"),
             //  Impuesto("Impuesto","impuesto"),
               Tipo("Tipo","tipo"),
-              Cantidad("Cantidad","canidad"),
-              Fecha("Fecha","fecha_actualizacion"),
-              Precio("Precio","pvp");
+              Cantidad("Cantidad","canidad_compra"),
+              Fecha("Fecha","fecha_compra"),
+              Precio("Precio","costo_unidad_compra");
               
               String header;
               String columna;

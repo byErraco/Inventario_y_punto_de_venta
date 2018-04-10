@@ -32,7 +32,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author David Chavez
  */
-public class AgregarProducto extends javax.swing.JInternalFrame {
+public class AgregarProducto1 extends javax.swing.JInternalFrame {
 
     public  MenuPrincipal menuPrincipal;
     public ModeloProducto producto;
@@ -40,7 +40,7 @@ public class AgregarProducto extends javax.swing.JInternalFrame {
     /**
      * Creates new form Detalles
      */
-    public AgregarProducto(MenuPrincipal menuPrincipal) {
+    public AgregarProducto1(MenuPrincipal menuPrincipal) {
         this.setTitle("Saphiro - Modificar producto");
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;

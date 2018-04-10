@@ -116,23 +116,39 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         panelDetalles = new javax.swing.JPanel();
-        panelDescripcion = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtbDescripcion = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
         panelComponente = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtbComponente = new javax.swing.JTable();
+        panelDescripcion = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbDescripcion = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
         jToolBarDetalle = new javax.swing.JToolBar();
         btnDescripcion = new javax.swing.JButton();
         btnComponente = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(32, 182, 155));
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         panelDetalles.setBackground(new java.awt.Color(32, 182, 155));
         panelDetalles.setLayout(new java.awt.CardLayout());
+
+        jPanel1.setBackground(new java.awt.Color(32, 182, 155));
+
+        panelComponente.setBackground(new java.awt.Color(32, 182, 155));
+
+        jtbComponente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jtbComponente);
 
         panelDescripcion.setBackground(new java.awt.Color(32, 182, 155));
 
@@ -150,47 +166,35 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         panelDescripcion.setLayout(panelDescripcionLayout);
         panelDescripcionLayout.setHorizontalGroup(
             panelDescripcionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDescripcionLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane1)
-                .addGap(19, 19, 19))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
         );
         panelDescripcionLayout.setVerticalGroup(
             panelDescripcionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDescripcionLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        panelDetalles.add(panelDescripcion, "card2");
-
-        panelComponente.setBackground(new java.awt.Color(32, 182, 155));
-
-        jtbComponente.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(jtbComponente);
 
         javax.swing.GroupLayout panelComponenteLayout = new javax.swing.GroupLayout(panelComponente);
         panelComponente.setLayout(panelComponenteLayout);
         panelComponenteLayout.setHorizontalGroup(
             panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelComponenteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelComponenteLayout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         panelComponenteLayout.setVerticalGroup(
             panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelComponenteLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(panelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelComponenteLayout.createSequentialGroup()
                     .addContainerGap()
@@ -198,7 +202,13 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
                     .addContainerGap()))
         );
 
-        panelDetalles.add(panelComponente, "card3");
+        jButton1.setText("<html><font size=4><center>Eliminar<br>XX</center></font></html>");
+        jButton1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnModificar.setText("<html><font size=4><center>Modificar<br>XX</center></font></html>");
         btnModificar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -248,43 +258,52 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         });
         jToolBarDetalle.add(btnComponente);
 
-        jButton1.setText("<html><font size=4><center>Eliminar<br>XX</center></font></html>");
-        jButton1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(114, 114, 114)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(154, 154, 154)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelComponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelComponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(btnModificar))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(135, 135, 135)
-                        .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(106, 106, 106)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(jButton1))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -307,7 +326,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnComponenteActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-    modificarProducto();
+    agregarProducto();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -325,9 +344,20 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
        // txtFiltro.requestFocus();
     }
     
-    public void  modificarProducto(){
-    
-    }
+     public void agregarProducto() {
+        if (producto.getId() > 0) {
+            int row = jtbDescripcion.getSelectedRow();
+            if (row >= 0) {
+                String codigoBarra = jtbDescripcion.getValueAt(row, 0).toString();
+                producto.getCodigoBarra();
+            } else {
+                Utilidades.Sonidos.beep();
+            }
+        } else {
+            Utilidades.Sonidos.beep();
+        } 
+   }
+   
 
     
    
@@ -363,6 +393,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDescripcion;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar jToolBarDetalle;
