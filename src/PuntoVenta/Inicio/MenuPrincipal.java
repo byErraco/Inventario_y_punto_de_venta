@@ -29,6 +29,8 @@ import Utilidades.KeySaphiro;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
@@ -209,6 +211,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         getContentPane().add(jDesktopPane1, java.awt.BorderLayout.NORTH);
 
         jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
+        jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
@@ -226,11 +229,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCaja.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnCajaMouseEntered(evt);
-            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnCajaMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnCajaMouseEntered(evt);
             }
         });
         btnCaja.addActionListener(new java.awt.event.ActionListener() {
@@ -429,31 +432,99 @@ public class MenuPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
-        abrirVentanaVentas();
-        PuntoVenta.Ventanas.Venta.txtDocumento.requestFocus();
-    }//GEN-LAST:event_btnVentasActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+
+        if (g == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else {
+            this.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculadoraActionPerformed
+        abrirCalculadora();
+    }//GEN-LAST:event_btnCalculadoraActionPerformed
+
+    private void btnbloqueoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnbloqueoKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F12) {
+            abrirVentanaBloqueo();
+        }
+    }//GEN-LAST:event_btnbloqueoKeyPressed
+
+    private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
+        abrirVentanaBloqueo();
+    }//GEN-LAST:event_btnbloqueoActionPerformed
+
+    private void btnbloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbloqueoMouseClicked
+
+    }//GEN-LAST:event_btnbloqueoMouseClicked
+
+    private void btnAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaActionPerformed
+        acerca();
+    }//GEN-LAST:event_btnAcercaActionPerformed
 
     private void btnAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAyudaActionPerformed
         ayuda();
     }//GEN-LAST:event_btnAyudaActionPerformed
 
-    private void ayuda() {
-        ayuda.setVisible(true);
-        ayuda.setLocationRelativeTo(this);
-        ayuda.setTitle("Sistema Saphiro: Ayuda");
-    }
+    private void btnProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnProductosKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F9) {
+            abrirVentanaProd();
+        }
+    }//GEN-LAST:event_btnProductosKeyPressed
 
-    private void acerca() {
-        acerca.setVisible(true);
-        acerca.setLocationRelativeTo(this);
-        acerca.setTitle("Sistema Saphiro: Acerca");
-    }
+    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
+        abrirVentanaProd();
+    }//GEN-LAST:event_btnProductosActionPerformed
 
+    private void btnMovimientosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMovimientosKeyPressed
 
-    private void btnAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaActionPerformed
-        acerca();
-    }//GEN-LAST:event_btnAcercaActionPerformed
+        if (evt.getKeyCode() == KeyEvent.VK_F8) {
+            abrirVentanaMovimientos();
+        }
+
+    }//GEN-LAST:event_btnMovimientosKeyPressed
+
+    private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
+        abrirVentanaMovimientos();
+
+    }//GEN-LAST:event_btnMovimientosActionPerformed
+
+    private void btnAdminKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAdminKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F6) {
+            abrirVentanaAdmin();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdminKeyPressed
+
+    private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
+        abrirVentanaAdmin();
+    }//GEN-LAST:event_btnAdminActionPerformed
+
+    private void btnAdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdminMouseExited
+
+    private void btnAdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdminMouseEntered
+
+    private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
+        abrirVentanaFactura();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFacturasActionPerformed
+
+    private void btnVentasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVentasKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            abrirVentanaVentas();
+        }
+    }//GEN-LAST:event_btnVentasKeyPressed
+
+    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
+        abrirVentanaVentas();
+        PuntoVenta.Ventanas.Venta.txtDocumento.requestFocus();
+    }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajaActionPerformed
         abrirVentanaCaja();
@@ -467,87 +538,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_btnCajaMouseExited
 
-    private void btnCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculadoraActionPerformed
-        abrirCalculadora();
-    }//GEN-LAST:event_btnCalculadoraActionPerformed
+    private void ayuda() {
+        ayuda.setVisible(true);
+        ayuda.setLocationRelativeTo(this);
+        ayuda.setTitle("Sistema Saphiro: Ayuda");
+    }
 
-    private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
-        abrirVentanaFactura();
-// TODO add your handling code here:
-    }//GEN-LAST:event_btnFacturasActionPerformed
+    private void acerca() {
+        acerca.setVisible(true);
+        acerca.setLocationRelativeTo(this);
+        acerca.setTitle("Sistema Saphiro: Acerca");
+    }
 
-    private void btnAdminMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdminMouseEntered
-
-    private void btnAdminMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAdminMouseExited
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdminMouseExited
-
-    private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
-        abrirVentanaAdmin();
-    }//GEN-LAST:event_btnAdminActionPerformed
-
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
-
-        if (g == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        } else {
-            this.setVisible(true);
-        }
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
-      abrirVentanaBloqueo();
-    }//GEN-LAST:event_btnbloqueoActionPerformed
-
-    private void btnbloqueoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnbloqueoKeyPressed
-if (evt.getKeyCode() == KeyEvent.VK_F12) {
-           abrirVentanaBloqueo();
-        }
-    }//GEN-LAST:event_btnbloqueoKeyPressed
-
-    private void btnbloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbloqueoMouseClicked
-
-
-    }//GEN-LAST:event_btnbloqueoMouseClicked
-
-    private void btnVentasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVentasKeyPressed
-if (evt.getKeyCode() == KeyEvent.VK_F2) {
-           abrirVentanaVentas();
-        }
-    }//GEN-LAST:event_btnVentasKeyPressed
-
-    private void btnAdminKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAdminKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_F6) {
-            abrirVentanaAdmin();
-        }        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdminKeyPressed
-
-    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-       abrirVentanaProd();
-    }//GEN-LAST:event_btnProductosActionPerformed
-
-    private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
-     abrirVentanaMovimientos();     
-       
-    }//GEN-LAST:event_btnMovimientosActionPerformed
-
-    private void btnProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnProductosKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_F9) {
-            abrirVentanaProd();
-        }
-    }//GEN-LAST:event_btnProductosKeyPressed
-
-    private void btnMovimientosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMovimientosKeyPressed
-        
-         if (evt.getKeyCode() == KeyEvent.VK_F8) {
-           abrirVentanaMovimientos();
-        }
-        
-    }//GEN-LAST:event_btnMovimientosKeyPressed
  public  void  habilitar(){
       if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
         btnCaja.setEnabled(false);
@@ -576,17 +578,17 @@ if (evt.getKeyCode() == KeyEvent.VK_F2) {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JButton btnAcerca;
-    public static javax.swing.JButton btnAdmin;
-    public static javax.swing.JButton btnAyuda;
-    public static javax.swing.JButton btnCaja;
+    private javax.swing.JButton btnAcerca;
+    private javax.swing.JButton btnAdmin;
+    private javax.swing.JButton btnAyuda;
+    private javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
-    public static javax.swing.JButton btnFacturas;
-    public static javax.swing.JButton btnMovimientos;
-    public static javax.swing.JButton btnProductos;
+    private javax.swing.JButton btnFacturas;
+    private javax.swing.JButton btnMovimientos;
+    private javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
-    public static javax.swing.JButton btnVentas;
-    public static javax.swing.JButton btnbloqueo;
+    private javax.swing.JButton btnVentas;
+    private javax.swing.JButton btnbloqueo;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables

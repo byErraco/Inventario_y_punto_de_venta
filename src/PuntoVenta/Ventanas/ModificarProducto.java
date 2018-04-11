@@ -45,7 +45,7 @@ public class ModificarProducto extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;
      //   crearHotKeys();
-        actualizarTabla();
+      //  actualizarTabla();
         initComponents();
     }
 

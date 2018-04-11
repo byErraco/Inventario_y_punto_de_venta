@@ -21,6 +21,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.event.InternalFrameAdapter;
@@ -319,6 +320,8 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void Agregar(){
+              
+           if(estacerrado(agregar)){     
                 agregar = new AgregarProducto(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
@@ -327,12 +330,19 @@ public class Productos extends javax.swing.JInternalFrame {
                  menuPrincipal.panel.add(agregar);
                 agregar.show(); 
                  setVentanaAbierta(Modulo.AGREGAR);
+           }else{
+                JOptionPane.showMessageDialog(this, "La ventana\n"+this.agregar.getTitle()+ "\nse encuentra abierta...");
+                  agregar.toFront();
+         
+           }
     
     }
     
     
     private void Modificar(){
     
+        if(estacerrado(modificar)){
+        
                 modificar = new ModificarProducto(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = modificar.getSize();
@@ -341,6 +351,11 @@ public class Productos extends javax.swing.JInternalFrame {
                 menuPrincipal.panel.add(modificar);
                 modificar.show();
                 setVentanaAbierta(Modulo.MODIFICAR);
+                
+        }else{
+             JOptionPane.showMessageDialog(this, "La ventana\n"+this.modificar.getTitle()+ "\nse encuentra abierta...");
+                modificar.toFront();
+         }
     
    
     }  
