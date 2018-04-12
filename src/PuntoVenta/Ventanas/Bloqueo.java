@@ -9,7 +9,8 @@ import static PuntoVenta.Inicio.MenuPrincipal.btnFacturas;
 import static PuntoVenta.Inicio.MenuPrincipal.btnMovimientos;
 import static PuntoVenta.Inicio.MenuPrincipal.btnProductos;
 import static PuntoVenta.Inicio.MenuPrincipal.btnVentas;
-import static PuntoVenta.Ventanas.bloqueo2.pass;
+import static PuntoVenta.Ventanas.LogIn.jpwClave;
+//import static PuntoVenta.Ventanas.bloqueo2.pass;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -93,6 +94,11 @@ public class Bloqueo extends javax.swing.JFrame {
 
         txtCedula.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         txtCedula.setName("txtCedula"); // NOI18N
+        txtCedula.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaActionPerformed(evt);
+            }
+        });
         txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCedulaKeyPressed(evt);
@@ -178,7 +184,7 @@ public class Bloqueo extends javax.swing.JFrame {
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addGap(69, 69, 69)
+                .addGap(60, 60, 60)
                 .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -226,41 +232,39 @@ public class Bloqueo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnIngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnIngresarKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ingresarSistema();
-        }
+       
     }//GEN-LAST:event_btnIngresarKeyPressed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
          // cerrarbloq();
         ingresarSistema();
-        this.menuPrincipal.deshabilitar();
+       // this.menuPrincipal.habilitar();
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
-        ingresarSistema(); 
-         this.menuPrincipal.deshabilitar();
+
     }//GEN-LAST:event_btnIngresarMouseClicked
 
     private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jpwContrasena.requestFocus();
-        }
+      
     }//GEN-LAST:event_txtCedulaKeyPressed
 
     private void jpwContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jpwContrasenaKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ingresarSistema();
-        }
+      
+        
     }//GEN-LAST:event_jpwContrasenaKeyPressed
 
     private void jpwContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpwContrasenaActionPerformed
-        // TODO add your handling code here:
+        ingresarSistema();
     }//GEN-LAST:event_jpwContrasenaActionPerformed
 
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+         jpwContrasena.requestFocus();
+    }//GEN-LAST:event_txtCedulaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnIngresar;
-    private javax.swing.JButton btnSalir;
+    public static javax.swing.JButton btnIngresar;
+    public static javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup14;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
@@ -290,9 +294,7 @@ public class Bloqueo extends javax.swing.JFrame {
         txtCedula.setText(ced);
         jpwContrasena.setText(pass);
     }
-    
-     
-    
+  
     
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables
@@ -304,14 +306,80 @@ public class Bloqueo extends javax.swing.JFrame {
      *
      */
     
-    
      public void cerrarbloq(){
-      //   if(PuntoVenta.Inicio.MenuPrincipal.btnVentas.isEnabled()){
-         
-        //}
+      
         this.dispose();
     }
-   /*  public  void  habilitar(){
+  
+    public void ingresarSistema() {
+       // entrarProgramador2();
+        
+       // entrarProgramador();
+        
+       
+       // REVISAR YA QUE AL INGRESAR UN USARIO "0" SIN CONTRASEÑA, DESBLOQUEA LA VENTANA.......
+          String cedula = txtCedula.getText();
+          char[] arrayPassword = jpwContrasena.getPassword();
+          
+          if (txtCedula.getText().equals(cedula.isEmpty())) {
+
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
+                       txtCedula.requestFocus();
+                       this.menuPrincipal.habilitar();
+                       return;
+
+                    } 
+                 if(jpwContrasena.getPassword().equals(arrayPassword.toString().isEmpty())){
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese password");
+                       jpwContrasena.requestFocus();
+                       this.menuPrincipal.habilitar();
+                      return;
+   
+                 }
+          
+          
+          
+          int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+            
+          if (idEmpleado != -1) {
+            HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
+            menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
+            menuPrincipal.setVisible(true);
+            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
+            this.menuPrincipal.deshabilitar();
+            cerrarbloq();
+            
+            } else { 
+                 if (txtCedula.getText().equals(cedula.isEmpty()) && jpwContrasena.getPassword().equals(arrayPassword.toString().isEmpty())) {
+                Utilidades.Sonidos.beep();
+                 JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
+                txtCedula.setText("");
+                jpwContrasena.setText("");
+                txtCedula.requestFocus();
+                //jpwContrasena.requestFocus();
+                this.menuPrincipal.habilitar();
+
+                 } /* else if (txtCedula.getText().equals(cedula.isEmpty())) {
+
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
+                       txtCedula.requestFocus();
+                       this.menuPrincipal.habilitar();
+
+                    } else{
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese password");
+                       jpwContrasena.requestFocus();
+                       this.menuPrincipal.habilitar();
+
+                 } // ii-else_if-else   */
+               return;
+           
+        } // if principal
+            
+         /* public  void  habilitar(){
         btnCaja.setEnabled(false);
         btnVentas.setEnabled(false);
         btnFacturas.setEnabled(false);
@@ -322,7 +390,7 @@ public class Bloqueo extends javax.swing.JFrame {
         btnMovimientos.setEnabled(false);
    
    }
-   public  void  deshabilitar(){
+    public  void  deshabilitar(){
        
        if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
         btnCaja.setEnabled(true);
@@ -335,44 +403,22 @@ public class Bloqueo extends javax.swing.JFrame {
         btnMovimientos.setEnabled(true);
        }
    }*/
-    public void ingresarSistema() {
-        entrarProgramador2();
-        
-       // entrarProgramador();
-        
-          String cedula = txtCedula.getText();
-          char[] arrayPassword = jpwContrasena.getPassword();
-
-        if (cedula.isEmpty()) {
+        /*  if (cedula.isEmpty() && arrayPassword.length <= 0) {
             Utilidades.Sonidos.beep();
-            JOptionPane.showMessageDialog(this, "Ingrese cedula");
+             JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
             txtCedula.requestFocus();
+            jpwContrasena.requestFocus();
+            this.menuPrincipal.habilitar();
             return;
         }
-        if (arrayPassword.length <= 0) {
+       if (arrayPassword.length <= 0) {
             Utilidades.Sonidos.beep();
              JOptionPane.showMessageDialog(this, "Ingrese password");
            jpwContrasena.requestFocus();
+           this.menuPrincipal.habilitar();
             return;
-        }
-             int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
-             if (idEmpleado != -1) {
-            HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-            menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
-            menuPrincipal.setVisible(true);
-            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
-            this.menuPrincipal.deshabilitar();
-            cerrarbloq();
-            
-        } else {             
-            Utilidades.Sonidos.beep();
-             JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
-            txtCedula.setText("");
-            jpwContrasena.setText("");
-            txtCedula.requestFocus();
-            return;
-        }
-        
+        }*/     
+             
         
        /* String cedula = txtCedula.getText();
         char[] arrayPassword = jpwContrasena.getPassword();

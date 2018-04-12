@@ -759,21 +759,22 @@ public class ObjetoBaseDatos {
                 id = result.getInt("id");
                 p = result.getString("clave");
             }
-            char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
+            char[] pass = PuntoVenta.Ventanas.Bloqueo.jpwContrasena.getPassword();
 
             String passString = new String(pass);
 
             if (passString.equals(p)) {
 
                 PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
+                PuntoVenta.Inicio.MenuPrincipal.btnFacturas.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAyuda.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
-              //  PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
-              //  PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
-                PuntoVenta.Ventanas.bloqueo2.jButton2.setEnabled(true);
-                PuntoVenta.Ventanas.bloqueo2.jButton2.requestFocus();
+                PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
+                PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
+                PuntoVenta.Ventanas.Bloqueo.btnIngresar.setEnabled(true);
+                PuntoVenta.Ventanas.Bloqueo.btnIngresar.requestFocus();
 
             } else {
                 return -1;
@@ -3275,7 +3276,7 @@ public class ObjetoBaseDatos {
                 id = result.getInt("id");
                 p = result.getString("clave");
             }
-            char[] pass = PuntoVenta.Ventanas.bloqueo2.pass.getPassword();
+            char[] pass = PuntoVenta.Ventanas.Bloqueo.jpwContrasena.getPassword();
             String passString = new String(pass);
 
         } catch (Exception e) {

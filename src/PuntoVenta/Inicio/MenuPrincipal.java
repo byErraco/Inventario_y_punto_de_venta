@@ -211,9 +211,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         getContentPane().add(jDesktopPane1, java.awt.BorderLayout.NORTH);
 
         jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
-        jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jToolBar1.setNextFocusableComponent(btnCaja);
@@ -551,7 +549,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
  public  void  habilitar(){
-      if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
+    //  if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
         btnCaja.setEnabled(false);
         btnVentas.setEnabled(false);
         btnFacturas.setEnabled(false);
@@ -560,7 +558,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAdmin.setEnabled(false);
         btnProductos.setEnabled(false);
         btnMovimientos.setEnabled(false);
-      }
+     // }
    }
  
  public  void  deshabilitar(){
@@ -578,17 +576,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAcerca;
-    private javax.swing.JButton btnAdmin;
-    private javax.swing.JButton btnAyuda;
-    private javax.swing.JButton btnCaja;
+    public static javax.swing.JButton btnAcerca;
+    public static javax.swing.JButton btnAdmin;
+    public static javax.swing.JButton btnAyuda;
+    public static javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
-    private javax.swing.JButton btnFacturas;
-    private javax.swing.JButton btnMovimientos;
-    private javax.swing.JButton btnProductos;
+    public static javax.swing.JButton btnFacturas;
+    public static javax.swing.JButton btnMovimientos;
+    public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JButton btnVentas;
-    private javax.swing.JButton btnbloqueo;
+    public static javax.swing.JButton btnVentas;
+    public static javax.swing.JButton btnbloqueo;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
