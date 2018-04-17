@@ -1,7 +1,7 @@
 package PuntoVenta.Inicio;
 
 //import PuntoVenta.Ventanas.bloqueo2;  
-import PuntoVenta.Ventanas.Bloqueo; //cambiado por bloqueo2
+import PuntoVenta.Ventanas.Bloqueo1; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
@@ -60,7 +60,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Venta venta;
     public LogIn login;
     public Admin admin;
-    public Bloqueo bloqueo; // modificado de bloqueo2 --> Bloqueo
+    public Bloqueo1 bloqueo; // modificado de bloqueo2 --> Bloqueo
     public Empresa empresa;
     public CierreCaja cierre;
     public Productos producto; //añadido
@@ -208,6 +208,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         getContentPane().add(jDesktopPane1, java.awt.BorderLayout.NORTH);
 
         jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
@@ -453,6 +458,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
         abrirVentanaBloqueo();
+      
     }//GEN-LAST:event_btnbloqueoActionPerformed
 
     private void btnbloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbloqueoMouseClicked
@@ -535,6 +541,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void btnCajaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCajaMouseExited
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_btnCajaMouseExited
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+     
+         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+
+        if (g == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        } else {
+            this.setVisible(true);
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     private void ayuda() {
         ayuda.setVisible(true);
@@ -626,14 +644,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public void abrirVentanaBloqueo() {
 
         if (estacerrado(bloqueo)) {
-            
-            bloqueo = new Bloqueo(this);
+            habilitar();
+            bloqueo = new Bloqueo1(this);
             Dimension desktopSize = panel.getSize();
             Dimension jInternalFrameSize = bloqueo.getSize();
             bloqueo.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
                                 (desktopSize.height - jInternalFrameSize.height) / 2);
             panel.add(bloqueo);
-            this.habilitar();
+           
             
            // bloqueo.setMaximum(true);
             bloqueo.show();

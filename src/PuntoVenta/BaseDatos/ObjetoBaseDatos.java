@@ -759,7 +759,7 @@ public class ObjetoBaseDatos {
                 id = result.getInt("id");
                 p = result.getString("clave");
             }
-            char[] pass = PuntoVenta.Ventanas.Bloqueo.jpwContrasena.getPassword();
+            char[] pass = PuntoVenta.Ventanas.Bloqueo1.jpwClave.getPassword();
 
             String passString = new String(pass);
 
@@ -773,15 +773,15 @@ public class ObjetoBaseDatos {
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
-                PuntoVenta.Ventanas.Bloqueo.btnIngresar.setEnabled(true);
-                PuntoVenta.Ventanas.Bloqueo.btnIngresar.requestFocus();
+                PuntoVenta.Ventanas.Bloqueo1.btnIngresar.setEnabled(true);
+                PuntoVenta.Ventanas.Bloqueo1.btnIngresar.requestFocus();
 
             } else {
                 return -1;
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             id = -1;
         } finally {
             postgreSQL.desconectar();
@@ -3276,7 +3276,7 @@ public class ObjetoBaseDatos {
                 id = result.getInt("id");
                 p = result.getString("clave");
             }
-            char[] pass = PuntoVenta.Ventanas.Bloqueo.jpwContrasena.getPassword();
+            char[] pass = PuntoVenta.Ventanas.Bloqueo1.jpwClave.getPassword();
             String passString = new String(pass);
 
         } catch (Exception e) {

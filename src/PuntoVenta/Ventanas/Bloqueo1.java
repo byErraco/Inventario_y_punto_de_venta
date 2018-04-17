@@ -6,11 +6,11 @@ import java.awt.Toolkit;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
-public class LogIn extends javax.swing.JFrame {
+public class Bloqueo1 extends javax.swing.JFrame {
     
     public MenuPrincipal menuPrincipal;
     
-    public LogIn(MenuPrincipal menuPrincipal) {
+    public Bloqueo1(MenuPrincipal menuPrincipal) {
         initComponents();
    
         this.menuPrincipal = menuPrincipal;
@@ -34,8 +34,9 @@ public class LogIn extends javax.swing.JFrame {
         lblContrasena = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
-        btnEntrar = new javax.swing.JButton();
+        btnIngresar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setTitle("Saphiro - Punto de Venta\n"); // NOI18N
 
@@ -97,14 +98,13 @@ public class LogIn extends javax.swing.JFrame {
                     .addGroup(jpnCamposLoginLayout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
-                    .addComponent(jpwClave))
-                .addContainerGap())
+                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
+                    .addComponent(jpwClave)))
         );
         jpnCamposLoginLayout.setVerticalGroup(
             jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -113,17 +113,17 @@ public class LogIn extends javax.swing.JFrame {
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jpwClave, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28))
+                .addGap(22, 22, 22))
         );
 
-        btnEntrar.setBackground(new java.awt.Color(204, 204, 204));
-        btnEntrar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnEntrar.setText("ENTRAR");
-        btnEntrar.setContentAreaFilled(true);
-        btnEntrar.setName("btnEntrar"); // NOI18N
-        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
+        btnIngresar.setBackground(new java.awt.Color(204, 204, 204));
+        btnIngresar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnIngresar.setText("INGRESAR");
+        btnIngresar.setContentAreaFilled(true);
+        btnIngresar.setName("btnIngresar"); // NOI18N
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEntrarActionPerformed(evt);
+                btnIngresarActionPerformed(evt);
             }
         });
 
@@ -137,6 +137,11 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("BLOQUEADO");
+        jLabel1.setName("jLabel1"); // NOI18N
+
         javax.swing.GroupLayout jpnPrincipalLayout = new javax.swing.GroupLayout(jpnPrincipal);
         jpnPrincipal.setLayout(jpnPrincipalLayout);
         jpnPrincipalLayout.setHorizontalGroup(
@@ -149,28 +154,34 @@ public class LogIn extends javax.swing.JFrame {
                 .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                        .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(90, 90, 90)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipalLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(153, 153, 153))
         );
         jpnPrincipalLayout.setVerticalGroup(
             jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(27, 27, 27)
                 .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
         getContentPane().add(jpnPrincipal, java.awt.BorderLayout.CENTER);
 
-        setSize(new java.awt.Dimension(487, 370));
+        setSize(new java.awt.Dimension(487, 407));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -185,9 +196,9 @@ public class LogIn extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         ingresarSistema();
-    }//GEN-LAST:event_btnEntrarActionPerformed
+    }//GEN-LAST:event_btnIngresarActionPerformed
         
     private void jpwClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpwClaveActionPerformed
         ingresarSistema();
@@ -198,10 +209,11 @@ public class LogIn extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCedulaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnEntrar;
+    public static javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup14;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jpnCamposLogin;
     private javax.swing.JPanel jpnPrincipal;
     public static javax.swing.JPasswordField jpwClave;
@@ -235,16 +247,20 @@ public class LogIn extends javax.swing.JFrame {
         char[] arrayPassword = jpwClave.getPassword();
         
         if (cedula.isEmpty()) {
+            
+            this.menuPrincipal.habilitar();
             Utilidades.Sonidos.beep();
-             JOptionPane.showMessageDialog(this, " Para INICIAR, debe ingresar su cedula/usuario");
+             JOptionPane.showMessageDialog(this, " Para DESBLOQUEAR, debe ingresar su cedula/usuario");
+             
             txtCedula.requestFocus();
             return;
         }
   
         if (arrayPassword.length <= 0) {
+            this.menuPrincipal.habilitar();
             Utilidades.Sonidos.beep();
             jpwClave.requestFocus();
-            JOptionPane.showMessageDialog(this, "Ahora, ingrese su clave");
+            JOptionPane.showMessageDialog(this, "Para DESBLOQUEAR, ingrese su clave");
             return;
         }
         
@@ -255,13 +271,16 @@ public class LogIn extends javax.swing.JFrame {
             menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
             menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
             menuPrincipal.setVisible(true);
+            menuPrincipal.deshabilitar();
             this.dispose();
         } else {
+            this.menuPrincipal.habilitar();
+            JOptionPane.showMessageDialog(this, "Ingrese su Usuario/Cedula y Clave correctamente para DESBLOQUEAR");
             Utilidades.Sonidos.beep();
-            JOptionPane.showMessageDialog(this, "Para INICIAR, Ingrese su Usuario/Cedula y Clave correctamente");
             txtCedula.setText("");
             jpwClave.setText("");
             txtCedula.requestFocus();
+            
         }
     }
 }

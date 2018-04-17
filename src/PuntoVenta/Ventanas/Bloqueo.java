@@ -18,21 +18,27 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 public class Bloqueo extends javax.swing.JFrame {
-    static Object txtNombreUsuario;
+   // static Object txtNombreUsuario;
     
 
     public MenuPrincipal menuPrincipal;
 
-    String contrasena = "";
-    int i =0;
+  //  String contrasena = "";
+ //   int i =0;
+    
     public Bloqueo(MenuPrincipal menuPrincipal) {
         initComponents();
+        
         this.menuPrincipal = menuPrincipal;
+        
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/PuntoVenta/Iconos/acerca.png")));
         
        // txtCedula.setText("");
+       
         this.setTitle("Saphiro - Bloqueo de caja");
+        
         ingresarSistema();
+        
        this.setVisible(true);
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -71,11 +77,6 @@ public class Bloqueo extends javax.swing.JFrame {
                 jpwContrasenaActionPerformed(evt);
             }
         });
-        jpwContrasena.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jpwContrasenaKeyPressed(evt);
-            }
-        });
 
         lblUsuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
@@ -99,11 +100,6 @@ public class Bloqueo extends javax.swing.JFrame {
                 txtCedulaActionPerformed(evt);
             }
         });
-        txtCedula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCedulaKeyPressed(evt);
-            }
-        });
 
         jComboBox1.setName("jComboBox1"); // NOI18N
 
@@ -117,12 +113,12 @@ public class Bloqueo extends javax.swing.JFrame {
                     .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jpnCamposLoginLayout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtCedula))
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jpnCamposLoginLayout.setVerticalGroup(
@@ -130,14 +126,15 @@ public class Bloqueo extends javax.swing.JFrame {
             .addGroup(jpnCamposLoginLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16))
+                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18))
         );
 
         btnIngresar.setBackground(new java.awt.Color(204, 204, 204));
@@ -145,19 +142,9 @@ public class Bloqueo extends javax.swing.JFrame {
         btnIngresar.setText("INGRESAR");
         btnIngresar.setContentAreaFilled(true);
         btnIngresar.setName("btnIngresar"); // NOI18N
-        btnIngresar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnIngresarMouseClicked(evt);
-            }
-        });
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIngresarActionPerformed(evt);
-            }
-        });
-        btnIngresar.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnIngresarKeyPressed(evt);
             }
         });
 
@@ -204,7 +191,7 @@ public class Bloqueo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
                 .addGap(11, 11, 11)
                 .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -221,7 +208,9 @@ public class Bloqueo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+       
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        
         int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
 
         if (g == JOptionPane.YES_OPTION) {
@@ -231,28 +220,11 @@ public class Bloqueo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnIngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnIngresarKeyPressed
-       
-    }//GEN-LAST:event_btnIngresarKeyPressed
-
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
          // cerrarbloq();
         ingresarSistema();
        // this.menuPrincipal.habilitar();
     }//GEN-LAST:event_btnIngresarActionPerformed
-
-    private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
-
-    }//GEN-LAST:event_btnIngresarMouseClicked
-
-    private void txtCedulaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaKeyPressed
-      
-    }//GEN-LAST:event_txtCedulaKeyPressed
-
-    private void jpwContrasenaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jpwContrasenaKeyPressed
-      
-        
-    }//GEN-LAST:event_jpwContrasenaKeyPressed
 
     private void jpwContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpwContrasenaActionPerformed
         ingresarSistema();
@@ -317,31 +289,15 @@ public class Bloqueo extends javax.swing.JFrame {
        // entrarProgramador();
         
        
-       // REVISAR YA QUE AL INGRESAR UN USARIO "0" SIN CONTRASEÑA, DESBLOQUEA LA VENTANA.......
+       // REVISAR YA QUE AL INGRESAR UN USUARIO "0" SIN CONTRASEÑA, DESBLOQUEA LA VENTANA.......
           String cedula = txtCedula.getText();
           char[] arrayPassword = jpwContrasena.getPassword();
-          
-          if (txtCedula.getText().equals(cedula.isEmpty())) {
-
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
-                       txtCedula.requestFocus();
-                       this.menuPrincipal.habilitar();
-                       return;
-
-                    } 
-                 if(jpwContrasena.getPassword().equals(arrayPassword.toString().isEmpty())){
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese password");
-                       jpwContrasena.requestFocus();
-                       this.menuPrincipal.habilitar();
-                      return;
-   
-                 }
+           int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+      
           
           
           
-          int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+         
             
           if (idEmpleado != -1) {
             HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
@@ -352,7 +308,7 @@ public class Bloqueo extends javax.swing.JFrame {
             cerrarbloq();
             
             } else { 
-                 if (txtCedula.getText().equals(cedula.isEmpty()) && jpwContrasena.getPassword().equals(arrayPassword.toString().isEmpty())) {
+               /*  if (cedula.isEmpty() && arrayPassword.toString().isEmpty()) {
                 Utilidades.Sonidos.beep();
                  JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
                 txtCedula.setText("");
@@ -361,7 +317,41 @@ public class Bloqueo extends javax.swing.JFrame {
                 //jpwContrasena.requestFocus();
                 this.menuPrincipal.habilitar();
 
-                 } /* else if (txtCedula.getText().equals(cedula.isEmpty())) {
+                         } //if dentro del else
+                  */
+                  if (!cedula.equals(idEmpleado)) {
+
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
+                        txtCedula.setText("");
+                       txtCedula.requestFocus();
+                       this.menuPrincipal.habilitar();
+                      return;
+
+                    } else{
+                      
+                  }
+                  
+                  
+                 if(!arrayPassword.toString().equalsIgnoreCase(cedula)){
+                        Utilidades.Sonidos.beep();
+                        JOptionPane.showMessageDialog(this, "Ingrese password");
+                        jpwContrasena.setText("");
+                       jpwContrasena.requestFocus();
+                       this.menuPrincipal.habilitar();
+                    //  return;
+                      
+                          }
+                   
+                 } // else
+        return;     
+        
+      
+        }// if principal
+    
+    
+    
+    /* else if (txtCedula.getText().equals(cedula.isEmpty())) {
 
                         Utilidades.Sonidos.beep();
                         JOptionPane.showMessageDialog(this, "Ingrese cedula");
@@ -375,11 +365,8 @@ public class Bloqueo extends javax.swing.JFrame {
                        this.menuPrincipal.habilitar();
 
                  } // ii-else_if-else   */
-               return;
-           
-        } // if principal
-            
-         /* public  void  habilitar(){
+    
+ /* public  void  habilitar(){
         btnCaja.setEnabled(false);
         btnVentas.setEnabled(false);
         btnFacturas.setEnabled(false);
@@ -447,9 +434,6 @@ public class Bloqueo extends javax.swing.JFrame {
             jpwContrasena.setText("");
             txtCedula.requestFocus();
         */
-      
-        }
-
     public void setMaximum(boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
