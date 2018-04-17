@@ -679,7 +679,7 @@ public class Pago extends javax.swing.JInternalFrame {
 
     public void factura() {
         List lista = new ArrayList();
-        XBigDecimal cantidad = new XBigDecimal(lblMontoVentaValor.getText());
+        XBigDecimal cantidad = new XBigDecimal(lblMontoVentaValor.getText());//este valor almacena el total de la venta
         String factura = txtNumeroFactura.getText();
         String nombre = txtNombreCliente.getText();
         String cedula = txtDocumento.getText();
@@ -687,8 +687,8 @@ public class Pago extends javax.swing.JInternalFrame {
         String pagado = "";
         String tipo = "";
         menuPrincipal.empresa = menuPrincipal.getOBD().datosEmpresas();
-        int aux = 0;
-        double total = 0;
+        //int aux = 0;
+        double total = 0; // este valor almacena la cantidad de dinero entrante a la caja
         double totefe = 0;
         double tottdd = 0;
         double tottdc = 0;
@@ -699,7 +699,10 @@ public class Pago extends javax.swing.JInternalFrame {
             if (!tipo.equals(tblTipoPago.getValueAt(i, 0).toString())) {
                 tipo = tblTipoPago.getValueAt(i, 0).toString();
                 total = total + Double.parseDouble(tblTipoPago.getValueAt(i, 1).toString());
-                aux++;
+                //aux++;// Ernesto: Revisar iteraciones de aux
+                if (i > 1) {
+                    tipo = "Mixto";
+                }
             }
             if ("Efectivo".equals(tblTipoPago.getValueAt(i, 0).toString())) {
                 totefe = totefe + Double.parseDouble(tblTipoPago.getValueAt(i, 1).toString());
@@ -736,16 +739,17 @@ public class Pago extends javax.swing.JInternalFrame {
         }
         pagado = "" + redondeo.format(total);
         pagado = pagado.replace(",", ".");
-        if (aux > 1) {
+        /*if (aux > 1) {
             tipo = "Mixto";
-        }
+        }*/
         List<ArticuloDescontar> ad = new ArrayList();
         Double cambio = Double.parseDouble(pagado) - Double.parseDouble("" + cantidad);
         String vuelto = redondeo.format(cambio).replace(",", ".");
+        Double exento = 0.00;//Ernesto: variable utilizada para calcular el total sin impuesto de una venta
         for (int i = 0; i < jtbVenta.getRowCount(); i++) {
             ad.add(new ArticuloDescontar(jtbVenta.getValueAt(i, 0).toString(), jtbVenta.getValueAt(i, 3).toString()));
             Double subtotal = pagoconiva - Double.parseDouble(venta.impuesto);
-            Double pagouni = Double.parseDouble(jtbVenta.getValueAt(i, 2).toString()) + Double.parseDouble(jtbVenta.getValueAt(i, 4).toString());
+            Double pagouni = Double.parseDouble((String) jtbVenta.getValueAt(i, 2));// Ernesto: el resto de esta expresion duplica el precio del producto + Double.parseDouble(jtbVenta.getValueAt(i, 4).toString());
             String descrip = "";
             if (jtbVenta.getValueAt(i, 1).toString().length() > 13) {
                 for (int k = 0; k < jtbVenta.getValueAt(i, 1).toString().length(); k++) {
@@ -757,14 +761,33 @@ public class Pago extends javax.swing.JInternalFrame {
                 descrip = jtbVenta.getValueAt(i, 1).toString();
             }
 //            System.out.println(menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+            //Ernesto: el siguiente bloque de declaraciones realiza las conversiones de tipo
+            //necesarias para calcular el total cantidad_producto * precio_unitario
+            Double cantidad_producto = Double.parseDouble((String) jtbVenta.getValueAt(i, 2));
+            Double total_previo = Double.parseDouble((String) jtbVenta.getValueAt(i, 5));
+            total_previo = cantidad_producto * total_previo;
+            String total_producto = total_previo.toString();
+            
+            exento = exento + total_previo;//Ernesto: acumulador de los totales de cada producto
+            String total_exento = exento.toString();
+            System.out.println("total exento "+total_exento);
             if ("0.00".equals(jtbVenta.getValueAt(i, 4).toString())) {
-                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 3).toString(), descrip + " (E)", "" + pagouni.toString(), jtbVenta.getValueAt(i, 5).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getTelefono(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+                //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 3).toString(), descrip + " (E)", "" + pagouni.toString(), jtbVenta.getValueAt(i, 5).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), jtbVenta.getValueAt(i, 6).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
             } else {
-                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 3).toString(), descrip, "" + pagouni.toString(), jtbVenta.getValueAt(i, 5).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getTelefono(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+
+                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), "Bs.", "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+                //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(cantidad_productos.toString(), descrip, "" + pagouni.toString(), string_total_pago_producto,cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
+                System.out.println("pagosiniva "+pagosiniva);
+                System.out.println("vuelto "+vuelto);
+                System.out.println("subtotal "+subtotal);
+                System.out.println("tipo "+tipo);
+                System.out.println("moneda "+menuPrincipal.empresa.getMoneda());
             }
         }
+
         try {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
@@ -775,7 +798,7 @@ public class Pago extends javax.swing.JInternalFrame {
         }
         menuPrincipal.getOBD().descontarcantidad(ad);
         menuPrincipal.getOBD().setEstadoVenta(venta.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Finalizada);
-        menuPrincipal.getOBD().actualizaiva(venta.getIdVenta(), venta.impuesto, montoVenta, pagoconiva, pagosiniva, pagado, vuelto, menuPrincipal.getEmpleado().getId());
+        //menuPrincipal.getOBD().actualizaiva(venta.getIdVenta(), venta.impuesto, montoVenta, pagoconiva, pagosiniva, pagado, vuelto, menuPrincipal.getEmpleado().getId());
         int id = venta.getIdVenta();
         venta.limpiarVenta();
         menuPrincipal.getOBD().guardarPagos(id, vp);

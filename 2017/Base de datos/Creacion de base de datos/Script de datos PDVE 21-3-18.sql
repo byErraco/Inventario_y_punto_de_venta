@@ -295,8 +295,8 @@ INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, 
 INSERT INTO producto (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, cantidad_disponible, balanza, producto_pre_fabricado, id_periodo_venta_producto, activo_producto) VALUES (4, 'Jugo de mamon', '7893', NULL, 'Sur del lago', 100, 1, 0, NULL, 1);
 INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (1, '2018-03-19', 30, 12, 112, 100, 0, 1, 12, 1);
 INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (2, '2018-03-19', 30, 6, 56, 50, 0, 1, 12, 2);
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (4, '2018-03-20', 30, NULL, 200, 0, 1, 1, 0, 3);
-INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (3, '2018-03-19', 30, NULL, 75, 0, 1, 1, 0, 4);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (4, '2018-03-20', 30, 0, 200, 0, 1, 1, 0, 3);
+INSERT INTO precio_producto (id_precio_producto, fecha_registro_precio, margen_ganancia, impuesto_producto, precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, porcentaje_impuesto_producto, id_producto) VALUES (3, '2018-03-19', 30, 0, 75, 0, 1, 1, 0, 4);
 
 
 

@@ -13,13 +13,15 @@ public class Empresa {
 
     String nombre;
     String direccion;
+    String tipoEmpresa;
     String rif;
     String telefono;
     String moneda;
 
-    public Empresa(String nombre, String direccion, String rif, String telefono, String moneda) {
+    public Empresa(String nombre, String direccion, String tipoEmpresa, String rif, String telefono, String moneda) {
         this.nombre = nombre;
         this.direccion = direccion;
+        this.tipoEmpresa = tipoEmpresa;
         this.rif = rif;
         this.telefono = telefono;
         this.moneda = moneda;
@@ -44,6 +46,14 @@ public class Empresa {
         this.direccion = direccion;
     }
 
+    public String getTipoEmpresa(){
+        return tipoEmpresa;
+    }
+    
+    public void setTipoEmpresa(String tipoEmpresa){
+        this.tipoEmpresa = tipoEmpresa;
+    }
+    
     public String getRif() {
         return rif;
     }
