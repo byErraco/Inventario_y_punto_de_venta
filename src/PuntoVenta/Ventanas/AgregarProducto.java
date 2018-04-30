@@ -224,7 +224,7 @@ public class AgregarProducto extends javax.swing.JInternalFrame {
         jToolBarDetalle.setRollover(true);
 
         btnDescripcion.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. descripcion.png"))); // NOI18N
         btnDescripcion.setText("<html><font size=4><center>Descripción</center></font></html>");
         btnDescripcion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDescripcion.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -245,7 +245,7 @@ public class AgregarProducto extends javax.swing.JInternalFrame {
         jToolBarDetalle.add(btnDescripcion);
 
         btnComponente.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. componente.png"))); // NOI18N
         btnComponente.setText("<html><font size=4><center>Componente<br></center></font></html>");
         btnComponente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnComponente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

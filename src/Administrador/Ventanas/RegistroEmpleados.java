@@ -39,6 +39,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     public RegistroEmpleados(Admin admin) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
+        this.setTitle("Saphiro - Registrar empleado(s)");
         initComponents();
         crearHotKeys();
         setCargos();
@@ -93,7 +94,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblDireccion = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Saphiro - Registrar empleado");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

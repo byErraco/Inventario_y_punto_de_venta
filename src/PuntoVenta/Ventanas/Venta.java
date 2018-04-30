@@ -85,7 +85,7 @@ public class Venta extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
         this.setClienteAsociadoFactura(false);
 
-        this.setTitle("Cajero: " + menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido());
+        this.setTitle("Saphiro - Cajero: " + menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido());
         actualizarTabla();
         crearHotKeys();
         setBotonesVentaEnabled(false);

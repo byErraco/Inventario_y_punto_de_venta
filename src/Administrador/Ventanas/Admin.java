@@ -60,6 +60,7 @@ public class Admin extends javax.swing.JInternalFrame {
 
         initComponents();
         this.menuPrincipal = menuPrincipal;
+        this.setTitle("Saphiro - Administración de Módulos");
         crearHotKeys();
         actualizarTabla();
     }
@@ -129,7 +130,6 @@ public class Admin extends javax.swing.JInternalFrame {
         setBackground(new java.awt.Color(32, 182, 155));
         setClosable(true);
         setForeground(java.awt.Color.cyan);
-        setTitle("Saphiro - Administración de módulos");
 
         jToolBarAdmin.setBackground(new java.awt.Color(32, 182, 155));
         jToolBarAdmin.setFloatable(false);

@@ -35,6 +35,7 @@ public class ListaClientes extends javax.swing.JInternalFrame {
     public ListaClientes(Venta venta) {
         this.venta = venta;
         initComponents();
+        this.setTitle("Saphiro - Clientes");
         this.btnAgregar.setEnabled(!venta.isClienteAsociadoFactura());
         crearHotKeys();
         this.actualizarTabla();
@@ -93,7 +94,6 @@ public class ListaClientes extends javax.swing.JInternalFrame {
         jtbListaCliente = new javax.swing.JTable();
 
         setClosable(true);
-        setTitle("Saphiro - Cliente");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

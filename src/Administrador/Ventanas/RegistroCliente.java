@@ -45,6 +45,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     public RegistroCliente(Admin admin) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
+        this.setTitle("Saphiro - Registro clientes");
         modificarCliente = false;
         initComponents();
         crearHotKeys();

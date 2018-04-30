@@ -28,6 +28,7 @@ import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
@@ -97,7 +98,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
-
+      
+        Dimension menuPrincipal = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension jFrameSize = menuPrincipal.getSize();
+        menuPrincipal.setSize(jFrameSize);
+        
         //Obtener archivo de configuracion
         this.configuracion = getConfiguracion("local.conf");
         //Crear objeto base de datos
@@ -164,6 +169,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return configuracion;
 
     }
+    
+    
 
     /**
      * METODO ANTIGUO. METODO QUE DEVUELVE UN VALOR BOOLEAN PARA SABER SI UN
@@ -217,6 +224,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setAutoscrolls(true);
         jToolBar1.setBorderPainted(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jToolBar1.setNextFocusableComponent(btnCaja);
@@ -314,7 +322,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnAdmin);
 
         btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. inventario.png"))); // NOI18N
         btnMovimientos.setText("<html><font size=2><center>Movimientos<br>F8</center></font></html>");
         btnMovimientos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnMovimientos.setFocusable(false);
@@ -333,7 +341,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnMovimientos);
 
         btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. producto.png"))); // NOI18N
         btnProductos.setText("<html><font size=2><center>Productos<br>F9</center></font></html>");
         btnProductos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnProductos.setFocusable(false);
@@ -405,6 +413,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnbloqueo);
 
         btnCalculadora.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. calculadora.png"))); // NOI18N
         btnCalculadora.setText("<html><font size=2><center>Calculadora<br>FX</center></font></html>");
         btnCalculadora.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnCalculadora.setFocusable(false);
@@ -418,7 +427,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jToolBar1.add(btnCalculadora);
 
         btnSalir.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnSalir.setText("<html><font size=4><center>Salir<br></center></font></html>");
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. salir.png"))); // NOI18N
+        btnSalir.setText("<html><font size=2><center>Salir<br>XX</center></font></html>");
         btnSalir.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSalir.setFocusable(false);
         btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

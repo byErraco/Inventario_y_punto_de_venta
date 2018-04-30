@@ -27,6 +27,7 @@ public class ListaProductos extends JInternalFrame {
 
     public ListaProductos(Venta venta) {
         initComponents();
+        this.setTitle("Saphiro - Lista de Productos");
         this.venta = venta;
         crearHotKeys();
         actualizarTabla();

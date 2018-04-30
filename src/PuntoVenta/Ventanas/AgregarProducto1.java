@@ -41,7 +41,7 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
      * Creates new form Detalles
      */
     public AgregarProducto1(MenuPrincipal menuPrincipal) {
-        this.setTitle("Saphiro - Modificar producto");
+        this.setTitle("Saphiro - Agregar producto");
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;
      //   crearHotKeys();
@@ -224,17 +224,17 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         jToolBarDetalle.setRollover(true);
 
         btnDescripcion.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. descripcion.png"))); // NOI18N
         btnDescripcion.setText("<html><font size=4><center>Descripción</center></font></html>");
         btnDescripcion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDescripcion.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btnDescripcion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnDescripcion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnDescripcionMouseEntered(evt);
-            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnDescripcionMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnDescripcionMouseEntered(evt);
             }
         });
         btnDescripcion.addActionListener(new java.awt.event.ActionListener() {
@@ -245,7 +245,7 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         jToolBarDetalle.add(btnDescripcion);
 
         btnComponente.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
+        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. componente.png"))); // NOI18N
         btnComponente.setText("<html><font size=4><center>Componente<br></center></font></html>");
         btnComponente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnComponente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

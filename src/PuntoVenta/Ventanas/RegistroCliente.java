@@ -36,6 +36,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      */
     public RegistroCliente(Venta venta) {
         this.venta = venta;
+        this.setTitle("Saphiro - Registro de clientes");
         initComponents();
         crearHotKeys();
     }
@@ -88,7 +89,6 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         txtFacebook = new javax.swing.JTextField();
 
         setClosable(true);
-        setTitle("Saphiro - Registro Cliente");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

@@ -60,6 +60,7 @@ public class Pago extends javax.swing.JInternalFrame {
     public Pago(Venta venta) {
         this.venta = venta;
         this.menuPrincipal = venta.menuPrincipal;
+        this.setTitle("Saphiro - Modulo de Pago");
         initComponents();
         String tipoma = "";
         if (EF.isSelected()) {

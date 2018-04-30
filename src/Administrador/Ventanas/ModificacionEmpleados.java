@@ -39,6 +39,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     public ModificacionEmpleados(Admin admin) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
+        this.setTitle("Saphiro - Modificar empleados");
         initComponents();
         txtDocumento.getText();
         txtNombres.getText();
@@ -97,7 +98,6 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         lblCargo = new javax.swing.JLabel();
 
         setClosable(true);
-        setTitle("Saphiro - Modificar empleado");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 
