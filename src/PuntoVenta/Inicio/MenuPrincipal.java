@@ -43,8 +43,11 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
@@ -98,10 +101,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
      */
     public MenuPrincipal() {
         initComponents();
+        JFrame frame = new JFrame();
       
         Dimension menuPrincipal = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension jFrameSize = menuPrincipal.getSize();
         menuPrincipal.setSize(jFrameSize);
+        
+        JScrollPane jScrollPane1 = new JScrollPane(panel);
+        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        JPanel jPanel2 = new JPanel(null);
+        jPanel2.add(jScrollPane1);
+        frame.setContentPane(jPanel2);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+        
         
         //Obtener archivo de configuracion
         this.configuracion = getConfiguracion("local.conf");
@@ -199,7 +214,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnCaja = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
@@ -212,6 +230,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnbloqueo = new javax.swing.JButton();
         btnCalculadora = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jDesktopPane1 = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -220,10 +239,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
-        getContentPane().add(jDesktopPane1, java.awt.BorderLayout.NORTH);
+
+        jScrollPane1.setAutoscrolls(true);
+
+        jPanel2.setAutoscrolls(true);
 
         jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setRollover(true);
         jToolBar1.setAutoscrolls(true);
         jToolBar1.setBorderPainted(false);
         jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -440,7 +463,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSalir);
 
-        getContentPane().add(jToolBar1, java.awt.BorderLayout.LINE_START);
+        jPanel2.add(jToolBar1);
+
+        jScrollPane1.setViewportView(jPanel2);
+
+        jPanel1.add(jScrollPane1);
+
+        jSplitPane1.setLeftComponent(jPanel1);
+
+        jDesktopPane1.setAutoscrolls(true);
+        jSplitPane1.setRightComponent(jDesktopPane1);
+
+        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -616,6 +650,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnVentas;
     public static javax.swing.JButton btnbloqueo;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
