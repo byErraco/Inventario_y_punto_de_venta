@@ -22,8 +22,8 @@ import PuntoVenta.Ventanas.Detalles; //añadido para productos
 import PuntoVenta.Ventanas.Compra; //añadido para movimientos
 import PuntoVenta.Ventanas.Fabricacion;//añadido para movimientos
 import PuntoVenta.Ventanas.Ajuste;//añadido para movimientos
-import PuntoVenta.Ventanas.AgregarProducto; //añadido para productos
-import PuntoVenta.Ventanas.ModificarProducto; //añadido para productos
+import PuntoVenta.Ventanas.AgregarProducto1; //añadido para productos
+import PuntoVenta.Ventanas.ModificarProducto1; //añadido para productos
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import java.awt.Color;
@@ -81,8 +81,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private boolean cajaAbierta;
     private ModeloCaja modeloCaja;
     private Factura factura;
-    private AgregarProducto agregar;
-    private ModificarProducto modificar;
+    private AgregarProducto1 agregar;
+    private ModificarProducto1 modificar;
     private Detalles detalles;
     private Fabricacion fabricacion;
     private Compra compra;
@@ -485,7 +485,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (g == JOptionPane.YES_OPTION) {
             System.exit(0);
-        } else {
+        } else if (g == JOptionPane.NO_OPTION) {
+            
             this.setVisible(true);
         }
     }//GEN-LAST:event_btnSalirActionPerformed
@@ -593,7 +594,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (g == JOptionPane.YES_OPTION) {
             System.exit(0);
-        } else {
+        } else if (g == JOptionPane.NO_OPTION) {
             this.setVisible(true);
         }
     }//GEN-LAST:event_formWindowClosing
@@ -675,11 +676,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         } else {
             venta.show();
             venta.getTxtDocumento().requestFocus();
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.venta.getTitle()+ "\nya esta abierta...");
         }
     }
 
     public void abrirVentanaAdmin() {
-
+     if (estacerrado(admin)){
         admin = new Admin(this);
         Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = admin.getSize();
@@ -687,6 +689,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 (desktopSize.height - jInternalFrameSize.height) / 2);
         panel.add(admin);
         admin.show();
+        
+            } else {
+         JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.admin.getTitle()+ "\nya esta abierta...");
+         }
     }
 
     public void abrirVentanaBloqueo() {
@@ -724,10 +730,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
             setVentanaAbierta(Modulo.CAJA);
         } else {
             caja.requestFocus();
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.caja.getTitle()+ "\nya esta abierta...");
         }
     }
 
     public void abrirVentanaFactura() {
+     if (estacerrado(factura)){
         factura = new Factura(this);
         Dimension desktopSize = panel.getSize();
         Dimension jInternalFrameSize = factura.getSize();
@@ -735,6 +743,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 (desktopSize.height - jInternalFrameSize.height) / 2);
         panel.add(factura);
         factura.show();
+        
+           } else{
+                 JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.factura.getTitle()+ "\nya esta abierta...");
+             }
     }
 
     public void abrirCalculadora() {
@@ -749,6 +761,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
             setVentanaAbierta(Modulo.CALC);
         } else {
             calc.requestFocus();
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.calc.getTitle()+ "\nya esta abierta...");
+            calc.moveToFront();
         }
     }
     
@@ -766,7 +780,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 producto.show();
                 setVentanaAbierta(Modulo.PRODUCTOS);
         } else {
-            JOptionPane.showMessageDialog(this, "La ventana ya esta abierta...");
+           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.producto.getTitle()+ "\nya esta abierta...");
+           producto.moveToFront();
         }
       
     }
@@ -782,7 +797,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 movimiento.show();
                 setVentanaAbierta(Modulo.MOVIMIENTOS);
         } else {
-            JOptionPane.showMessageDialog(this, "La ventana ya esta abierta...");
+           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.movimiento.getTitle()+ "\nya esta abierta...");
+           movimiento.moveToFront();
         }
        
     }

@@ -236,7 +236,7 @@ public class LogIn extends javax.swing.JFrame {
         
         if (cedula.isEmpty()) {
             Utilidades.Sonidos.beep();
-             JOptionPane.showMessageDialog(this, " Para INICIAR, debe ingresar su cedula/usuario");
+             JOptionPane.showMessageDialog(this, " Para INICIAR, debe ingresar su IDENTIFICACIÓN");
             txtCedula.requestFocus();
             return;
         }
@@ -258,7 +258,7 @@ public class LogIn extends javax.swing.JFrame {
             this.dispose();
         } else {
             Utilidades.Sonidos.beep();
-            JOptionPane.showMessageDialog(this, "Para INICIAR, Ingrese su Usuario/Cedula y Clave correctamente");
+            JOptionPane.showMessageDialog(this, "Para INICIAR, Ingrese su IDENTIFICACION y Clave correctamente");
             txtCedula.setText("");
             jpwClave.setText("");
             txtCedula.requestFocus();

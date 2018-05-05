@@ -181,7 +181,6 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(117, 133, 155));
         setClosable(true);
-        setTitle("Saphiro - Corte de Caja");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

@@ -275,7 +275,7 @@ public class Bloqueo1 extends javax.swing.JFrame {
             this.dispose();
         } else {
             this.menuPrincipal.habilitar();
-            JOptionPane.showMessageDialog(this, "Ingrese su Usuario/Cedula y Clave correctamente para DESBLOQUEAR");
+            JOptionPane.showMessageDialog(this, "Ingrese su IDENTIFICACION y Clave correctamente para DESBLOQUEAR");
             Utilidades.Sonidos.beep();
             txtCedula.setText("");
             jpwClave.setText("");

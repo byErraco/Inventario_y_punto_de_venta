@@ -183,7 +183,6 @@ public class CierreCaja extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(117, 133, 155));
         setClosable(true);
-        setTitle("Saphiro - Cierre de Caja");
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
 

@@ -918,7 +918,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
         Component tr = null;
         String m = "Introduce la clave del supervisor:";
-        String t = "bloqueo";
+        String t = "Bloqueo";
         try {
             contra(tr, m, t);
 
@@ -1159,6 +1159,8 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param numero_identificacion_persona
      */
     private void abrirVentanaRegistroSimpleCliente(char tipo_persona, String numero_identificacion_persona) {
+      
+         
         if (menuPrincipal.estacerrado(registroCliente)) {
             if (numero_identificacion_persona.isEmpty()) {
                 registroCliente = new RegistroCliente(this);
@@ -1174,14 +1176,16 @@ public class Venta extends javax.swing.JInternalFrame {
             menuPrincipal.panel.add(registroCliente);
             registroCliente.show();
         } else {
-            JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.registroCliente.getTitle()+ "\nya esta abierta...");
         }
-    }
-
+      }
+ 
+        
     /**
      * Abre la ventana de registro simple.
      */
     private void abrirVentanaRegistroSimpleCliente() {
+       
         if (menuPrincipal.estacerrado(registroCliente)) {
             registroCliente = new RegistroCliente(this);
             Dimension desktopSize = menuPrincipal.panel.getSize();
@@ -1192,10 +1196,10 @@ public class Venta extends javax.swing.JInternalFrame {
             menuPrincipal.panel.add(registroCliente);
             registroCliente.show();
         } else {
-            JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.registroCliente.getTitle()+"\nya esta abierta...");
         }
-    }
-
+       }
+    
     /**
      * Abre la ventana de ListaClientes.
      */
@@ -1210,7 +1214,7 @@ public class Venta extends javax.swing.JInternalFrame {
             menuPrincipal.panel.add(ventanaCliente);
             ventanaCliente.show();
         } else {
-            JOptionPane.showMessageDialog(this, "Error: La ventana ya esta abierta...");
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.ventanaCliente.getTitle()+ "\nya esta abierta...");
         }
     }
 
@@ -1224,6 +1228,7 @@ public class Venta extends javax.swing.JInternalFrame {
                     (desktopSize.height - jInternalFrameSize.height) / 2);
             menuPrincipal.panel.add(buscarProducto);
         } else {
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.buscarProducto.getTitle()+ "\nya esta abierta...");
             buscarProducto.moveToFront();
             if (txtProductoNombre == null) {
 
@@ -1287,7 +1292,7 @@ public class Venta extends javax.swing.JInternalFrame {
             this.setClienteAsociadoFactura(false);
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea registrar a este cliente?", "Este cliente no existe");
             if (seleccion == 0) {
-                abrirVentanaRegistroSimpleCliente(tipo_persona, numero_identificacion_persona);
+                abrirVentanaRegistroSimpleCliente();
             }
         }
     }

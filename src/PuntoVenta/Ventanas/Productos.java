@@ -9,8 +9,8 @@ import ClasesExtendidas.Tablas.ProductoTableModel;
 import ClasesExtendidas.Tablas.ProductoVentaTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.Ventanas.AgregarProducto;
-import PuntoVenta.Ventanas.ModificarProducto;
+import PuntoVenta.Ventanas.AgregarProducto1;
+import PuntoVenta.Ventanas.ModificarProducto1;
 import PuntoVenta.Modelos.ModeloProducto;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -39,8 +39,8 @@ public class Productos extends javax.swing.JInternalFrame {
     
  private Modulo ventanaAbierta; 
  public MenuPrincipal menuPrincipal;
- public  AgregarProducto agregar;
- public ModificarProducto modificar;
+ public  AgregarProducto1 agregar;
+ public ModificarProducto1 modificar;
  public ModeloProducto productos;
  
     /**
@@ -322,7 +322,7 @@ public class Productos extends javax.swing.JInternalFrame {
     private void Agregar(){
               
            if(estacerrado(agregar)){     
-                agregar = new AgregarProducto(menuPrincipal);
+                agregar = new AgregarProducto1(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
                 agregar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -343,7 +343,7 @@ public class Productos extends javax.swing.JInternalFrame {
     
         if(estacerrado(modificar)){
         
-                modificar = new ModificarProducto(menuPrincipal);
+                modificar = new ModificarProducto1(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = modificar.getSize();
                 modificar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
