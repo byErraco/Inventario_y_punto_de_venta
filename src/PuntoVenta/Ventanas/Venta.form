@@ -283,13 +283,15 @@
             <Component class="javax.swing.JComboBox" name="cmbTipoDocumento">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
+                  <StringArray count="1">
+                    <StringItem index="0" value="E"/>
+                  </StringArray>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value=""/>
                 <Property name="name" type="java.lang.String" value="" noResource="true"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="cmbTipoDocumento.addItem(&quot;V&quot;);&#xa;cmbTipoDocumento.addItem(&quot;J&quot;);&#xa;cmbTipoDocumento.addItem(&quot;P&quot;);&#xa;cmbTipoDocumento.addItem(&quot;E&quot;);"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="lblFechaFactura">

@@ -1,10 +1,15 @@
 package PuntoVenta.Inicio;
 
 //import PuntoVenta.Ventanas.bloqueo2;  
+import PuntoVenta.Inicio.ParametrosIniciales1;
+import PuntoVenta.Inicio.RegistroAdministrador;
 import PuntoVenta.Ventanas.Bloqueo1; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
+import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Pais;
+import PuntoVenta.BaseDatos.Parametros;
 import PuntoVenta.Modelos.ModeloCaja;
 import PuntoVenta.Modelos.ModeloEmpleado;
 import PuntoVenta.Modelos.ModeloProducto; // añadido
@@ -23,9 +28,12 @@ import PuntoVenta.Ventanas.Compra; //añadido para movimientos
 import PuntoVenta.Ventanas.Fabricacion;//añadido para movimientos
 import PuntoVenta.Ventanas.Ajuste;//añadido para movimientos
 import PuntoVenta.Ventanas.AgregarProducto1; //añadido para productos
+import PuntoVenta.Ventanas.ClaveSuperUsuario;
 import PuntoVenta.Ventanas.ModificarProducto1; //añadido para productos
+//import PuntoVenta.Ventanas.ModificarProducto2;
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
+import Utilidades.currentLoger;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -59,15 +67,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
     KeySaphiro ks;
 
     //VENTANAS
+    public ParametrosIniciales1 parametrosIniciales1;
+    public RegistroAdministrador registroAdministrador;
     public Caja caja;
     public Calculadora calc;
     public Venta venta;
     public LogIn login;
     public Admin admin;
     public Bloqueo1 bloqueo; // modificado de bloqueo2 --> Bloqueo
-    public Empresa empresa;
+//    public Empresa empresa;
+    public Parametros parametros;
+    public Pais pais;
     public CierreCaja cierre;
-    public Productos producto; //añadido
+    public Productos productos; //añadido
     public Movimientos movimiento;   // añadido
 
     //OTRAS VENTANAS
@@ -82,7 +94,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private ModeloCaja modeloCaja;
     private Factura factura;
     private AgregarProducto1 agregar;
-    private ModificarProducto1 modificar;
     private Detalles detalles;
     private Fabricacion fabricacion;
     private Compra compra;
@@ -116,7 +127,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
-        
         
         //Obtener archivo de configuracion
         this.configuracion = getConfiguracion("local.conf");
@@ -163,8 +173,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        this.login = new LogIn(this);
+        validarInicio();
     }
 
     /**
@@ -184,7 +193,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return configuracion;
 
     }
-    
+    //valida el inicio
+    public void validarInicio() {
+        //Verifica si los parametros han sido creados, de no ser asi, abre la ventana para crearlos.
+        int verificarParametros = PuntoVenta.BaseDatos.ObjetoBaseDatos.verificarParametros();
+        int verificarUsuarios = PuntoVenta.BaseDatos.ObjetoBaseDatos.verificarUsuarios();
+        
+        if(verificarParametros > 0 && verificarUsuarios > 0) {
+            this.login = new LogIn(this);
+        } else if (verificarParametros == 0) {
+            this.parametrosIniciales1 = new ParametrosIniciales1(this);
+        } else {
+            this.registroAdministrador = new RegistroAdministrador(this);
+        }
+    }
     
 
     /**
@@ -232,13 +254,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         jDesktopPane1 = new javax.swing.JDesktopPane();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
+
+        jSplitPane1.setMaximumSize(new java.awt.Dimension(1400, 720));
 
         jScrollPane1.setAutoscrolls(true);
 
@@ -257,6 +281,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnCaja.setText("<html><font size=2><center>Caja<br>F1</center></font></html>");
         btnCaja.setActionCommand("actionCaja");
         btnCaja.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnCaja.setFocusable(false);
         btnCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCaja.setNextFocusableComponent(btnVentas);
         btnCaja.setSelected(true);
@@ -325,11 +350,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAdmin.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAdmin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnAdminMouseEntered(evt);
-            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnAdminMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAdminMouseEntered(evt);
             }
         });
         btnAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -481,10 +506,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
 
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
         if (g == JOptionPane.YES_OPTION) {
-            System.exit(0);
+            if(this.cajaAbierta)   JOptionPane.showMessageDialog(this, "Aun hay cajas abiertas, debe cerrarlas antes de salir del sistema");
+            else System.exit(0);
         } else if (g == JOptionPane.NO_OPTION) {
             
             this.setVisible(true);
@@ -588,7 +614,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCajaMouseExited
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-     
+        
          javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
         int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
 
@@ -618,7 +644,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnFacturas.setEnabled(false);
         btnAyuda.setEnabled(false);
         btnAcerca.setEnabled(false);
-        btnAdmin.setEnabled(false);
+        btnAdmin.setEnabled(false);        
         btnProductos.setEnabled(false);
         btnMovimientos.setEnabled(false);
      // }
@@ -681,18 +707,36 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     public void abrirVentanaAdmin() {
-     if (estacerrado(admin)){
-        admin = new Admin(this);
-        Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = admin.getSize();
-        admin.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(admin);
-        admin.show();
+        currentLoger c = new currentLoger();
+        Empleado emple = c.getDatosEmpleadoLogueado();
         
+//        System.out.println("abrirVentanaAdmin se ha llamado");
+        
+        if(estacerrado(admin)) {
+            if (emple.getCargo_id().equals("1")) {
+                admin = new Admin(this);
+                Dimension desktopSize = panel.getSize();
+                Dimension jInternalFrameSize = admin.getSize();
+                admin.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                        (desktopSize.height - jInternalFrameSize.height) / 2);
+                panel.add(admin);
+                admin.show();
             } else {
-         JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.admin.getTitle()+ "\nya esta abierta...");
-         }
+                ClaveSuperUsuario csu = new ClaveSuperUsuario(this, true, this);
+                csu.setVisible(true);
+                if(csu.autenticarClave(true)) {
+                    admin = new Admin(this);
+                    Dimension desktopSize = panel.getSize();
+                    Dimension jInternalFrameSize = admin.getSize();
+                    admin.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                        (desktopSize.height - jInternalFrameSize.height) / 2);
+                    panel.add(admin);
+                    admin.show();
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.admin.getTitle()+ "\nya esta abierta...");
+        }
     }
 
     public void abrirVentanaBloqueo() {
@@ -770,18 +814,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
    
     public void abrirVentanaProd(){
       
-        if (estacerrado(producto)) {
-             producto = new Productos(this);
+        if (estacerrado(productos)) {
+             productos = new Productos(this);
              Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = producto.getSize();
-        producto.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
+        Dimension jInternalFrameSize = productos.getSize();
+        productos.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
-                panel.add(producto);
-                producto.show();
+                panel.add(productos);
+                productos.show();
                 setVentanaAbierta(Modulo.PRODUCTOS);
         } else {
-           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.producto.getTitle()+ "\nya esta abierta...");
-           producto.moveToFront();
+           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.productos.getTitle()+ "\nya esta abierta...");
+           productos.moveToFront();
         }
       
     }
@@ -912,11 +956,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
         actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
         actMovimiento.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
-        
+
         
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);
         getBtnCaja().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCaja.getValue(Action.ACCELERATOR_KEY), Modulo.CAJA.getAction());
-
+        
         btnVentas.getActionMap().put(Modulo.VENTAS.getAction(), actVentas);
         btnVentas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actVentas.getValue(Action.ACCELERATOR_KEY), Modulo.VENTAS.getAction());
 
@@ -1034,6 +1078,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         CALC(10, "actionCalculadora"),
         ADMIN(6, "actionAdmin"),
         PRODUCTOS(8,"actionProducto"),// nueva ventana
+//        PRODUCTO3(13,"actionProducto3"),// nueva ventana
         MOVIMIENTOS(9,"actionMovimiento"), // nueva ventana
         BLOQUEO(12, "actionBloqueo");
 

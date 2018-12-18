@@ -452,20 +452,20 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         if (direccion.isEmpty()) {
             Utilidades.Sonidos.beep();
             JOptionPane.showMessageDialog(null, "Direccion obligatoria", "Error", JOptionPane.ERROR_MESSAGE);
-            txaDireccion.requestFocus();
-            return;
-        }
-        
-        idCliente = venta.menuPrincipal.getOBD().crearPersona(nombre, apellido, nacionalidad, documento, direccion, telefono, correo);
-        JOptionPane.showMessageDialog(null, "Usuario registrado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
-
-        if (idCliente > 0) {
-            venta.crearVenta(nacionalidad, documento);
-            venta.getCmbTipoDocumento().setSelectedItem(nacionalidad);
-            venta.getTxtDocumento().setText(documento);
-        } else {
-            Utilidades.Sonidos.beep();
+//            txaDireccion.requestFocus();
+//            return;
+//        }
+//        
+//        idCliente = venta.menuPrincipal.getOBD().crearPersona(nombre, apellido, nacionalidad, documento, direccion, telefono, correo, false);
+//        JOptionPane.showMessageDialog(null, "Usuario registrado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+//        this.dispose();
+//
+//        if (idCliente > 0) {
+//            venta.crearVenta(nacionalidad, documento);
+//            venta.getCmbTipoDocumento().setSelectedItem(nacionalidad);
+//            venta.getTxtDocumento().setText(documento);
+//        } else {
+//            Utilidades.Sonidos.beep();
         }
     }
 

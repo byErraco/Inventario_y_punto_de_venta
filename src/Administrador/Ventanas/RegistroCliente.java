@@ -6,6 +6,7 @@
 package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Ventanas.Venta;
@@ -33,7 +34,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private Venta venta;
     private ObjetoBaseDatos obd;
     private final boolean modificarCliente;
-    private char tipo_persona;
+    private String tipo_persona;
     private String numero_identificacion_persona;
 
     /**
@@ -43,12 +44,13 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * @param admin Ventana de admin.
      */
     public RegistroCliente(Admin admin) {
+        initComponents();
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
         this.setTitle("Saphiro - Registro clientes");
         modificarCliente = false;
-        initComponents();
         crearHotKeys();
+        identificarPais();
     }
     
     /**
@@ -58,11 +60,17 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * @param venta Ventana de venta.
      */
     public RegistroCliente(Venta venta) {
+        initComponents();
         this.venta = venta;
         this.obd = venta.menuPrincipal.getOBD();
+        txtDocumento.setEnabled(false);
+        cmbTipoIdentificacion.setEnabled(false);
+        cmbTipoIdentificacion.removeAllItems();
+        cmbTipoIdentificacion.addItem(venta.cmbTipoDocumento.getSelectedItem());
+        txtDocumento.setText(venta.txtDocumento.getText());
         modificarCliente = false;
-        initComponents();
         crearHotKeys();
+        identificarPais();
     }
 
     /**
@@ -74,15 +82,17 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      * @param modificarCliente Indica si la ventana es de registro (false) o modificación (true).
      */
-    public RegistroCliente(Admin admin, char tipo_persona, String numero_identificacion_persona, boolean modificarCliente) {
+    public RegistroCliente(Admin admin, String tipo_persona, String numero_identificacion_persona, boolean modificarCliente) {
+        initComponents();
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
         this.modificarCliente = modificarCliente;
-        initComponents();
         crearHotKeys();
-        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
+        identificarPais();
+        cmbTipoIdentificacion.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
         
+
         if(modificarCliente) {
             setTitle("Saphiro - Modificar cliente");
             btnRegistrarEmpleados.setText("<html><center>Modificar<br>F2</center></html>");
@@ -99,12 +109,12 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
     public RegistroCliente(Venta venta, char tipo_persona, String numero_identificacion_persona) {
+        initComponents();
         this.venta = venta;
         this.obd = venta.menuPrincipal.getOBD();
         modificarCliente = false;
-        initComponents();
         crearHotKeys();
-        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
+        cmbTipoIdentificacion.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
     }
 
@@ -121,7 +131,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         btnRegistrarEmpleados = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblDocumento = new javax.swing.JLabel();
-        cmbTipoDocumento = new javax.swing.JComboBox();
+        cmbTipoIdentificacion = new javax.swing.JComboBox();
         txtDocumento = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
         txtNombres = new javax.swing.JTextField();
@@ -155,10 +165,10 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         lblDocumento.setForeground(new java.awt.Color(255, 255, 255));
         lblDocumento.setText("CI / RIF:");
 
-        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "J", "E", "P" }));
-        cmbTipoDocumento.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipoIdentificacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "E" }));
+        cmbTipoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTipoDocumentoActionPerformed(evt);
+                cmbTipoIdentificacionActionPerformed(evt);
             }
         });
 
@@ -268,7 +278,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
                         .addComponent(txtTelefono)
                         .addComponent(txtApellido)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -280,7 +290,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDocumento)
-                    .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -346,7 +356,10 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     private void btnRegistrarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEmpleadosActionPerformed
         if(modificarCliente) modificarCliente();
         else registrarCliente();
-        if(admin != null) admin.actualizarTabla();
+        if(admin != null) {
+            admin.actualizarTabla();
+            System.out.println("se cumplio la condicion de actualizar tabla");
+        }
     }//GEN-LAST:event_btnRegistrarEmpleadosActionPerformed
 
 
@@ -457,16 +470,27 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
-    private void cmbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoDocumentoActionPerformed
-        txtApellido.setVisible(!cmbTipoDocumento.getSelectedItem().equals("J"));
-        lblApellido.setVisible(!cmbTipoDocumento.getSelectedItem().equals("J"));
-    }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
+    private void cmbTipoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIdentificacionActionPerformed
+//        txtApellido.setVisible(!cmbTipoIdentificacion.getSelectedItem().equals("J"));
+//        lblApellido.setVisible(!cmbTipoIdentificacion.getSelectedItem().equals("J"));
+    }//GEN-LAST:event_cmbTipoIdentificacionActionPerformed
 
     private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
         if (txtDireccion.getText().length() > 100) {
             evt.consume();
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
+    
+    //identifica el pais y lo asigna al combobox
+    public void identificarPais() {
+        //Obteniendo el pais seleccionado
+        Pais p = this.obd.getDatosPais(" WHERE activo = true");
+        
+        //asignando identificaicon al combo.
+        cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoIdentificacion.setSelectedIndex(0);
+    }    
+    
     
     private void crearHotKeys() {
         Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
@@ -512,7 +536,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
         this.dispose();
     }
     
-    private void setCliente(char tipo_persona, String numero_identificacion_persona){
+    private void setCliente(String tipo_persona, String numero_identificacion_persona){
         this.tipo_persona = tipo_persona;
         this.numero_identificacion_persona = numero_identificacion_persona;
         
@@ -526,13 +550,12 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
 
     private void registrarCliente() {
-        String nombre, apellido, numero_identificacion, direccion, telefono, email;
-        char tipo;
+        String nombre, apellido, numero_identificacion, direccion, telefono, email, tipo;
         int idCliente;
         
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
-        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        tipo = cmbTipoIdentificacion.getSelectedItem().toString();
         numero_identificacion = txtDocumento.getText();
         direccion = txtDireccion.getText();
         telefono = txtTelefono.getText();
@@ -548,7 +571,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txtNombres.requestFocus();
             return;
         }
-        if (apellido.isEmpty() && !cmbTipoDocumento.getSelectedItem().toString().equalsIgnoreCase("J")) {
+        if (apellido.isEmpty() && !cmbTipoIdentificacion.getSelectedItem().toString().equalsIgnoreCase("J")) {
             Utilidades.Sonidos.beep();
             txtApellido.requestFocus();
             return;
@@ -559,10 +582,9 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             return;
         }
         
-        idCliente = obd.crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email);
+        idCliente = obd.crearPersona(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email, false);
 
         if (idCliente > 0) {
-            JOptionPane.showMessageDialog(null, "Persona registrada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             
             this.cerrarVentana();
             
@@ -577,13 +599,12 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
     }
     
     private void modificarCliente() {
-        String numero_identificacion, nombre, apellido, telefono, correo, direccion;
-        char nacionalidad;
+        String numero_identificacion, nombre, apellido, telefono, correo, direccion, nacionalidad;
         boolean clienteModificado;
         
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
-        nacionalidad = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        nacionalidad = cmbTipoIdentificacion.getSelectedItem().toString();
         numero_identificacion = txtDocumento.getText();
         direccion = txtDireccion.getText();
         telefono = txtTelefono.getText();
@@ -599,7 +620,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             txtNombres.requestFocus();
             return;
         }
-        if (apellido.isEmpty() && !cmbTipoDocumento.getSelectedItem().toString().equalsIgnoreCase("J")) {
+        if (apellido.isEmpty() && !cmbTipoIdentificacion.getSelectedItem().toString().equalsIgnoreCase("J")) {
             Utilidades.Sonidos.beep();
             txtApellido.requestFocus();
             return;
@@ -610,9 +631,10 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
             return;
         }
 
-        clienteModificado = admin.menuPrincipal.getOBD().modificarPersona(nombre, apellido, nacionalidad, numero_identificacion, direccion, telefono, correo, this.numero_identificacion_persona, this.tipo_persona);
-
-        if (clienteModificado) {
+        clienteModificado = admin.menuPrincipal.getOBD().actualizarCliente(nombre, apellido, nacionalidad, 
+                numero_identificacion, telefono, correo, direccion, this.numero_identificacion_persona, this.tipo_persona);
+        // si es false se modificó
+        if (clienteModificado == true) {
             this.cerrarVentana();
         } else {
             Utilidades.Sonidos.beep();
@@ -623,7 +645,7 @@ public class RegistroCliente extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarEmpleados;
-    private javax.swing.JComboBox cmbTipoDocumento;
+    private javax.swing.JComboBox cmbTipoIdentificacion;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblApellido;

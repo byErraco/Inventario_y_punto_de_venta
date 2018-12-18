@@ -8,6 +8,7 @@ import PuntoVenta.Modelos.ModeloCliente;
 import PuntoVenta.Modelos.ModeloProducto;
 
 import Administrador.Ventanas.RegistroCliente;
+import PuntoVenta.BaseDatos.Pais;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -86,6 +87,7 @@ public class Venta extends javax.swing.JInternalFrame {
         this.setClienteAsociadoFactura(false);
 
         this.setTitle("Saphiro - Cajero: " + menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido());
+        identificarPais();
         actualizarTabla();
         crearHotKeys();
         setBotonesVentaEnabled(false);
@@ -312,6 +314,7 @@ public class Venta extends javax.swing.JInternalFrame {
         lblNombres.setForeground(new java.awt.Color(255, 255, 255));
         lblNombres.setText("Nombre:");
 
+        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "E" }));
         cmbTipoDocumento.setToolTipText("");
         cmbTipoDocumento.setName(""); // NOI18N
 
@@ -372,11 +375,6 @@ public class Venta extends javax.swing.JInternalFrame {
                     .addComponent(lblValorFechaFactura))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        cmbTipoDocumento.addItem("V");
-        cmbTipoDocumento.addItem("J");
-        cmbTipoDocumento.addItem("P");
-        cmbTipoDocumento.addItem("E");
 
         pnlInformacionProducto.setBackground(new java.awt.Color(32, 182, 155));
         pnlInformacionProducto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Producto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 18), java.awt.Color.white)); // NOI18N
@@ -791,7 +789,7 @@ public class Venta extends javax.swing.JInternalFrame {
             actualizarTabla();
         }
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            char tipo_persona = getCmbTipoDocumento().getSelectedItem().toString().charAt(0);
+            String tipo_persona = getCmbTipoDocumento().getSelectedItem().toString();
             String numero_identificacion_persona = getTxtDocumento().getText();
             crearVenta(tipo_persona, numero_identificacion_persona);
         }
@@ -977,7 +975,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnModificar;
     public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnTotalizar;
-    private javax.swing.JComboBox cmbTipoDocumento;
+    public javax.swing.JComboBox cmbTipoDocumento;
     private javax.swing.JLabel error;
     private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane2;
@@ -1011,6 +1009,15 @@ public class Venta extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtProductoNombre;
     // End of variables declaration//GEN-END:variables
 
+    public void identificarPais() {
+        //Obteniendo el pais seleccionado
+        Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
+        
+        //asignando identificaicon al combo.
+        cmbTipoDocumento.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoDocumento.setSelectedIndex(0);
+    }
+    
     /**
      *
      * Metodo para comprobar si un producto agregado en la tabla supera el
@@ -1246,7 +1253,7 @@ public class Venta extends javax.swing.JInternalFrame {
      * @param tipo_persona
      * @param numero_identificacion_persona
      */
-    public void crearVenta(char tipo_persona, String numero_identificacion_persona) {
+    public void crearVenta(String tipo_persona, String numero_identificacion_persona) {
         //El documento no puede ser null o estar vacio ""
         if (numero_identificacion_persona == null || numero_identificacion_persona.isEmpty()) {
             Utilidades.Sonidos.beep();

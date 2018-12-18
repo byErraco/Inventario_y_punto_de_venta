@@ -7,6 +7,7 @@ package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.Inicio.MenuPrincipal;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -28,6 +30,8 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
     private Admin admin;
     private ObjetoBaseDatos obd;
     private HashMap<String, Integer> cargos;
+    String tipo_viejo;
+    String numero_persona_viejo;
     
     Object panel;
     
@@ -57,13 +61,17 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
      * @param tipo_persona Indicador del combobox. J,V,E,P.
      * @param numero_identificacion_persona Cedula, RIF o número de pasaporte de la persona
      */
-    public ModificacionEmpleados(Admin admin, char tipo_persona, String numero_identificacion_persona) {
+    public ModificacionEmpleados(Admin admin, String tipo_persona, String numero_identificacion_persona) {
         this.admin = admin;
         this.obd = admin.menuPrincipal.getOBD();
         initComponents();
         crearHotKeys();
         setCargos();
+        identificarPais();
+        System.out.println("tipo_persona = " + tipo_persona + "   numero_identificacion_persona = " + numero_identificacion_persona);
         setEmpleado(tipo_persona, numero_identificacion_persona);
+        tipo_viejo = cmbTipoIdentificacion.getSelectedItem().toString();
+        numero_persona_viejo = (String)txtDocumento.getText();
     }
 
     /**
@@ -79,7 +87,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         btnModificarEmpleados = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblDocumento = new javax.swing.JLabel();
-        cmbTipoDocumento = new javax.swing.JComboBox();
+        cmbTipoIdentificacion = new javax.swing.JComboBox();
         txtDocumento = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
         txtNombres = new javax.swing.JTextField();
@@ -116,7 +124,12 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         lblDocumento.setForeground(new java.awt.Color(255, 255, 255));
         lblDocumento.setText("CI / RIF:");
 
-        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "J", "E", "P" }));
+        cmbTipoIdentificacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "E" }));
+        cmbTipoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoIdentificacionActionPerformed(evt);
+            }
+        });
 
         txtDocumento.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtDocumento.addActionListener(new java.awt.event.ActionListener() {
@@ -236,22 +249,20 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                             .addComponent(txtApellido)
                             .addComponent(txtNombres)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblCargo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblPassword)
-                            .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblCargo))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbCargoId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jClave, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))))
+                            .addComponent(jClave))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -260,7 +271,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDocumento)
-                    .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -427,6 +438,19 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtDireccionKeyTyped
 
+    private void cmbTipoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIdentificacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoIdentificacionActionPerformed
+
+    public void identificarPais() {
+        //Obteniendo el pais seleccionado
+        Pais p = this.obd.getDatosPais(" WHERE activo = true");
+        
+        //asignando identificaicon al combo.
+        cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoIdentificacion.setSelectedIndex(0);
+    }    
+    
     private void cerrarVentana() {
         this.dispose();
     }
@@ -476,8 +500,8 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         }
     }
     
-    private void setEmpleado(char tipo_persona, String numero_identificacion_persona) {
-        cmbTipoDocumento.setSelectedItem(String.valueOf(tipo_persona));
+    private void setEmpleado(String tipo_persona, String numero_identificacion_persona) {
+        cmbTipoIdentificacion.setSelectedItem(String.valueOf(tipo_persona));
         txtDocumento.setText(numero_identificacion_persona);
         
         Empleado empleadoSeleccionado = obd.getDatosEmpleadoIdentificacion(tipo_persona, numero_identificacion_persona);
@@ -493,13 +517,13 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
                 cmbCargoId.setSelectedItem(entry.getKey());
         }
     }
-    
-    private void modificarEmpleado() {
-        String numero_identificacion, nombre, apellido, telefono, email, direccion, clave;
-        char tipo;
-        int idEmpleado, cargo_id;
 
-        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+    private void modificarEmpleado() {
+        String numero_identificacion, nombre, apellido, telefono, email, direccion, clave, tipo;
+        int cargo_id;
+        boolean idEmpleado; 
+        
+        tipo = cmbTipoIdentificacion.getSelectedItem().toString();
         numero_identificacion = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
@@ -507,9 +531,9 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
         email = txtCorreo.getText();
         direccion = txtDireccion.getText();
         clave = String.valueOf(jClave.getPassword());
-
-        cargo_id = cargos.get((String) cmbCargoId.getSelectedItem());
-
+        
+        cargo_id = cmbCargoId.getSelectedIndex()+1;
+         
         if (numero_identificacion.isEmpty()) {
             Utilidades.Sonidos.beep();
             txtDocumento.requestFocus();
@@ -520,7 +544,7 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             txtNombres.requestFocus();
             return;
         }
-        if (apellido.isEmpty() && !cmbTipoDocumento.getSelectedItem().toString().equalsIgnoreCase("J")) {
+        if (apellido.isEmpty() && !cmbTipoIdentificacion.getSelectedItem().toString().equalsIgnoreCase("J")) {
             Utilidades.Sonidos.beep();
             txtApellido.requestFocus();
             return;
@@ -536,19 +560,21 @@ public class ModificacionEmpleados extends javax.swing.JInternalFrame {
             return;
         }
 
-        /*idEmpleado = this.obd.modificarEmpleado(nombre, apellido, tipo, numero_identificacion, direccion, telefono, email, clave, cargo_id);
+        idEmpleado = this.obd.actualizarEmpleado(nombre, apellido, tipo, numero_identificacion, telefono, 
+                email, direccion, cargo_id, clave, numero_persona_viejo, tipo_viejo);
 
-        if (idEmpleado > 0) {
+        if (idEmpleado == false) {
             this.cerrarVentana();
         } else {
             Utilidades.Sonidos.beep();
-        }*/
+        }
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnModificarEmpleados;
     private javax.swing.JComboBox cmbCargoId;
-    private javax.swing.JComboBox cmbTipoDocumento;
+    private javax.swing.JComboBox cmbTipoIdentificacion;
     private javax.swing.JPasswordField jClave;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

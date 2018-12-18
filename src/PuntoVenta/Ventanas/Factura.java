@@ -22,6 +22,7 @@ import javax.swing.table.TableRowSorter;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -295,12 +296,14 @@ public class Factura extends javax.swing.JInternalFrame {
             List lista = menuPrincipal.getOBD().reimprimirfac(codigoBarra);
             try {
                 JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
-                JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
+//                JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
+                JasperPrint jprint = JasperPrintManager.printPage("", 0, true);
                 JasperViewer visor = new JasperViewer(jprint, false);
                 visor.setVisible(true);
             } catch (JRException ex) {
                 Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

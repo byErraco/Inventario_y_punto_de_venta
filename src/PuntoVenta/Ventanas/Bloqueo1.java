@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 public class Bloqueo1 extends javax.swing.JFrame {
     
     public MenuPrincipal menuPrincipal;
-    
+  
     public Bloqueo1(MenuPrincipal menuPrincipal) {
         initComponents();
    
@@ -82,6 +82,7 @@ public class Bloqueo1 extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "V", "J", "E", "P" }));
         jComboBox1.setName("jComboBox1"); // NOI18N
 
         javax.swing.GroupLayout jpnCamposLoginLayout = new javax.swing.GroupLayout(jpnCamposLogin);
@@ -245,6 +246,7 @@ public class Bloqueo1 extends javax.swing.JFrame {
         
         String cedula = txtCedula.getText();
         char[] arrayPassword = jpwClave.getPassword();
+        String tipo = jComboBox1.getSelectedItem().toString();
         
         if (cedula.isEmpty()) {
             
@@ -264,8 +266,8 @@ public class Bloqueo1 extends javax.swing.JFrame {
             return;
         }
         
-        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
-        
+        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword, tipo);
+
         if (idEmpleado != -1) {
             HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
             menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));

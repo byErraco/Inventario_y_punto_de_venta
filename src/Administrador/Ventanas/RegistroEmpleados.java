@@ -6,6 +6,7 @@
 package Administrador.Ventanas;
 
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Pais;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
@@ -43,24 +44,26 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         initComponents();
         crearHotKeys();
         setCargos();
+        identificarPais();
     }
 
     /**
-     * Creates new form RegistroEmpleados
-     *
-     * @param admin Ventana de admin.
-     * @param identificador Indicador del combobox. J,V,E,P.
-     * @param documento Cedula, RIF o número de pasaporte de la persona
-     */
-    public RegistroEmpleados(Admin admin, char identificador, String documento) {
-        this.admin = admin;
-        this.obd = admin.menuPrincipal.getOBD();
-        initComponents();
-        crearHotKeys();
-        cmbTipoDocumento.setSelectedItem(identificador);
-        txtDocumento.setText(documento);
-
-    }
+//     * Creates new form RegistroEmpleados
+//     *
+//     * @param admin Ventana de admin.
+//     * @param identificador Indicador del combobox. J,V,E,P.
+//     * @param documento Cedula, RIF o número de pasaporte de la persona
+//     */
+//    public RegistroEmpleados(Admin admin, char identificador, String documento) {
+//        this.admin = admin;
+//        this.obd = admin.menuPrincipal.getOBD();
+//        initComponents();
+//        crearHotKeys();
+//        System.out.println("identificador = " + identificador + "   documento = " + documento);
+//
+//        cmbTipoIdentificacion.setSelectedItem(identificador);
+//        txtDocumento.setText(documento);
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -75,7 +78,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         btnRegistrarEmpleados = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lblDocumento = new javax.swing.JLabel();
-        cmbTipoDocumento = new javax.swing.JComboBox();
+        cmbTipoIdentificacion = new javax.swing.JComboBox();
         txtDocumento = new javax.swing.JTextField();
         lblNombre = new javax.swing.JLabel();
         txtNombres = new javax.swing.JTextField();
@@ -112,10 +115,10 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         lblDocumento.setForeground(new java.awt.Color(255, 255, 255));
         lblDocumento.setText("CI / RIF:");
 
-        cmbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "V", "E" }));
-        cmbTipoDocumento.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipoIdentificacion.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "E" }));
+        cmbTipoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbTipoDocumentoActionPerformed(evt);
+                cmbTipoIdentificacionActionPerformed(evt);
             }
         });
 
@@ -208,36 +211,38 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblPassword)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addComponent(jClave, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblNombre)
+                                        .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblTelefono)
+                                        .addComponent(lblCorreo)
+                                        .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(0, 0, Short.MAX_VALUE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(lblPassword)
+                            .addGap(19, 19, 19)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblCargo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbCargoId, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDocumento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNombre)
-                                    .addComponent(lblApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblTelefono)
-                                    .addComponent(lblCorreo)
-                                    .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtCorreo)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(txtTelefono)
-                            .addComponent(txtApellido)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtNombres))))
+                        .addGap(60, 60, 60)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cmbCargoId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jClave)
+                        .addComponent(txtCorreo)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(txtTelefono)
+                        .addComponent(txtApellido)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtNombres)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -246,7 +251,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDocumento)
-                    .addComponent(cmbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -338,8 +343,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
         if (Character.isDigit(c)) {
             evt.consume();
-            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan letras.");
-
         }
     }//GEN-LAST:event_txtApellidoKeyTyped
 
@@ -348,7 +351,6 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
 
         if (Character.isDigit(c)) {
             evt.consume();
-            JOptionPane.showMessageDialog(this, "Error: Solo se aceptan letras.");
         }
     }//GEN-LAST:event_txtNombresKeyTyped
 
@@ -375,9 +377,9 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDocumentoActionPerformed
 
-    private void cmbTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoDocumentoActionPerformed
+    private void cmbTipoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIdentificacionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmbTipoDocumentoActionPerformed
+    }//GEN-LAST:event_cmbTipoIdentificacionActionPerformed
 
     private void txtDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDireccionKeyTyped
         if (txtDireccion.getText().length() > 100) {
@@ -386,6 +388,15 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDireccionKeyTyped
 
 
+    public void identificarPais() {
+        //Obteniendo el pais seleccionado
+        Pais p = this.obd.getDatosPais(" WHERE activo = true");
+        
+        //asignando identificaicon al combo.
+        cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoIdentificacion.setSelectedIndex(0);
+    }    
+    
     private void crearHotKeys() {
         Action actCerrarVentana = new AbstractAction("actionCerrarVentanaCaja") {
             @Override
@@ -437,18 +448,18 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     }
 
     private void registrarEmpleados() {
-        String numero_identificacion, nombre, apellido, telefono, email, direccion, clave;
-        char tipo;
+        String numero_identificacion, nombre, apellido, telefono, email, direccion, tipo;
+        char[] clave;
         int idEmpleado, cargo_id;
 
-        tipo = cmbTipoDocumento.getSelectedItem().toString().charAt(0);
+        tipo = cmbTipoIdentificacion.getSelectedItem().toString();
         numero_identificacion = txtDocumento.getText();
         nombre = txtNombres.getText();
         apellido = txtApellido.getText();
         telefono = txtTelefono.getText();
         email = txtCorreo.getText();
         direccion = txtDireccion.getText();
-        clave = String.valueOf(jClave.getPassword());
+        clave = jClave.getPassword();
 
         cargo_id = cargos.get((String) cmbCargoId.getSelectedItem());
 
@@ -462,7 +473,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             txtNombres.requestFocus();
             return;
         }
-        if (apellido.isEmpty() && !cmbTipoDocumento.getSelectedItem().toString().equalsIgnoreCase("J")) {
+        if (apellido.isEmpty() && !cmbTipoIdentificacion.getSelectedItem().toString().equalsIgnoreCase("J")) {
             Utilidades.Sonidos.beep();
             txtApellido.requestFocus();
             return;
@@ -472,7 +483,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
             txtTelefono.requestFocus();
             return;
         }
-        if (clave.isEmpty()) {
+        if (clave.length <= 0) {
             Utilidades.Sonidos.beep();
             jClave.requestFocus();
             return;
@@ -491,7 +502,7 @@ public class RegistroEmpleados extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarEmpleados;
     private javax.swing.JComboBox cmbCargoId;
-    private javax.swing.JComboBox cmbTipoDocumento;
+    private javax.swing.JComboBox cmbTipoIdentificacion;
     private javax.swing.JPasswordField jClave;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

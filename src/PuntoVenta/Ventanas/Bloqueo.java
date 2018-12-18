@@ -101,6 +101,7 @@ public class Bloqueo extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "V", "J", "E", "P" }));
         jComboBox1.setName("jComboBox1"); // NOI18N
 
         javax.swing.GroupLayout jpnCamposLoginLayout = new javax.swing.GroupLayout(jpnCamposLogin);
@@ -292,7 +293,8 @@ public class Bloqueo extends javax.swing.JFrame {
        // REVISAR YA QUE AL INGRESAR UN USUARIO "0" SIN CONTRASEÑA, DESBLOQUEA LA VENTANA.......
           String cedula = txtCedula.getText();
           char[] arrayPassword = jpwContrasena.getPassword();
-           int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+          String tipo = jComboBox1.getSelectedItem().toString();
+           int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword, tipo);
       
           
           

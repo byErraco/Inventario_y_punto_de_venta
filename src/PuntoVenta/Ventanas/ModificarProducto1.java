@@ -45,8 +45,8 @@ public class ModificarProducto1 extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;
      //   crearHotKeys();
-        actualizarTabla();
         initComponents();
+        actualizarTabla();
     }
 
 /*   public void crearHotKeys(){
@@ -372,7 +372,7 @@ public class ModificarProducto1 extends javax.swing.JInternalFrame {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el producto?: " + jtbDescripcion.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
             if (seleccion == 0) {
                 String codigo = jtbDescripcion.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarProducto(codigo);
+//                menuPrincipal.getOBD().eliminarProducto(codigo);
                 actualizarTabla();
 
             } else {

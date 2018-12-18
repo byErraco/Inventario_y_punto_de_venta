@@ -1,5 +1,6 @@
 package PuntoVenta.Ventanas;
 
+import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.Inicio.MenuPrincipal;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
@@ -9,17 +10,20 @@ import javax.swing.JOptionPane;
 public class LogIn extends javax.swing.JFrame {
     
     public MenuPrincipal menuPrincipal;
+    public static int contador = 0;
+    public static int idEmpleado;
     
     public LogIn(MenuPrincipal menuPrincipal) {
         initComponents();
-   
+        contador++;
         this.menuPrincipal = menuPrincipal;
 
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/PuntoVenta/Iconos/acerca.png")));
         
       //  entrarProgramador();
-        
+        identificarPais();
         this.setVisible(true);
+        txtCedula.requestFocus();
     }
     
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -33,7 +37,7 @@ public class LogIn extends javax.swing.JFrame {
         lblUsuario = new javax.swing.JLabel();
         lblContrasena = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbTipoIdentificacion = new javax.swing.JComboBox<>();
         btnEntrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
@@ -81,7 +85,13 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setName("jComboBox1"); // NOI18N
+        cmbTipoIdentificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "E" }));
+        cmbTipoIdentificacion.setName("cmbTipoIdentificacion"); // NOI18N
+        cmbTipoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoIdentificacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jpnCamposLoginLayout = new javax.swing.GroupLayout(jpnCamposLogin);
         jpnCamposLogin.setLayout(jpnCamposLoginLayout);
@@ -95,7 +105,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
                     .addComponent(jpwClave))
@@ -108,7 +118,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
                     .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1))
+                    .addComponent(cmbTipoIdentificacion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jpwClave, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,20 +207,32 @@ public class LogIn extends javax.swing.JFrame {
         jpwClave.requestFocus();
     }//GEN-LAST:event_txtCedulaActionPerformed
 
+    private void cmbTipoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIdentificacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoIdentificacionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.ButtonGroup buttonGroup14;
-    private javax.swing.JComboBox<String> jComboBox1;
+    public static javax.swing.JComboBox<String> cmbTipoIdentificacion;
     private javax.swing.JPanel jpnCamposLogin;
     private javax.swing.JPanel jpnPrincipal;
     public static javax.swing.JPasswordField jpwClave;
     private javax.swing.JLabel lblCabecera;
     private javax.swing.JLabel lblContrasena;
     private javax.swing.JLabel lblUsuario;
-    private static javax.swing.JTextField txtCedula;
+    public static javax.swing.JTextField txtCedula;
     // End of variables declaration//GEN-END:variables
 
+    public void identificarPais(){
+        Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
+
+        //asignando identificacion al combo.
+        cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoIdentificacion.setSelectedIndex(0);
+    }
+    
     /* Konstanza: nueva función para entrar al sistema. 
        La primera función 'entrarProgramador' no servía, los valores que asignaba a
        las variables no están en la base de datos.
@@ -233,6 +255,7 @@ public class LogIn extends javax.swing.JFrame {
         
         String cedula = txtCedula.getText();
         char[] arrayPassword = jpwClave.getPassword();
+        String tipo = cmbTipoIdentificacion.getSelectedItem().toString();
         
         if (cedula.isEmpty()) {
             Utilidades.Sonidos.beep();
@@ -248,7 +271,7 @@ public class LogIn extends javax.swing.JFrame {
             return;
         }
         
-        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
+        idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword, tipo);
         
         if (idEmpleado != -1) {
             HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
@@ -264,4 +287,5 @@ public class LogIn extends javax.swing.JFrame {
             txtCedula.requestFocus();
         }
     }
+
 }

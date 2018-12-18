@@ -665,7 +665,7 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         menuPrincipal.getOBD().ActualizarCierreEnVenta(menuPrincipal.getIdEstadoCaja());
         menuPrincipal.getOBD().crearCierre(txtTotalGlobal.getText(), txtTotalVentas.getText(), txtEmpleado.getText(), txtFecha.getText());
         String saldo = menuPrincipal.getOBD().montoInicial(menuPrincipal.getIdEstadoCaja());
-        Reporte3 rp = new Reporte3(menuPrincipal.getOBD().datosEmpresas(), menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), txtTotalVentas.getText(), txtTotalGlobal.getText(), txtTotalEfectivo.getText(), txtTotalDebito.getText(), txtTotalCredito.getText(), txtTotalCestaTicket.getText(), txtTotalEfectivoF.getText(), txtTotalDebitoF.getText(), txtTotalCreditoF.getText(), txtTotalCestaTicketF.getText(), saldo);
+        Reporte3 rp = new Reporte3(menuPrincipal.getOBD().getDatosParametros(), menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), txtTotalVentas.getText(), txtTotalGlobal.getText(), txtTotalEfectivo.getText(), txtTotalDebito.getText(), txtTotalCredito.getText(), txtTotalCestaTicket.getText(), txtTotalEfectivoF.getText(), txtTotalDebitoF.getText(), txtTotalCreditoF.getText(), txtTotalCestaTicketF.getText(), saldo);
         List<Reporte3> l3 = new ArrayList();
         l3.add(rp);
         try {

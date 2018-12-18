@@ -8,6 +8,7 @@ import ClasesExtendidas.Numeros.XBigDecimal;
 import ClasesExtendidas.Tablas.PagoTableModel;
 import ClasesExtendidas.Tablas.TipoPagoTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.Inicio.MenuPrincipal;
 import static PuntoVenta.Ventanas.Venta.jtbVenta;
 import static PuntoVenta.Ventanas.Venta.txtDocumento;
@@ -39,7 +40,9 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import static PuntoVenta.Ventanas.Venta.txtNumeroFactura;
 import Utilidades.ArticuloDescontar;
+import Utilidades.GuardarReporte;
 import Utilidades.ValorPagos;
+import java.io.IOException;
 
 /**
  *
@@ -126,7 +129,11 @@ public class Pago extends javax.swing.JInternalFrame {
         Action actAceptar = new AbstractAction("actionAceptar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                factura();
+                try {
+                    factura();
+                } catch (IOException ex) {
+                    Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         };
 
@@ -198,6 +205,7 @@ public class Pago extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
 
         setClosable(true);
+        setPreferredSize(new java.awt.Dimension(900, 500));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -206,8 +214,9 @@ public class Pago extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(new java.awt.Color(32, 182, 155));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 500));
 
-        btnAceptar.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnAceptar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnAceptar.setText("<html><center>Aceptar<br>SPACE</center></html>");
         btnAceptar.setEnabled(false);
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -216,8 +225,9 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSalir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnSalir.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnSalir.setText("<html><center>Cancelar<br>Alt+Q</center></html>");
+        btnSalir.setPreferredSize(new java.awt.Dimension(75, 40));
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
@@ -241,11 +251,11 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        lblFormaPago.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblFormaPago.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         lblFormaPago.setForeground(java.awt.Color.white);
         lblFormaPago.setText("Forma de pago:");
 
-        lblMontoPagar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblMontoPagar.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         lblMontoPagar.setForeground(java.awt.Color.white);
         lblMontoPagar.setText("Monto a pagar:");
 
@@ -306,12 +316,12 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        lblBanco.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblBanco.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         lblBanco.setForeground(java.awt.Color.white);
         lblBanco.setText("Banco:");
         lblBanco.setEnabled(false);
 
-        lblCT.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblCT.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         lblCT.setForeground(java.awt.Color.white);
         lblCT.setText("Cesta tickets:");
         lblCT.setEnabled(false);
@@ -393,11 +403,17 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        apro1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        apro1.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
         apro1.setForeground(java.awt.Color.white);
         apro1.setText("Aprobacion:");
 
         apro2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        apro2.setPreferredSize(new java.awt.Dimension(4, 21));
+        apro2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                apro2ActionPerformed(evt);
+            }
+        });
         apro2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 apro2KeyTyped(evt);
@@ -417,45 +433,44 @@ public class Pago extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addComponent(lblFormaPago)
-                                .addGap(166, 166, 166))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(lblMontoPagar)
-                                .addGap(4, 4, 4)
-                                .addComponent(txtMonto))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblCT)
-                            .addComponent(lblBanco))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(EF, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TDD, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TDC, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CTK, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(29, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblCT)
+                                    .addComponent(lblBanco))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblX)
-                                .addGap(12, 12, 12)
-                                .addComponent(txtMontoCT))
-                            .addComponent(cmbBoxBancos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(EF)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TDD)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TDC)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CTK)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblX)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtMontoCT))
+                                    .addComponent(cmbBoxBancos, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblMontoPagar)
+                        .addGap(4, 4, 4)
+                        .addComponent(txtMonto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(apro1)
                         .addGap(2, 2, 2)
-                        .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -470,24 +485,24 @@ public class Pago extends javax.swing.JInternalFrame {
                             .addComponent(TDD)
                             .addComponent(TDC)
                             .addComponent(CTK))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cmbBoxBancos, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBanco))
-                        .addGap(9, 9, 9)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtMontoCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblX)
                             .addComponent(lblCT)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblMontoPagar)
                     .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(apro1)
-                    .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42))
         );
 
         lblSaldo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
@@ -509,7 +524,7 @@ public class Pago extends javax.swing.JInternalFrame {
         lblSaldoValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblSaldoValor.setText("0.00");
 
-        jButton1.setFont(new java.awt.Font("Ubuntu Light", 0, 14)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jButton1.setText("<html><center>Agregar Pago<br>ENTER</center></html>");
         jButton1.setEnabled(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -523,36 +538,41 @@ public class Pago extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCambio)
+                            .addComponent(lblSaldo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblCambioValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSaldoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(102, 102, 102)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
                         .addComponent(lblMontoVenta)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblMontoVentaValor, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblCambio)
-                                    .addComponent(lblSaldo))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblCambioValor, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                    .addComponent(lblSaldoValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(91, 91, 91)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(208, 208, 208))
+                        .addGap(22, 22, 22)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(332, 332, 332)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(79, 79, 79))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -560,26 +580,18 @@ public class Pago extends javax.swing.JInternalFrame {
                     .addComponent(lblMontoVentaValor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSaldoValor)
-                            .addComponent(lblSaldo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCambioValor)
-                            .addComponent(lblCambio)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblSaldoValor)
+                    .addComponent(lblSaldo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCambioValor)
+                    .addComponent(lblCambio))
+                .addGap(79, 79, 79))
         );
 
-        getContentPane().add(jPanel1, java.awt.BorderLayout.LINE_START);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -678,8 +690,9 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtMontoKeyPressed
 
-    public void factura() {
+    public void factura() throws IOException {
         List lista = new ArrayList();
+        GuardarReporte gr = new GuardarReporte();
         XBigDecimal cantidad = new XBigDecimal(lblMontoVentaValor.getText());//este valor almacena el total de la venta
         String factura = txtNumeroFactura.getText();
         String nombre = txtNombreCliente.getText();
@@ -687,7 +700,8 @@ public class Pago extends javax.swing.JInternalFrame {
         String direccion = menuPrincipal.getOBD().direccionCliente(cedula);
         String pagado = "";
         String tipo = "";
-        menuPrincipal.empresa = menuPrincipal.getOBD().datosEmpresas();
+        menuPrincipal.parametros = menuPrincipal.getOBD().getDatosParametros();
+        menuPrincipal.pais = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
         //int aux = 0;
         double total = 0; // este valor almacena la cantidad de dinero entrante a la caja
         double totefe = 0;
@@ -701,7 +715,7 @@ public class Pago extends javax.swing.JInternalFrame {
                 tipo = tblTipoPago.getValueAt(i, 0).toString();
                 total = total + Double.parseDouble(tblTipoPago.getValueAt(i, 1).toString());
                 //aux++;// Ernesto: Revisar iteraciones de aux
-                if (i > 1) {
+                if (i >= 1) {
                     tipo = "Mixto";
                 }
             }
@@ -748,7 +762,7 @@ public class Pago extends javax.swing.JInternalFrame {
         String vuelto = redondeo.format(cambio).replace(",", ".");
         Double exento = 0.00;//Ernesto: variable utilizada para calcular el total sin impuesto de una venta
         for (int i = 0; i < jtbVenta.getRowCount(); i++) {
-            ad.add(new ArticuloDescontar(jtbVenta.getValueAt(i, 0).toString(), jtbVenta.getValueAt(i, 3).toString()));
+            ad.add(new ArticuloDescontar(jtbVenta.getValueAt(i, 0).toString(), jtbVenta.getValueAt(i, 5).toString()));
             Double subtotal = pagoconiva - Double.parseDouble(venta.impuesto);
             Double pagouni = Double.parseDouble((String) jtbVenta.getValueAt(i, 2));// Ernesto: el resto de esta expresion duplica el precio del producto + Double.parseDouble(jtbVenta.getValueAt(i, 4).toString());
             String descrip = "";
@@ -771,28 +785,34 @@ public class Pago extends javax.swing.JInternalFrame {
             
             exento = exento + total_previo;//Ernesto: acumulador de los totales de cada producto
             String total_exento = exento.toString();
-            System.out.println("total exento "+total_exento);
             if ("0.00".equals(jtbVenta.getValueAt(i, 4).toString())) {
                 //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 3).toString(), descrip + " (E)", "" + pagouni.toString(), jtbVenta.getValueAt(i, 5).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
-                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), jtbVenta.getValueAt(i, 6).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip,
+                        "" + pagouni.toString(), jtbVenta.getValueAt(i, 6).toString(), cantidad.toString(), nombre, cedula, direccion,
+                        factura, pagado, tipo, menuPrincipal.pais.getIdentificacion(), menuPrincipal.parametros.getNombre(),
+                        menuPrincipal.parametros.getDireccion(), menuPrincipal.parametros.getTelefono(), menuPrincipal.pais.getSimbolo(),
+                        "" + total_exento, "0.", venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
             } else {
 
-                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip, "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), "Bs.", "" + total_exento, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
+                PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip,
+                        "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion,
+                        factura, pagado, tipo, menuPrincipal.pais.getIdentificacion(), menuPrincipal.parametros.getNombre(),
+                        menuPrincipal.parametros.getDireccion(), menuPrincipal.parametros.getTelefono(), menuPrincipal.pais.getSimbolo(),
+                        "" + total_exento, "0.", venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(cantidad_productos.toString(), descrip, "" + pagouni.toString(), string_total_pago_producto,cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
-                System.out.println("pagosiniva "+pagosiniva);
-                System.out.println("vuelto "+vuelto);
-                System.out.println("subtotal "+subtotal);
-                System.out.println("tipo "+tipo);
-                System.out.println("moneda "+menuPrincipal.empresa.getMoneda());
             }
         }
-
+        
+        int cantidadPoductos = jtbVenta.getRowCount();
+        
         try {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
             JasperViewer visor = new JasperViewer(jprint, false);
+            jprint.setPageHeight(270 + (cantidadPoductos * 24)); // Adaptando la altura de la factura
+            gr.GuardarPDF(jprint, "reporteVenta.PDF"); // Guardando el reporte como pdf
             visor.setVisible(true);
         } catch (JRException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
@@ -803,13 +823,18 @@ public class Pago extends javax.swing.JInternalFrame {
         int id = venta.getIdVenta();
         venta.limpiarVenta();
         menuPrincipal.getOBD().guardarPagos(id, vp);
+        gr.GuardarBaseDatos(id, "reporteVenta.PDF");
         PuntoVenta.Inicio.MenuPrincipal.btnCaja.setEnabled(true);
         PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
         cerrarVentana();
     }
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        factura();
+        try {
+            factura();
+        } catch (IOException ex) {
+            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -1137,6 +1162,10 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_cmbBoxBancosItemStateChanged
+
+    private void apro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apro2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_apro2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

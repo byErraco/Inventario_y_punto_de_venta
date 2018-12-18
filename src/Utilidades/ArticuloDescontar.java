@@ -31,6 +31,7 @@ public class ArticuloDescontar {
     }
 
     public int getCantidad() {
+//        System.out.println("Integer.parseInt(Cantidad) = " + Cantidad);
         return Integer.parseInt(Cantidad);
     }
 

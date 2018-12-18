@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public class ValorPagos {
 
-    String tipo;
-    String monto;
-    String fecha;
+    private String tipo;
+    private String monto;
+    private String fecha;
 
     public ValorPagos(String tipo, Double monto) {
         this.tipo = tipo;

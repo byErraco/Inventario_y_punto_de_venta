@@ -45,11 +45,11 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
        // this.producto = producto;
      //   crearHotKeys();
-        actualizarTabla();
         initComponents();
+        actualizarTabla();
     }
 
-/*   public void crearHotKeys(){
+ /*  public void crearHotKeys(){
       Action actDescripcion = new AbstractAction("actionDescripcion") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,8 +98,8 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         this.addInternalFrameListener(listener);
       
    }
-   */
    
+  */ 
    //revisar
    public void actualizarTabla(){
         ArrayList<HashMap<String, String>> Descripcion = menuPrincipal.getOBD().getArrayListProductos();
@@ -377,7 +377,7 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
             int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el producto?: " + jtbDescripcion.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
             if (seleccion == 0) {
                 String codigo = jtbDescripcion.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarProducto(codigo);
+//                menuPrincipal.getOBD().eliminarProducto(codigo);
                 actualizarTabla();
 
             } else {

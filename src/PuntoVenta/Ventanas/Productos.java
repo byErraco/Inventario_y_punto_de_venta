@@ -5,6 +5,8 @@
  */
 package PuntoVenta.Ventanas;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
+import ClasesExtendidas.Tablas.ClienteTableModel;
+import ClasesExtendidas.Tablas.EmpleadosTableModel;
 import ClasesExtendidas.Tablas.ProductoTableModel;
 import ClasesExtendidas.Tablas.ProductoVentaTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
@@ -27,6 +29,7 @@ import javax.swing.RowFilter;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -40,7 +43,8 @@ public class Productos extends javax.swing.JInternalFrame {
  private Modulo ventanaAbierta; 
  public MenuPrincipal menuPrincipal;
  public  AgregarProducto1 agregar;
- public ModificarProducto1 modificar;
+ public ModificarProducto1 modificar; 
+ public ModificarProducto2 modificar2;
  public ModeloProducto productos;
  
     /**
@@ -56,9 +60,9 @@ public class Productos extends javax.swing.JInternalFrame {
       //  this.modificar = modificar;
         this.setTitle("Saphiro - Consúlta de productos");
        // crearHotKeys();
-       // actualizarTabla();
         initComponents();
-       
+        actualizarTabla();
+
     }
     
     
@@ -138,28 +142,28 @@ public class Productos extends javax.swing.JInternalFrame {
         btnModificar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtbProducto = new javax.swing.JTable();
         txtProductos = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbListaProducto = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameClosing(evt);
             }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
         });
 
@@ -231,7 +235,7 @@ public class Productos extends javax.swing.JInternalFrame {
         jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel2.setPreferredSize(new java.awt.Dimension(500, 302));
 
-        jtbProducto.setModel(new javax.swing.table.DefaultTableModel(
+        jtbListaProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -239,28 +243,28 @@ public class Productos extends javax.swing.JInternalFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jtbProducto);
+        jScrollPane1.setViewportView(jtbListaProducto);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(209, Short.MAX_VALUE)
                 .addComponent(txtProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(213, 213, 213))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(7, 7, 7)
                 .addComponent(txtProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -312,16 +316,16 @@ public class Productos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        Modificar();
+        modificarProductoSeleccionado();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        EliminarProductos();
+//        EliminarProductos();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void Agregar(){
               
-           if(estacerrado(agregar)){     
+           if(estacerrado(agregar)){
                 agregar = new AgregarProducto1(menuPrincipal);
                 Dimension desktopSize = menuPrincipal.panel.getSize();
                 Dimension jInternalFrameSize = agregar.getSize();
@@ -339,54 +343,60 @@ public class Productos extends javax.swing.JInternalFrame {
     }
     
     
-    private void Modificar(){
+    private void abrirVentanaModificacionProductos(String codigo) {
     
-        if(estacerrado(modificar)){
-        
-                modificar = new ModificarProducto1(menuPrincipal);
-                Dimension desktopSize = menuPrincipal.panel.getSize();
-                Dimension jInternalFrameSize = modificar.getSize();
-                modificar.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                        (desktopSize.height - jInternalFrameSize.height) / 2);
-                menuPrincipal.panel.add(modificar);
-                modificar.show();
-                setVentanaAbierta(Modulo.MODIFICAR);
-                
-        }else{
-             JOptionPane.showMessageDialog(this, "La ventana\n"+this.modificar.getTitle()+ "\nse encuentra abierta...");
-                modificar.toFront();
-         }
+//      QUEDA PENDIENTE PARA MANANA TERMINAR EL DE MODIFICAR PRODUCTOS
+        modificar2 = new ModificarProducto2(this, codigo);
+        Dimension desktopSize = menuPrincipal.panel.getSize();
+        Dimension jInternalFrameSize = modificar2.getSize();
+        modificar2.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                (desktopSize.height - jInternalFrameSize.height) / 2);
+
+        menuPrincipal.panel.add(modificar2);
+        modificar2.show();
     
    
     }  
     
-     
-    public void EliminarProductos(){
-    
-        int numeroRow = jtbProducto.getSelectedRow();
+    public void modificarProductoSeleccionado() {
+        int numeroRow = jtbListaProducto.getSelectedRow();
         if (numeroRow < 0) {
-            jtbProducto.setRowSelectionInterval(0, 0);
-            numeroRow = jtbProducto.getSelectedRow();
+            jtbListaProducto.setRowSelectionInterval(0, 0);
         }
-        if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el producto?: " + jtbProducto.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
-            if (seleccion == 0) {
-                String codigo = jtbProducto.getValueAt(numeroRow, 0).toString();
-                menuPrincipal.getOBD().eliminarProducto(codigo);
-                actualizarTabla();
-
-            } else {
-                jtbProducto.requestFocus();
-            }
+        else {
+            String codigo = jtbListaProducto.getValueAt(numeroRow, 1).toString();
+            abrirVentanaModificacionProductos(codigo);
         }
-    
     }
+     
+//    public void EliminarProductos(){
+//    
+//        int numeroRow = jtbListaProducto.getSelectedRow();
+//        if (numeroRow < 0) {
+//            jtbListaProducto.setRowSelectionInterval(0, 0);
+//            numeroRow = jtbListaProducto.getSelectedRow();
+//        }
+//        if (numeroRow >= 0) {
+//            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Deséa eliminar el producto?: " + jtbListaProducto.getModel().getValueAt(numeroRow, 1) + " del sistema?", "Eliminar archivo");
+//            if (seleccion == 0) {
+//                String codigo = jtbListaProducto.getValueAt(numeroRow, 1).toString();
+////                System.out.println("codigo = "+codigo);
+//                menuPrincipal.getOBD().eliminarProducto(codigo);
+//                actualizarTabla();
+//
+//            } else {
+//                jtbListaProducto.requestFocus();
+//            }
+//        }
+//    
+//    }
    
-// revisar
-    private void actualizarTabla() {
+    public void actualizarTabla() {
        ArrayList<HashMap<String, String>> Producto = menuPrincipal.getOBD().getArrayListProductos();
        ProductoTableModel model = new ProductoTableModel(Producto);
-       jtbProducto.setModel(model); 
+       System.out.println("Producto -> "+Producto);
+//       System.out.println("setModel(model) -> "+jtbListaProducto.setModel(model));
+       jtbListaProducto.setModel(model);
     }
     
     
@@ -402,10 +412,10 @@ public class Productos extends javax.swing.JInternalFrame {
     
     
     
-    private enum Modulo {
+    public enum Modulo {
 
         AGREGAR(1, "actionAgregar"),
-        MODIFICAR(2, "actionModificar"),
+        MODIFICAR2(2, "actionModificar"),
         ELIMINAR(3, "actionEliminar");
 
         private final int id;
@@ -433,7 +443,7 @@ public class Productos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jtbProducto;
+    private javax.swing.JTable jtbListaProducto;
     private javax.swing.JPanel panelPrincipal;
     private javax.swing.JTextField txtProductos;
     // End of variables declaration//GEN-END:variables

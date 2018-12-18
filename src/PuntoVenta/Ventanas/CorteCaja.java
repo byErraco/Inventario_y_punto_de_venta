@@ -9,12 +9,15 @@ import ClasesExtendidas.Numeros.XBigDecimal;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.TipoPagoTableModel;
 import ClasesExtendidas.Tablas.CorteEstadoCajaTableModel;
-import PuntoVenta.BaseDatos.Empresa;
+import PuntoVenta.BaseDatos.Pais;
+import PuntoVenta.BaseDatos.Parametros;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Reporte2;
 import Utilidades.ValorPagos;
+import Utilidades.CorteUtilidades;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +29,8 @@ import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -46,7 +51,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private Caja caja;
     public MenuPrincipal menuPrincipal;
-
+    boolean suprimir = false;
     boolean actualizastes = false;
 
     /**
@@ -94,13 +99,27 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         Action actAceptar = new AbstractAction("actionAceptar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cortarCaja();
+//                confirmacion();
+                if(btnAceptar.isEnabled())  confirmacion();
+
+            }
+        };
+        Action actSuprimir = new AbstractAction("actionSuprimir") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                suprimir = !suprimir;
+                if(suprimir) {
+                    JOptionPane.showMessageDialog(null, "Suprimir activado" , "Error", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Suprimir desactivado" , "Error", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         };
 
         actCerrarVentana.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
         actAceptar.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
         actFocusPuntoInteres.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+        actSuprimir.putValue(Action.ACTION_COMMAND_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.ALT_MASK));
 
         pnlContenedor.getActionMap().put("actionCerrarVentanaCaja", actCerrarVentana);
         pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCerrarVentana.getValue(Action.ACTION_COMMAND_KEY), "actionCerrarVentanaCaja");
@@ -111,6 +130,9 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         pnlContenedor.getActionMap().put("actionAceptar", actAceptar);
         pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAceptar.getValue(Action.ACCELERATOR_KEY), "actionAceptar");
 
+        pnlContenedor.getActionMap().put("actionSuprimir", actSuprimir);
+        pnlContenedor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actSuprimir.getValue(Action.ACTION_COMMAND_KEY), "actionSuprimir");
+        
         InternalFrameAdapter listener = new InternalFrameAdapter() {
             @Override
             public void internalFrameClosed(InternalFrameEvent e) {
@@ -146,7 +168,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         btnSalir = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtTotalVentas = new javax.swing.JTextField();
+        txtEfectivo = new javax.swing.JTextField();
         txtNumeroCaja = new javax.swing.JTextField();
         lblNumeroCaja = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
@@ -162,6 +184,14 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         txtExcedente = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtRestante = new javax.swing.JTextField();
+        txtCredito = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtDebito = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtTicket = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtTotalVentas = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         txtMonto = new javax.swing.JTextField();
         lblMonto = new javax.swing.JLabel();
@@ -239,7 +269,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
@@ -256,10 +286,14 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Total ventas:");
+        jLabel1.setText("Efectivo:");
 
-        txtTotalVentas.setEditable(false);
-        txtTotalVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtEfectivo.setEditable(false);
+        txtEfectivo.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtEfectivo.setMaximumSize(new java.awt.Dimension(141, 20));
+        txtEfectivo.setMinimumSize(new java.awt.Dimension(141, 20));
+        txtEfectivo.setName(""); // NOI18N
+        txtEfectivo.setPreferredSize(new java.awt.Dimension(141, 20));
 
         txtNumeroCaja.setEditable(false);
         txtNumeroCaja.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -328,11 +362,34 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
         txtRestante.setEditable(false);
         txtRestante.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtRestante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRestanteActionPerformed(evt);
-            }
-        });
+
+        txtCredito.setEditable(false);
+        txtCredito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Crédito:");
+
+        txtDebito.setEditable(false);
+        txtDebito.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Débito:");
+
+        txtTicket.setEditable(false);
+        txtTicket.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Ticket:");
+
+        txtTotalVentas.setEditable(false);
+        txtTotalVentas.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Total ventas:");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -352,28 +409,50 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                             .addComponent(txtNumeroCaja, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtEmpleado, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(8, 8, 8)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(16, 16, 16)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTotalVentas)
                             .addComponent(txtTotalCortes)
                             .addComponent(txtExcedente)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtRestante))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel1)
+                                .addGap(16, 16, 16))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCredito)
+                            .addComponent(txtEfectivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtTicket))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtDebito))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTotalVentas)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -392,10 +471,26 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                     .addComponent(txtEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEmpleado))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(txtTotalVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtDebito, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtCredito, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(txtTotalVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtTotalCortes, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -403,15 +498,15 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtExcedente, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(txtRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel2.setBackground(new java.awt.Color(32, 182, 155));
@@ -420,6 +515,9 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         txtMonto.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         txtMonto.setText("0.00");
         txtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMontoKeyTyped(evt);
+            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtMontoKeyPressed(evt);
             }
@@ -491,13 +589,15 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlContenedorLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -521,40 +621,42 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         //actualizastes = true;
-        cortarCaja();
+        if(btnAceptar.isEnabled())  confirmacion();
         //actualizarInformacionCaja();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtMontoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER && Double.parseDouble(txtMonto.getText()) > 0) {
+            CorteUtilidades cu = new CorteUtilidades();
+            txtMonto.requestFocus();
+            
+            // resta y añade color a los campos de pagos            
+            if(cmbTipoPago.getSelectedItem().equals("Efectivo")) {
+                XBigDecimal efectivo = new XBigDecimal(txtEfectivo.getText());
+                asignarValorTipoPago(efectivo, txtEfectivo, "Efectivo");
+                cu.colorTexto(txtEfectivo);
+            } else if(cmbTipoPago.getSelectedItem().equals("Débito")) {
+                XBigDecimal debito = new XBigDecimal(txtDebito.getText());
+                asignarValorTipoPago(debito, txtDebito, "Débito");
+//                txtDebito.setText(debito.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+                cu.colorTexto(txtDebito);
+            } else if(cmbTipoPago.getSelectedItem().equals("Crédito")) {
+                XBigDecimal credito = new XBigDecimal(txtCredito.getText());
+                asignarValorTipoPago(credito, txtCredito, "Crédito");
+//                txtCredito.setText(credito.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+                cu.colorTexto(txtCredito);
+            } else {
+                XBigDecimal ticket = new XBigDecimal(txtTicket.getText());
+                asignarValorTipoPago(ticket, txtTicket, "CestaTicket");
+//                txtTicket.setText(ticket.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+                cu.colorTexto(txtTicket);
+            }
+            
+            // obtiene el monto y lo agrega a tblResultadoCorte
             XBigDecimal monto = new XBigDecimal(txtMonto.getText());
-            PromptSupport.setPrompt("0.00", txtMonto);
             agregarMontoAlCorte(cmbTipoPago.getSelectedItem().toString(), monto);
-            txtMonto.setText("0.00");
-            txtMonto.requestFocus();
-            txtMonto.setSelectionStart(0);
-            txtMonto.setSelectionEnd(txtMonto.getText().length());
-        }
-    }//GEN-LAST:event_txtMontoKeyPressed
 
-    private void cmbTipoPagoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbTipoPagoKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtMonto.requestFocus();
-            txtMonto.setSelectionStart(0);
-            txtMonto.setSelectionEnd(txtMonto.getText().length());
-        }
-    }//GEN-LAST:event_cmbTipoPagoKeyPressed
-
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        cerrarVentana();
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void txtRestanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRestanteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRestanteActionPerformed
-
-    private void txtMontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Agrega al txtTotalCortes el monto acumulado por el corte
             XBigDecimal totalVentas = new XBigDecimal(txtTotalVentas.getText());
             double acumuladocortes = 0;
             for (int i = 0; i < tblResultadoCorte.getRowCount(); i++) {
@@ -562,23 +664,117 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             }
             XBigDecimal totalCortes = new XBigDecimal("" + acumuladocortes);
             txtTotalCortes.setText(totalCortes.setScale(2, RoundingMode.HALF_EVEN).toString());
-
+            
+            // Controla los campos txtExcedente y txtRestante
             XBigDecimal excedente = new XBigDecimal(totalVentas.add(totalCortes.negate()).toString());
             if (excedente.toString().equals("0") || Double.parseDouble(excedente.toString()) < 0) {
-                txtExcedente.setText(excedente.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
                 txtRestante.setText("0.00");
+                txtExcedente.setText(excedente.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
+                // asignando colores
+                cu.colorVerde(txtExcedente);
+                cu.colorRojo(txtRestante);
             } else {
                 XBigDecimal Restante = new XBigDecimal(totalVentas.add(totalCortes.negate()).toString());
                 txtExcedente.setText("0.00");
-                txtRestante.setText(Restante.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
+                txtRestante.setText("-".concat(Restante.setScale(2, RoundingMode.HALF_EVEN).toString()));
+                if(Double.parseDouble(txtRestante.getText()) == 0)   txtRestante.setText("0.00");
+                // asignando colores
+                cu.colorVerde(txtExcedente);
+                cu.colorRojo(txtRestante);
             }
+            
+            // si el acumulado del corte es menor o igual a 0, no permite hacer el corte
             if (Double.parseDouble(txtTotalCortes.getText()) <= 0) {
                 btnAceptar.setEnabled(false);
             } else {
                 btnAceptar.setEnabled(true);
             }
+            
+            txtMonto.setText("0.00");
+            cu.selectAntesDelPunto(txtMonto);
         }
+    }//GEN-LAST:event_txtMontoKeyPressed
+
+    private void cmbTipoPagoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbTipoPagoKeyPressed
+        CorteUtilidades cu = new CorteUtilidades();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            cu.selectAntesDelPunto(txtMonto);
+        }
+    }//GEN-LAST:event_cmbTipoPagoKeyPressed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        cerrarVentana();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void txtMontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyReleased
+//        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            CorteUtilidades cu = new CorteUtilidades();
+//            // asignando focus
+//            XBigDecimal totalVentas = new XBigDecimal(txtTotalVentas.getText());
+//            double acumuladocortes = 0;
+//            for (int i = 0; i < tblResultadoCorte.getRowCount(); i++) {
+//                acumuladocortes = acumuladocortes + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
+//            }
+//            XBigDecimal totalCortes = new XBigDecimal("" + acumuladocortes);
+//            txtTotalCortes.setText(totalCortes.setScale(2, RoundingMode.HALF_EVEN).toString());
+//
+//            
+//            XBigDecimal valorTxt = new XBigDecimal(txtMonto.getText());
+//            txtMonto.setText("0.00");
+//            cu.selectAntesDelPunto(txtMonto);
+//
+//            // asigna y resta el monto a los campos de pagos
+//            if(cmbTipoPago.getSelectedItem().equals("Efectivo")) {
+//                XBigDecimal efectivo = new XBigDecimal(txtEfectivo.getText());
+//                txtEfectivo.setText(efectivo.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+//                cu.colorTexto(txtEfectivo);
+//            } else if(cmbTipoPago.getSelectedItem().equals("Débito")) {
+//                XBigDecimal debito = new XBigDecimal(txtDebito.getText());
+//                txtDebito.setText(debito.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+//                cu.colorTexto(txtDebito);
+//            } else if(cmbTipoPago.getSelectedItem().equals("Crédito")) {
+//                XBigDecimal credito = new XBigDecimal(txtCredito.getText());
+//                txtCredito.setText(credito.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+//                cu.colorTexto(txtCredito);
+//            } else {
+//                XBigDecimal ticket = new XBigDecimal(txtTicket.getText());
+//                txtTicket.setText(ticket.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+//                cu.colorTexto(txtTicket);
+//            }
+//            
+//
+//            XBigDecimal excedente = new XBigDecimal(totalVentas.add(totalCortes.negate()).toString());
+//            if (excedente.toString().equals("0") || Double.parseDouble(excedente.toString()) < 0) {
+//                txtRestante.setText("0.00");
+//                txtExcedente.setText(excedente.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
+//                cu.colorTexto(txtExcedente);
+//            } else {
+//                XBigDecimal Restante = new XBigDecimal(totalVentas.add(totalCortes).toString());
+//                txtExcedente.setText("0.00");
+//                txtRestante.setText(Restante.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
+//                cu.colorTexto(txtRestante);
+//            }
+//            if (Double.parseDouble(txtTotalCortes.getText()) <= 0) {
+//                btnAceptar.setEnabled(false);
+//            } else {
+//                btnAceptar.setEnabled(true);
+//            }
+//        }
     }//GEN-LAST:event_txtMontoKeyReleased
+
+    private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
+        CorteUtilidades cu = new CorteUtilidades();
+        // no permite introducir números
+        if (evt.getKeyChar() == '.') {
+            if(txtMonto.getText().lastIndexOf(".") >= 0)  {
+                evt.consume();
+                cu.selectDespuesDelPunto(txtMonto);
+            }
+        } else if(!Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+        }
+        
+    }//GEN-LAST:event_txtMontoKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
@@ -589,6 +785,10 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -605,12 +805,16 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JTable tblCortesAnteriores;
     private javax.swing.JTable tblResultadoCorte;
+    private javax.swing.JTextField txtCredito;
+    private javax.swing.JTextField txtDebito;
+    private javax.swing.JTextField txtEfectivo;
     private javax.swing.JTextField txtEmpleado;
     private javax.swing.JTextField txtExcedente;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtMonto;
     private javax.swing.JTextField txtNumeroCaja;
     private javax.swing.JTextField txtRestante;
+    private javax.swing.JTextField txtTicket;
     private javax.swing.JTextField txtTotalCortes;
     private javax.swing.JTextField txtTotalVentas;
     // End of variables declaration//GEN-END:variables
@@ -625,12 +829,19 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             tipoMonedaEnTabla = model.getValueAt(i, 0).toString();
             if (tipoMonedaEnTabla.equalsIgnoreCase(tipoMoneda)) {
                 montoEnTabla = new XBigDecimal(model.getValueAt(i, 1).toString());
-                model.setValueAt(monto.add(montoEnTabla).setScale(2, RoundingMode.HALF_EVEN), i, 1);
+                if(suprimir == false)  model.setValueAt(monto.add(montoEnTabla).setScale(2, RoundingMode.HALF_EVEN), i, 1);
+                else {
+                    BigDecimal montoNuevo = monto.negate().add(montoEnTabla).setScale(2, RoundingMode.HALF_EVEN);
+                    model.setValueAt(montoNuevo, i, 1);
+                    if(montoNuevo.compareTo(new BigDecimal(0)) <= 0)   model.removeRow(i);
+                }
+                
                 existe = true;
             }
         }
         if (!existe) {
-            model.addRow(new String[]{tipoMoneda, monto.setScale(2, RoundingMode.HALF_EVEN).toString()});
+            if(suprimir)    JOptionPane.showMessageDialog(null, "No queda mas por restar de este tipo de pago", "Error", JOptionPane.INFORMATION_MESSAGE);
+            else            model.addRow(new String[]{tipoMoneda, monto.setScale(2, RoundingMode.HALF_EVEN).toString()});
         }
 
         montoTotal = new XBigDecimal(0);
@@ -657,18 +868,20 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         }
     }
 
-    private void crearCorteCaja() {
+    private int crearCorteCaja() {
         TipoPagoTableModel model = (TipoPagoTableModel) tblResultadoCorte.getModel();
         XBigDecimal montoCorte = new XBigDecimal(lblTotalValor.getText());
         XBigDecimal excedente = new XBigDecimal(txtExcedente.getText());
-        XBigDecimal restante = new XBigDecimal(txtRestante.getText());
+        XBigDecimal restante = new XBigDecimal(txtRestante.getText().replace("-",""));
         int comparacion = montoCorte.compareTo(new XBigDecimal(0));
+        int idCorteCaja = -1;
         if (comparacion < 0) {
             Utilidades.Sonidos.beep();
             focusPuntoInteres();
         } else {
-            int idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(montoCorte.doubleValue(), excedente.doubleValue(), restante.doubleValue(), caja.menuPrincipal.getIdEstadoCaja(), caja.menuPrincipal.getEmpleado().getId());
-            caja.menuPrincipal.getOBD().ActualizarCorteEnVenta(caja.menuPrincipal.getIdEstadoCaja());
+            idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(montoCorte.doubleValue(), excedente.doubleValue(), restante.doubleValue(), caja.menuPrincipal.getIdEstadoCaja(), caja.menuPrincipal.getEmpleado().getId());
+            // el corte ya no existe en venta
+//            caja.menuPrincipal.getOBD().ActualizarCorteEnVenta(caja.menuPrincipal.getIdEstadoCaja());
             XBigDecimal montoEnTabla;
             for (int i = 0; i < model.getRowCount(); i++) {
                 montoEnTabla = new XBigDecimal(model.getValueAt(i, 1).toString());
@@ -676,6 +889,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
                 caja.menuPrincipal.getOBD().crearDesgloseCaja(idCorteCaja, tipo, montoEnTabla);
             }
         }
+        return idCorteCaja;
     }
 
     /**
@@ -700,8 +914,25 @@ public class CorteCaja extends javax.swing.JInternalFrame {
      * caja.
      */
     private void actualizarInformacionCaja() {
-        XBigDecimal totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
-        txtTotalVentas.setText(totalVentas.setScale(2, RoundingMode.HALF_EVEN).toString());
+        CorteUtilidades cu = new CorteUtilidades();
+        
+        
+        
+        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
+        //------ Asignando totales por tipo de pago ------
+        txtEfectivo.setText(totalVentas[0].setScale(2, RoundingMode.HALF_EVEN).toString());
+        cu.colorTexto(txtEfectivo);
+   
+        txtCredito.setText(totalVentas[1].setScale(2, RoundingMode.HALF_EVEN).toString());
+        cu.colorTexto(txtCredito);
+        
+        txtDebito.setText(totalVentas[2].setScale(2, RoundingMode.HALF_EVEN).toString());
+        cu.colorTexto(txtDebito);
+        
+        txtTicket.setText(totalVentas[3].setScale(2, RoundingMode.HALF_EVEN).toString());
+        cu.colorTexto(txtTicket);
+        
+        txtTotalVentas.setText(totalVentas[4].setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
         
         ArrayList<HashMap<String, String>> cortesAnteriores = caja.menuPrincipal.getOBD().getArrayListCortesCaja(caja.menuPrincipal.getIdEstadoCaja());
         CorteEstadoCajaTableModel modelCortesCaja = new CorteEstadoCajaTableModel(cortesAnteriores);
@@ -709,51 +940,66 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         
         TipoPagoTableModel model = new TipoPagoTableModel();
         tblResultadoCorte.setModel(model);
-        cerrarVentana();
+        
+//        cerrarVentana();
     }
 
     private void cortarCaja() {
         List<Reporte2> lista = new ArrayList();
         List<Integer> listaid = new ArrayList();
         List<ValorPagos> listavalor = new ArrayList();
-        double gtotal = 0;
+        int idCorteCaja;
+        double gtotalU = 0;
         double efectivo = 0;
         double debito = 0;
         double credito = 0;
         double ctk = 0;
-        Empresa e = menuPrincipal.getOBD().datosEmpresas();
-        XBigDecimal totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
-        listaid.addAll(menuPrincipal.getOBD().getListIDVentas(menuPrincipal.getIdEstadoCaja()));
-        txtTotalVentas.setText(totalVentas.setScale(2, RoundingMode.HALF_EVEN).toString());
+        Parametros para = menuPrincipal.getOBD().getDatosParametros();
+        Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
+        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
+//        listaid.addAll(menuPrincipal.getOBD().getListIDVentas(menuPrincipal.getIdEstadoCaja()));
         
         ArrayList<HashMap<String, String>> cortesAnteriores = caja.menuPrincipal.getOBD().getArrayListCortesCaja(caja.menuPrincipal.getIdEstadoCaja());
         CorteEstadoCajaTableModel modelCortesCaja = new CorteEstadoCajaTableModel(cortesAnteriores);
         tblCortesAnteriores.setModel(modelCortesCaja);
         
-        crearCorteCaja();
+        idCorteCaja = crearCorteCaja();
         actualizastes = false;
-        for (int i = 0; i < tblResultadoCorte.getRowCount(); i++) {
-            if (tblResultadoCorte.getValueAt(i, 0).equals("Efectivo")) {
-                efectivo = efectivo + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
-            }
-            if (tblResultadoCorte.getValueAt(i, 0).equals("Debito")) {
-                debito = debito + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
-            }
-            if (tblResultadoCorte.getValueAt(i, 0).equals("Credito")) {
-                credito = credito + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
-            }
-            if (tblResultadoCorte.getValueAt(i, 0).equals("Cesta Ticket")) {
-                ctk = ctk + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
-            }
-        }
-        listavalor.addAll(menuPrincipal.getOBD().montoscorte(listaid));
+        
+//        for (int i = 0; i < tblResultadoCorte.getRowCount(); i++) {
+//            if (tblResultadoCorte.getValueAt(i, 0).equals("Efectivo")) {
+//                efectivo = efectivo + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
+//            }
+//            if (tblResultadoCorte.getValueAt(i, 0).equals("Debito")) {
+//                debito = debito + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
+//            }
+//            if (tblResultadoCorte.getValueAt(i, 0).equals("Credito")) {
+//                credito = credito + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
+//            }
+//            if (tblResultadoCorte.getValueAt(i, 0).equals("CestaTicket")) {
+//                ctk = ctk + Double.parseDouble(tblResultadoCorte.getValueAt(i, 1).toString());
+//            }
+//        }
+        // Anteriormente aquí se enviaba "listaid" que era un conjunto de los id de las ventas
+        // ahora se envía el id del corte que se acaba de crear
+        listavalor.addAll(menuPrincipal.getOBD().montoscorte(idCorteCaja));
         
         for (ValorPagos valor : listavalor) {
-            gtotal = gtotal + valor.getMontoD();
+            gtotalU = gtotalU + valor.getMontoD();
         }
         
+        // Asignando los montos que trae el sistema por defecto
+        efectivo = Double.parseDouble(totalVentas[0].setScale(2, RoundingMode.HALF_EVEN).toString().replace("-", ""));
+        credito = Double.parseDouble(totalVentas[1].setScale(2, RoundingMode.HALF_EVEN).toString().replace("-", ""));
+        debito = Double.parseDouble(totalVentas[2].setScale(2, RoundingMode.HALF_EVEN).toString().replace("-", ""));
+        ctk = Double.parseDouble(totalVentas[3].setScale(2, RoundingMode.HALF_EVEN).toString().replace("-", ""));
+        String gtotalS = totalVentas[4].setScale(2, RoundingMode.HALF_EVEN).toString().replace("-", "");
+        
+        // Asignando los montos que ingresa el cajero en el reporte
         for (ValorPagos valor : listavalor) {
-            Reporte2 pr = new Reporte2(e, menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), valor.getTipo(), valor.getMonto(), "" + gtotal, "" + efectivo, "" + debito, "" + credito, "" + ctk);
+            Reporte2 pr = new Reporte2(para, p, menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), 
+                    menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), valor.getTipo(), valor.getMonto(), 
+                    gtotalS, "" + gtotalU, "" + efectivo, "" + debito, "" + credito, "" + ctk);
             lista.add(pr);
         }
         
@@ -769,5 +1015,31 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         TipoPagoTableModel model = new TipoPagoTableModel();
         tblResultadoCorte.setModel(model);
         cerrarVentana();
+    }
+    
+    public void asignarValorTipoPago(XBigDecimal cantidad, JTextField campo, String tipoPago) {
+        TipoPagoTableModel model = (TipoPagoTableModel) tblResultadoCorte.getModel();
+        XBigDecimal valorTxt = new XBigDecimal(txtMonto.getText());
+        // verifica si ingresa o saca dinero del corte
+        if(suprimir == false) campo.setText(cantidad.add(valorTxt).setScale(2, RoundingMode.HALF_EVEN).toString());
+        else {
+            for(int i = 0; i < model.getRowCount(); i++) {
+                XBigDecimal tblMonto = new XBigDecimal(model.getValueAt(i, 1).toString());
+                if(model.getValueAt(i, 0).toString().equals(tipoPago) && tblMonto.compareTo(valorTxt) > 0) {
+                    campo.setText(cantidad.add(valorTxt.negate()).setScale(2, RoundingMode.HALF_EVEN).toString());
+                } else if (model.getValueAt(i, 0).toString().equals(tipoPago) && tblMonto.compareTo(valorTxt) <= 0) {
+                    campo.setText(cantidad.add(tblMonto.negate()).setScale(2, RoundingMode.HALF_EVEN).toString());
+                }
+            }
+        }
+    }
+    
+    public void confirmacion() {
+        int g = JOptionPane.showConfirmDialog(this, "¿Desea realizar el corte de caja?\nNo podrá realizar cambios", "Corte de caja", JOptionPane.YES_NO_OPTION);
+        if (g == JOptionPane.YES_OPTION) {
+            cortarCaja();
+        } else if (g == JOptionPane.NO_OPTION) {
+            this.setVisible(true);
+        }
     }
 }

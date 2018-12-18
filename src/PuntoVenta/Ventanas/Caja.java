@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -201,7 +202,7 @@ public class Caja extends javax.swing.JInternalFrame {
      */
     public void abrirCaja() {
         String montoApertura;
-        
+
         if(!menuPrincipal.isCajaAbierta()){
             do {
                 montoApertura = JOptionPane.showInputDialog(this, "Monto de apertura", 0);
@@ -228,11 +229,17 @@ public class Caja extends javax.swing.JInternalFrame {
      * Crea un corte de caja.
      */
     public void abrirVentanaCorteCaja() {
+        int idCaja = menuPrincipal.getModeloCaja().getId();
+        int idEstadoCaja = menuPrincipal.getOBD().getIdEstadoCaja(idCaja);
+        List<Integer> ventas = menuPrincipal.getOBD().getListIDVentas(idEstadoCaja);
+        System.out.println("cantidad de ventas realizadas: " + ventas.size());
+        
         if (menuPrincipal.isCajaAbierta()) {
             if (ventanaCorte != null) {
                 JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
-            } 
-            else {
+            } else if(ventas.size() <= 0) {
+                JOptionPane.showMessageDialog(this, "Aun no has vendido nada");
+            } else {
                 ventanaCorte = new CorteCaja(this);
 
                 Dimension desktopSize = menuPrincipal.panel.getSize();

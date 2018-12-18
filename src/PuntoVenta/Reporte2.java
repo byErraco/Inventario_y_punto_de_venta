@@ -6,6 +6,8 @@
 package PuntoVenta;
 
 import PuntoVenta.BaseDatos.Empresa;
+import PuntoVenta.BaseDatos.Pais;
+import PuntoVenta.BaseDatos.Parametros;
 
 /**
  *
@@ -22,29 +24,31 @@ public class Reporte2 {
     private String numCaja;
     private String tipoP;
     private String total;
-    private String gtotal;
+    private String gtotalS;
+    private String gtotalU;
     private String moneda;
     private String ef;
     private String tdd;
     private String tdc;
     private String ctk;
 
-    public Reporte2(Empresa e, String nombreEmp, String cedulaEmp, String numCaja, String tipoP, String total, String gtotal, String ef, String tdd, String tdc, String ctk) {
-        this.rifE = e.getRif();
-        this.nombreE = e.getNombre();
-        this.direccionE = e.getDireccion();
-        this.telefonoE = e.getTelefono();
+    public Reporte2(Parametros para, Pais p, String nombreEmp, String cedulaEmp, String numCaja, String tipoP, String total, String gtotalS, String gtotalU, String ef, String tdd, String tdc, String ctk) {
+        this.rifE = para.getIdentificacion();
+        this.nombreE = para.getNombre();
+        this.direccionE = para.getDireccion();
+        this.telefonoE = para.getTelefono();
         this.nombreEmp = nombreEmp;
         this.cedulaEmp = cedulaEmp;
         this.numCaja = numCaja;
         this.tipoP = tipoP;
         this.total = total;
-        this.gtotal = gtotal;
+        this.gtotalS = gtotalS;
+        this.gtotalU = gtotalU;
         this.ef = ef;
         this.tdd = tdd;
         this.tdc = tdc;
         this.ctk = ctk;
-        this.moneda = e.getMoneda();
+        this.moneda = p.getSimbolo();
     }
 
     public String getRifE() {
@@ -119,12 +123,20 @@ public class Reporte2 {
         this.total = total;
     }
 
-    public String getGtotal() {
-        return gtotal;
+    public String getGtotalS() {
+        return gtotalS;
     }
 
-    public void setGtotal(String gtotal) {
-        this.gtotal = gtotal;
+    public void setGtotalS(String gtotalS) {
+        this.gtotalS = gtotalS;
+    }
+    
+    public String getGtotalU() {
+        return gtotalU;
+    }
+
+    public void setGtotalU(String gtotalU) {
+        this.gtotalU = gtotalU;
     }
 
     public String getMoneda() {

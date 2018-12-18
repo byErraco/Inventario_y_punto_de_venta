@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="215" pageHeight="2834" columnWidth="205" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d2b0068a-db22-4367-8e8a-1923ed75e3b9">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="215" pageHeight="500" columnWidth="205" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d2b0068a-db22-4367-8e8a-1923ed75e3b9">
 	<property name="ireport.zoom" value="2.8531167061100033"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="218"/>
 	<parameter name="empresa" class="java.lang.String"/>
 	<parameter name="direccion" class="java.lang.String"/>
 	<parameter name="parameter1" class="java.lang.String"/>
@@ -148,18 +148,18 @@
 				<text><![CDATA[Tipo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="101" y="50" width="35" height="13" uuid="a4de9aa0-1aa2-4988-906d-cc09cdcfbb71"/>
+				<reportElement x="139" y="50" width="35" height="13" uuid="a4de9aa0-1aa2-4988-906d-cc09cdcfbb71"/>
 				<textElement>
 					<font fontName="Verdana" size="8"/>
 				</textElement>
 				<text><![CDATA[Monto:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="67" y="31" width="57" height="13" uuid="0488d479-0f53-4f16-91ac-9f5cf12f49d3"/>
-				<textElement textAlignment="Left">
+				<reportElement x="0" y="30" width="205" height="13" uuid="0488d479-0f53-4f16-91ac-9f5cf12f49d3"/>
+				<textElement textAlignment="Center">
 					<font fontName="Verdana" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[En Sistema]]></text>
+				<text><![CDATA[En Caja]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-2" y="27" width="203" height="1" uuid="0679cff0-86c7-4950-94c6-6fd62b6877aa"/>
@@ -218,14 +218,14 @@
 				<reportElement x="-2" y="24" width="203" height="1" uuid="83144b8f-5751-4995-9c6b-4bb8e831445b"/>
 			</line>
 			<textField>
-				<reportElement x="98" y="32" width="55" height="10" uuid="d36edc7d-025c-454f-a4a4-565deea98d12"/>
+				<reportElement x="97" y="32" width="55" height="10" uuid="d36edc7d-025c-454f-a4a4-565deea98d12"/>
 				<textElement>
 					<font fontName="Verdana" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-1" y="31" width="99" height="13" uuid="16f95c1b-1253-4ba5-9c30-ff711e7fde8b"/>
+				<reportElement x="-1" y="31" width="98" height="13" uuid="16f95c1b-1253-4ba5-9c30-ff711e7fde8b"/>
 				<textElement textAlignment="Left">
 					<font fontName="Verdana" size="9" isBold="true"/>
 				</textElement>
@@ -253,21 +253,21 @@
 				<textFieldExpression><![CDATA[$F{tdd}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="99" y="45" width="55" height="10" uuid="53cdce04-75d1-4e12-980d-a49af87ff8f5"/>
+				<reportElement x="97" y="45" width="55" height="10" uuid="53cdce04-75d1-4e12-980d-a49af87ff8f5"/>
 				<textElement>
 					<font fontName="Verdana" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="-1" y="58" width="100" height="13" uuid="5b27101c-df6b-468a-8693-fdd9cb00bbb6"/>
+				<reportElement x="-1" y="58" width="98" height="13" uuid="5b27101c-df6b-468a-8693-fdd9cb00bbb6"/>
 				<textElement textAlignment="Left">
 					<font fontName="Verdana" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Credito:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="-1" y="72" width="99" height="13" uuid="26981191-1b58-4cad-9026-fee55e1d3b15"/>
+				<reportElement x="-1" y="72" width="98" height="13" uuid="26981191-1b58-4cad-9026-fee55e1d3b15"/>
 				<textElement textAlignment="Left">
 					<font fontName="Verdana" size="9" isBold="true"/>
 				</textElement>
@@ -302,11 +302,11 @@
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="74" y="8" width="45" height="13" uuid="2330d4e2-0476-4900-a656-3e0033b14250"/>
-				<textElement textAlignment="Left">
+				<reportElement x="0" y="7" width="205" height="13" uuid="2330d4e2-0476-4900-a656-3e0033b14250"/>
+				<textElement textAlignment="Center">
 					<font fontName="Verdana" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[En Caja]]></text>
+				<text><![CDATA[En Sistema]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-1" y="3" width="203" height="1" uuid="a6938f58-32b6-4ea0-8c6b-a7c2d89cfba7"/>

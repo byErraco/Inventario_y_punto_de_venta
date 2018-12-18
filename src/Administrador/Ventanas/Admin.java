@@ -7,11 +7,17 @@ package Administrador.Ventanas;
 
 import ClasesExtendidas.Tablas.ClienteTableModel;
 import ClasesExtendidas.Tablas.EmpleadosTableModel;
+import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
+import PuntoVenta.BaseDatos.Pais;
+import PuntoVenta.BaseDatos.Parametros;
+import PuntoVenta.BaseDatos.PostgreSQL;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Ventanas.Venta;
 import PuntoVenta.fondo;
+import Utilidades.currentLoger;
+import Utilidades.ruta;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.jdesktop.swingx.prompt.*;
 
@@ -62,7 +69,7 @@ public class Admin extends javax.swing.JInternalFrame {
         this.menuPrincipal = menuPrincipal;
         this.setTitle("Saphiro - Administración de Módulos");
         crearHotKeys();
-        actualizarTabla();
+        actualizarTabla();  
     }
 
     //OTRAS VENTANAS
@@ -73,13 +80,13 @@ public class Admin extends javax.swing.JInternalFrame {
 
     public void limpiar() {
 
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextArea1.setText("");
+        txtEmpresa.setText("");
+        txtIdentificacion.setText("");
+        txtMoneda.setText("");
+        txtTelefono.setText("");
+        txtDireccion.setText("");
 
-        jTextField1.requestFocus();
+        txtEmpresa.requestFocus();
 
     }
 
@@ -92,19 +99,12 @@ public class Admin extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jToolBarAdmin = new javax.swing.JToolBar();
         btnEmpleados = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnParametros = new javax.swing.JButton();
         panelPrincipal = new javax.swing.JPanel();
-        panelEmpleados = new javax.swing.JPanel();
-        agregarEmpleados = new javax.swing.JButton();
-        modificarEmpleados = new javax.swing.JButton();
-        eliminarEmpleados = new javax.swing.JButton();
-        txtFiltro = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtbListaEmpleado = new javax.swing.JTable();
-        jLabel7 = new javax.swing.JLabel();
         panelClientes = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtbListaCliente = new javax.swing.JTable();
@@ -113,20 +113,31 @@ public class Admin extends javax.swing.JInternalFrame {
         modificarClientes = new javax.swing.JButton();
         eliminarClientes = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        panelEmpleados = new javax.swing.JPanel();
+        agregarEmpleados = new javax.swing.JButton();
+        modificarEmpleados = new javax.swing.JButton();
+        eliminarEmpleados = new javax.swing.JButton();
+        txtFiltro = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbListaEmpleado = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
         panelParametros = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnRegistrar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtEmpresa = new javax.swing.JTextField();
+        txtIdentificacion = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblIdentificacion = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDireccion = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtMoneda = new javax.swing.JTextField();
+        lblImg = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        txtPais = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(32, 182, 155));
         setClosable(true);
@@ -201,6 +212,100 @@ public class Admin extends javax.swing.JInternalFrame {
         jToolBarAdmin.add(btnParametros);
 
         panelPrincipal.setLayout(new java.awt.CardLayout());
+
+        panelClientes.setBackground(new java.awt.Color(32, 182, 155));
+
+        jtbListaCliente.setBackground(new java.awt.Color(240, 240, 240));
+        jtbListaCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jtbListaCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtbListaClienteKeyPressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtbListaCliente);
+
+        txtFiltro1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtFiltro1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFiltro1KeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFiltro1KeyReleased(evt);
+            }
+        });
+
+        agregarClientes.setText("Agregar");
+        agregarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarClientesActionPerformed(evt);
+            }
+        });
+
+        modificarClientes.setText("Modificar");
+        modificarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modificarClientesActionPerformed(evt);
+            }
+        });
+
+        eliminarClientes.setText("Eliminar");
+        eliminarClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarClientesActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("<html><font size=4><center>Búsqueda:<br></font></center></html>");
+
+        javax.swing.GroupLayout panelClientesLayout = new javax.swing.GroupLayout(panelClientes);
+        panelClientes.setLayout(panelClientesLayout);
+        panelClientesLayout.setHorizontalGroup(
+            panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelClientesLayout.createSequentialGroup()
+                .addContainerGap(184, Short.MAX_VALUE)
+                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClientesLayout.createSequentialGroup()
+                        .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(panelClientesLayout.createSequentialGroup()
+                                .addComponent(agregarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(81, 81, 81)
+                                .addComponent(modificarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(eliminarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(75, 75, 75))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClientesLayout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtFiltro1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(221, 221, 221))))
+        );
+        panelClientesLayout.setVerticalGroup(
+            panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelClientesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFiltro1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(modificarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(eliminarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(agregarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        panelPrincipal.add(panelClientes, "panelClientes");
 
         panelEmpleados.setBackground(new java.awt.Color(32, 182, 155));
 
@@ -283,7 +388,7 @@ public class Admin extends javax.swing.JInternalFrame {
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(180, 180, 180))
+                .addGap(181, 181, 181))
         );
         panelEmpleadosLayout.setVerticalGroup(
             panelEmpleadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,107 +404,10 @@ public class Admin extends javax.swing.JInternalFrame {
                     .addComponent(agregarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modificarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(eliminarEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         panelPrincipal.add(panelEmpleados, "panelEmpleados");
-
-        panelClientes.setBackground(new java.awt.Color(32, 182, 155));
-
-        jtbListaCliente.setBackground(new java.awt.Color(240, 240, 240));
-        jtbListaCliente.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
-
-            }
-        ));
-        jtbListaCliente.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jtbListaClienteKeyPressed(evt);
-            }
-        });
-        jScrollPane2.setViewportView(jtbListaCliente);
-
-        txtFiltro1.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        txtFiltro1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtFiltro1KeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFiltro1KeyReleased(evt);
-            }
-        });
-
-        agregarClientes.setText("Agregar");
-        agregarClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                agregarClientesActionPerformed(evt);
-            }
-        });
-
-        modificarClientes.setText("Modificar");
-        modificarClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                modificarClientesActionPerformed(evt);
-            }
-        });
-
-        eliminarClientes.setText("Eliminar");
-        eliminarClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eliminarClientesActionPerformed(evt);
-            }
-        });
-
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("<html><font size=4><center>Búsqueda:<br></font></center></html>");
-
-        javax.swing.GroupLayout panelClientesLayout = new javax.swing.GroupLayout(panelClientes);
-        panelClientes.setLayout(panelClientesLayout);
-        panelClientesLayout.setHorizontalGroup(
-            panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelClientesLayout.createSequentialGroup()
-                .addContainerGap(184, Short.MAX_VALUE)
-                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClientesLayout.createSequentialGroup()
-                        .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(panelClientesLayout.createSequentialGroup()
-                                .addComponent(agregarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(81, 81, 81)
-                                .addComponent(modificarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(eliminarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(75, 75, 75))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelClientesLayout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFiltro1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(201, 201, 201))))
-        );
-        panelClientesLayout.setVerticalGroup(
-            panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelClientesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtFiltro1, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(panelClientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(modificarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(eliminarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(agregarClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-
-        panelPrincipal.add(panelClientes, "panelClientes");
 
         panelParametros.setBackground(new java.awt.Color(32, 182, 155));
         panelParametros.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -408,63 +416,25 @@ public class Admin extends javax.swing.JInternalFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("<html><font size=16><center>Parámetros:<br></font></center></html>");
 
-        btnRegistrar.setText("Registrar");
-        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarActionPerformed(evt);
-            }
-        });
+        txtEmpresa.setEditable(false);
+        txtEmpresa.setToolTipText("");
+        txtEmpresa.setFocusable(false);
 
-        jTextField1.setToolTipText("");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField1KeyTyped(evt);
-            }
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField1KeyReleased(evt);
-            }
-        });
+        txtIdentificacion.setEditable(false);
+        txtIdentificacion.setToolTipText("");
+        txtIdentificacion.setFocusable(false);
 
-        jTextField2.setToolTipText("");
-        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField2KeyTyped(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField2KeyReleased(evt);
-            }
-        });
-
-        jTextField4.setToolTipText("");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField4KeyTyped(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField4KeyReleased(evt);
-            }
-        });
+        txtTelefono.setEditable(false);
+        txtTelefono.setToolTipText("");
+        txtTelefono.setFocusable(false);
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Nombre:");
+        jLabel2.setText("Empresa:");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Rif:");
+        lblIdentificacion.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        lblIdentificacion.setForeground(new java.awt.Color(255, 255, 255));
+        lblIdentificacion.setText("Rif:");
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -474,31 +444,32 @@ public class Admin extends javax.swing.JInternalFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Teléfono:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setAutoscrolls(false);
-        jTextArea1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextArea1KeyTyped(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextArea1KeyReleased(evt);
-            }
-        });
-        jScrollPane3.setViewportView(jTextArea1);
+        txtDireccion.setEditable(false);
+        txtDireccion.setColumns(20);
+        txtDireccion.setRows(5);
+        txtDireccion.setAutoscrolls(false);
+        jScrollPane3.setViewportView(txtDireccion);
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Moneda:");
 
-        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                jTextField3KeyTyped(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextField3KeyReleased(evt);
-            }
-        });
+        txtMoneda.setEditable(false);
+        txtMoneda.setFocusable(false);
+
+        lblImg.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Logo:");
+
+        txtPais.setEditable(false);
+        txtPais.setToolTipText("");
+        txtPais.setFocusable(false);
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Pais:");
 
         javax.swing.GroupLayout panelParametrosLayout = new javax.swing.GroupLayout(panelParametros);
         panelParametros.setLayout(panelParametrosLayout);
@@ -518,22 +489,30 @@ public class Admin extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel6))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(panelParametrosLayout.createSequentialGroup()
                             .addContainerGap()
                             .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel2))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(panelParametrosLayout.createSequentialGroup()
+                                    .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lblIdentificacion)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel2))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(panelParametrosLayout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(txtPais, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(panelParametrosLayout.createSequentialGroup()
-                        .addGap(292, 292, 292)
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(171, 171, 171)
+                        .addComponent(jLabel9)
+                        .addGap(67, 67, 67)
+                        .addComponent(lblImg, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(230, Short.MAX_VALUE))
         );
         panelParametrosLayout.setVerticalGroup(
@@ -541,29 +520,38 @@ public class Admin extends javax.swing.JInternalFrame {
             .addGroup(panelParametrosLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGap(3, 3, 3)
+                .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtPais, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIdentificacion))
                 .addGap(11, 11, 11)
                 .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(20, 20, 20)
                 .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addGap(45, 45, 45)
-                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addGroup(panelParametrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelParametrosLayout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel9))
+                    .addGroup(panelParametrosLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImg, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         panelPrincipal.add(panelParametros, "panelApariencia");
@@ -607,6 +595,7 @@ public class Admin extends javax.swing.JInternalFrame {
         card.show(panelPrincipal, "panelEmpleados");
         txtFiltro.requestFocus();
     }
+    
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         clientes();
@@ -676,55 +665,32 @@ public class Admin extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_modificarEmpleadosActionPerformed
 
     private void parametros() {
-        Empresa emp = menuPrincipal.getOBD().datosEmpresas();
+        Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = TRUE");
+        
+        Parametros para = menuPrincipal.getOBD().getDatosParametros();
         CardLayout card = (CardLayout) panelPrincipal.getLayout();
         card.show(panelPrincipal, "panelApariencia");
-        if (emp == null) {
-            PromptSupport.setPrompt("Nombre de la Empresa", jTextField1);
-            PromptSupport.setPrompt("J-12345678-9", jTextField2);
-            PromptSupport.setPrompt("Dirección", jTextArea1);
-            PromptSupport.setPrompt("####-#######", jTextField4);
-            PromptSupport.setPrompt("Ej: Bs, $, €", jTextField3);
-        } else {
-            jTextField1.setText(emp.getNombre());
-            jTextField2.setText(emp.getRif());
-            jTextArea1.setText(emp.getDireccion());
-            jTextField4.setText(emp.getTelefono());
-            jTextField3.setText(emp.getMoneda());
-        }
-        PromptSupport.setBackground(Color.white, jTextField2);
-        PromptSupport.setBackground(Color.white, jTextArea1);
-        PromptSupport.setBackground(Color.white, jTextField4);
-        PromptSupport.setBackground(Color.white, jTextField3);
-        jTextField1.requestFocus();
-        habilitar();
+        //asignando datos a los campos
+        txtPais.setText(para.getPais());
+        txtEmpresa.setText(para.getNombre());
+        lblIdentificacion.setText(p.getIdentificacion()+":");
+        txtIdentificacion.setText(para.getIdentificacion());
+        txtDireccion.setText(para.getDireccion());
+        txtTelefono.setText(para.getTelefono());
+        txtMoneda.setText(para.getMoneda());
+        rsscalelabel.RSScaleLabel.setScaleLabel(lblImg, para.getLogo());
+        
+        
+//        PromptSupport.setBackground(Color.white, txtIdentificacion);
+//        PromptSupport.setBackground(Color.white, txtDireccion);
+//        PromptSupport.setBackground(Color.white, txtTelefono);
+//        PromptSupport.setBackground(Color.white, txtMoneda);
+//        txtEmpresa.requestFocus();
     }
-
+    
     private void btnParametrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnParametrosActionPerformed
         parametros();
     }//GEN-LAST:event_btnParametrosActionPerformed
-
-    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
-        String nombre = jTextField1.getText();
-        String rif = jTextField2.getText();
-        String direccion = jTextArea1.getText();
-        String telefono = jTextField4.getText();
-        String moneda = jTextField3.getText();
-
-        if ((nombre.trim().equals("") || rif.trim().equals("") || direccion.trim().equals("") || telefono.trim().equals("") || moneda.trim().equals("")) || (telefono.length() < 12)) {
-            Utilidades.Sonidos.beep();
-            JOptionPane.showMessageDialog(null, "Documentos obligatorios", "Error", JOptionPane.ERROR_MESSAGE);
-            limpiar();
-        } else {
-            /*menuPrincipal.getOBD().ingresoEmp(nombre, rif, telefono, direccion, moneda);
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            limpiar();*/
-        }
-
-        //abrirVentanaUpload();
-        //conseguirRuta();
-    }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void eliminarEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarEmpleadosActionPerformed
         eliminarEmpleadoSeleccionado();
@@ -742,99 +708,16 @@ public class Admin extends javax.swing.JInternalFrame {
         eliminarClienteSeleccionado();
     }//GEN-LAST:event_eliminarClientesActionPerformed
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-        jTextField1.setBackground(Color.white);
-    }//GEN-LAST:event_jTextField1KeyPressed
-    private void habilitar() {
-        if (jTextArea1.getText().isEmpty() || jTextField1.getText().isEmpty() || jTextField2.getText().isEmpty() || jTextField3.getText().isEmpty() || jTextField4.getText().isEmpty()) {
-            btnRegistrar.setEnabled(false);
-        } else {
-            btnRegistrar.setEnabled(true);
-        }
-    }
-
-    public void mostrarAlerta() {
-        //Alerta.setVisible(true);
-    }
-
-    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
-        boolean valido = true;
-        if ((!Character.isDigit(evt.getKeyChar()) && (evt.getKeyChar() != KeyEvent.VK_MINUS))) {
-            evt.consume();
-        } else if ((Character.isDigit(evt.getKeyChar())) && jTextField4.getText().length() == 4) {
-            evt.consume();
-        } else if (jTextField4.getText().length() != 4 && (evt.getKeyChar() == KeyEvent.VK_MINUS)) {
-            evt.consume();
-        } else if (jTextField4.getText().length() > 11) {
-            evt.consume();
-        } else {
-            valido = false;
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
-            valido = false;
-        }
-        if (jTextField4.getText().length() == 12) {
-            valido = false;
-        }
-      //  Alerta.setVisible(valido);
-    }//GEN-LAST:event_jTextField4KeyTyped
-
-    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-        if (!Character.isAlphabetic(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_SPACE)) {
-            evt.consume();
-        }
-        if (jTextField1.getText().length() > 20) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField1KeyTyped
-
-    private void jTextArea1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyTyped
-        if (!jTextArea1.getText().isEmpty() && jTextArea1.getText().length() % 38 == 0) {
-            jTextArea1.setText(jTextArea1.getText() + "\n");
-        }
-    }//GEN-LAST:event_jTextArea1KeyTyped
-
-    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
-        if (Character.isDigit(evt.getKeyChar())) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField3KeyTyped
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyTyped
-        if (jTextField2.getText().length() > 11) {
-            evt.consume();
-        }
-    }//GEN-LAST:event_jTextField2KeyTyped
-
-    private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        habilitar();        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1KeyReleased
-
-    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
-        habilitar();        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2KeyReleased
-
-    private void jTextArea1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextArea1KeyReleased
-        habilitar();        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextArea1KeyReleased
-
-    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
-        habilitar();        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4KeyReleased
-
-    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
-        habilitar();        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3KeyReleased
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+//    public void mostrarAlerta() {
+//        //Alerta.setVisible(true);
+//    }
 
     public void actualizarTabla() {
+        DefaultTableModel table = (DefaultTableModel)jtbListaEmpleado.getModel();
+        DefaultTableModel table2 = (DefaultTableModel)jtbListaCliente.getModel();
+        table.setNumRows(0);
+        table2.setNumRows(0);
+        
         ArrayList<HashMap<String, String>> listaEmpleados = menuPrincipal.getOBD().getArrayListEmpleado();
         EmpleadosTableModel model = new EmpleadosTableModel(listaEmpleados);
         jtbListaEmpleado.setModel(model);
@@ -856,7 +739,7 @@ public class Admin extends javax.swing.JInternalFrame {
         registroEmpleados.show();
     }
 
-    public void abrirVentanaModificacionEmpleados(char tipo_persona, String numero_identificacion_persona) {
+    public void abrirVentanaModificacionEmpleados(String tipo_persona, String numero_identificacion_persona) {
         modificacionEmpleados = new ModificacionEmpleados(this, tipo_persona, numero_identificacion_persona);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionEmpleados.getSize();
@@ -878,7 +761,7 @@ public class Admin extends javax.swing.JInternalFrame {
         registroCliente.show();
     }
 
-    public void abrirVentanaModificacionCliente(char tipo_persona, String numero_identificacion_persona) {
+    public void abrirVentanaModificacionCliente(String tipo_persona, String numero_identificacion_persona) {
         modificacionClientes = new RegistroCliente(this, tipo_persona, numero_identificacion_persona, true);
         Dimension desktopSize = menuPrincipal.panel.getSize();
         Dimension jInternalFrameSize = modificacionClientes.getSize();
@@ -899,9 +782,9 @@ public class Admin extends javax.swing.JInternalFrame {
 //            System.out.println("You chose to open this file: "
 //                    + chooser.getSelectedFile().getName());
         }
-
-        jTextField1.setText(chooser.getSelectedFile().getAbsolutePath());
-        String ruta = jTextField1.getText();
+        
+        txtEmpresa.setText(chooser.getSelectedFile().getAbsolutePath());
+        String ruta = txtEmpresa.getText();
 //        System.out.println(ruta);
 
     }
@@ -950,13 +833,17 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaEmpleado.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
             
+            int seleccion;
+            seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
             if (seleccion == 0) {
                 String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
                 String[] partes = identificacion.split("-");
-                menuPrincipal.getOBD().eliminarEmpleado(partes[0].charAt(0), partes[1]);
+                menuPrincipal.getOBD().eliminarEmpleado(partes[0], partes[1]);
                 actualizarTabla();
+                agregarEmpleados.setVisible(true);
+                modificarEmpleados.setVisible(true);
+                eliminarEmpleados.setText("Eliminar");
 
             } else {
                 jtbListaEmpleado.requestFocus();
@@ -973,7 +860,7 @@ public class Admin extends javax.swing.JInternalFrame {
             String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
             String[] partes = identificacion.split("-");
 
-            abrirVentanaModificacionEmpleados(partes[0].charAt(0), partes[1]);
+            abrirVentanaModificacionEmpleados(partes[0], partes[1]);
         }
     }
 
@@ -986,7 +873,7 @@ public class Admin extends javax.swing.JInternalFrame {
             String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
             String[] partes = identificacion.split("-");
             
-            abrirVentanaModificacionCliente(partes[0].charAt(0), partes[1]);
+            abrirVentanaModificacionCliente(partes[0], partes[1]);
         }
     }
 
@@ -997,18 +884,62 @@ public class Admin extends javax.swing.JInternalFrame {
             numeroRow = jtbListaCliente.getSelectedRow();
         }
         if (numeroRow >= 0) {
-            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
+            int seleccion; 
+            seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el cliente " + jtbListaCliente.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar cliente");
             if (seleccion == 0) {
                 String identificacion = jtbListaCliente.getValueAt(numeroRow, 0).toString();
                 String[] partes = identificacion.split("-");
-                menuPrincipal.getOBD().eliminarPersona(partes[0].charAt(0), partes[1]);
+                menuPrincipal.getOBD().eliminarPersona(partes[0], partes[1]);
                 actualizarTabla();
-
             } else {
                 jtbListaCliente.requestFocus();
             }
         }
     }
+    //Filtra a los empleados segun su estatus (activo o inactivo)
+//    public void filtrarEmpleados(int indice) {
+//        int index = cmbfiltrar.getSelectedIndex();
+//        switch(indice){
+//            case 1:
+//                if(index == 0) {
+//                    
+//                }
+//                else {
+//                    actualizarTabla("0");
+//                    agregarEmpleados.setVisible(false);
+//                    modificarEmpleados.setVisible(false);
+//                    eliminarEmpleados.setText("Recuperar");
+//                }
+//            break;
+//            case 2: 
+//                if(index == 0) {
+//                    
+//                }
+//                else {
+//                    eliminarEmpleadoSeleccionado("1");
+//                }
+//            break;
+//        }  
+//    }
+    /*
+    int numeroRow = jtbListaEmpleado.getSelectedRow();
+        if (numeroRow < 0) {
+            jtbListaEmpleado.setRowSelectionInterval(0, 0);
+            numeroRow = jtbListaEmpleado.getSelectedRow();
+        }
+        if (numeroRow >= 0) {
+            int seleccion = Utilidades.CuadroMensaje.getMensajeSiNo(this, "¿Desea eliminar el empleado " + jtbListaEmpleado.getModel().getValueAt(numeroRow, 1) + "?", "Eliminar empleado");
+            
+            if (seleccion == 0) {
+                String identificacion = jtbListaEmpleado.getValueAt(numeroRow, 0).toString();
+                String[] partes = identificacion.split("-");
+                menuPrincipal.getOBD().eliminarEmpleado(partes[0].charAt(0), partes[1]);
+                actualizarTabla();
+
+            } else {
+                jtbListaEmpleado.requestFocus();
+            }
+        }*/
 
     /**
      * Método para crear y asignar HotKeys (accesos rápidos). Tiene 4 pasos: -
@@ -1029,7 +960,7 @@ public class Admin extends javax.swing.JInternalFrame {
         Action actEmpleados = new AbstractAction(Admin.Modulo.EMPLEADOS.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                empleados();
+//                empleados();
             }
         };
         Action actClientes = new AbstractAction(Admin.Modulo.CLIENTES.getAction()) {
@@ -1093,7 +1024,6 @@ public class Admin extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnEmpleados;
     private javax.swing.JButton btnParametros;
-    private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton eliminarClientes;
     private javax.swing.JButton eliminarEmpleados;
     private javax.swing.JLabel jLabel1;
@@ -1104,25 +1034,30 @@ public class Admin extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jTextArea1;
-    public static javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBarAdmin;
-    private javax.swing.JTable jtbListaCliente;
+    public static javax.swing.JTable jtbListaCliente;
     public static javax.swing.JTable jtbListaEmpleado;
+    private javax.swing.JLabel lblIdentificacion;
+    private javax.swing.JLabel lblImg;
     private javax.swing.JButton modificarClientes;
     private javax.swing.JButton modificarEmpleados;
     private javax.swing.JPanel panelClientes;
     private javax.swing.JPanel panelEmpleados;
     private javax.swing.JPanel panelParametros;
     private javax.swing.JPanel panelPrincipal;
+    private javax.swing.JTextArea txtDireccion;
+    public static javax.swing.JTextField txtEmpresa;
     private javax.swing.JTextField txtFiltro;
     private javax.swing.JTextField txtFiltro1;
+    private javax.swing.JTextField txtIdentificacion;
+    private javax.swing.JTextField txtMoneda;
+    public static javax.swing.JTextField txtPais;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 
 }

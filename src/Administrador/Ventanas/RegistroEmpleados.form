@@ -105,44 +105,46 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="31" max="32767" attributes="0"/>
-                              <Component id="jClave" min="-2" pref="201" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="lblDocumento" max="32767" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="lblNombre" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblApellido" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                                              <Component id="lblTelefono" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblCorreo" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblDireccion" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="lblPassword" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblCargo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="cmbCargoId" min="-2" pref="201" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblDocumento" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblNombre" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblApellido" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                                          <Component id="lblTelefono" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblCorreo" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblDireccion" alignment="0" min="-2" pref="88" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="cmbCargoId" max="32767" attributes="0"/>
+                          <Component id="jClave" max="32767" attributes="0"/>
+                          <Component id="txtCorreo" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="1" pref="0" max="32767" attributes="0"/>
+                          <Component id="txtTelefono" max="32767" attributes="0"/>
+                          <Component id="txtApellido" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="cmbTipoIdentificacion" min="-2" pref="57" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="txtCorreo" max="32767" attributes="0"/>
-                                  <Component id="jScrollPane1" alignment="1" pref="0" max="32767" attributes="0"/>
-                                  <Component id="txtTelefono" max="32767" attributes="0"/>
-                                  <Component id="txtApellido" alignment="0" max="32767" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="cmbTipoDocumento" min="-2" pref="45" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="txtDocumento" min="-2" pref="150" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtNombres" alignment="0" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="txtDocumento" min="-2" pref="150" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="txtNombres" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -154,7 +156,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblDocumento" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbTipoDocumento" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="cmbTipoIdentificacion" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                           <Component id="txtDocumento" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -209,17 +211,16 @@
                 <Property name="text" type="java.lang.String" value="CI / RIF:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="cmbTipoDocumento">
+            <Component class="javax.swing.JComboBox" name="cmbTipoIdentificacion">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="V"/>
-                    <StringItem index="1" value="E"/>
+                  <StringArray count="1">
+                    <StringItem index="0" value="E"/>
                   </StringArray>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTipoDocumentoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbTipoIdentificacionActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDocumento">

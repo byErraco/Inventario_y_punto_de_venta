@@ -3,14 +3,18 @@
  */
 package PuntoVenta.BaseDatos;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class PostgreSQL {
-
+    
+    public ResultSet rs;
     private Connection conexion;
     private Statement sentencia;
     private final String path;
@@ -18,13 +22,66 @@ public class PostgreSQL {
     private final String password;
     private boolean estado;
 
-    public PostgreSQL(String path, String login, String password) {
-        this.path = path;
-        this.login = login;
-        this.password = password;
+    public PostgreSQL() {
+      
         this.estado = false;
+        Properties configuracion;
+        configuracion = getConfiguracion("local.conf");
+         String bdName = configuracion.getProperty("bd_nombre");
+        String bdPort = configuracion.getProperty("bd_port");
+        String bdServer = configuracion.getProperty("bd_servidor");
+        String bdUrl = "jdbc:postgresql://" + bdServer + ":" + bdPort + "/" + bdName;
+
+        String bdLogin = configuracion.getProperty("bd_user");
+        String bdPassword = configuracion.getProperty("bd_password");
+        
+          this.path = bdUrl;
+        this.login = bdLogin;
+        this.password = bdPassword;
+         try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException cnfe) {
+     
+            System.exit(0);
+        }
+
+        try {
+            conexion = DriverManager.getConnection(path,login, password);
+        } catch (Exception se) {
+        
+            System.exit(0);
+        }
+    }
+    
+
+    public boolean ejecutar(String LaQuery) {
+        try {
+            return conexion.createStatement().execute(LaQuery);
+        } catch (SQLException ex) {
+            System.out.println("Error al ejecutar la consulta SQL. " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        }
     }
 
+     private Properties getConfiguracion(String archivo) {
+        Properties configuracion = new Properties();
+        try {
+            configuracion.load(new FileInputStream(System.getProperty("user.dir") + File.separator + archivo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return configuracion;
+
+    }
+    
+    public void buscar(String LaQuery) {
+        try {
+            rs = conexion.createStatement().executeQuery(LaQuery);
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }
     /**
      * Método para conectar a la base de datos PostgreSQL.
      *
@@ -76,7 +133,6 @@ public class PostgreSQL {
             - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
               cuando puede dar otro error como que no haya un campo o una tabla
         */
-        System.out.println(sql+"\n");
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return null; 
@@ -104,7 +160,6 @@ public class PostgreSQL {
             - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
               cuando puede dar otro error como que no haya un campo o una tabla
         */
-        System.out.println(sql);
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return false; 
@@ -132,7 +187,6 @@ public class PostgreSQL {
             if (this.conexion == null || this.conexion.isClosed()) {
                 throw new XSQLException("La base de datos no está conectada.");
             }
-            System.out.println(sql);
             this.sentencia.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
             if (this.sentencia.getGeneratedKeys().next()) {
                 resultado = this.sentencia.getGeneratedKeys().getInt("id_"+tabla);
