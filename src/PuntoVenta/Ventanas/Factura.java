@@ -297,9 +297,9 @@ public class Factura extends javax.swing.JInternalFrame {
             try {
                 JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
 //                JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
-                JasperPrint jprint = JasperPrintManager.printPage("", 0, true);
-                JasperViewer visor = new JasperViewer(jprint, false);
-                visor.setVisible(true);
+////                JasperPrint jprint = JasperPrintManager.printPage("", 0, true);
+//                JasperViewer visor = new JasperViewer(jprint, false);
+//                visor.setVisible(true);
             } catch (JRException ex) {
                 Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
             }
