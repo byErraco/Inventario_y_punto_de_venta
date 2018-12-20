@@ -3,14 +3,18 @@ package PuntoVenta.Ventanas;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.VentaTableModel;
 import PuntoVenta.Inicio.MenuPrincipal;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.stage.FileChooser;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -256,7 +260,11 @@ public class Factura extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
-        reimprimir();
+        try {
+            reimprimir();
+        } catch (IOException ex) {
+            Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnImprimirActionPerformed
 
     private void txtFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroKeyReleased
@@ -280,10 +288,14 @@ public class Factura extends javax.swing.JInternalFrame {
 
     private void jtbResultadoBusquedaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtbResultadoBusquedaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F11) {
-            reimprimir();
+            try {
+                reimprimir();
+            } catch (IOException ex) {
+                Logger.getLogger(Factura.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jtbResultadoBusquedaKeyPressed
-    private void reimprimir() {
+    private void reimprimir() throws IOException {
         int row = jtbResultadoBusqueda.getSelectedRow();
         if (row >= 0) {
             String codigoBarra = jtbResultadoBusqueda.getValueAt(row, 0).toString();
@@ -293,16 +305,20 @@ public class Factura extends javax.swing.JInternalFrame {
                 }
                 break;
             }
-            List lista = menuPrincipal.getOBD().reimprimirfac(codigoBarra);
-            try {
-                JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
+            File reporteFile = menuPrincipal.getOBD().reimprimirfac1(codigoBarra);
+            Desktop.getDesktop().open(reporteFile);
+//            List lista = menuPrincipal.getOBD().reimprimirfac(codigoBarra);
+//            try {
+//                JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
 //                JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
-////                JasperPrint jprint = JasperPrintManager.printPage("", 0, true);
+//                JasperPrintManager.printReport(realPath + "reporteVenta.PDF", false);
+//                JasperViewer.viewReport(realPath + "reporteVenta.PDF", false);
 //                JasperViewer visor = new JasperViewer(jprint, false);
 //                visor.setVisible(true);
-            } catch (JRException ex) {
-                Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                  
+//            } catch (JRException ex) {
+//                Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
+//            }
             
         }
     }

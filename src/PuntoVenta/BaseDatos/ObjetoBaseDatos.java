@@ -13,8 +13,11 @@ import PuntoVenta.Ventanas.LogIn;
 import PuntoVenta.reporte1;
 import Utilidades.ArticuloDescontar;
 import Utilidades.Cripto;
+import Utilidades.GuardarReporte;
 import Utilidades.currentLoger;
 import Utilidades.ValorPagos;
+import java.io.File;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -3677,6 +3680,21 @@ public class ObjetoBaseDatos {
         return direccion;
     }
 
+    // Agregado en sustitucion de "reimprimirfac" 
+    public File reimprimirfac1(String codigo) throws IOException {
+        GuardarReporte gr = new GuardarReporte();
+        PostgreSQL d = new PostgreSQL();
+        byte[] reporteBytea = {};
+        try{
+            d.buscar("SELECT reporte_venta FROM spve.venta WHERE id_venta = '"+codigo+"'");
+            while(d.rs.next()) {
+                reporteBytea = d.rs.getBytes("reporte_venta");
+            }
+        }catch(Exception e){}
+        
+        return gr.ByteArrayToFile(reporteBytea, "reporteVenta.PDF");
+    }
+    
     public List<reporte1> reimprimirfac(String codigo) {
         List lista = new ArrayList();
         ResultSet rs;

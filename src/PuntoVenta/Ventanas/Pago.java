@@ -43,6 +43,7 @@ import Utilidades.ArticuloDescontar;
 import Utilidades.GuardarReporte;
 import Utilidades.ValorPagos;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  *
@@ -132,6 +133,8 @@ public class Pago extends javax.swing.JInternalFrame {
                 try {
                     factura();
                 } catch (IOException ex) {
+                    Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
                     Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -690,7 +693,7 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtMontoKeyPressed
 
-    public void factura() throws IOException {
+    public void factura() throws IOException, SQLException {
         List lista = new ArrayList();
         GuardarReporte gr = new GuardarReporte();
         XBigDecimal cantidad = new XBigDecimal(lblMontoVentaValor.getText());//este valor almacena el total de la venta
@@ -833,6 +836,8 @@ public class Pago extends javax.swing.JInternalFrame {
         try {
             factura();
         } catch (IOException ex) {
+            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAceptarActionPerformed
