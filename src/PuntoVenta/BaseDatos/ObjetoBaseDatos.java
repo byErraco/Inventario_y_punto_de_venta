@@ -1156,7 +1156,8 @@ public class ObjetoBaseDatos {
                     .append(mapSchema.get("spve"))
                     .append(".").append(mapTabla.get("estado_caja"))
                     .append(" WHERE ").append("id_caja = '"+idCaja)
-                    .append("';");
+                    .append("' AND caja_abierta = 1")
+                    .append(";");
             try {
                 postgreSQL.conectar();
                 rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1221,22 +1222,34 @@ public class ObjetoBaseDatos {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-
-        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado", "fecha_apertura", "fecha_corte"};
+        // agregado "id_corte_caja" a "columasEstadoCaja"
+//        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado", "fecha_apertura",/* "fecha_corte", "id_corte_caja"*/};
+//        sqlQuery.append("SELECT ");
+//        sqlQuery = addColumnasAlQuery(columnasEstadoCaja, "", sqlQuery);
+//        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+//        sqlQuery.append(" FROM spve.estado_caja as ec INNER JOIN spve.caja as c ON ec.id_caja = c.id_caja")
+//                .append(" LEFT JOIN spve.corte_caja as cc ON ec.id_estado_caja = cc.id_estado_caja")
+//                //.append(" LEFT JOIN spve.cierre_caja as cic ON cc.id_corte_caja = cic.id_corte_caja")
+//                .append(" INNER JOIN spve.empleado as em ON ec.id_empleado = em.id_empleado")
+//                .append(" INNER JOIN spve.persona as p ON em.id_persona = p.id_persona")
+//                //.append(" LEFT JOIN spve.empleado as em1 ON cc.id_empleado = em1.id_empleado")
+//                //.append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
+//                .append(" WHERE ec.id_caja = ")
+//                .append(idCaja)
+//                .append(" AND activo_caja = 1")
+//                //.append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, fecha_cierre")
+//                .append(" ORDER BY fecha_apertura DESC;");
+        
+        String[] columnasEstadoCaja = {"p.tipo_persona||'-'||p.numero_identificacion_persona AS empleado", "fecha_apertura", "caja_abierta", "id_estado_caja"};
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasEstadoCaja, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
         sqlQuery.append(" FROM spve.estado_caja as ec INNER JOIN spve.caja as c ON ec.id_caja = c.id_caja")
-                .append(" LEFT JOIN spve.corte_caja as cc ON ec.id_estado_caja = cc.id_estado_caja")
-                //.append(" LEFT JOIN spve.cierre_caja as cic ON cc.id_corte_caja = cic.id_corte_caja")
                 .append(" INNER JOIN spve.empleado as em ON ec.id_empleado = em.id_empleado")
                 .append(" INNER JOIN spve.persona as p ON em.id_persona = p.id_persona")
-                //.append(" LEFT JOIN spve.empleado as em1 ON cc.id_empleado = em1.id_empleado")
-                //.append(" LEFT JOIN spve.persona as p1 ON em1.id_persona = p1.id_persona")
                 .append(" WHERE ec.id_caja = ")
                 .append(idCaja)
                 .append(" AND activo_caja = 1")
-                //.append(" GROUP BY ec.id_estado_caja, descripcion_caja, empleado_apertura, fecha_apertura, fecha_cierre")
                 .append(" ORDER BY fecha_apertura DESC;");
         
         try {
@@ -1245,7 +1258,14 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 HashMap<String, String> row = new HashMap<>();
                 for (String columna : columnasEstadoCaja) {
-                    row.put(columna, rs.getString(columna));
+                    if(columna.equals("caja_abierta")) {
+                        switch(rs.getString(columna)) {
+                            case "1": row.put(columna, "Abierta"); break;
+                            case "0": row.put(columna, "Cerrada"); break;
+                        }
+                    } else {
+                        row.put(columna, rs.getString(columna));
+                    }
                 }
                 resultado.add(row);
             }
@@ -1303,7 +1323,17 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 HashMap<String, String> row = new HashMap<>();
                 for (String columna : columnas) {
-                    row.put(columna, rs.getString(columna));
+                    // ingresa el string correspondiente para cada número
+                    if(columna.equals("estado_venta")) {
+                        switch(rs.getString(columna)) {
+                            case "1": row.put(columna, "En proceso"); break;
+                            case "2": row.put(columna, "Finalizada"); break;
+                            case "3": row.put(columna, "Pausada");    break;
+                            case "4": row.put(columna, "Cancelada");  break;
+                        }
+                    } else {
+                        row.put(columna, rs.getString(columna));
+                    }
                 }
                 resultado.add(row);
             }
@@ -1554,7 +1584,7 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnasCorteCaja = {"fecha_corte", "monto_corte"};
+        String[] columnasCorteCaja = {"fecha_corte", "monto_corte", "id_corte_caja"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasCorteCaja, "", sqlQuery);
@@ -2246,13 +2276,10 @@ public class ObjetoBaseDatos {
 //        String sql = "SELECT v.id FROM stpv.venta AS v LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.corte_caja is null";
         String sql = "SELECT id_venta FROM spve.venta "
                    + "WHERE id_estado_caja = '" + idEstadoCaja + "'";
-
-//        System.out.println(sql);
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sql);
             while (rs.next()) {
-//                System.out.println(rs.getInt("id"));
                 resultado.add(rs.getInt("id_venta"));
             }
         } catch (Exception e) {
@@ -2261,7 +2288,6 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-//        System.out.println(resultado);
         return resultado;
     }
 
@@ -2628,13 +2654,6 @@ public class ObjetoBaseDatos {
 
         resultado = ejecutarCreate(sqlQuery.toString(), "corte_caja");
         return resultado;
-    }
-
-    // Guarda el reporte generado del corte de caja en la base de datos
-    public boolean reporteCorteCaja(byte[] reporte) {
-        PostgreSQL d = new PostgreSQL();
-        System.out.println("reporte en reporteCorteCaja: " + reporte);
-        return d.ejecutar("INSERT INTO spve.corte_caja (reporte_corte) VALUES ('"+reporte+"')");
     }
     
     /**
@@ -3680,26 +3699,26 @@ public class ObjetoBaseDatos {
         return direccion;
     }
 
-    // Agregado en sustitucion de "reimprimirfac" 
-    public File reimprimirfac1(String codigo) throws IOException {
+    // Método para traer los reportes pdf de la base de datos
+    public File reimprimirReporte(String codigo,  String campo, String tabla, String filtro, String fileName) throws IOException {
         GuardarReporte gr = new GuardarReporte();
         PostgreSQL d = new PostgreSQL();
         byte[] reporteBytea = {};
         try{
-            d.buscar("SELECT reporte_venta FROM spve.venta WHERE id_venta = '"+codigo+"'");
+            d.buscar("SELECT "+campo+" FROM spve."+tabla+" WHERE "+filtro+" = '"+codigo+"'");
             while(d.rs.next()) {
-                reporteBytea = d.rs.getBytes("reporte_venta");
+                reporteBytea = d.rs.getBytes(campo);
             }
         }catch(Exception e){}
-        
-        return gr.ByteArrayToFile(reporteBytea, "reporteVenta.PDF");
+        return gr.ByteArrayToFile(reporteBytea,  fileName+".PDF");
     }
     
+    /*
     public List<reporte1> reimprimirfac(String codigo) {
         List lista = new ArrayList();
         ResultSet rs;
         Pais p = getDatosPais("WHERE activo = true");
-        Parametros para = getDatosParametros();//Ernesto: /*REVISAR QUERY*/
+        Parametros para = getDatosParametros();//Ernesto: /*REVISAR QUERY*
         String sql = "SELECT DISTINCT CONCAT(c.nombre,' ',c.apellido) as nombre,c.cedula,c.direccion,"
                 + "ven.codigo_factura,ven.total_exento,ven.total_no_exento,ven.iva,ven.total,ven.totalpag,ven.cambio,"
                 + "pag.tipopago,pag.monto,vp.cantidad_producto, CONCAT (e.nombre,' ',e.apellido) as nombE,"
@@ -3757,7 +3776,7 @@ public class ObjetoBaseDatos {
         }
         return lista;
     }
-
+*/
     public void crearCierre(String monto_fisico, String monto_sistema, String empleado, String fecha) {
         String sql = "INSERT INTO stpv.cierre_caja(monto_fisico,monto_sistema,empleado,fecha) "
                 + "VALUES('" + monto_fisico + "','" + monto_sistema + "','" + empleado + "','" + fecha + "')";

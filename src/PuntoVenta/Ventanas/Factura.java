@@ -296,30 +296,17 @@ public class Factura extends javax.swing.JInternalFrame {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jtbResultadoBusquedaKeyPressed
     private void reimprimir() throws IOException {
-        int row = jtbResultadoBusqueda.getSelectedRow();
-        if (row >= 0) {
-            String codigoBarra = jtbResultadoBusqueda.getValueAt(row, 0).toString();
+        if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
+            String codigoBarra = jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString();
             for (int i = 0; i < codigoBarra.length(); i++) {
                 if (codigoBarra.charAt(i) != 0) {
                     codigoBarra = codigoBarra.substring(i, codigoBarra.length());
                 }
                 break;
             }
-            File reporteFile = menuPrincipal.getOBD().reimprimirfac1(codigoBarra);
+            File reporteFile = menuPrincipal.getOBD().reimprimirReporte(codigoBarra, "reporte_venta", "venta", "id_venta", "reporteVenta");
+
             Desktop.getDesktop().open(reporteFile);
-//            List lista = menuPrincipal.getOBD().reimprimirfac(codigoBarra);
-//            try {
-//                JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
-//                JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
-//                JasperPrintManager.printReport(realPath + "reporteVenta.PDF", false);
-//                JasperViewer.viewReport(realPath + "reporteVenta.PDF", false);
-//                JasperViewer visor = new JasperViewer(jprint, false);
-//                visor.setVisible(true);
-                  
-//            } catch (JRException ex) {
-//                Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-            
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

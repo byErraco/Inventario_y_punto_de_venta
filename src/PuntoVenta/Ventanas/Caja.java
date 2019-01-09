@@ -30,13 +30,15 @@ public class Caja extends javax.swing.JInternalFrame {
 
     private CorteCaja ventanaCorte;
     private CierreCaja ventanaCierre;
-
+    private Cortes ventanaHistorialCortes;
+    
     /**
      *
      * @param menuPrincipal
      */
     public Caja(MenuPrincipal menuPrincipal) {
         initComponents();
+        btnImprimir.setVisible(true);
         this.menuPrincipal = menuPrincipal;
         this.setTitle("Saphiro - Gestión de la caja N°" + menuPrincipal.getModeloCaja().getId());
 
@@ -232,7 +234,6 @@ public class Caja extends javax.swing.JInternalFrame {
         int idCaja = menuPrincipal.getModeloCaja().getId();
         int idEstadoCaja = menuPrincipal.getOBD().getIdEstadoCaja(idCaja);
         List<Integer> ventas = menuPrincipal.getOBD().getListIDVentas(idEstadoCaja);
-        System.out.println("cantidad de ventas realizadas: " + ventas.size());
         
         if (menuPrincipal.isCajaAbierta()) {
             if (ventanaCorte != null) {
@@ -254,6 +255,23 @@ public class Caja extends javax.swing.JInternalFrame {
         }
     }
 
+    public void abrirVentanaHistorialCortes() {
+        if(ventanaHistorialCortes != null) {
+            JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
+        } else if(jtbResultadoBusqueda.getSelectedRow() >= 0) {
+                ventanaHistorialCortes = new Cortes(this, 
+                        Integer.parseInt(jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString().trim())
+                );
+
+                Dimension desktopSize = menuPrincipal.panel.getSize();
+                Dimension jInternalFrameSize = ventanaHistorialCortes.getSize();
+                ventanaHistorialCortes.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                                         (desktopSize.height - jInternalFrameSize.height) / 2);
+                menuPrincipal.panel.add(ventanaHistorialCortes);
+                ventanaHistorialCortes.show();
+        }
+    }
+    
     private void abrirVentanaCierre() {
         if (menuPrincipal.isCajaAbierta() && menuPrincipal.estacerrado(ventanaCierre)) {
             ventanaCierre = new CierreCaja(this);
@@ -289,6 +307,7 @@ public class Caja extends javax.swing.JInternalFrame {
         btnFlujoCaja = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
         btnCorte = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
 
@@ -309,9 +328,6 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
         txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-               // txtFiltroKeyPressed(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtFiltroKeyReleased(evt);
             }
@@ -347,7 +363,7 @@ public class Caja extends javax.swing.JInternalFrame {
                 .addGap(135, 135, 135)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                .addComponent(txtFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addGap(180, 180, 180))
         );
         jPanel3Layout.setVerticalGroup(
@@ -431,21 +447,32 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton1.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        jButton1.setText("<html><font size=4><center>Cortes<br>F6</center></font></html>");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnAbrirCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 111, Short.MAX_VALUE)
+                .addComponent(btnAbrirCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnCerrarCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 111, Short.MAX_VALUE)
+                .addComponent(btnCerrarCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCorte, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))
+                .addGap(15, 15, 15)
+                .addComponent(btnCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,9 +480,10 @@ public class Caja extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnCorte)
                         .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCorte)
+                        .addComponent(jButton1))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(btnAbrirCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -519,12 +547,17 @@ public class Caja extends javax.swing.JInternalFrame {
         focusResultado();
     }//GEN-LAST:event_txtFiltroActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        abrirVentanaHistorialCortes();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAbrirCaja;
     private javax.swing.JButton btnCerrarCaja;
     private javax.swing.JButton btnCorte;
     private javax.swing.JButton btnFlujoCaja;
     private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -545,7 +578,7 @@ public class Caja extends javax.swing.JInternalFrame {
     private void imprimirFacturaCaja() {
         if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
             int r = Integer.parseInt(jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString().trim());
-            //btnImprimir.setEnabled(true);
+            btnImprimir.setEnabled(true);
 
 //    ctrl.VerFacturaCaja(conf, r);
         }

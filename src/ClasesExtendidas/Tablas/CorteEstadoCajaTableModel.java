@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class CorteEstadoCajaTableModel extends ArrayListTableModel {
     enum Columnas {
 
+        Codigo("Código", "id_corte_caja"),
         Monto("Monto", "monto_corte"),
         Fecha("Fecha", "fecha_corte");
         
@@ -37,8 +38,8 @@ public class CorteEstadoCajaTableModel extends ArrayListTableModel {
 
     public CorteEstadoCajaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Monto.getHeader(), Columnas.Fecha.getHeader()},
-                new String[]{Columnas.Monto.getColumna(), Columnas.Fecha.getColumna()});
+                new String[]{Columnas.Codigo.getHeader(), Columnas.Monto.getHeader(), Columnas.Fecha.getHeader()},
+                new String[]{Columnas.Codigo.getColumna(), Columnas.Monto.getColumna(), Columnas.Fecha.getColumna()});
     }
 
 }

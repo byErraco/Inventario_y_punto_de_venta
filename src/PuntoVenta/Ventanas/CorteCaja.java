@@ -15,10 +15,13 @@ import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Reporte2;
 import Utilidades.ValorPagos;
 import Utilidades.CorteUtilidades;
+import Utilidades.GuardarReporte;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +56,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     public MenuPrincipal menuPrincipal;
     boolean suprimir = false;
     boolean actualizastes = false;
-
+    int idEstadoCaja;
     /**
      * Creates new form CorteCaja
      *
@@ -100,7 +103,13 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 //                confirmacion();
-                if(btnAceptar.isEnabled())  confirmacion();
+                if(btnAceptar.isEnabled())  try {
+                    confirmacion();
+                } catch (IOException ex) {
+                    Logger.getLogger(CorteCaja.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(CorteCaja.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
             }
         };
@@ -621,7 +630,13 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         //actualizastes = true;
-        if(btnAceptar.isEnabled())  confirmacion();
+        if(btnAceptar.isEnabled())  try {
+            confirmacion();
+        } catch (IOException ex) {
+            Logger.getLogger(CorteCaja.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CorteCaja.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //actualizarInformacionCaja();
     }//GEN-LAST:event_btnAceptarActionPerformed
 
@@ -944,7 +959,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 //        cerrarVentana();
     }
 
-    private void cortarCaja() {
+    private void cortarCaja() throws IOException, SQLException {
         List<Reporte2> lista = new ArrayList();
         List<Integer> listaid = new ArrayList();
         List<ValorPagos> listavalor = new ArrayList();
@@ -954,6 +969,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         double debito = 0;
         double credito = 0;
         double ctk = 0;
+        GuardarReporte gr = new GuardarReporte();
         Parametros para = menuPrincipal.getOBD().getDatosParametros();
         Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
         XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
@@ -1007,11 +1023,13 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/corte.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
             JasperViewer visor = new JasperViewer(jprint, false);
+            gr.GuardarPDF(jprint, "reporteCorte.PDF"); // Guarda el reporte en formato pdf
             visor.setVisible(true);
         } catch (JRException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        gr.GuardarBaseDatos(idCorteCaja, "reporteCorte.PDF");
         TipoPagoTableModel model = new TipoPagoTableModel();
         tblResultadoCorte.setModel(model);
         cerrarVentana();
@@ -1034,8 +1052,9 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         }
     }
     
-    public void confirmacion() {
-        int g = JOptionPane.showConfirmDialog(this, "¿Desea realizar el corte de caja?\nNo podrá realizar cambios", "Corte de caja", JOptionPane.YES_NO_OPTION);
+    public void confirmacion() throws IOException, SQLException {
+        int g = JOptionPane.showConfirmDialog(this, "¿Desea realizar el corte de caja?\nNo podrá realizar cambios", 
+                "Corte de caja", JOptionPane.YES_NO_OPTION);
         if (g == JOptionPane.YES_OPTION) {
             cortarCaja();
         } else if (g == JOptionPane.NO_OPTION) {

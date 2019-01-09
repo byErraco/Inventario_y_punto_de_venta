@@ -19,8 +19,8 @@ public class VentaTableModel extends ArrayListTableModel {
         Codigo("Código", "codigo_factura"),
         Cliente("Cliente", "identificacion_persona"),
         Fecha("Fecha", "fecha_venta"),
-        Estado("Estado", "estado_venta"),
-        Total("Total", "total");
+        Estado("Estado", "estado_venta");
+//        Total("Total", "total");
 
         String header;
         String columna;
@@ -55,9 +55,9 @@ public class VentaTableModel extends ArrayListTableModel {
     public VentaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
                 new String[]{Columnas.Codigo.getHeader(), Columnas.Cliente.getHeader(), Columnas.Fecha.getHeader(),
-                    Columnas.Estado.getHeader(), Columnas.Total.getHeader()},
+                    Columnas.Estado.getHeader()/*,, Columnas.Total.getHeader()*/},
                 new String[]{Columnas.Codigo.getColumna(), Columnas.Cliente.getColumna(), Columnas.Fecha.getColumna(),
-                    Columnas.Estado.getColumna(), Columnas.Total.getColumna()});
+                    Columnas.Estado.getColumna()/*, Columnas.Total.getColumna()*/});
     }
 
     @Override
