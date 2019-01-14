@@ -895,8 +895,6 @@ public class CorteCaja extends javax.swing.JInternalFrame {
             focusPuntoInteres();
         } else {
             idCorteCaja = caja.menuPrincipal.getOBD().crearCorteCaja(montoCorte.doubleValue(), excedente.doubleValue(), restante.doubleValue(), caja.menuPrincipal.getIdEstadoCaja(), caja.menuPrincipal.getEmpleado().getId());
-            // el corte ya no existe en venta
-//            caja.menuPrincipal.getOBD().ActualizarCorteEnVenta(caja.menuPrincipal.getIdEstadoCaja());
             XBigDecimal montoEnTabla;
             for (int i = 0; i < model.getRowCount(); i++) {
                 montoEnTabla = new XBigDecimal(model.getValueAt(i, 1).toString());
@@ -931,9 +929,8 @@ public class CorteCaja extends javax.swing.JInternalFrame {
     private void actualizarInformacionCaja() {
         CorteUtilidades cu = new CorteUtilidades();
         
-        
-        
-        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
+        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja(),
+                " AND corte_realizado = 0");
         //------ Asignando totales por tipo de pago ------
         txtEfectivo.setText(totalVentas[0].setScale(2, RoundingMode.HALF_EVEN).toString());
         cu.colorTexto(txtEfectivo);
@@ -961,7 +958,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private void cortarCaja() throws IOException, SQLException {
         List<Reporte2> lista = new ArrayList();
-        List<Integer> listaid = new ArrayList();
+//        List<Integer> listaid = new ArrayList();
         List<ValorPagos> listavalor = new ArrayList();
         int idCorteCaja;
         double gtotalU = 0;
@@ -972,7 +969,8 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         GuardarReporte gr = new GuardarReporte();
         Parametros para = menuPrincipal.getOBD().getDatosParametros();
         Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
-        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja());
+        XBigDecimal[] totalVentas = caja.menuPrincipal.getOBD().getTotalEstadoCaja(caja.menuPrincipal.getIdEstadoCaja(),
+                " AND corte_realizado = 0");
 //        listaid.addAll(menuPrincipal.getOBD().getListIDVentas(menuPrincipal.getIdEstadoCaja()));
         
         ArrayList<HashMap<String, String>> cortesAnteriores = caja.menuPrincipal.getOBD().getArrayListCortesCaja(caja.menuPrincipal.getIdEstadoCaja());
@@ -1013,8 +1011,17 @@ public class CorteCaja extends javax.swing.JInternalFrame {
         
         // Asignando los montos que ingresa el cajero en el reporte
         for (ValorPagos valor : listavalor) {
+            
+            String tipoPago = "";
+            switch(valor.getTipo()) {
+                case 1: tipoPago = "Efectivo"; break;
+                case 2: tipoPago = "Débito"; break;
+                case 3: tipoPago = "Crédito"; break;
+                case 4: tipoPago = "CestaTicket"; break;
+            }
+            
             Reporte2 pr = new Reporte2(para, p, menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), 
-                    menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), valor.getTipo(), valor.getMonto(), 
+                    menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), tipoPago, valor.getMonto(), 
                     gtotalS, "" + gtotalU, "" + efectivo, "" + debito, "" + credito, "" + ctk);
             lista.add(pr);
         }

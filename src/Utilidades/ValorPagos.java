@@ -14,11 +14,11 @@ import java.util.Date;
  */
 public class ValorPagos {
 
-    private String tipo;
+    private int tipo;
     private String monto;
     private String fecha;
 
-    public ValorPagos(String tipo, Double monto) {
+    public ValorPagos(int tipo, Double monto) {
         this.tipo = tipo;
         this.monto = "" + monto;
         SimpleDateFormat sdf = new SimpleDateFormat("Y-MM-dd hh:mm a");
@@ -30,11 +30,11 @@ public class ValorPagos {
         fecha = sdf.format(new Date());
     }
 
-    public String getTipo() {
+    public int getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(int tipo) {
         this.tipo = tipo;
     }
 

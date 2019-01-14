@@ -744,16 +744,16 @@ public class Pago extends javax.swing.JInternalFrame {
         }
         List<ValorPagos> vp = new ArrayList();
         if (totefe != 0) {
-            vp.add(new ValorPagos("Efectivo", totefe));
+            vp.add(new ValorPagos(1, totefe));
         }
         if (tottdd != 0) {
-            vp.add(new ValorPagos("Debito", tottdd));
+            vp.add(new ValorPagos(2, tottdd));
         }
         if (tottdc != 0) {
-            vp.add(new ValorPagos("Credito", tottdc));
+            vp.add(new ValorPagos(3, tottdc));
         }
         if (totctk != 0) {
-            vp.add(new ValorPagos("Cestaticket", totctk));
+            vp.add(new ValorPagos(4, totctk));
         }
         pagado = "" + redondeo.format(total);
         pagado = pagado.replace(",", ".");

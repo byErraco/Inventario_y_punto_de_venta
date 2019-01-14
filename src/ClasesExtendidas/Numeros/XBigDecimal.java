@@ -30,6 +30,14 @@ public class XBigDecimal extends BigDecimal {
     public XBigDecimal(int valor) {
         super(valor);
     }
-
+    
+    /**
+     * Inicializa el BigDecimal utilizando un double.
+     *
+     * @param valor
+     */
+    public XBigDecimal(Double valor) {
+        super(valor);
+    }
 
 }

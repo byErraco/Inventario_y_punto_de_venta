@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -52,8 +53,15 @@ public class Cortes extends javax.swing.JInternalFrame {
         int idCaja = menuPrincipal.getModeloCaja().getId();
         int idEstadoCaja = menuPrincipal.getOBD().getIdEstadoCaja(idCaja);
         
-        ArrayList cortesCajaArrayList = menuPrincipal.getOBD().getArrayListCortesCaja(idEstadoCaja); 
-        CorteEstadoCajaTableModel corteEstadoCajaTableModel = new CorteEstadoCajaTableModel(cortesCajaArrayList);
+        ArrayList cortesCajaArrayList = menuPrincipal.getOBD().getArrayListCortesCaja(idEstadoCaja);
+        CorteEstadoCajaTableModel corteEstadoCajaTableModel = new CorteEstadoCajaTableModel(cortesCajaArrayList)
+        {
+            @Override 
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
         jtbResultadoBusqueda.setModel(corteEstadoCajaTableModel);
         
 //        setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
@@ -131,6 +139,7 @@ public class Cortes extends javax.swing.JInternalFrame {
         btnImprimir = new javax.swing.JButton();
 
         setClosable(true);
+        setMinimumSize(new java.awt.Dimension(45, 532));
 
         pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
         pnlContenedor.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(172, 162, 162), null, null));
@@ -166,6 +175,7 @@ public class Cortes extends javax.swing.JInternalFrame {
 
             }
         ));
+        jtbResultadoBusqueda.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtbResultadoBusqueda);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,13 +187,13 @@ public class Cortes extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(135, 135, 135)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                .addComponent(txtFiltro)
                 .addGap(180, 180, 180))
         );
         jPanel3Layout.setVerticalGroup(
@@ -247,7 +257,7 @@ public class Cortes extends javax.swing.JInternalFrame {
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -255,7 +265,7 @@ public class Cortes extends javax.swing.JInternalFrame {
 
         getContentPane().add(pnlContenedor, java.awt.BorderLayout.CENTER);
 
-        pack();
+        setBounds(0, 0, 732, 532);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed

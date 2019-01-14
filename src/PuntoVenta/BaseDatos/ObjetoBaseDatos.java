@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -1121,7 +1122,6 @@ public class ObjetoBaseDatos {
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
-//            rs = postgreSQL.ejecutarSelect(sql);
             
             if(rs.next()){
                 cajaAbierta = !rs.getBoolean("exists");
@@ -1584,13 +1584,15 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnasCorteCaja = {"fecha_corte", "monto_corte", "id_corte_caja"};
+        String[] columnasCorteCaja = {"fecha_corte", "monto_corte", "id_corte_caja", "tipo_persona||'-'||numero_identificacion_persona AS empleado"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnasCorteCaja, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM spve.corte_caja")
+                .append(" INNER JOIN spve.empleado ON corte_caja.id_empleado = empleado.id_empleado")
+                .append(" INNER JOIN spve.persona ON persona.id_persona = empleado.id_persona")
                 .append(" WHERE id_estado_caja = ").append(idEstadoCaja)
                 .append(";");
         try {
@@ -1599,7 +1601,11 @@ public class ObjetoBaseDatos {
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnasCorteCaja) {
-                    map.put(columna, rs.getString(columna));
+                    if(columna.equals("monto_corte")) {
+                        map.put(columna, String.format(Locale.US, "%.2f",rs.getDouble(columna)));
+                    } else {
+                        map.put(columna, rs.getString(columna));
+                    }
                 }
                 resultado.add(map);
             }
@@ -2080,9 +2086,10 @@ public class ObjetoBaseDatos {
      * getTotalEstadoCajaPorProductoVendido;
      *
      * @param idEstadoCaja
+     * @param pagos_por_corte filtra los resultados que se obtienen por corte realizado
      * @return XBigDecimal con el valor del total de la venta.
      */
-    public XBigDecimal[] getTotalEstadoCaja(int idEstadoCaja) {
+    public XBigDecimal[] getTotalEstadoCaja(int idEstadoCaja, String pagos_por_corte) {
         ResultSet rs;
         XBigDecimal[] resultado = new XBigDecimal[5];
         XBigDecimal[] acum = new XBigDecimal[5];
@@ -2095,23 +2102,23 @@ public class ObjetoBaseDatos {
                 sql1 = "SELECT sum(monto_pago) FROM "
                     + "(spve.pago AS p INNER JOIN spve.venta AS v "
                     + "ON p.id_venta = v.id_venta "
-                    + " INNER JOIN spve.estado_caja AS ec "
+                    + "INNER JOIN spve.estado_caja AS ec "
                     + "ON v.id_estado_caja = ec.id_estado_caja) "
-                    + "WHERE p.id_tipo_pago = '"+(i+1)+"' AND ec.id_estado_caja = '"+idEstadoCaja+"'";
+                    + "WHERE p.id_tipo_pago = '"+(i+1)+"' AND ec.id_estado_caja = '"+idEstadoCaja+"'"+pagos_por_corte;
             } else {
                 sql1 = "SELECT sum(monto_pago) FROM "
                     + "(spve.pago AS p INNER JOIN spve.venta AS v "
                     + "ON p.id_venta = v.id_venta "
                     + " INNER JOIN spve.estado_caja AS ec "
                     + "ON v.id_estado_caja = ec.id_estado_caja) "
-                    + "WHERE ec.id_estado_caja = '"+idEstadoCaja+"'";
+                    + "WHERE ec.id_estado_caja = '"+idEstadoCaja+"'"+pagos_por_corte;
             }
             
             try {
                 postgreSQL.conectar();
                 rs = postgreSQL.ejecutarSelect(sql1);
                 while (rs.next()) {
-                    acum[i] = new XBigDecimal(rs.getInt("sum"));
+                    acum[i] = new XBigDecimal(rs.getDouble("sum"));
                     resultado[i] = new XBigDecimal(acum[i].negate().toString());
                 }
 
@@ -2127,7 +2134,20 @@ public class ObjetoBaseDatos {
 //        System.out.println("REsultado valor xbd" + resultado);
         return resultado;
     }
-
+    
+    // Verifica en la tabla pago si hay algún registro sin corte realizado
+    public boolean verificarCorteEnPagos() {
+        PostgreSQL d = new PostgreSQL();
+        boolean resultado = false;
+        try{
+            d.buscar("SELECT EXISTS (SELECT id_pago from spve.pago WHERE corte_realizado = 0)");
+            while(d.rs.next()) {
+                resultado = d.rs.getBoolean("exists");
+            }
+        }catch(Exception e){}
+        return resultado;
+    }
+    
     public XBigDecimal getTotalEstadoCajaCierre(int idEstadoCaja) {
         ResultSet rs;
         XBigDecimal resultado = new XBigDecimal(0);
@@ -2165,7 +2185,8 @@ public class ObjetoBaseDatos {
         double ctk = 0;
         //Ernesto:
         //Anotacion: no esta especificado el alias para "p" y "v" en el siguiente Query
-        String sql = "SELECT p.tipopago,p.monto FROM stpv.pago p INNER JOIN stpv.venta v ON p.id_venta=v.id LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.cierre_caja is null";
+        String sql = "SELECT p.tipopago,p.monto FROM stpv.pago p INNER JOIN stpv.venta v ON p.id_venta=v.id "
+                + "LEFT JOIN stpv.estado_venta AS ev ON v.estado_venta_id=ev.id WHERE v.estado_caja_id=" + idEstadoCaja + " AND v.cierre_caja is null";
 
         try {
             postgreSQL.conectar();
@@ -2191,10 +2212,10 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-        resultado.add(new ValorPagos("Efectivo", ef));
-        resultado.add(new ValorPagos("Debito", tdd));
-        resultado.add(new ValorPagos("Credito", tdc));
-        resultado.add(new ValorPagos("Cestaticket", ctk));
+        resultado.add(new ValorPagos(1, ef));
+        resultado.add(new ValorPagos(2, tdd));
+        resultado.add(new ValorPagos(3, tdc));
+        resultado.add(new ValorPagos(4, ctk));
         return resultado;
     }
 
@@ -2207,14 +2228,13 @@ public class ObjetoBaseDatos {
         double tdc = 0;
         double ctk = 0;
             
-            String sql = "SELECT monto_desglose_caja, tipo_pago_desglose FROM spve.desglose_caja "
+            String sql = "SELECT monto_desglose_caja, id_tipo_pago FROM spve.desglose_caja "
                        + "WHERE id_corte_caja = '"+idCorteCaja+"'";
             try {
                 postgreSQL.conectar();
                 rs = postgreSQL.ejecutarSelect(sql);
                 while (rs.next()) {
-                    System.out.println(rs.getString("tipo_pago_desglose")+" : "+rs.getDouble("monto_desglose_caja"));
-                    valores.add(new ValorPagos(rs.getString("tipo_pago_desglose"), rs.getDouble("monto_desglose_caja")));
+                    valores.add(new ValorPagos(rs.getInt("id_tipo_pago"), rs.getDouble("monto_desglose_caja")));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2225,48 +2245,85 @@ public class ObjetoBaseDatos {
         
         
         for (ValorPagos valor : valores) {
-            if ("Efectivo".equals(valor.getTipo())) {
+            if (1 == valor.getTipo()) {
                 ef = ef + valor.getMontoD();
             }
-            if ("Débito".equals(valor.getTipo())) {
+            if (2 == valor.getTipo()) {
                 tdd = tdd + valor.getMontoD();
             }
-            if ("Crédito".equals(valor.getTipo())) {
+            if (3 == valor.getTipo()) {
                 tdc = tdc + valor.getMontoD();
             }
-            if ("CestaTicket".equals(valor.getTipo())) {
+            if (4 == valor.getTipo()) {
                 ctk = ctk + valor.getMontoD();          
             }
         }
-        resultado.add(new ValorPagos("Efectivo", ef));
-        resultado.add(new ValorPagos("Débito", tdd));
-        resultado.add(new ValorPagos("Crédito", tdc));
-        resultado.add(new ValorPagos("Ticket", ctk));
-        
+        resultado.add(new ValorPagos(1, ef));
+        resultado.add(new ValorPagos(2, tdd));
+        resultado.add(new ValorPagos(3, tdc));
+        resultado.add(new ValorPagos(4, ctk));
+         
         return resultado;
     }
 
-    public ValorPagos getTotalCortesCierre(int idEstadoCaja) {
+    // Obtiene los datos de los cortes realizados
+    // para mostrarlos en el cierre de caja
+    public XBigDecimal[] getTotalCortesCierre(int idEstadoCaja) {
         ResultSet rs;
-//        List<ValorPagos> resultado = new ArrayList();
-        double monto = 0;
-        //Ernesto:
-        //Anotacion: no esta especificado el alias para "cc" en el siguiente Query
-        String sql = "SELECT cc.monto_corte FROM stpv.corte_caja cc WHERE cc.estado_caja_id=" + idEstadoCaja + ";";
+        XBigDecimal[] resultado = new XBigDecimal[5];
 
-        try {
-            postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(sql);
-            while (rs.next()) {
-                monto = monto + Double.parseDouble(rs.getString("monto_corte"));
+        String sql;
+        
+        for(int i = 0; i < 5; i++) {
+            if(i < 4) {
+                sql = "SELECT sum(monto_desglose_caja) FROM spve.desglose_caja "
+                    + "INNER JOIN spve.corte_caja ON desglose_caja.id_corte_caja = corte_caja.id_corte_caja "
+                    + "INNER JOIN spve.estado_caja ON corte_caja.id_estado_caja = estado_caja.id_estado_caja "
+                    + "WHERE corte_caja.id_estado_caja = '"+idEstadoCaja+"' AND desglose_caja.id_tipo_pago = '"+(i+1)+"'";
+            } else {
+                sql = "SELECT sum(monto_desglose_caja) FROM spve.desglose_caja "
+                    + "INNER JOIN spve.corte_caja ON desglose_caja.id_corte_caja = corte_caja.id_corte_caja "
+                    + "INNER JOIN spve.estado_caja ON corte_caja.id_estado_caja = estado_caja.id_estado_caja "
+                    + "WHERE corte_caja.id_estado_caja = '"+idEstadoCaja+"'";
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        } finally {
-            postgreSQL.desconectar();
+            
+            try {
+                postgreSQL.conectar();
+                rs = postgreSQL.ejecutarSelect(sql);
+                while (rs.next()) {
+                    resultado[i] = new XBigDecimal(rs.getDouble("sum"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        ValorPagos resultado = new ValorPagos("monto", monto);
+
+        return resultado;
+    }
+    
+    public XBigDecimal getExcedenteCortesCaja(int idEstadoCaja) {
+        PostgreSQL d = new PostgreSQL();
+        XBigDecimal resultado = new XBigDecimal(0); 
+        try{
+            d.buscar("SELECT sum(excedente_caja) FROM spve.corte_caja "
+                    + "WHERE id_estado_caja = '"+idEstadoCaja+"'");
+            while(d.rs.next()) {
+                resultado = new XBigDecimal(d.rs.getString("sum"));
+            }
+        }catch(Exception e){}
+        return resultado;
+    }
+    
+    public XBigDecimal getRestanteCortesCaja(int idEstadoCaja) {
+        PostgreSQL d = new PostgreSQL();
+        XBigDecimal resultado = new XBigDecimal(0); 
+        try{
+            d.buscar("SELECT sum(restante_caja) FROM spve.corte_caja "
+                    + "WHERE id_estado_caja = '"+idEstadoCaja+"'");
+            while(d.rs.next()) {
+                resultado = new XBigDecimal(d.rs.getString("sum"));
+            }
+        }catch(Exception e){}
         return resultado;
     }
 
@@ -2637,8 +2694,10 @@ public class ObjetoBaseDatos {
     public int crearCorteCaja(double monto, double excedente, double restante, int idEstadoCaja, int idempleado) {
         Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
+        PostgreSQL d = new PostgreSQL();
         int resultado;
-
+        
+        // inserta los datos del corte en la tabla corte_caja
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("corte_caja"))
@@ -2651,9 +2710,22 @@ public class ObjetoBaseDatos {
                 .append(idEstadoCaja).append(", ")
                 .append(idempleado)
                 .append(");");
+        
+        // actualiza la tabla de pago para no tomar en cuenta esos pagos en los próximos cortes
+        d.ejecutar("UPDATE spve.pago SET corte_realizado = 1 WHERE corte_realizado = 0"); 
 
         resultado = ejecutarCreate(sqlQuery.toString(), "corte_caja");
         return resultado;
+    }
+    
+    // inserta en la tabla pago_corte que define el tipo de pago
+    // en cada corte.
+    public void insertarTipoPagoPorCorte(int idCorteCaja, int tipoPago, XBigDecimal monto) {
+        PostgreSQL d = new PostgreSQL();
+
+
+        
+        d.ejecutar("INSERT INTO spve.pago_corte (id_tipo_pago, monto, id_corte_caja) VALUES ()");
     }
     
     /**
@@ -2667,14 +2739,24 @@ public class ObjetoBaseDatos {
     public int crearDesgloseCaja(int idCorteCaja, String tipo, XBigDecimal monto) {
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
+        int tipoInt = 0;
+        
+        System.out.println("tipo: " + tipo);
+        
+        switch(tipo) {
+            case "Efectivo": tipoInt = 1; break;
+            case "Débito": tipoInt = 2; break;
+            case "Crédito": tipoInt = 3; break;
+            case "CestaTicket": tipoInt = 4; break;
+        }
         
         sqlQuery.append("INSERT INTO ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("desglose_caja"))
-                .append("(id_corte_caja, monto_desglose_caja,tipo_pago_desglose) VALUES (")
+                .append("(id_corte_caja, monto_desglose_caja,id_tipo_pago) VALUES (")
                 .append(idCorteCaja).append(", ")
                 .append(monto).append(", '")
-                .append(tipo).append("');");
+                .append(tipoInt).append("');");
         resultado = ejecutarCreate(sqlQuery.toString(), "desglose_caja");
   
         return resultado;
@@ -3447,21 +3529,10 @@ public class ObjetoBaseDatos {
         String sql;
         PostgreSQL d = new PostgreSQL();
         for (ValorPagos vp : valor) {
-            String tipoPagoString = vp.getTipo();
-            int tipoPagoId = -1; //Variable utilizada para enviar a la base de datos el id correspondiente al tipo de pago, y no el String.
-            switch(tipoPagoString) {
-                case "Efectivo":     tipoPagoId = 1;
-                break;
-                case "Debito":       tipoPagoId = 2;
-                break;
-                case "Credito":      tipoPagoId = 3;
-                break;
-                case "Cestaticket":  tipoPagoId = 4;
-                break;
-            }
+            int tipoPago = vp.getTipo();
 
             sql = "INSERT into spve.pago (id_venta,id_tipo_pago,monto_pago,fecha_pago) "
-                + "VALUES('" + idventa + "','" + tipoPagoId + "','" + vp.getMonto() + "','" + vp.getFecha() + "');";
+                + "VALUES('" + idventa + "','" + tipoPago + "','" + vp.getMonto() + "','" + vp.getFecha() + "');";
             d.ejecutar(sql);
 
         }

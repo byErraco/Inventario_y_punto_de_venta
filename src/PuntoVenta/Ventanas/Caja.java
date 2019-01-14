@@ -1,5 +1,6 @@
 package PuntoVenta.Ventanas;
 
+import ClasesExtendidas.Numeros.XBigDecimal;
 import PuntoVenta.Inicio.MenuPrincipal;
 import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.EstadoCajaTableModel;
@@ -8,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,14 @@ public class Caja extends javax.swing.JInternalFrame {
      */
     public void actualizarTabla() {
         ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja"))); 
-        EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList);
+        EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList)
+        {
+            @Override 
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
         jtbResultadoBusqueda.setModel(estadoCajaTableModel);
         
         setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
@@ -235,11 +244,16 @@ public class Caja extends javax.swing.JInternalFrame {
         int idEstadoCaja = menuPrincipal.getOBD().getIdEstadoCaja(idCaja);
         List<Integer> ventas = menuPrincipal.getOBD().getListIDVentas(idEstadoCaja);
         
+        XBigDecimal[] totalVentas = menuPrincipal.getOBD().getTotalEstadoCaja(menuPrincipal.getIdEstadoCaja(),
+                " AND corte_realizado = 0");
+        
         if (menuPrincipal.isCajaAbierta()) {
-            if (ventanaCorte != null) {
+            if (!menuPrincipal.estacerrado(ventanaCorte)) {
                 JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
             } else if(ventas.size() <= 0) {
                 JOptionPane.showMessageDialog(this, "Aun no has vendido nada");
+            } else if(totalVentas[4].compareTo(new BigDecimal(0)) >= 0) {
+                JOptionPane.showMessageDialog(this, "Tiene sus cortes al día");
             } else {
                 ventanaCorte = new CorteCaja(this);
 
@@ -256,9 +270,8 @@ public class Caja extends javax.swing.JInternalFrame {
     }
 
     public void abrirVentanaHistorialCortes() {
-        if(ventanaHistorialCortes != null) {
-            JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
-        } else if(jtbResultadoBusqueda.getSelectedRow() >= 0) {
+        if(menuPrincipal.estacerrado(ventanaHistorialCortes)) {
+            if(jtbResultadoBusqueda.getSelectedRow() >= 0) {
                 ventanaHistorialCortes = new Cortes(this, 
                         Integer.parseInt(jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString().trim())
                 );
@@ -269,6 +282,11 @@ public class Caja extends javax.swing.JInternalFrame {
                                          (desktopSize.height - jInternalFrameSize.height) / 2);
                 menuPrincipal.panel.add(ventanaHistorialCortes);
                 ventanaHistorialCortes.show();
+            } else {
+                JOptionPane.showMessageDialog(this, "Seleccione algún resultado de la tabla");     
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "La ventana ya está abierta");
         }
     }
     

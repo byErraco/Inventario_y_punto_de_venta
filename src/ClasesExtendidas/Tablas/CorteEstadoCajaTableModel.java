@@ -16,6 +16,7 @@ public class CorteEstadoCajaTableModel extends ArrayListTableModel {
     enum Columnas {
 
         Codigo("Código", "id_corte_caja"),
+        Empleado("Empleado", "empleado"),
         Monto("Monto", "monto_corte"),
         Fecha("Fecha", "fecha_corte");
         
@@ -38,8 +39,8 @@ public class CorteEstadoCajaTableModel extends ArrayListTableModel {
 
     public CorteEstadoCajaTableModel(ArrayList<HashMap<String, String>> contenido) {
         super(contenido,
-                new String[]{Columnas.Codigo.getHeader(), Columnas.Monto.getHeader(), Columnas.Fecha.getHeader()},
-                new String[]{Columnas.Codigo.getColumna(), Columnas.Monto.getColumna(), Columnas.Fecha.getColumna()});
+                new String[]{Columnas.Codigo.getHeader(), Columnas.Empleado.getHeader(), Columnas.Monto.getHeader(), Columnas.Fecha.getHeader()},
+                new String[]{Columnas.Codigo.getColumna(), Columnas.Empleado.getColumna(), Columnas.Monto.getColumna(), Columnas.Fecha.getColumna()});
     }
 
 }

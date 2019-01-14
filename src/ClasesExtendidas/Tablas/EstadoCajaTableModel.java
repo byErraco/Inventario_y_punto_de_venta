@@ -48,9 +48,9 @@ public class EstadoCajaTableModel extends ArrayListTableModel{
         // para cambiar las columnas
         super(contenido,
                 new String[]{Columnas.Codigo.getHeader(), Columnas.EmpleadoApertura.getHeader(), 
-                    Columnas.FechaApertura.getHeader()/*, Columnas.FechaCierre.getHeader(),*/, Columnas.CajaAbierta.getHeader()},
+                    Columnas.FechaApertura.getHeader(), Columnas.CajaAbierta.getHeader()},
                 new String[]{Columnas.Codigo.getColumna(), Columnas.EmpleadoApertura.getColumna(), 
-                    Columnas.FechaApertura.getColumna()/*, Columnas.FechaCierre.getColumna() */, Columnas.CajaAbierta.getColumna()});
+                    Columnas.FechaApertura.getColumna(), Columnas.CajaAbierta.getColumna()});
     }
 
 }
