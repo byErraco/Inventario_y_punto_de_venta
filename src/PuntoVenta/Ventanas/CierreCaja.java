@@ -9,10 +9,13 @@ import ClasesExtendidas.Numeros.XBigDecimal;
 import PuntoVenta.Inicio.MenuPrincipal;
 import PuntoVenta.Reporte3;
 import Utilidades.CorteUtilidades;
+import Utilidades.GuardarReporte;
 import Utilidades.ValorPagos;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.math.RoundingMode;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
@@ -42,7 +46,6 @@ public class CierreCaja extends javax.swing.JInternalFrame {
 
     private Caja caja;
     public MenuPrincipal menuPrincipal;
-
     /**
      *
      * Creates new form CierreCaja
@@ -84,12 +87,21 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         Action actFocusPuntoInteres = new AbstractAction("actionFocusPuntoInteres") {
             @Override
             public void actionPerformed(ActionEvent e) {
+                focusPuntoInteres();
             }
         };
         Action actAceptar = new AbstractAction("actionAceptar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cerrarCaja();
+                if(btnFinalizar.isEnabled() == true) {
+                    try {
+                        confirmacion();
+                    } catch (IOException ex) {
+                        Logger.getLogger(CierreCaja.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(CierreCaja.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
         };
 
@@ -119,6 +131,18 @@ public class CierreCaja extends javax.swing.JInternalFrame {
 
     private void cerrarVentana() {
         this.dispose();
+        menuPrincipal.abrirVentanaCaja();
+    }
+    
+    private void focusPuntoInteres() {
+        if (!txtTotalEfectivoF.hasFocus()) {
+            txtTotalEfectivoF.requestFocus();
+            CorteUtilidades cu = new CorteUtilidades();
+            cu.selectAntesDelPunto(txtTotalEfectivoF);
+        } /*else {
+            tblResultadoCorte.requestFocus();
+            tblResultadoCorte.addColumnSelectionInterval(0, 0);
+        }*/
     }
 
     /**
@@ -764,88 +788,91 @@ public class CierreCaja extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtTotalGlobalActionPerformed
 
     private void txtTotalEfectivoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalEfectivoFKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_PERIOD)) {
-            evt.consume();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PERIOD && txtTotalEfectivoF.getText().contains(".")) {
-            evt.consume();
-        }
-        if (txtTotalEfectivoF.getText().length() > 20) {
-            evt.consume();
-        }
+//        if (!Character.isDigit(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_PERIOD)) {
+//            evt.consume();
+//        }
+//        if (evt.getKeyChar() == KeyEvent.VK_PERIOD && txtTotalEfectivoF.getText().contains(".")) {
+//            evt.consume();
+//        }
+        keyTypedEvent(evt, txtTotalEfectivoF);
     }//GEN-LAST:event_txtTotalEfectivoFKeyTyped
 
     private void txtTotalDebitoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalDebitoFKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_PERIOD)) {
-            evt.consume();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PERIOD && txtTotalDebitoF.getText().contains(".")) {
-            evt.consume();
-        }
-        if (txtTotalDebitoF.getText().length() > 20) {
-            evt.consume();
-        }
+        keyTypedEvent(evt, txtTotalDebitoF);
     }//GEN-LAST:event_txtTotalDebitoFKeyTyped
 
     private void txtTotalCreditoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalCreditoFKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_PERIOD)) {
-            evt.consume();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PERIOD && txtTotalCreditoF.getText().contains(".")) {
-            evt.consume();
-        }
-        if (txtTotalCreditoF.getText().length() > 20) {
-            evt.consume();
-        }
+        keyTypedEvent(evt, txtTotalCreditoF);
     }//GEN-LAST:event_txtTotalCreditoFKeyTyped
 
     private void txtTotalCestaTicketFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalCestaTicketFKeyTyped
-        if (!Character.isDigit(evt.getKeyChar()) && !(evt.getKeyChar() == KeyEvent.VK_PERIOD)) {
-            evt.consume();
-        }
-        if (evt.getKeyChar() == KeyEvent.VK_PERIOD && txtTotalCestaTicketF.getText().contains(".")) {
-            evt.consume();
-        }
-        if (txtTotalCestaTicketF.getText().length() > 20) {
-            evt.consume();
-        }
+        keyTypedEvent(evt, txtTotalCestaTicketF);
     }//GEN-LAST:event_txtTotalCestaTicketFKeyTyped
 
     private void txtTotalEfectivoFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalEfectivoFKeyReleased
         totalfisico();
+        keyPressedEvent(evt, txtTotalEfectivoF);
     }//GEN-LAST:event_txtTotalEfectivoFKeyReleased
 
     private void txtTotalDebitoFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalDebitoFKeyReleased
         totalfisico();
+        keyPressedEvent(evt, txtTotalDebitoF);
     }//GEN-LAST:event_txtTotalDebitoFKeyReleased
 
     private void txtTotalCreditoFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalCreditoFKeyReleased
         totalfisico();
+        keyPressedEvent(evt, txtTotalCreditoF);
     }//GEN-LAST:event_txtTotalCreditoFKeyReleased
 
     private void txtTotalCestaTicketFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTotalCestaTicketFKeyReleased
         totalfisico();
+        keyPressedEvent(evt, txtTotalCestaTicketF);
     }//GEN-LAST:event_txtTotalCestaTicketFKeyReleased
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        cerrarCaja();
+        try {
+            confirmacion();
+        } catch (IOException ex) {
+            Logger.getLogger(CierreCaja.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CierreCaja.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
-    private void cerrarCaja() {
-        menuPrincipal.getOBD().ActualizarCierreEnVenta(menuPrincipal.getIdEstadoCaja());
-        menuPrincipal.getOBD().crearCierre(txtTotalGlobal.getText(), txtTotalVentasS.getText(), txtEmpleado.getText(), txtFecha.getText());
+    private void cerrarCaja() throws IOException, SQLException {
+        GuardarReporte gr = new GuardarReporte();
+                             // montos sistema
+        String[][] montos = {{txtTotalEfectivoS.getText(), txtTotalDebitoS.getText(), txtTotalCreditoS.getText(), txtTotalCestaTicketS.getText()},
+                             // montos cortes
+                             {txtTotalEfectivoC.getText(), txtTotalDebitoC.getText(), txtTotalCreditoC.getText(), txtTotalCestaTicketC.getText()},
+                             // montos fisico
+                             {txtTotalEfectivoF.getText(), txtTotalDebitoF.getText(), txtTotalCreditoF.getText(), txtTotalCestaTicketF.getText()}};
+        
+        // guarda en las tablas de la base de datos
+        menuPrincipal.getOBD().ActualizarCierreEnEstadoCaja(menuPrincipal.getIdEstadoCaja());
+        int idCierreCaja = menuPrincipal.getOBD().crearCierre(txtTotalGlobal.getText(), txtTotalVentasS.getText(), txtTotalVentasC.getText(), 
+                menuPrincipal.getIdEstadoCaja(), txtFecha.getText());
+        menuPrincipal.getOBD().guardarMontosCierreCaja(idCierreCaja, montos);
+        
         String saldo = menuPrincipal.getOBD().montoInicial(menuPrincipal.getIdEstadoCaja());
-        Reporte3 rp = new Reporte3(menuPrincipal.getOBD().getDatosParametros(), menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), menuPrincipal.getModeloCaja().getDescripcion(), txtTotalVentasS.getText(), txtTotalGlobal.getText(), txtTotalEfectivoS.getText(), txtTotalDebitoS.getText(), txtTotalCreditoS.getText(), txtTotalCestaTicketS.getText(), txtTotalEfectivoF.getText(), txtTotalDebitoF.getText(), txtTotalCreditoF.getText(), txtTotalCestaTicketF.getText(), saldo);
+        Reporte3 rp = new Reporte3(menuPrincipal.getOBD().getDatosParametros(), menuPrincipal.getOBD().getDatosPais(" WHERE activo = TRUE"),
+                menuPrincipal.getEmpleado().getNombre() + " " + menuPrincipal.getEmpleado().getApellido(), menuPrincipal.getEmpleado().getCedula(), 
+                menuPrincipal.getModeloCaja().getDescripcion(), txtTotalVentasS.getText(), txtTotalGlobal.getText(), txtTotalEfectivoS.getText(), 
+                txtTotalDebitoS.getText(), txtTotalCreditoS.getText(), txtTotalCestaTicketS.getText(), txtTotalEfectivoF.getText(), txtTotalDebitoF.getText(), 
+                txtTotalCreditoF.getText(), txtTotalCestaTicketF.getText(), saldo);
         List<Reporte3> l3 = new ArrayList();
         l3.add(rp);
         try {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/cierre.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(l3));
             JasperViewer visor = new JasperViewer(jprint, false);
+            gr.GuardarPDF(jprint, "reporteCierre.PDF"); // Guarda el reporte en formato pdf
             visor.setVisible(true);
         } catch (JRException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        gr.GuardarBaseDatos(idCierreCaja, "reporteCierre.PDF");
         caja.menuPrincipal.getOBD().setEstadoCaja(
                 caja.menuPrincipal.getIdEstadoCaja(),
                 caja.menuPrincipal.getModeloCaja().getId(),
@@ -952,6 +979,42 @@ public class CierreCaja extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtTotalVentasS;
     // End of variables declaration//GEN-END:variables
 
+    public void keyTypedEvent(KeyEvent evt, JTextField campo) {
+        
+        if (campo.getText().length() > 20) {
+            evt.consume();
+        }
+        
+        CorteUtilidades cu = new CorteUtilidades();
+        // no permite introducir letras
+        if (evt.getKeyChar() == '.') {
+            if(campo.getText().lastIndexOf(".") >= 0)  {
+                evt.consume();
+                cu.selectDespuesDelPunto(campo);
+            }
+        } else if(!Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+        }
+        
+        
+    }
+    
+    public void keyPressedEvent(KeyEvent evt, JTextField campo) {
+        CorteUtilidades cu = new CorteUtilidades();
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if(campo.equals(txtTotalEfectivoF)) {
+                cu.selectAntesDelPunto(txtTotalDebitoF);
+            } else if(campo.equals(txtTotalDebitoF)) {
+                cu.selectAntesDelPunto(txtTotalCreditoF);
+            } else if(campo.equals(txtTotalCreditoF)) {
+                cu.selectAntesDelPunto(txtTotalCestaTicketF);
+            } else if(campo.equals(txtTotalCestaTicketF)) {
+                cu.selectAntesDelPunto(txtTotalEfectivoF);
+            }
+        }
+    }
+    
+    
     private void actualizarInformacionCaja() {
 //        List<ValorPagos> listpagos = menuPrincipal.getOBD().getTotalPagoCierre(caja.menuPrincipal.getIdEstadoCaja());
 //        ValorPagos valorcorte = menuPrincipal.getOBD().getTotalCortesCierre(caja.menuPrincipal.getIdEstadoCaja());
@@ -982,8 +1045,17 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         txtTotalDebitoC.setText(totalVentasCortes[1].setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
         txtTotalCestaTicketC.setText(totalVentasCortes[3].setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
         
-        txtExcedenteC.setText(excedente.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
-        txtRestanteC.setText(restante.setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
+        // Compara el excedente y el restante para aplicar suma y resta        
+        if(excedente.compareTo(restante) > 0) {
+            txtExcedenteC.setText(excedente.add(restante.negate()).setScale(2, RoundingMode.HALF_EVEN).toString());
+            txtRestanteC.setText("0.00");
+        } else if(excedente.compareTo(restante) < 0) {
+            txtRestanteC.setText(restante.add(excedente.negate()).setScale(2, RoundingMode.HALF_EVEN).toString());
+            txtExcedenteC.setText("0.00");
+        } else {
+            txtExcedenteC.setText("0.00");
+            txtRestanteC.setText("0.00");
+        }
         
         txtTotalVentasC.setText(totalVentasCortes[4].setScale(2, RoundingMode.HALF_EVEN).toString().replaceAll("-", ""));
         
@@ -1036,4 +1108,15 @@ public class CierreCaja extends javax.swing.JInternalFrame {
 //        txtTotalCestaTicket.setText(totalCestaticket.setScale(2, RoundingMode.HALF_EVEN).toString());
 //        txtTotalCortes.setText(totalCorte.setScale(2, RoundingMode.HALF_EVEN).toString());
     }
+    
+    public void confirmacion() throws IOException, SQLException {
+        int g = JOptionPane.showConfirmDialog(this, "¿Desea realizar el cierre de caja?\nNo podrá realizar cambios", 
+                "Cierre de caja", JOptionPane.YES_NO_OPTION);
+        if (g == JOptionPane.YES_OPTION) {
+            cerrarCaja();
+        } else if (g == JOptionPane.NO_OPTION) {
+            this.setVisible(true);
+        }
+    }
+    
 }

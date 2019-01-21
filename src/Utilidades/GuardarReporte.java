@@ -55,10 +55,18 @@ public class GuardarReporte {
         String realPath = System.getProperty("user.dir") + System.getProperty("file.separator");
         File reporte = new File(realPath + name);
         
-        if(name.equals("reporteCorte.PDF")) {
-            guardarReporte(id, reporte, "corte_caja", "reporte_corte", "id_corte_caja");
-        } else if (name.equals("reporteVenta.PDF")) {
-            guardarReporte(id, reporte, "venta", "reporte_venta", "id_venta");
+        switch (name) {
+            case "reporteCorte.PDF":
+                guardarReporte(id, reporte, "corte_caja", "reporte_corte", "id_corte_caja");
+                break;
+            case "reporteVenta.PDF":
+                guardarReporte(id, reporte, "venta", "reporte_venta", "id_venta");
+                break;
+            case "reporteCierre.PDF":
+                guardarReporte(id, reporte, "cierre_caja", "reporte_cierre", "id_cierre_caja");
+                break;
+            default:
+                break;
         }
     }
     

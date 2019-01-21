@@ -21,6 +21,8 @@ import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 
 public class Cortes extends javax.swing.JInternalFrame {
@@ -42,17 +44,14 @@ public class Cortes extends javax.swing.JInternalFrame {
         this.setTitle("Saphiro - Gestión historial de cortes para la N°" + idEstadoCaja);
 
         actualizarTabla();
-
         crearHotKeys();
+        btnImprimirFlag();
     }
 
     /**
      * Método para actualizar el contenido de la tabla en la ventana caja.
      */
     public void actualizarTabla() {
-        int idCaja = menuPrincipal.getModeloCaja().getId();
-        int idEstadoCaja = menuPrincipal.getOBD().getIdEstadoCaja(idCaja);
-        
         ArrayList cortesCajaArrayList = menuPrincipal.getOBD().getArrayListCortesCaja(idEstadoCaja);
         CorteEstadoCajaTableModel corteEstadoCajaTableModel = new CorteEstadoCajaTableModel(cortesCajaArrayList)
         {
@@ -74,6 +73,7 @@ public class Cortes extends javax.swing.JInternalFrame {
      */
     private void cerrarVentana() {
         this.dispose();
+        menuPrincipal.abrirVentanaCaja();
     }
 
     private void crearHotKeys() {
@@ -81,7 +81,7 @@ public class Cortes extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    imprimirFacturaCaja();
+                    imprimirFacturaCorte();
                 } catch (IOException ex) {
                     Logger.getLogger(Cortes.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -125,7 +125,15 @@ public class Cortes extends javax.swing.JInternalFrame {
         };
         this.addInternalFrameListener(listener);
     }
-
+    
+    public void btnImprimirFlag() {
+        if(jtbResultadoBusqueda.getSelectedRow() >= 0) {
+            btnImprimir.setEnabled(true);
+        } else {
+            btnImprimir.setEnabled(false);
+        }
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -177,6 +185,12 @@ public class Cortes extends javax.swing.JInternalFrame {
         ));
         jtbResultadoBusqueda.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtbResultadoBusqueda);
+        // evento que habilita o deshabilita el boton de imprimir segun la fila seleccionada
+        jtbResultadoBusqueda.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                btnImprimirFlag();
+            }
+        });
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("<html><font size=4><center>Búsqueda:<br></font></center></html>");
@@ -270,7 +284,7 @@ public class Cortes extends javax.swing.JInternalFrame {
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         try {
-            imprimirFacturaCaja();
+            imprimirFacturaCorte();
         } catch (IOException ex) {
             Logger.getLogger(Cortes.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -298,11 +312,7 @@ public class Cortes extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
 
-    protected void setBotonesCajaEnabled(boolean aFlag) {
-        btnImprimir.setEnabled(!aFlag);
-    }
-
-    private void imprimirFacturaCaja() throws IOException {
+    private void imprimirFacturaCorte() throws IOException {
         if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
             String codigoBarra = jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString();
             for (int i = 0; i < codigoBarra.length(); i++) {

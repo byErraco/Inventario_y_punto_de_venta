@@ -307,26 +307,6 @@ public class ObjetoBaseDatos {
         return resultado;
     }
     
-    //  se crea para eliminar productos en la ventana "productos"(solo por metodo de prueba)
-    //REVISAR:
-//    public boolean eliminarProducto(String codigo){
-//        
-//        boolean result = false;
-////        System.out.println("codigo del producto que acabas de eliminar -> "+codigo);
-//        PostgreSQL d = new PostgreSQL();
-//        int id;
-//        currentLoger id1 = new currentLoger();
-//        id = id1.getIdempleadoLogeado();
-//        result = d.ejecutar("UPDATE spve.producto SET activo_producto = 0"
-//                + " WHERE codigo_venta_producto = '"+codigo+"';");
-//        d.ejecutar("UPDATE spve.precio_producto SET activo_precio_producto = 0"
-//                + " WHERE id_producto IN (SELECT id_producto FROM spve.producto WHERE "
-//                + " codigo_venta_producto = '"+codigo+"')");
-////        System.out.println("Result = "+result);
-//        return result;
-//    
-//    } 
-    
     //VALIDA QUE EL PRODUCTO EXISTE
     public int productoExiste(String codigo, String estado, String sqlCodigoViejo) {
         // el Parametro sqlCodigoViejo se utiliza para la parte de modificar, cuando queremos verificar que un codigo existe en la tabla
@@ -1084,7 +1064,7 @@ public class ObjetoBaseDatos {
      * @param idCaja
      * @return Estado de la caja. Abierto o cerrado.
      */
-    public boolean isCajaAbierta(int idCaja) {
+    public boolean isCajaAbierta(int idCaja, boolean primeraVez) {
         boolean cajaAbierta = false;
         int caja_abierta = 0;
         ResultSet rs;
@@ -1093,31 +1073,33 @@ public class ObjetoBaseDatos {
         
         // Busca el cierre de caja que este relacionado al ultimo id_caja de la tabla 
         // estado_caja, de no haber ninguno envia false
-        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja, fecha_corte FROM ")
+//        sqlQuery.append("SELECT EXISTS (SELECT id_cierre_caja, fecha_corte FROM ")
+//                .append(mapSchema.get("spve"))
+//                .append(".").append(mapTabla.get("cierre_caja"))
+//                .append(" as cic LEFT JOIN ")
+//                .append(mapSchema.get("spve"))
+//                .append(".").append(mapTabla.get("corte_caja"))
+//                .append(" AS c ")
+//                .append("ON cic.id_corte_caja = c.id_corte_caja ")
+//                .append("WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
+//                .append(mapSchema.get("spve"))
+//                .append(".").append(mapTabla.get("corte_caja"))
+//                .append(" AS cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
+//                .append(mapSchema.get("spve"))
+//                .append(".").append(mapTabla.get("estado_caja"))
+//                .append(" AS ec WHERE ec.id_caja = ")
+//                .append(idCaja)
+//                .append(")) AND fecha_corte < current_date);");
+        
+        sqlQuery.append("SELECT EXISTS (SELECT id_estado_caja, fecha_cierre FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("cierre_caja"))
-                .append(" as cic LEFT JOIN ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("corte_caja"))
-                .append(" AS c ")
-                .append("ON cic.id_corte_caja = c.id_corte_caja ")
-                .append("WHERE cic.id_corte_caja = (SELECT max(id_corte_caja) FROM ")
-                .append(mapSchema.get("spve"))
-                .append(".").append(mapTabla.get("corte_caja"))
                 .append(" AS cc WHERE cc.id_estado_caja = (SELECT max(id_estado_caja) FROM ")
                 .append(mapSchema.get("spve"))
                 .append(".").append(mapTabla.get("estado_caja"))
                 .append(" AS ec WHERE ec.id_caja = ")
                 .append(idCaja)
-                .append(")) AND fecha_corte < current_date);");
-        
-        //Busca el smallint "caja_abierta" de la tabla estado_caja
-        try{
-            d.buscar("SELECT caja_abierta FROM spve.estado_caja WHERE id_caja = '"+idCaja+"'");
-            while(d.rs.next()) {
-                caja_abierta = d.rs.getInt("caja_abierta");
-            }
-        }catch(Exception e){}
+                .append(") AND fecha_cierre < current_date);");
         
         try {
             postgreSQL.conectar();
@@ -1131,10 +1113,18 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-
-        if(cajaAbierta == true && caja_abierta == 1) {
+        
+        //Busca el smallint "caja_abierta" de la tabla estado_caja
+        try{
+            d.buscar("SELECT caja_abierta FROM spve.estado_caja WHERE id_caja = '"+idCaja+"'");
+            while(d.rs.next()) {
+                caja_abierta = d.rs.getInt("caja_abierta");
+            }
+        }catch(Exception e){}
+        
+//        if(cajaAbierta == true && caja_abierta == 1 && primeraVez) {
 //            JOptionPane.showMessageDialog(null, "Hemos detectado un mal cierre del sistema", "Aviso", JOptionPane.INFORMATION_MESSAGE);
-        }
+//        }
 
         return (cajaAbierta && caja_abierta == 1);
     }
@@ -1150,7 +1140,7 @@ public class ObjetoBaseDatos {
         int idEstadoCaja = -1;
         ResultSet rs;
  
-        if(isCajaAbierta(idCaja)){
+        if(isCajaAbierta(idCaja, false)){
             StringBuilder sqlQuery = new StringBuilder();
             sqlQuery.append("SELECT MAX(id_estado_caja) FROM ")
                     .append(mapSchema.get("spve"))
@@ -2762,33 +2752,37 @@ public class ObjetoBaseDatos {
         return resultado;
     }
 
-    public void ActualizarCorteEnVenta(int idEstadoCaja) {
+    public void guardarMontosCierreCaja(int idCierreCaja, String[][] montos) {
+        PostgreSQL d = new PostgreSQL();
+        
+        for(int i=0; i < 3; i++) {
+            for(int j=0; j < 4; j++) {
 
-        String sql = "UPDATE spve.venta v SET corte_caja = true WHERE v.id_estado_caja=" + idEstadoCaja;
-//        System.out.println(sql);
-        try {
-            postgreSQL.conectar();
-            postgreSQL.ejecutarSelect(sql);
-//            System.out.println(sql);
-        } catch (Exception e) {
-//            System.out.println("hola");
-        } finally {
-            postgreSQL.desconectar();
+                String sql = "INSERT INTO spve.montos_cierre_caja (monto, id_tipo_pago, id_tipo_monto_cierre, id_cierre_caja) "
+                        + "VALUES ('"+montos[i][j]+"', '"+(j+1)+"', '"+(i+1)+"', '"+idCierreCaja+"')";
+                d.ejecutar(sql);
+//                try {
+//                    postgreSQL.conectar();
+//                    postgreSQL.ejecutarSelect(sql);
+//                } catch (Exception e) {
+//                } finally {
+//                    postgreSQL.desconectar();
+//                }
+            }
         }
     }
 
-    public void ActualizarCierreEnVenta(int idEstadoCaja) {
-        String sql = "UPDATE spve.venta v SET cierre_caja = true WHERE v.id_estado_caja=" + idEstadoCaja;
-//        System.out.println(sql);
-        try {
-            postgreSQL.conectar();
-            postgreSQL.ejecutarSelect(sql);
-//            System.out.println(sql);
-        } catch (Exception e) {
-//            System.out.println("hola");
-        } finally {
-            postgreSQL.desconectar();
-        }
+    public void ActualizarCierreEnEstadoCaja(int idEstadoCaja) {
+        PostgreSQL d = new PostgreSQL();
+        String sql = "UPDATE spve.estado_caja SET caja_abierta = 0 WHERE id_estado_caja=" + idEstadoCaja;
+        d.ejecutar(sql);
+//        try {
+//            postgreSQL.conectar();
+//            postgreSQL.ejecutarSelect(sql);
+//        } catch (Exception e) {
+//        } finally {
+//            postgreSQL.desconectar();
+//        }
     }
 
     public String montoInicial(int idEstadoCaja) {
@@ -3773,6 +3767,7 @@ public class ObjetoBaseDatos {
     // Método para traer los reportes pdf de la base de datos
     public File reimprimirReporte(String codigo,  String campo, String tabla, String filtro, String fileName) throws IOException {
         GuardarReporte gr = new GuardarReporte();
+//        codigoBarra, "reporte_cierre", "cierre_caja", "id_cierre_caja", "reporteCierre"
         PostgreSQL d = new PostgreSQL();
         byte[] reporteBytea = {};
         try{
@@ -3848,18 +3843,30 @@ public class ObjetoBaseDatos {
         return lista;
     }
 */
-    public void crearCierre(String monto_fisico, String monto_sistema, String empleado, String fecha) {
-        String sql = "INSERT INTO stpv.cierre_caja(monto_fisico,monto_sistema,empleado,fecha) "
-                + "VALUES('" + monto_fisico + "','" + monto_sistema + "','" + empleado + "','" + fecha + "')";
-        System.out.println(sql);
-        try {
-            postgreSQL.conectar();
-            postgreSQL.getSentencia().execute(sql);
-        } catch (Exception ex) {
-            Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            postgreSQL.desconectar();
-        }
+    public int crearCierre(String monto_fisico, String monto_sistema, String monto_cortes, int id_estado_caja, String fecha) {
+        
+//        PostgreSQL d = new PostgreSQL();
+        currentLoger cl = new currentLoger();
+        Empleado emple = cl.getDatosEmpleadoLogueado();
+        Date now = new Date();
+        
+        String sql = "INSERT INTO spve.cierre_caja(monto_fisico, monto_sistema, monto_cortes, id_empleado, id_estado_caja, fecha_cierre)"
+                   + "VALUES ('"+monto_fisico+"', '"+monto_sistema+"', '"+monto_cortes+"', '"+emple.getId()+"', '"+id_estado_caja+"', '"+now+"'  )";
+        
+//        return d.ejecutar("INSERT INTO spve.cierre_caja(monto_fisico, monto_sistema, monto_cortes, id_empleado, id_estado_caja, fecha_cierre)"
+//                   + "VALUES ('"+monto_fisico+"', '"+monto_sistema+"', '"+monto_cortes+"', '"+emple.getId()+"', '"+id_estado_caja+"', '"+fecha+"'  )");
+        
+        return ejecutarCreate(sql, "cierre_caja");
+        
+//        System.out.println(sql);
+//        try {
+//            postgreSQL.conectar();
+//            postgreSQL.getSentencia().execute(sql);
+//        } catch (Exception ex) {
+//            Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            postgreSQL.desconectar();
+//        }
 
     }
 

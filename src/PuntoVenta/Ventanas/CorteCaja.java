@@ -155,6 +155,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private void cerrarVentana() {
         this.dispose();
+        menuPrincipal.abrirVentanaCaja();
     }
 
     /**
@@ -779,7 +780,7 @@ public class CorteCaja extends javax.swing.JInternalFrame {
 
     private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
         CorteUtilidades cu = new CorteUtilidades();
-        // no permite introducir números
+        // no permite introducir letras
         if (evt.getKeyChar() == '.') {
             if(txtMonto.getText().lastIndexOf(".") >= 0)  {
                 evt.consume();

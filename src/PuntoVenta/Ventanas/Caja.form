@@ -162,6 +162,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="// evento que habilita o deshabilita el boton de imprimir segun la fila seleccionada&#xa;jtbResultadoBusqueda.getSelectionModel().addListSelectionListener(new ListSelectionListener(){&#xa;    public void valueChanged(ListSelectionEvent event) {&#xa;        btnImprimirFlag();&#xa;        btnCortesFlag();&#xa;    }&#xa;});"/>
                     <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()"/>
                   </AuxValues>
                 </Component>
@@ -203,7 +204,7 @@
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="btnCorte" min="-2" pref="104" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="92" max="-2" attributes="0"/>
+                      <Component id="btnCortes" min="-2" pref="92" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -217,7 +218,7 @@
                               <Component id="btnFlujoCaja" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
                               <Component id="btnImprimir" alignment="3" min="-2" pref="45" max="-2" attributes="0"/>
                               <Component id="btnCorte" alignment="3" max="32767" attributes="0"/>
-                              <Component id="jButton1" alignment="3" max="32767" attributes="0"/>
+                              <Component id="btnCortes" alignment="3" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
@@ -353,7 +354,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCorteActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="btnCortes">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="15" style="0"/>
@@ -361,8 +362,11 @@
                 <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font size=4&gt;&lt;center&gt;Cortes&lt;br&gt;F6&lt;/center&gt;&lt;/font&gt;&lt;/html&gt;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCortesActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="btnCortes.setEnabled(false);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

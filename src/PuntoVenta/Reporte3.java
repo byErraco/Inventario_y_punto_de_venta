@@ -6,6 +6,7 @@
 package PuntoVenta;
 
 import PuntoVenta.BaseDatos.Empresa;
+import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.BaseDatos.Parametros;
 
 /**
@@ -35,7 +36,7 @@ public class Reporte3 {
     private String dif;
     private String saldo;
 
-    public Reporte3(Parametros e, String nombreEmp, String cedulaEmp, String numCaja, String total, String gtotal, String sefe, String stdd, String stdc, String sctk, String cefe, String ctdd, String ctdc, String cctk, String saldo) {
+    public Reporte3(Parametros e, Pais p, String nombreEmp, String cedulaEmp, String numCaja, String total, String gtotal, String sefe, String stdd, String stdc, String sctk, String cefe, String ctdd, String ctdc, String cctk, String saldo) {
         this.rifE = e.getIdentificacion();
         this.nombreE = e.getNombre();
         this.direccionE = e.getDireccion();
@@ -45,7 +46,7 @@ public class Reporte3 {
         this.numCaja = numCaja;
         this.total = total;
         this.gtotal = gtotal;
-        this.moneda = e.getMoneda();
+        this.moneda = p.getSimbolo();
         this.sefe = decimales(sefe);
         this.stdd = decimales(stdd);
         this.stdc = decimales(stdc);

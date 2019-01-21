@@ -101,7 +101,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Acerca acerca = new Acerca();
     private Ayuda ayuda = new Ayuda();
     private int idEstadoCaja;
-
+    private boolean primeraVez = true;
     private ObjetoBaseDatos obd; //Objeto Base Datos
     private Properties configuracion;
     private boolean logged;
@@ -146,8 +146,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
 
         this.setTitle("Saphiro - " + this.configuracion.getProperty("nombre_equipo"));
-        this.cajaAbierta = this.obd.isCajaAbierta(this.modeloCaja.getId());
-
+        this.cajaAbierta = this.obd.isCajaAbierta(this.modeloCaja.getId(), primeraVez);
+        primeraVez = false;
         this.idEstadoCaja = this.obd.getIdUltimoEstadoCaja(this.modeloCaja.getId());
         crearHotKeys();
         //Si la caja está cerrada, deshabilita los botones F2, F3, F4.
@@ -230,6 +230,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
             i++;
         }
         return cerrado;
+    }
+    
+    public void cerrarAplicacion() {
+        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+        if (g == JOptionPane.YES_OPTION) {
+//            if(this.cajaAbierta)   JOptionPane.showMessageDialog(this, "Aun hay cajas abiertas, debe cerrarlas antes de salir del sistema");
+//            else System.exit(0);
+            System.exit(0);
+        } else if (g == JOptionPane.NO_OPTION) {
+            this.setVisible(true);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -507,14 +518,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
 
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
-        if (g == JOptionPane.YES_OPTION) {
-            if(this.cajaAbierta)   JOptionPane.showMessageDialog(this, "Aun hay cajas abiertas, debe cerrarlas antes de salir del sistema");
-            else System.exit(0);
-        } else if (g == JOptionPane.NO_OPTION) {
-            
-            this.setVisible(true);
-        }
+        cerrarAplicacion();
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnCalculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculadoraActionPerformed
@@ -615,14 +619,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         
-         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
-
-        if (g == JOptionPane.YES_OPTION) {
-            System.exit(0);
-        } else if (g == JOptionPane.NO_OPTION) {
-            this.setVisible(true);
-        }
+        cerrarAplicacion();
+//         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+//        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+//
+//        if (g == JOptionPane.YES_OPTION) {
+//            System.exit(0);
+//        } else if (g == JOptionPane.NO_OPTION) {
+//            this.setVisible(true);
+//        }
     }//GEN-LAST:event_formWindowClosing
 
     private void ayuda() {
