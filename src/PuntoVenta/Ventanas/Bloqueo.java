@@ -1,5 +1,6 @@
 package PuntoVenta.Ventanas;
 
+import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.Inicio.MenuPrincipal;
 import static PuntoVenta.Inicio.MenuPrincipal.btnAcerca;
 import static PuntoVenta.Inicio.MenuPrincipal.btnAdmin;
@@ -9,7 +10,9 @@ import static PuntoVenta.Inicio.MenuPrincipal.btnFacturas;
 import static PuntoVenta.Inicio.MenuPrincipal.btnMovimientos;
 import static PuntoVenta.Inicio.MenuPrincipal.btnProductos;
 import static PuntoVenta.Inicio.MenuPrincipal.btnVentas;
-import static PuntoVenta.Ventanas.LogIn.jpwClave;
+//import static PuntoVenta.Ventanas.Bloqueo.jpwContrasena;
+import static PuntoVenta.Ventanas.LogIn.cmbTipoIdentificacion;
+//import static PuntoVenta.Ventanas.LogIn.jpwClave;
 //import static PuntoVenta.Ventanas.bloqueo2.pass;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
@@ -18,82 +21,61 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 public class Bloqueo extends javax.swing.JFrame {
-   // static Object txtNombreUsuario;
+//    static Object txtNombreUsuario;
     
-
     public MenuPrincipal menuPrincipal;
 
-  //  String contrasena = "";
- //   int i =0;
+//    String contrasena = "";
+//    int i =0;
     
     public Bloqueo(MenuPrincipal menuPrincipal) {
         initComponents();
-        
         this.menuPrincipal = menuPrincipal;
-        
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/PuntoVenta/Iconos/acerca.png")));
-        
-       // txtCedula.setText("");
-       
+//        txtCedula.setText("");
         this.setTitle("Saphiro - Bloqueo de caja");
-        
-        ingresarSistema();
-        
-       this.setVisible(true);
+        this.setVisible(true);
+        identificarPais();
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup14 = new javax.swing.ButtonGroup();
-        jpnPrincipal = new javax.swing.JPanel();
-        lblCabecera = new javax.swing.JLabel();
-        jpnCamposLogin = new javax.swing.JPanel();
-        jpwContrasena = new javax.swing.JPasswordField();
-        lblUsuario = new javax.swing.JLabel();
-        lblContrasena = new javax.swing.JLabel();
+        jpnPrincipal1 = new javax.swing.JPanel();
+        cmbTipoIdentificacion = new javax.swing.JComboBox<>();
+        lblDescripcion = new javax.swing.JLabel();
         txtCedula = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        btnIngresar = new javax.swing.JButton();
+        lblContrasena = new javax.swing.JLabel();
+        jpwContrasena = new javax.swing.JPasswordField();
+        btnEntrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblLogoInverdata = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
+        lblFondo = new javax.swing.JLabel();
 
         setTitle("Saphiro - Punto de Venta\n"); // NOI18N
 
-        jpnPrincipal.setBackground(new java.awt.Color(32, 182, 155));
-        jpnPrincipal.setName("jpnPrincipal"); // NOI18N
+        jpnPrincipal1.setBackground(new java.awt.Color(255, 255, 255));
+        jpnPrincipal1.setName("jpnPrincipal1"); // NOI18N
+        jpnPrincipal1.setPreferredSize(new java.awt.Dimension(500, 424));
 
-        lblCabecera.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCabecera.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Banner_Saphiro_Punto_de_Venta_Fondo_Blanco.jpg"))); // NOI18N
-        lblCabecera.setName("lblCabecera"); // NOI18N
-
-        jpnCamposLogin.setBackground(new java.awt.Color(32, 182, 155));
-        jpnCamposLogin.setName("jpnCamposLogin"); // NOI18N
-
-        jpwContrasena.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        jpwContrasena.setForeground(new java.awt.Color(204, 0, 51));
-        jpwContrasena.setName("jpwContrasena"); // NOI18N
-        jpwContrasena.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipoIdentificacion.setBackground(new java.awt.Color(32, 182, 155));
+        cmbTipoIdentificacion.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        cmbTipoIdentificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "E" }));
+        cmbTipoIdentificacion.setBorder(null);
+        cmbTipoIdentificacion.setName("cmbTipoIdentificacion"); // NOI18N
+        cmbTipoIdentificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jpwContrasenaActionPerformed(evt);
+                cmbTipoIdentificacionActionPerformed(evt);
             }
         });
 
-        lblUsuario.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblUsuario.setForeground(new java.awt.Color(255, 255, 255));
-        lblUsuario.setText("IDENTIFICACIÓN:");
-        lblUsuario.setAutoscrolls(true);
-        lblUsuario.setFocusable(false);
-        lblUsuario.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
-        lblUsuario.setName("lblUsuario"); // NOI18N
-
-        lblContrasena.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblContrasena.setForeground(new java.awt.Color(255, 255, 255));
-        lblContrasena.setText("CONTRASEÑA: ");
-        lblContrasena.setAutoscrolls(true);
-        lblContrasena.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        lblContrasena.setName("lblContrasena"); // NOI18N
+        lblDescripcion.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblDescripcion.setForeground(new java.awt.Color(28, 90, 125));
+        lblDescripcion.setText("    Por favor ingresa tu cédula y contraseña");
+        lblDescripcion.setName("lblDescripcion"); // NOI18N
 
         txtCedula.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        txtCedula.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtCedula.setName("txtCedula"); // NOI18N
         txtCedula.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,57 +83,41 @@ public class Bloqueo extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "V", "J", "E", "P" }));
-        jComboBox1.setName("jComboBox1"); // NOI18N
+        lblContrasena.setBackground(new java.awt.Color(32, 182, 155));
+        lblContrasena.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblContrasena.setForeground(new java.awt.Color(255, 255, 255));
+        lblContrasena.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/10-bloqueo.png"))); // NOI18N
+        lblContrasena.setAutoscrolls(true);
+        lblContrasena.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblContrasena.setName("lblContrasena"); // NOI18N
 
-        javax.swing.GroupLayout jpnCamposLoginLayout = new javax.swing.GroupLayout(jpnCamposLogin);
-        jpnCamposLogin.setLayout(jpnCamposLoginLayout);
-        jpnCamposLoginLayout.setHorizontalGroup(
-            jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtCedula))
-                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jpnCamposLoginLayout.setVerticalGroup(
-            jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpnCamposLoginLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                        .addComponent(txtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jpnCamposLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18))
-        );
-
-        btnIngresar.setBackground(new java.awt.Color(204, 204, 204));
-        btnIngresar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnIngresar.setText("INGRESAR");
-        btnIngresar.setContentAreaFilled(true);
-        btnIngresar.setName("btnIngresar"); // NOI18N
-        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+        jpwContrasena.setForeground(new java.awt.Color(32, 182, 155));
+        jpwContrasena.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
+        jpwContrasena.setName("jpwContrasena"); // NOI18N
+        jpwContrasena.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIngresarActionPerformed(evt);
+                jpwContrasenaActionPerformed(evt);
             }
         });
 
-        btnSalir.setBackground(new java.awt.Color(204, 204, 204));
+        btnEntrar.setBackground(new java.awt.Color(32, 182, 155));
+        btnEntrar.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnEntrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEntrar.setText("Entrar");
+        btnEntrar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
+        btnEntrar.setContentAreaFilled(true);
+        btnEntrar.setName("btnEntrar"); // NOI18N
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntrarActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setBackground(new java.awt.Color(32, 182, 155));
         btnSalir.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnSalir.setText("SALIR");
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
+        btnSalir.setText("Salir");
+        btnSalir.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 1, true));
         btnSalir.setName("btnSalir"); // NOI18N
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,103 +125,148 @@ public class Bloqueo extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("BLOQUEADO");
-        jLabel1.setName("jLabel1"); // NOI18N
+        lblLogoInverdata.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/logo_verde_p_v.png"))); // NOI18N
+        lblLogoInverdata.setName("lblLogoInverdata"); // NOI18N
 
-        javax.swing.GroupLayout jpnPrincipalLayout = new javax.swing.GroupLayout(jpnPrincipal);
-        jpnPrincipal.setLayout(jpnPrincipalLayout);
-        jpnPrincipalLayout.setHorizontalGroup(
-            jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54))
-            .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jpnCamposLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addGap(162, 162, 162)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/logo_saphiro-verde-pequeño.png"))); // NOI18N
+        lblLogo.setName("lblLogo"); // NOI18N
+
+        lblFondo.setBackground(new java.awt.Color(255, 255, 255));
+        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/login 500x424.jpg"))); // NOI18N
+        lblFondo.setName("lblFondo"); // NOI18N
+
+        javax.swing.GroupLayout jpnPrincipal1Layout = new javax.swing.GroupLayout(jpnPrincipal1);
+        jpnPrincipal1.setLayout(jpnPrincipal1Layout);
+        jpnPrincipal1Layout.setHorizontalGroup(
+            jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                        .addGap(366, 366, 366)
+                        .addComponent(lblLogoInverdata, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                        .addGap(86, 86, 86)
+                        .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 71, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                            .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap())
+                        .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal1Layout.createSequentialGroup()
+                                .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(152, 152, 152))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal1Layout.createSequentialGroup()
+                                .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jpwContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(117, 117, 117))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal1Layout.createSequentialGroup()
+                        .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(173, 173, 173))))
+            .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lblFondo)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
-        jpnPrincipalLayout.setVerticalGroup(
-            jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpnPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblCabecera, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                .addGap(11, 11, 11)
-                .addComponent(jpnCamposLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jpnPrincipal1Layout.setVerticalGroup(
+            jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jpnPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27))
+                .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbTipoIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jpwContrasena, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblContrasena, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addComponent(lblLogoInverdata, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
+            .addGroup(jpnPrincipal1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpnPrincipal1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lblFondo)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        getContentPane().add(jpnPrincipal, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jpnPrincipal1, java.awt.BorderLayout.PAGE_START);
 
-        setSize(new java.awt.Dimension(487, 383));
+        setSize(new java.awt.Dimension(517, 461));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-       
-        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+    private void cmbTipoIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoIdentificacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbTipoIdentificacionActionPerformed
 
-        if (g == JOptionPane.YES_OPTION) {
+    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
+        jpwContrasena.requestFocus();
+    }//GEN-LAST:event_txtCedulaActionPerformed
+
+    private void jpwContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpwContrasenaActionPerformed
+        ingresarSistema();
+    }//GEN-LAST:event_jpwContrasenaActionPerformed
+
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+        ingresarSistema();
+    }//GEN-LAST:event_btnEntrarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        int dialogo_salir = JOptionPane.showConfirmDialog(this, "Desea salir del Sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+
+        if (dialogo_salir == JOptionPane.YES_OPTION) {
             System.exit(0);
         } else {
             this.setVisible(true);
         }
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-         // cerrarbloq();
-        ingresarSistema();
-       // this.menuPrincipal.habilitar();
-    }//GEN-LAST:event_btnIngresarActionPerformed
-
-    private void jpwContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpwContrasenaActionPerformed
-        ingresarSistema();
-    }//GEN-LAST:event_jpwContrasenaActionPerformed
-
-    private void txtCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaActionPerformed
-         jpwContrasena.requestFocus();
-    }//GEN-LAST:event_txtCedulaActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JButton btnIngresar;
-    public static javax.swing.JButton btnSalir;
-    private javax.swing.ButtonGroup buttonGroup14;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jpnCamposLogin;
-    private javax.swing.JPanel jpnPrincipal;
-    public static javax.swing.JPasswordField jpwContrasena;
-    private javax.swing.JLabel lblCabecera;
+    private javax.swing.JButton btnEntrar;
+    private javax.swing.JButton btnSalir;
+    public static javax.swing.JComboBox<String> cmbTipoIdentificacion;
+    private javax.swing.JPanel jpnPrincipal1;
+    private javax.swing.JPasswordField jpwContrasena;
     private javax.swing.JLabel lblContrasena;
-    private javax.swing.JLabel lblUsuario;
-    private static javax.swing.JTextField txtCedula;
+    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblFondo;
+    private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogoInverdata;
+    public static javax.swing.JTextField txtCedula;
     // End of variables declaration//GEN-END:variables
+
+    public void identificarPais(){
+        Pais p = menuPrincipal.getOBD().getDatosPais(" WHERE activo = true");
+
+        //asignando identificacion al combo.
+        cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
+        cmbTipoIdentificacion.setSelectedIndex(0);
+    }    
 
     /**
      * Método para asignar usuario y clave automatico.
      */
     private void entrarProgramador() {
         String nombre = "inverdata@inverdata.com.ve";
-       String password = "1234";
+        String password = "1234";
         txtCedula.setText(nombre);
         jpwContrasena.setText(password);
     }
@@ -279,169 +290,53 @@ public class Bloqueo extends javax.swing.JFrame {
      *
      */
     
-     public void cerrarbloq(){
-      
+    public void cerrarbloq(){
         this.dispose();
     }
   
     public void ingresarSistema() {
-       // entrarProgramador2();
-        
-       // entrarProgramador();
-        
-       
-       // REVISAR YA QUE AL INGRESAR UN USUARIO "0" SIN CONTRASEÑA, DESBLOQUEA LA VENTANA.......
-          String cedula = txtCedula.getText();
-          char[] arrayPassword = jpwContrasena.getPassword();
-          String tipo = jComboBox1.getSelectedItem().toString();
-           int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword, tipo);
-      
-          
-          
-          
-         
-            
-          if (idEmpleado != -1) {
-            HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-            menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
-            menuPrincipal.setVisible(true);
-            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
-            this.menuPrincipal.deshabilitar();
-            cerrarbloq();
-            
-            } else { 
-               /*  if (cedula.isEmpty() && arrayPassword.toString().isEmpty()) {
-                Utilidades.Sonidos.beep();
-                 JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
-                txtCedula.setText("");
-                jpwContrasena.setText("");
-                txtCedula.requestFocus();
-                //jpwContrasena.requestFocus();
-                this.menuPrincipal.habilitar();
-
-                         } //if dentro del else
-                  */
-                  if (!cedula.equals(idEmpleado)) {
-
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
-                        txtCedula.setText("");
-                       txtCedula.requestFocus();
-                       this.menuPrincipal.habilitar();
-                      return;
-
-                    } else{
-                      
-                  }
-                  
-                  
-                 if(!arrayPassword.toString().equalsIgnoreCase(cedula)){
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese password");
-                        jpwContrasena.setText("");
-                       jpwContrasena.requestFocus();
-                       this.menuPrincipal.habilitar();
-                    //  return;
-                      
-                          }
-                   
-                 } // else
-        return;     
-        
-      
-        }// if principal
-    
-    
-    
-    /* else if (txtCedula.getText().equals(cedula.isEmpty())) {
-
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese cedula");
-                       txtCedula.requestFocus();
-                       this.menuPrincipal.habilitar();
-
-                    } else{
-                        Utilidades.Sonidos.beep();
-                        JOptionPane.showMessageDialog(this, "Ingrese password");
-                       jpwContrasena.requestFocus();
-                       this.menuPrincipal.habilitar();
-
-                 } // ii-else_if-else   */
-    
- /* public  void  habilitar(){
-        btnCaja.setEnabled(false);
-        btnVentas.setEnabled(false);
-        btnFacturas.setEnabled(false);
-        btnAyuda.setEnabled(false);
-        btnAcerca.setEnabled(false);
-        btnAdmin.setEnabled(false);
-        btnProductos.setEnabled(false);
-        btnMovimientos.setEnabled(false);
-   
-   }
-    public  void  deshabilitar(){
-       
-       if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
-        btnCaja.setEnabled(true);
-        btnVentas.setEnabled(true);
-        btnFacturas.setEnabled(true);
-        btnAyuda.setEnabled(true);
-        btnAcerca.setEnabled(true);
-        btnAdmin.setEnabled(true);
-        btnProductos.setEnabled(true);
-        btnMovimientos.setEnabled(true);
-       }
-   }*/
-        /*  if (cedula.isEmpty() && arrayPassword.length <= 0) {
-            Utilidades.Sonidos.beep();
-             JOptionPane.showMessageDialog(this, "Ingresar CEDULA y PASWORD para acceder al sistema");
-            txtCedula.requestFocus();
-            jpwContrasena.requestFocus();
-            this.menuPrincipal.habilitar();
-            return;
-        }
-       if (arrayPassword.length <= 0) {
-            Utilidades.Sonidos.beep();
-             JOptionPane.showMessageDialog(this, "Ingrese password");
-           jpwContrasena.requestFocus();
-           this.menuPrincipal.habilitar();
-            return;
-        }*/     
-             
-        
-       /* String cedula = txtCedula.getText();
+        String cedula = txtCedula.getText();
         char[] arrayPassword = jpwContrasena.getPassword();
-        System.out.println(cedula+"  "+arrayPassword);
+        String tipo = cmbTipoIdentificacion.getSelectedItem().toString();
+        
         if (cedula.isEmpty()) {
             Utilidades.Sonidos.beep();
+            JOptionPane.showMessageDialog(this, " Para DESBLOQUEAR, debe ingresar su cedula/usuario");
             txtCedula.requestFocus();
             return;
         }
+  
         if (arrayPassword.length <= 0) {
+            this.menuPrincipal.habilitar();
             Utilidades.Sonidos.beep();
             jpwContrasena.requestFocus();
+            JOptionPane.showMessageDialog(this, "Para DESBLOQUEAR, ingrese su clave");
             return;
         }
-        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword);
-              if (idEmpleado != -1) {
+        
+        int idEmpleado = menuPrincipal.getOBD().autenticarEmpleado2(cedula, arrayPassword, tipo);
+
+        if (idEmpleado != -1) {
             HashMap<String, String> mapEmpleado = menuPrincipal.getOBD().getMapEmpleado(idEmpleado);
-            //entrar
+            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
             menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
             menuPrincipal.setVisible(true);
-            menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
+            menuPrincipal.deshabilitar();
             this.dispose();
-             } else {
+        } else {
+            this.menuPrincipal.habilitar();
+            JOptionPane.showMessageDialog(this, "Ingrese su IDENTIFICACION y Clave correctamente para DESBLOQUEAR");
             Utilidades.Sonidos.beep();
             txtCedula.setText("");
             jpwContrasena.setText("");
             txtCedula.requestFocus();
-        */
+        }
+    }
+    
     public void setMaximum(boolean b) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-  
-    }
+}
 
   
     

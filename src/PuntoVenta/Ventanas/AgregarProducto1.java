@@ -115,7 +115,6 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelDetalles = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         panelComponente = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -123,22 +122,20 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         panelDescripcion = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbDescripcion = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jToolBarDetalle = new javax.swing.JToolBar();
         btnDescripcion = new javax.swing.JButton();
         btnComponente = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(32, 182, 155));
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        panelDetalles.setBackground(new java.awt.Color(32, 182, 155));
-        panelDetalles.setLayout(new java.awt.CardLayout());
-
         jPanel1.setBackground(new java.awt.Color(32, 182, 155));
 
-        panelComponente.setBackground(new java.awt.Color(32, 182, 155));
+        panelComponente.setBackground(new java.awt.Color(255, 255, 255));
 
         jtbComponente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -150,7 +147,7 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(jtbComponente);
 
-        panelDescripcion.setBackground(new java.awt.Color(32, 182, 155));
+        panelDescripcion.setBackground(new java.awt.Color(255, 255, 255));
 
         jtbDescripcion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -162,17 +159,52 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jtbDescripcion);
 
+        btnAgregar.setBackground(new java.awt.Color(32, 182, 155));
+        btnAgregar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnAgregar.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregar.setText("<html><font size=4><center>Agregar<br>XX</center></font></html>");
+        btnAgregar.setBorder(null);
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnEliminar.setBackground(new java.awt.Color(32, 182, 155));
+        btnEliminar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("<html><font size=4><center>Eliminar<br>XX</center></font></html>");
+        btnEliminar.setBorder(null);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelDescripcionLayout = new javax.swing.GroupLayout(panelDescripcion);
         panelDescripcion.setLayout(panelDescripcionLayout);
         panelDescripcionLayout.setHorizontalGroup(
             panelDescripcionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+            .addGroup(panelDescripcionLayout.createSequentialGroup()
+                .addGap(133, 133, 133)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(77, 77, 77)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDescripcionLayout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelDescripcionLayout.setVerticalGroup(
             panelDescripcionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDescripcionLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+            .addGroup(panelDescripcionLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addGroup(panelDescripcionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -180,61 +212,43 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         panelComponente.setLayout(panelComponenteLayout);
         panelComponenteLayout.setHorizontalGroup(
             panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelComponenteLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(panelDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelComponenteLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                    .addContainerGap(42, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap()))
         );
         panelComponenteLayout.setVerticalGroup(
             panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelComponenteLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(panelDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(panelDescripcion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(panelComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelComponenteLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2)
-                    .addContainerGap()))
+                    .addGap(41, 41, 41)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(118, Short.MAX_VALUE)))
         );
 
-        jButton1.setText("<html><font size=4><center>Eliminar<br>XX</center></font></html>");
-        jButton1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        btnAgregar.setText("<html><font size=4><center>Agregar<br>XX</center></font></html>");
-        btnAgregar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-
-        jToolBarDetalle.setBackground(new java.awt.Color(32, 182, 155));
-        jToolBarDetalle.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jToolBarDetalle.setBackground(new java.awt.Color(255, 255, 255));
+        jToolBarDetalle.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         jToolBarDetalle.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBarDetalle.setRollover(true);
 
-        btnDescripcion.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. descripcion.png"))); // NOI18N
+        btnDescripcion.setBackground(new java.awt.Color(255, 255, 255));
+        btnDescripcion.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnDescripcion.setForeground(new java.awt.Color(28, 90, 125));
+        btnDescripcion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/5-descripcion.png"))); // NOI18N
         btnDescripcion.setText("<html><font size=4><center>Descripción</center></font></html>");
+        btnDescripcion.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDescripcion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDescripcion.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btnDescripcion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnDescripcion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnDescripcionMouseExited(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnDescripcionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnDescripcionMouseExited(evt);
             }
         });
         btnDescripcion.addActionListener(new java.awt.event.ActionListener() {
@@ -244,10 +258,11 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         });
         jToolBarDetalle.add(btnDescripcion);
 
-        btnComponente.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. componente.png"))); // NOI18N
+        btnComponente.setBackground(new java.awt.Color(255, 255, 255));
+        btnComponente.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnComponente.setForeground(new java.awt.Color(28, 90, 125));
+        btnComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/6-componente.png"))); // NOI18N
         btnComponente.setText("<html><font size=4><center>Componente<br></center></font></html>");
-        btnComponente.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnComponente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnComponente.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         btnComponente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -258,38 +273,37 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         });
         jToolBarDetalle.add(btnComponente);
 
+        jLabel2.setBackground(new java.awt.Color(32, 182, 155));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro-700x400.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelComponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(114, 114, 114)
-                        .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(154, 154, 154)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(73, 73, 73)
+                .addComponent(panelComponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
                 .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(25, 25, 25)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(115, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelComponente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
-                    .addComponent(btnAgregar))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jToolBarDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(62, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 31, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -297,18 +311,12 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 637, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(panelDetalles, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -334,19 +342,23 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
     agregarProducto();
     }//GEN-LAST:event_btnAgregarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
        EliminarProductos();
-    }//GEN-LAST:event_jButton1ActionPerformed
- private void descripcion() {
-        CardLayout card = (CardLayout) panelDetalles.getLayout();
-        card.show(panelDetalles, "panelDescripcion");
-       // txtFiltro.requestFocus();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+    
+    /**
+     * FALTA: Panel Detalle 
+     */
+    private void descripcion() {
+//        CardLayout card = (CardLayout) panelDetalles.getLayout();
+//        card.show(panelDetalles, "panelDescripcion");
+//        txtFiltro.requestFocus();
     }
     
     private void componente() {
-        CardLayout card = (CardLayout) panelDetalles.getLayout();
-        card.show(panelDetalles, "panelComponente");
-       // txtFiltro.requestFocus();
+//        CardLayout card = (CardLayout) panelDetalles.getLayout();
+//        card.show(panelDetalles, "panelComponente");
+//        txtFiltro.requestFocus();
     }
     
      public void agregarProducto() {
@@ -397,7 +409,8 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnComponente;
     private javax.swing.JButton btnDescripcion;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -406,6 +419,5 @@ public class AgregarProducto1 extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtbDescripcion;
     private javax.swing.JPanel panelComponente;
     private javax.swing.JPanel panelDescripcion;
-    private javax.swing.JPanel panelDetalles;
     // End of variables declaration//GEN-END:variables
 }

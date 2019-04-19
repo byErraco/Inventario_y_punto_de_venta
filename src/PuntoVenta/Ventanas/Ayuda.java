@@ -27,31 +27,223 @@ public class Ayuda extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jpnPrincipal2 = new javax.swing.JPanel();
+        lblDescripcion = new javax.swing.JLabel();
+        lblContrasena = new javax.swing.JLabel();
+        lblLogoInverdata = new javax.swing.JLabel();
+        lblLogo = new javax.swing.JLabel();
+        lblFondo = new javax.swing.JLabel();
+        lblDescripcion1 = new javax.swing.JLabel();
+        lblDescripcion2 = new javax.swing.JLabel();
+        lblDescripcion3 = new javax.swing.JLabel();
+        lblDescripcion4 = new javax.swing.JLabel();
+        lblContrasena1 = new javax.swing.JLabel();
+        lblContrasena2 = new javax.swing.JLabel();
+        lblContrasena3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sistema Saphiro PV: Ayuda");
         setBackground(new java.awt.Color(32, 182, 155));
         setResizable(false);
 
-        jLabel1.setBackground(new java.awt.Color(32, 182, 155));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Ayuda2.png"))); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(850, 500));
+
+        jpnPrincipal2.setBackground(new java.awt.Color(255, 255, 255));
+        jpnPrincipal2.setPreferredSize(new java.awt.Dimension(850, 500));
+
+        lblDescripcion.setBackground(new java.awt.Color(255, 255, 255));
+        lblDescripcion.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblDescripcion.setForeground(new java.awt.Color(32, 182, 155));
+        lblDescripcion.setText("Moraima Sanchez");
+
+        lblContrasena.setBackground(new java.awt.Color(32, 182, 155));
+        lblContrasena.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblContrasena.setForeground(new java.awt.Color(255, 255, 255));
+        lblContrasena.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/icono-1.png"))); // NOI18N
+        lblContrasena.setAutoscrolls(true);
+        lblContrasena.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        lblLogoInverdata.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/logo_inverdata 100x100.png"))); // NOI18N
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/logo_ayuda.png"))); // NOI18N
+
+        lblFondo.setBackground(new java.awt.Color(255, 255, 255));
+        lblFondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/ayuda.png"))); // NOI18N
+
+        lblDescripcion1.setBackground(new java.awt.Color(255, 255, 255));
+        lblDescripcion1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblDescripcion1.setForeground(new java.awt.Color(28, 90, 125));
+        lblDescripcion1.setText("0414 - 646 06 00 / 0426 - 687 73 91");
+
+        lblDescripcion2.setBackground(new java.awt.Color(255, 255, 255));
+        lblDescripcion2.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblDescripcion2.setForeground(new java.awt.Color(28, 90, 125));
+        lblDescripcion2.setText("moraima.sanchez@inverdata.com.ve");
+
+        lblDescripcion3.setBackground(new java.awt.Color(255, 255, 255));
+        lblDescripcion3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblDescripcion3.setForeground(new java.awt.Color(28, 90, 125));
+        lblDescripcion3.setText("PARA SOPORTE CONTÁCTENOS");
+
+        lblDescripcion4.setBackground(new java.awt.Color(255, 255, 255));
+        lblDescripcion4.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblDescripcion4.setForeground(new java.awt.Color(28, 90, 125));
+        lblDescripcion4.setText("www.inverdata.com.ve");
+
+        lblContrasena1.setBackground(new java.awt.Color(32, 182, 155));
+        lblContrasena1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblContrasena1.setForeground(new java.awt.Color(255, 255, 255));
+        lblContrasena1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/icono-3.png"))); // NOI18N
+        lblContrasena1.setAutoscrolls(true);
+        lblContrasena1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        lblContrasena2.setBackground(new java.awt.Color(32, 182, 155));
+        lblContrasena2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        lblContrasena2.setForeground(new java.awt.Color(255, 255, 255));
+        lblContrasena2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/icono-2.png"))); // NOI18N
+        lblContrasena2.setAutoscrolls(true);
+        lblContrasena2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        lblContrasena3.setBackground(new java.awt.Color(255, 255, 255));
+        lblContrasena3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblContrasena3.setForeground(new java.awt.Color(28, 90, 125));
+        lblContrasena3.setText("Versión 2.0");
+        lblContrasena3.setAutoscrolls(true);
+        lblContrasena3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+
+        javax.swing.GroupLayout jpnPrincipal2Layout = new javax.swing.GroupLayout(jpnPrincipal2);
+        jpnPrincipal2.setLayout(jpnPrincipal2Layout);
+        jpnPrincipal2Layout.setHorizontalGroup(
+            jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                        .addComponent(lblContrasena3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(71, 71, 71)
+                        .addComponent(lblContrasena1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDescripcion4, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblLogoInverdata)
+                        .addGap(34, 34, 34))
+                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                        .addGap(0, 180, Short.MAX_VALUE)
+                        .addComponent(lblDescripcion3)
+                        .addGap(221, 221, 221))
+                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                        .addGap(131, 131, 131)
+                        .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                                .addComponent(lblContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblDescripcion1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                                        .addGap(70, 70, 70)
+                                        .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                                .addComponent(lblContrasena2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblDescripcion2, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
+            .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 582, Short.MAX_VALUE))
+            .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                    .addComponent(lblFondo, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        jpnPrincipal2Layout.setVerticalGroup(
+            jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                .addContainerGap(48, Short.MAX_VALUE)
+                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblDescripcion3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(lblDescripcion1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jpnPrincipal2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lblContrasena)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDescripcion2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblContrasena2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal2Layout.createSequentialGroup()
+                        .addComponent(lblContrasena3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpnPrincipal2Layout.createSequentialGroup()
+                        .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLogoInverdata)
+                            .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblContrasena1)
+                                .addComponent(lblDescripcion4, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(40, 40, 40))))
+            .addGroup(jpnPrincipal2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblFondo, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 850, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jpnPrincipal2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 56, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addComponent(jpnPrincipal2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jpnPrincipal2;
+    private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblContrasena1;
+    private javax.swing.JLabel lblContrasena2;
+    private javax.swing.JLabel lblContrasena3;
+    private javax.swing.JLabel lblDescripcion;
+    private javax.swing.JLabel lblDescripcion1;
+    private javax.swing.JLabel lblDescripcion2;
+    private javax.swing.JLabel lblDescripcion3;
+    private javax.swing.JLabel lblDescripcion4;
+    private javax.swing.JLabel lblFondo;
+    private javax.swing.JLabel lblLogo;
+    private javax.swing.JLabel lblLogoInverdata;
     // End of variables declaration//GEN-END:variables
 }

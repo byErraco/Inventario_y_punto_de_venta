@@ -20,6 +20,7 @@ import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -39,7 +40,7 @@ public class GuardarReporte {
     // Transforma byte a file
     public static File ByteArrayToFile(byte[] myByteArray, String nombre) throws IOException{
         String url=System.getProperty("user.dir")+System.getProperty("file.separator");
-        File reporteFile = new File(url + nombre);
+        File reporteFile = new File(url + nombre); 
         FileUtils.writeByteArrayToFile(reporteFile, myByteArray);
         return reporteFile;
     }
@@ -54,7 +55,7 @@ public class GuardarReporte {
     public static void GuardarBaseDatos(int id, String name) throws IOException, SQLException {
         String realPath = System.getProperty("user.dir") + System.getProperty("file.separator");
         File reporte = new File(realPath + name);
-        
+                        
         switch (name) {
             case "reporteCorte.PDF":
                 guardarReporte(id, reporte, "corte_caja", "reporte_corte", "id_corte_caja");
@@ -71,14 +72,15 @@ public class GuardarReporte {
     }
     
     // Guarda el reporte en la base de datos
-    public static boolean guardarReporte(int id, File reporteFile, String tabla, String campo, String filtro) throws FileNotFoundException, SQLException {
+    public static void guardarReporte(int id, File reporteFile, String tabla, String campo, String filtro) throws FileNotFoundException, SQLException {
         PostgreSQL d = new PostgreSQL();
         FileInputStream fis = new FileInputStream(reporteFile);
         
         String sql = "UPDATE spve."+tabla+" SET "+campo+" = ? WHERE "+filtro+" = '"+id+"'";
+//        String sql1 = "INSERT INTO spve.reporte (reporte_cierre, id_cierre_caja) VALUES (?, '"+id+"')";
         PreparedStatement ps = d.getConexion().prepareStatement(sql);
         ps.setBinaryStream(1, fis, (int)reporteFile.length());
-
-        return ps.execute();
+        ps.execute();
+        ps.close();
     }
 }

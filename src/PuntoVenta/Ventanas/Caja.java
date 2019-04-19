@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -18,6 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -48,8 +57,7 @@ public class Caja extends javax.swing.JInternalFrame {
      * @param menuPrincipal
      */
     public Caja(MenuPrincipal menuPrincipal) {
-        initComponents();
-        btnImprimir.setVisible(true);
+        initComponents();       
         this.menuPrincipal = menuPrincipal;
         this.setTitle("Saphiro - Gestión de la caja N°" + menuPrincipal.getModeloCaja().getId());
         actualizarTabla();
@@ -61,19 +69,19 @@ public class Caja extends javax.swing.JInternalFrame {
      */
     public void actualizarTabla() {
         DefaultTableModel table = (DefaultTableModel)jtbResultadoBusqueda.getModel();
-        table.setNumRows(0);
+        table.setRowCount(0);
         
-        ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja"))); 
+        ArrayList estadoCajaArrayList = menuPrincipal.getOBD().getArrayListEstadoCaja(Integer.parseInt(menuPrincipal.getConfiguracion().getProperty("id_caja")), ""); 
         EstadoCajaTableModel estadoCajaTableModel = new EstadoCajaTableModel(estadoCajaArrayList)
         {
-            @Override 
+            @Override
             public boolean isCellEditable(int row, int column)
             {
                 return false;
             }
         };
         jtbResultadoBusqueda.setModel(estadoCajaTableModel);
-        
+
         setBotonesCajaEnabled(menuPrincipal.isCajaAbierta());
 
         jtbResultadoBusqueda.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -109,6 +117,7 @@ public class Caja extends javax.swing.JInternalFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 //                verFlujoCaja();
+                mostrarCerradas();
             }
         };
         Action actHistorialCortesCaja = new AbstractAction("actionHistorialCortesCaja") {
@@ -158,8 +167,8 @@ public class Caja extends javax.swing.JInternalFrame {
         btnCorte.getActionMap().put("actionCorteCaja", actCorteCaja);
         btnCorte.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actCorteCaja.getValue(Action.ACCELERATOR_KEY), "actionCorteCaja");
 
-        btnFlujoCaja.getActionMap().put("actionFlujoCaja", actFlujoCaja);
-        btnFlujoCaja.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actFlujoCaja.getValue(Action.ACCELERATOR_KEY), "actionFlujoCaja");
+        mostrarCerradas.getActionMap().put("actionFlujoCaja", actFlujoCaja);
+        mostrarCerradas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actFlujoCaja.getValue(Action.ACCELERATOR_KEY), "actionFlujoCaja");
         
         btnCortes.getActionMap().put("actionHistorialCortesCaja", actHistorialCortesCaja);
         btnCortes.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actHistorialCortesCaja.getValue(Action.ACCELERATOR_KEY), "actionHistorialCortesCaja");
@@ -242,6 +251,7 @@ public class Caja extends javax.swing.JInternalFrame {
             do {
                 montoApertura = JOptionPane.showInputDialog(this, "Monto de apertura", 0);
             } while (!montoApertura.matches(Globales.patronCantidad));
+            System.out.println("montoApertura: " + montoApertura);
             
             int idEstadoCaja = menuPrincipal.getOBD().abrirCaja(menuPrincipal.getModeloCaja().getId(),
                                                                 menuPrincipal.getEmpleado().getId(),
@@ -357,18 +367,19 @@ public class Caja extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         pnlContenedor = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        txtFiltro = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtbResultadoBusqueda = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        btnAbrirCaja = new javax.swing.JButton();
+        btnCortes = new javax.swing.JButton();
+        btnCorte = new javax.swing.JButton();
+        btnImprimir = new javax.swing.JButton();
         btnCerrarCaja = new javax.swing.JButton();
         btnFlujoCaja = new javax.swing.JButton();
-        btnImprimir = new javax.swing.JButton();
-        btnCorte = new javax.swing.JButton();
-        btnCortes = new javax.swing.JButton();
+        btnAbrirCaja = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbResultadoBusqueda = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtFiltro = new javax.swing.JTextField();
+        mostrarCerradas = new javax.swing.JCheckBox();
 
         setClosable(true);
 
@@ -377,20 +388,99 @@ public class Caja extends javax.swing.JInternalFrame {
         //jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         ///jPanel1.setBackground(new java.awt.Color(-15589839));
 
-        jPanel3.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 15), java.awt.Color.white)); // NOI18N
-        //jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        //jPanel3.setBackground(new java.awt.Color(-15589839));
+        jPanel4.setBackground(new java.awt.Color(153, 255, 51));
+        jPanel4.setOpaque(false);
+        //jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        //jPanel4.setBackground(new java.awt.Color(-15589839));
 
-        txtFiltro.setNextFocusableComponent(jtbResultadoBusqueda);
-        txtFiltro.addActionListener(new java.awt.event.ActionListener() {
+        btnCortes.setBackground(new java.awt.Color(45, 178, 152));
+        btnCortes.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnCortes.setForeground(new java.awt.Color(255, 255, 255));
+        btnCortes.setText("<html><font size=4><center>Cortes<br>F6</center></font></html>");
+        btnCortes.setBorder(null);
+        btnCortes.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnCortes.setEnabled(false);
+        btnCortes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFiltroActionPerformed(evt);
+                btnCortesActionPerformed(evt);
             }
         });
-        txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtFiltroKeyReleased(evt);
+
+        btnCorte.setBackground(new java.awt.Color(45, 178, 152));
+        btnCorte.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnCorte.setForeground(new java.awt.Color(255, 255, 255));
+        btnCorte.setText("<html><font size=4><center>Corte<br>F4</center></font></html>");
+        btnCorte.setBorder(null);
+        btnCorte.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnCorte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorteActionPerformed(evt);
+            }
+        });
+
+        btnImprimir.setBackground(new java.awt.Color(45, 178, 152));
+        btnImprimir.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnImprimir.setForeground(new java.awt.Color(255, 255, 255));
+        btnImprimir.setText("<html><font size=4><center>Imprimir<br>F11</center></font></html>");
+        btnImprimir.setBorder(null);
+        btnImprimir.setMaximumSize(new java.awt.Dimension(150, 45));
+        btnImprimir.setMinimumSize(new java.awt.Dimension(150, 45));
+        btnImprimir.setNextFocusableComponent(txtFiltro);
+        btnImprimir.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnImprimir.setEnabled(false);
+        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprimirActionPerformed(evt);
+            }
+        });
+
+        btnCerrarCaja.setBackground(new java.awt.Color(45, 178, 152));
+        btnCerrarCaja.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnCerrarCaja.setForeground(new java.awt.Color(255, 255, 255));
+        btnCerrarCaja.setText("<html><font size=4><center>Cerrar<br>F3</center></font></html>");
+        btnCerrarCaja.setActionCommand("actionCerrarCaja");
+        btnCerrarCaja.setBorder(null);
+        btnCerrarCaja.setMaximumSize(new java.awt.Dimension(150, 45));
+        btnCerrarCaja.setMinimumSize(new java.awt.Dimension(150, 45));
+        btnCerrarCaja.setNextFocusableComponent(btnFlujoCaja);
+        btnCerrarCaja.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnCerrarCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCerrarCajaActionPerformed(evt);
+            }
+        });
+
+        btnFlujoCaja.setVisible(false);
+        btnFlujoCaja.setBackground(new java.awt.Color(45, 178, 152));
+        btnFlujoCaja.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnFlujoCaja.setForeground(new java.awt.Color(255, 255, 255));
+        btnFlujoCaja.setText("<html><font size=4><center>Ver Flujo<br>F5</center></font></html>");
+        btnFlujoCaja.setActionCommand("actionFlujoCaja");
+        btnFlujoCaja.setBorder(null);
+        btnFlujoCaja.setEnabled(false);
+        btnFlujoCaja.setMaximumSize(new java.awt.Dimension(150, 45));
+        btnFlujoCaja.setMinimumSize(new java.awt.Dimension(150, 45));
+        btnFlujoCaja.setNextFocusableComponent(btnImprimir);
+        btnFlujoCaja.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnFlujoCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFlujoCajaActionPerformed(evt);
+            }
+        });
+
+        btnAbrirCaja.setBackground(new java.awt.Color(45, 178, 152));
+        btnAbrirCaja.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnAbrirCaja.setForeground(new java.awt.Color(255, 255, 255));
+        btnAbrirCaja.setText("<html><font size=4><center>Abrir<br>F2</center></font></html>");
+        btnAbrirCaja.setActionCommand("actionAbrirCaja");
+        btnAbrirCaja.setBorder(null);
+        btnAbrirCaja.setMaximumSize(new java.awt.Dimension(150, 45));
+        btnAbrirCaja.setMinimumSize(new java.awt.Dimension(150, 45));
+        btnAbrirCaja.setNextFocusableComponent(btnCerrarCaja);
+        btnAbrirCaja.setPreferredSize(new java.awt.Dimension(150, 45));
+        btnAbrirCaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirCajaActionPerformed(evt);
             }
         });
 
@@ -416,111 +506,33 @@ public class Caja extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/fondo-blanco 900x500.png"))); // NOI18N
+
+        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(28, 90, 125));
         jLabel1.setText("<html><font size=4><center>Búsqueda:<br></font></center></html>");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(135, 135, 135)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                .addGap(180, 180, 180))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtFiltro, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jPanel4.setBackground(new java.awt.Color(35, 109, 215));
-        jPanel4.setOpaque(false);
-        //jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        //jPanel4.setBackground(new java.awt.Color(-15589839));
-
-        btnAbrirCaja.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnAbrirCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/Tips.png"))); // NOI18N
-        btnAbrirCaja.setText("<html><font size=4><center>Abrir<br>F2</center></font></html>");
-        btnAbrirCaja.setActionCommand("actionAbrirCaja");
-        btnAbrirCaja.setMaximumSize(new java.awt.Dimension(150, 45));
-        btnAbrirCaja.setMinimumSize(new java.awt.Dimension(150, 45));
-        btnAbrirCaja.setNextFocusableComponent(btnCerrarCaja);
-        btnAbrirCaja.setPreferredSize(new java.awt.Dimension(150, 45));
-        btnAbrirCaja.addActionListener(new java.awt.event.ActionListener() {
+        txtFiltro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
+        txtFiltro.setNextFocusableComponent(jtbResultadoBusqueda);
+        txtFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAbrirCajaActionPerformed(evt);
+                txtFiltroActionPerformed(evt);
+            }
+        });
+        txtFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFiltroKeyReleased(evt);
             }
         });
 
-        btnCerrarCaja.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnCerrarCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/cancel.png"))); // NOI18N
-        btnCerrarCaja.setText("<html><font size=4><center>Cerrar<br>F3</center></font></html>");
-        btnCerrarCaja.setActionCommand("actionCerrarCaja");
-        btnCerrarCaja.setMaximumSize(new java.awt.Dimension(150, 45));
-        btnCerrarCaja.setMinimumSize(new java.awt.Dimension(150, 45));
-        btnCerrarCaja.setNextFocusableComponent(btnFlujoCaja);
-        btnCerrarCaja.setPreferredSize(new java.awt.Dimension(150, 45));
-        btnCerrarCaja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarCajaActionPerformed(evt);
-            }
-        });
-
-        btnFlujoCaja.setVisible(false);
-        btnFlujoCaja.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        btnFlujoCaja.setText("<html><font size=4><center>Ver Flujo<br>F5</center></font></html>");
-        btnFlujoCaja.setActionCommand("actionFlujoCaja");
-        btnFlujoCaja.setEnabled(false);
-        btnFlujoCaja.setMaximumSize(new java.awt.Dimension(150, 45));
-        btnFlujoCaja.setMinimumSize(new java.awt.Dimension(150, 45));
-        btnFlujoCaja.setNextFocusableComponent(btnImprimir);
-        btnFlujoCaja.setPreferredSize(new java.awt.Dimension(150, 45));
-        btnFlujoCaja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFlujoCajaActionPerformed(evt);
-            }
-        });
-
-        btnImprimir.setVisible(false);
-        btnImprimir.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnImprimir.setText("<html><font size=4><center>Imprimir<br>F11</center></font></html>");
-        btnImprimir.setMaximumSize(new java.awt.Dimension(150, 45));
-        btnImprimir.setMinimumSize(new java.awt.Dimension(150, 45));
-        btnImprimir.setNextFocusableComponent(txtFiltro);
-        btnImprimir.setPreferredSize(new java.awt.Dimension(150, 45));
-        btnImprimir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImprimirActionPerformed(evt);
-            }
-        });
-
-        btnCorte.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnCorte.setText("<html><font size=4><center>Corte<br>F4</center></font></html>");
-        btnCorte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCorteActionPerformed(evt);
-            }
-        });
-
-        btnCortes.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnCortes.setText("<html><font size=4><center>Cortes<br>F6</center></font></html>");
-        btnCortes.setEnabled(false);
-        btnCortes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCortesActionPerformed(evt);
+        mostrarCerradas.setSelected(true);
+        mostrarCerradas.setBackground(new java.awt.Color(255, 255, 255));
+        mostrarCerradas.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        mostrarCerradas.setText("<html><font size=4><center>Mostrar cerradas</center></font></html>");
+        mostrarCerradas.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                mostrarCerradasItemStateChanged(evt);
             }
         });
 
@@ -529,35 +541,62 @@ public class Caja extends javax.swing.JInternalFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnAbrirCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCerrarCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 120, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(btnCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCortes, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 329, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99)
+                        .addComponent(mostrarCerradas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 774, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(btnAbrirCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCerrarCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCorte, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnCortes, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 926, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(37, 37, 37)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mostrarCerradas)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCorte)
-                        .addComponent(btnCortes))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(btnAbrirCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnCerrarCaja, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(txtFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAbrirCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFlujoCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCerrarCaja, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCorte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCortes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
@@ -565,19 +604,16 @@ public class Caja extends javax.swing.JInternalFrame {
         pnlContenedorLayout.setHorizontalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(20, 20, 20)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 907, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlContenedorLayout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenedorLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         getContentPane().add(pnlContenedor, java.awt.BorderLayout.CENTER);
@@ -608,7 +644,12 @@ public class Caja extends javax.swing.JInternalFrame {
     private void txtFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltroKeyReleased
         String filtro = txtFiltro.getText();
         TableRowSorter sorter = new TableRowSorter(jtbResultadoBusqueda.getModel());
-        sorter.setRowFilter(RowFilter.regexFilter(filtro));
+        List<RowFilter<Object,Object>> filters = new ArrayList<RowFilter<Object,Object>>(2);
+        if(!mostrarCerradas.isSelected()) {
+            filters.add(RowFilter.regexFilter("Abierta", 3));
+        }
+        filters.add(RowFilter.regexFilter(filtro));
+        sorter.setRowFilter(RowFilter.andFilter(filters));
         jtbResultadoBusqueda.setRowSorter(sorter);
     }//GEN-LAST:event_txtFiltroKeyReleased
 
@@ -624,6 +665,10 @@ public class Caja extends javax.swing.JInternalFrame {
         abrirVentanaHistorialCortes();
     }//GEN-LAST:event_btnCortesActionPerformed
 
+    private void mostrarCerradasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_mostrarCerradasItemStateChanged
+        mostrarCerradasEvt();
+    }//GEN-LAST:event_mostrarCerradasItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnAbrirCaja;
     private javax.swing.JButton btnCerrarCaja;
@@ -632,10 +677,11 @@ public class Caja extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnFlujoCaja;
     private javax.swing.JButton btnImprimir;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtbResultadoBusqueda;
+    private javax.swing.JCheckBox mostrarCerradas;
     private javax.swing.JPanel pnlContenedor;
     private javax.swing.JTextField txtFiltro;
     // End of variables declaration//GEN-END:variables
@@ -644,8 +690,12 @@ public class Caja extends javax.swing.JInternalFrame {
         btnAbrirCaja.setEnabled(!aFlag);
         btnCerrarCaja.setEnabled(aFlag);
         btnCorte.setEnabled(aFlag);
-        btnImprimir.setEnabled(!aFlag);
 //        btnFlujoCaja.setEnabled(aFlag);
+    }
+    
+    public void mostrarCerradas() {
+        focusResultado();
+        mostrarCerradas.setSelected(!mostrarCerradas.isSelected());
     }
 
 //    private void imprimirFacturaCaja() {
@@ -659,6 +709,18 @@ public class Caja extends javax.swing.JInternalFrame {
 //        }
 //    }
     
+    public void mostrarCerradasEvt() {
+        if(!mostrarCerradas.isSelected()) {
+            TableRowSorter sorter = new TableRowSorter(jtbResultadoBusqueda.getModel());
+            sorter.setRowFilter(RowFilter.regexFilter("Abierta", 3));
+            jtbResultadoBusqueda.setRowSorter(sorter);
+        } else {
+            TableRowSorter sorter = new TableRowSorter(jtbResultadoBusqueda.getModel());
+            sorter.setRowFilter(RowFilter.regexFilter(""));
+            jtbResultadoBusqueda.setRowSorter(sorter);
+        }
+    }
+    
     private void imprimirFacturaCaja() throws IOException {
         if (jtbResultadoBusqueda.getSelectedRow() >= 0) {
             String codigoBarra = jtbResultadoBusqueda.getValueAt(jtbResultadoBusqueda.getSelectedRow(), 0).toString();
@@ -668,8 +730,21 @@ public class Caja extends javax.swing.JInternalFrame {
                 }
                 break;
             }
-            File reporteFile = menuPrincipal.getOBD().reimprimirReporte(codigoBarra, "reporte_cierre", "cierre_caja", "id_cierre_caja", "reporteCierre");
-            Desktop.getDesktop().open(reporteFile);
+
+            byte[] reporteBytea = menuPrincipal.getOBD().reimprimirReporte(codigoBarra, "reporte_cierre", "cierre_caja", "id_estado_caja", "reporteCierre");
+            String texto = "Esto es lo que va a la impresora";
+
+            PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
+
+            DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+            DocPrintJob docPrintJob = printService.createPrintJob();
+            Doc doc = new SimpleDoc(reporteBytea, flavor, null);
+            try {
+                    docPrintJob.print(doc, null);
+            } catch (PrintException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+            }
         }
     }
 

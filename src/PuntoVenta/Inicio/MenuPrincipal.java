@@ -3,7 +3,7 @@ package PuntoVenta.Inicio;
 //import PuntoVenta.Ventanas.bloqueo2;  
 import PuntoVenta.Inicio.ParametrosIniciales1;
 import PuntoVenta.Inicio.RegistroAdministrador;
-import PuntoVenta.Ventanas.Bloqueo1; //cambiado por bloqueo2
+import PuntoVenta.Ventanas.Bloqueo; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
 import PuntoVenta.BaseDatos.Empleado;
 import PuntoVenta.BaseDatos.Empresa;
@@ -41,16 +41,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -58,6 +63,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 /**
  *
@@ -74,7 +81,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Venta venta;
     public LogIn login;
     public Admin admin;
-    public Bloqueo1 bloqueo; // modificado de bloqueo2 --> Bloqueo
+    public Bloqueo bloqueo; // modificado de bloqueo2 --> Bloqueo
 //    public Empresa empresa;
     public Parametros parametros;
     public Pais pais;
@@ -106,6 +113,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Properties configuracion;
     private boolean logged;
     private Object actProd;
+    public ArrayList<JButton> ListadeBotones = new ArrayList<JButton>();
+
 
     /**
      * ?
@@ -113,20 +122,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         initComponents();
         JFrame frame = new JFrame();
-      
-        Dimension menuPrincipal = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension jFrameSize = menuPrincipal.getSize();
-        menuPrincipal.setSize(jFrameSize);
+//        this.PnlPrincipal.setVisible(false);
+//        this.setDefaultCloseOperation(0);
+//        Dimension menuPrincipal = Toolkit.getDefaultToolkit().getScreenSize();
+//        Dimension jFrameSize = menuPrincipal.getSize();
+//        menuPrincipal.setSize(jFrameSize);
         
-        JScrollPane jScrollPane1 = new JScrollPane(panel);
-        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        JPanel jPanel2 = new JPanel(null);
-        jPanel2.add(jScrollPane1);
-        frame.setContentPane(jPanel2);
-        frame.pack();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
+//        JScrollPane jScrollPane1 = new JScrollPane(panel);
+//        jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//        JPanel jPanel2 = new JPanel(null);
+//        jPanel2.add(jScrollPane1);
+//        frame.setContentPane(jPanel2);
+//        frame.pack();
+//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        frame.setVisible(true);
         
         //Obtener archivo de configuracion
         this.configuracion = getConfiguracion("local.conf");
@@ -208,6 +218,64 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
     }
     
+    public void crearListas() {
+        ListadeBotones.add(btnCaja);
+        ListadeBotones.add(btnVentas);
+        ListadeBotones.add(btnFacturas);
+        ListadeBotones.add(btnAdmin);
+        ListadeBotones.add(btnMovimientos);
+        ListadeBotones.add(btnProductos);
+        ListadeBotones.add(btnAyuda);
+        ListadeBotones.add(btnAcerca);
+        ListadeBotones.add(btnBloqueo);
+        ListadeBotones.add(btnCalculadora);
+        ListadeBotones.add(btnSalir);
+    }
+    
+    public void activarBtn(boolean aux){
+        for(int i=0;i<ListadeBotones.size();i++){
+            ListadeBotones.get(i).setVisible(aux);
+        }
+    }
+    
+    public void ejecutarCerrar(Object auxiliar) {
+        int a=0;
+        if(a==0){
+            try {
+                JDialog aux= (JDialog) auxiliar;
+                aux.addWindowListener(new WindowAdapter() {
+                    public void windowClosed(WindowEvent e) {
+                       activarBtn(true);
+                    }
+                });    
+            }catch(Exception e){
+                a=1;
+            }   
+        }
+        if(a==1){
+            try {
+                JFrame aux= (JFrame) auxiliar;
+                aux.addWindowListener(new WindowAdapter() {
+                    public void windowClosed(WindowEvent e) {
+                       activarBtn(true);
+                    }
+                });    
+            }catch(Exception e){
+                a=2;
+            }   
+        }
+        if(a==2){
+            try {
+                JInternalFrame aux= (JInternalFrame) auxiliar;
+                aux.addInternalFrameListener ( new InternalFrameAdapter () {
+                    @Override
+                    public void internalFrameClosing ( InternalFrameEvent arg0 ) {
+                        activarBtn(true);
+                    }
+                });
+            }catch(Exception e){}
+        }
+    }
 
     /**
      * METODO ANTIGUO. METODO QUE DEVUELVE UN VALOR BOOLEAN PARA SABER SI UN
@@ -247,10 +315,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSplitPane1 = new javax.swing.JSplitPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
         btnCaja = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
@@ -260,12 +324,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnProductos = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         btnAcerca = new javax.swing.JButton();
-        btnbloqueo = new javax.swing.JButton();
+        btnBloqueo = new javax.swing.JButton();
         btnCalculadora = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 51, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -273,37 +337,30 @@ public class MenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jSplitPane1.setMaximumSize(new java.awt.Dimension(1400, 720));
-
-        jScrollPane1.setAutoscrolls(true);
-
-        jPanel2.setAutoscrolls(true);
-
-        jToolBar1.setBackground(new java.awt.Color(117, 133, 155));
-        jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
+        jToolBar1.setForeground(new java.awt.Color(255, 0, 51));
         jToolBar1.setRollover(true);
-        jToolBar1.setAutoscrolls(true);
-        jToolBar1.setBorderPainted(false);
-        jToolBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jToolBar1.setNextFocusableComponent(btnCaja);
 
-        btnCaja.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. caja.png"))); // NOI18N
-        btnCaja.setText("<html><font size=2><center>Caja<br>F1</center></font></html>");
+        btnCaja.setBackground(new java.awt.Color(255, 255, 255));
+        btnCaja.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnCaja.setForeground(new java.awt.Color(28, 90, 125));
+        btnCaja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/16-caja.png"))); // NOI18N
+        btnCaja.setText("<html><center>Caja<br>F1</center></html>");
         btnCaja.setActionCommand("actionCaja");
-        btnCaja.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnCaja.setBorder(null);
         btnCaja.setFocusable(false);
         btnCaja.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCaja.setNextFocusableComponent(btnVentas);
+        btnCaja.setPreferredSize(new java.awt.Dimension(130, 80));
         btnCaja.setSelected(true);
         btnCaja.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnCaja.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCaja.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnCajaMouseExited(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnCajaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnCajaMouseExited(evt);
             }
         });
         btnCaja.addActionListener(new java.awt.event.ActionListener() {
@@ -313,13 +370,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnCaja);
 
-        btnVentas.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ventas.png"))); // NOI18N
-        btnVentas.setText("<html><font size=2><center>Ventas<br>F2</center></font></html>");
+        btnVentas.setBackground(new java.awt.Color(255, 255, 255));
+        btnVentas.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnVentas.setForeground(new java.awt.Color(28, 90, 125));
+        btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/12-ventas.png"))); // NOI18N
         btnVentas.setActionCommand("actionVentas");
-        btnVentas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnVentas.setBorder(null);
         btnVentas.setFocusable(false);
         btnVentas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVentas.setLabel("<html><center>Ventas<br>F2</center></html>");
+        btnVentas.setPreferredSize(new java.awt.Dimension(130, 80));
         btnVentas.setRequestFocusEnabled(false);
         btnVentas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnVentas.addActionListener(new java.awt.event.ActionListener() {
@@ -334,13 +394,16 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnVentas);
 
-        btnFacturas.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnFacturas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. factura.png"))); // NOI18N
-        btnFacturas.setText("<html><font size=2><center>Facturas<br>F4</center></font></html>");
+        btnFacturas.setBackground(new java.awt.Color(255, 255, 255));
+        btnFacturas.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnFacturas.setForeground(new java.awt.Color(28, 90, 125));
+        btnFacturas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/11-factura.png"))); // NOI18N
+        btnFacturas.setText("<html><center>Facturas<br>F4</center></html>");
         btnFacturas.setActionCommand("actionFacturas");
-        btnFacturas.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnFacturas.setBorder(null);
         btnFacturas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFacturas.setNextFocusableComponent(btnCaja);
+        btnFacturas.setPreferredSize(new java.awt.Dimension(130, 80));
         btnFacturas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnFacturas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,23 +412,26 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnFacturas);
 
-        btnAdmin.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. admin.png"))); // NOI18N
-        btnAdmin.setText("<html><font size=2><center>Admin<br>F6</center></font></html>");
+        btnAdmin.setBackground(new java.awt.Color(255, 255, 255));
+        btnAdmin.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnAdmin.setForeground(new java.awt.Color(28, 90, 125));
+        btnAdmin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/13-admin.png"))); // NOI18N
+        btnAdmin.setText("<html><center>Admin<br>F6</center></html>");
         btnAdmin.setActionCommand("actionCaja");
-        btnAdmin.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnAdmin.setBorder(null);
         btnAdmin.setFocusable(false);
         btnAdmin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAdmin.setNextFocusableComponent(btnVentas);
+        btnAdmin.setPreferredSize(new java.awt.Dimension(130, 80));
         btnAdmin.setSelected(true);
         btnAdmin.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         btnAdmin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAdmin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnAdminMouseExited(evt);
-            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnAdminMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnAdminMouseExited(evt);
             }
         });
         btnAdmin.addActionListener(new java.awt.event.ActionListener() {
@@ -380,12 +446,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAdmin);
 
-        btnMovimientos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. inventario.png"))); // NOI18N
-        btnMovimientos.setText("<html><font size=2><center>Movimientos<br>F8</center></font></html>");
-        btnMovimientos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnMovimientos.setBackground(new java.awt.Color(255, 255, 255));
+        btnMovimientos.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnMovimientos.setForeground(new java.awt.Color(28, 90, 125));
+        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/2-inventario.png"))); // NOI18N
+        btnMovimientos.setText("<html><center>Movimientos<br>F8</center></html>");
+        btnMovimientos.setBorder(null);
         btnMovimientos.setFocusable(false);
         btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMovimientos.setPreferredSize(new java.awt.Dimension(130, 80));
         btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnMovimientos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -399,12 +468,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnMovimientos);
 
-        btnProductos.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. producto.png"))); // NOI18N
-        btnProductos.setText("<html><font size=2><center>Productos<br>F9</center></font></html>");
-        btnProductos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnProductos.setBackground(new java.awt.Color(255, 255, 255));
+        btnProductos.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnProductos.setForeground(new java.awt.Color(28, 90, 125));
+        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/3-producto.png"))); // NOI18N
+        btnProductos.setText("<html><center>Productos<br>F9</center></html>");
+        btnProductos.setBorder(null);
         btnProductos.setFocusable(false);
         btnProductos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProductos.setPreferredSize(new java.awt.Dimension(130, 80));
         btnProductos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,12 +490,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnProductos);
 
-        btnAyuda.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. ayuda.png"))); // NOI18N
-        btnAyuda.setText("<html><font size=2><center>Ayuda<br>F10</center></font></html>");
-        btnAyuda.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnAyuda.setBackground(new java.awt.Color(255, 255, 255));
+        btnAyuda.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnAyuda.setForeground(new java.awt.Color(28, 90, 125));
+        btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/15-ayuda.png"))); // NOI18N
+        btnAyuda.setText("<html><center>Ayuda<br>F10</center></html>");
+        btnAyuda.setBorder(null);
         btnAyuda.setFocusable(false);
         btnAyuda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAyuda.setPreferredSize(new java.awt.Dimension(130, 80));
         btnAyuda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAyuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -432,12 +507,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAyuda);
 
-        btnAcerca.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. acerca.png"))); // NOI18N
-        btnAcerca.setText("<html><font size=2><center>Acerca<br>F11</center></font></html>");
-        btnAcerca.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnAcerca.setBackground(new java.awt.Color(255, 255, 255));
+        btnAcerca.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnAcerca.setForeground(new java.awt.Color(28, 90, 125));
+        btnAcerca.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/14-acerca.png"))); // NOI18N
+        btnAcerca.setText("<html><center>Acerca<br>F11</center></html>");
+        btnAcerca.setBorder(null);
         btnAcerca.setFocusable(false);
         btnAcerca.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAcerca.setPreferredSize(new java.awt.Dimension(130, 80));
         btnAcerca.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnAcerca.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,37 +524,42 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAcerca);
 
-        btnbloqueo.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnbloqueo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/1. bloqueo.png"))); // NOI18N
-        btnbloqueo.setText("<html><font size=2><center>Bloqueo<br>F12</center></font></html>");
-        btnbloqueo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        btnbloqueo.setFocusable(false);
-        btnbloqueo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnbloqueo.setPreferredSize(new java.awt.Dimension(52, 82));
-        btnbloqueo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnbloqueo.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnBloqueo.setBackground(new java.awt.Color(255, 255, 255));
+        btnBloqueo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnBloqueo.setForeground(new java.awt.Color(28, 90, 125));
+        btnBloqueo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/10-bloqueo.png"))); // NOI18N
+        btnBloqueo.setText("<html><center>Bloqueo<br>F12</center></html>");
+        btnBloqueo.setBorder(null);
+        btnBloqueo.setFocusable(false);
+        btnBloqueo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBloqueo.setPreferredSize(new java.awt.Dimension(130, 80));
+        btnBloqueo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBloqueo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnbloqueoMouseClicked(evt);
+                btnBloqueoMouseClicked(evt);
             }
         });
-        btnbloqueo.addActionListener(new java.awt.event.ActionListener() {
+        btnBloqueo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnbloqueoActionPerformed(evt);
+                btnBloqueoActionPerformed(evt);
             }
         });
-        btnbloqueo.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnBloqueo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnbloqueoKeyPressed(evt);
+                btnBloqueoKeyPressed(evt);
             }
         });
-        jToolBar1.add(btnbloqueo);
+        jToolBar1.add(btnBloqueo);
 
-        btnCalculadora.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. calculadora.png"))); // NOI18N
-        btnCalculadora.setText("<html><font size=2><center>Calculadora<br>FX</center></font></html>");
-        btnCalculadora.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnCalculadora.setBackground(new java.awt.Color(255, 255, 255));
+        btnCalculadora.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnCalculadora.setForeground(new java.awt.Color(28, 90, 125));
+        btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/1-calculadora.png"))); // NOI18N
+        btnCalculadora.setText("<html><center>Calculadora<br>FX</center></html>");
+        btnCalculadora.setBorder(null);
         btnCalculadora.setFocusable(false);
         btnCalculadora.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCalculadora.setPreferredSize(new java.awt.Dimension(130, 80));
         btnCalculadora.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnCalculadora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -485,12 +568,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnCalculadora);
 
-        btnSalir.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
-        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/01. salir.png"))); // NOI18N
-        btnSalir.setText("<html><font size=2><center>Salir<br>XX</center></font></html>");
-        btnSalir.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnSalir.setBackground(new java.awt.Color(255, 255, 255));
+        btnSalir.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(28, 90, 125));
+        btnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/4-salir.png"))); // NOI18N
+        btnSalir.setText("<html><center>Salir<br>XX</center></html>");
+        btnSalir.setBorder(null);
         btnSalir.setFocusable(false);
         btnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSalir.setPreferredSize(new java.awt.Dimension(130, 80));
         btnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -499,25 +585,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSalir);
 
-        jPanel2.add(jToolBar1);
-
-        jScrollPane1.setViewportView(jPanel2);
-
-        jPanel1.add(jScrollPane1);
-
-        jSplitPane1.setLeftComponent(jPanel1);
-
-        jDesktopPane1.setAutoscrolls(true);
-        jSplitPane1.setRightComponent(jDesktopPane1);
-
-        getContentPane().add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-
         cerrarAplicacion();
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -525,20 +599,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
         abrirCalculadora();
     }//GEN-LAST:event_btnCalculadoraActionPerformed
 
-    private void btnbloqueoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnbloqueoKeyPressed
+    private void btnBloqueoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnBloqueoKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F12) {
             abrirVentanaBloqueo();
         }
-    }//GEN-LAST:event_btnbloqueoKeyPressed
+    }//GEN-LAST:event_btnBloqueoKeyPressed
 
-    private void btnbloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbloqueoActionPerformed
+    private void btnBloqueoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBloqueoActionPerformed
         abrirVentanaBloqueo();
-      
-    }//GEN-LAST:event_btnbloqueoActionPerformed
+    }//GEN-LAST:event_btnBloqueoActionPerformed
 
-    private void btnbloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbloqueoMouseClicked
+    private void btnBloqueoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBloqueoMouseClicked
 
-    }//GEN-LAST:event_btnbloqueoMouseClicked
+    }//GEN-LAST:event_btnBloqueoMouseClicked
 
     private void btnAcercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcercaActionPerformed
         acerca();
@@ -559,22 +632,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductosActionPerformed
 
     private void btnMovimientosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMovimientosKeyPressed
-
         if (evt.getKeyCode() == KeyEvent.VK_F8) {
             abrirVentanaMovimientos();
         }
-
     }//GEN-LAST:event_btnMovimientosKeyPressed
 
     private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
         abrirVentanaMovimientos();
-
     }//GEN-LAST:event_btnMovimientosActionPerformed
 
     private void btnAdminKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAdminKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F6) {
             abrirVentanaAdmin();
-        }        // TODO add your handling code here:
+        }
     }//GEN-LAST:event_btnAdminKeyPressed
 
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
@@ -606,11 +676,18 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void btnCajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCajaActionPerformed
-        abrirVentanaCaja();
+//        if (estacerrado(caja)) {
+//            habilitar();
+            abrirVentanaCaja();
+//            PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(false);
+            
+//        } else if (estacerrado(caja)) {
+//            deshabilitar();
+//        }
     }//GEN-LAST:event_btnCajaActionPerformed
 
     private void btnCajaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCajaMouseEntered
-        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+//        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }//GEN-LAST:event_btnCajaMouseEntered
 
     private void btnCajaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCajaMouseExited
@@ -618,7 +695,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCajaMouseExited
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        
         cerrarAplicacion();
 //         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
 //        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
@@ -642,7 +718,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         acerca.setTitle("Sistema Saphiro: Acerca");
     }
 
- public  void  habilitar(){
+    public  void  habilitar(){
     //  if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
         btnCaja.setEnabled(false);
         btnVentas.setEnabled(false);
@@ -655,8 +731,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
      // }
    }
  
- public  void  deshabilitar(){
-       
+    public  void  deshabilitar(){
     //   if(PuntoVenta.Inicio.MenuPrincipal.btnbloqueo.isEnabled()){
         btnCaja.setEnabled(true);
         btnVentas.setEnabled(true);
@@ -673,6 +748,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnAcerca;
     public static javax.swing.JButton btnAdmin;
     public static javax.swing.JButton btnAyuda;
+    public static javax.swing.JButton btnBloqueo;
     public static javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
     public static javax.swing.JButton btnFacturas;
@@ -680,12 +756,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
-    public static javax.swing.JButton btnbloqueo;
-    private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 
@@ -748,7 +818,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         if (estacerrado(bloqueo)) {
             habilitar();
-            bloqueo = new Bloqueo1(this);
+            bloqueo = new Bloqueo(this);
             Dimension desktopSize = panel.getSize();
             Dimension jInternalFrameSize = bloqueo.getSize();
             bloqueo.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
@@ -784,18 +854,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }
 
     public void abrirVentanaFactura() {
-     if (estacerrado(factura)){
-        factura = new Factura(this);
-        Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = factura.getSize();
-        factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
-                (desktopSize.height - jInternalFrameSize.height) / 2);
-        panel.add(factura);
-        factura.show();
-        
-           } else{
-                 JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.factura.getTitle()+ "\nya esta abierta...");
-             }
+        if (estacerrado(factura)){
+            factura = new Factura(this);
+            Dimension desktopSize = panel.getSize();
+            Dimension jInternalFrameSize = factura.getSize();
+            factura.setLocation((desktopSize.width - jInternalFrameSize.width) / 2,
+                    (desktopSize.height - jInternalFrameSize.height) / 2);
+            panel.add(factura);
+            factura.show();
+        } else{
+            JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.factura.getTitle()+ "\nya esta abierta...");
+        }
     }
 
     public void abrirCalculadora() {
@@ -894,18 +963,21 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 abrirVentanaFactura();
             }
         };
+        
         Action actUsuario = new AbstractAction(Modulo.USUARIO.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
 
             }
         };
+        
         Action actAdmin = new AbstractAction(Modulo.ADMIN.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 abrirVentanaAdmin();
             }
         };
+        
         Action actAcerca = new AbstractAction(Modulo.ACERCA.getAction()) {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -975,8 +1047,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAdmin.getActionMap().put(Modulo.ADMIN.getAction(), actAdmin);
         btnAdmin.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAdmin.getValue(Action.ACCELERATOR_KEY), Modulo.ADMIN.getAction());
 
-        btnbloqueo.getActionMap().put(Modulo.BLOQUEO.getAction(), actbloqueo);
-        btnbloqueo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actbloqueo.getValue(Action.ACCELERATOR_KEY), Modulo.BLOQUEO.getAction());
+        btnBloqueo.getActionMap().put(Modulo.BLOQUEO.getAction(), actbloqueo);
+        btnBloqueo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actbloqueo.getValue(Action.ACCELERATOR_KEY), Modulo.BLOQUEO.getAction());
 
         btnAyuda.getActionMap().put(Modulo.AYUDA.getAction(), actAyuda);
         btnAyuda.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke) actAyuda.getValue(Action.ACCELERATOR_KEY), Modulo.AYUDA.getAction());

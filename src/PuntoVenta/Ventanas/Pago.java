@@ -44,6 +44,13 @@ import Utilidades.GuardarReporte;
 import Utilidades.ValorPagos;
 import java.io.IOException;
 import java.sql.SQLException;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
 
 /**
  *
@@ -184,43 +191,48 @@ public class Pago extends javax.swing.JInternalFrame {
         lblMontoVenta = new javax.swing.JLabel();
         lblMontoVentaValor = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        lblFormaPago = new javax.swing.JLabel();
-        lblMontoPagar = new javax.swing.JLabel();
-        txtMonto = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblTipoPago = new javax.swing.JTable();
-        cmbBoxBancos = new javax.swing.JComboBox();
-        lblBanco = new javax.swing.JLabel();
-        lblCT = new javax.swing.JLabel();
-        txtMontoCT = new javax.swing.JTextField();
-        txtCantidadCT = new javax.swing.JTextField();
-        lblX = new javax.swing.JLabel();
-        EF = new javax.swing.JRadioButton();
-        TDD = new javax.swing.JRadioButton();
-        TDC = new javax.swing.JRadioButton();
-        CTK = new javax.swing.JRadioButton();
-        apro1 = new javax.swing.JLabel();
-        apro2 = new javax.swing.JTextField();
         lblSaldo = new javax.swing.JLabel();
         lblCambio = new javax.swing.JLabel();
         lblCambioValor = new javax.swing.JLabel();
         lblSaldoValor = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        info2 = new javax.swing.JLabel();
+        lblFormaPago = new javax.swing.JLabel();
+        TDD = new javax.swing.JRadioButton();
+        EF = new javax.swing.JRadioButton();
+        TDC = new javax.swing.JRadioButton();
+        CTK = new javax.swing.JRadioButton();
+        lblBanco = new javax.swing.JLabel();
+        cmbBoxBancos = new javax.swing.JComboBox();
+        lblCT = new javax.swing.JLabel();
+        txtCantidadCT = new javax.swing.JTextField();
+        lblX = new javax.swing.JLabel();
+        txtMontoCT = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblTipoPago = new javax.swing.JTable();
+        lblMontoPagar = new javax.swing.JLabel();
+        txtMonto = new javax.swing.JTextField();
+        apro1 = new javax.swing.JLabel();
+        apro2 = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setClosable(true);
-        setPreferredSize(new java.awt.Dimension(900, 500));
+        setPreferredSize(new java.awt.Dimension(1200, 600));
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jPanel1.setPreferredSize(new java.awt.Dimension(900, 500));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1200, 600));
 
-        btnAceptar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnAceptar.setBackground(new java.awt.Color(32, 182, 155));
+        btnAceptar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnAceptar.setForeground(new java.awt.Color(255, 255, 255));
         btnAceptar.setText("<html><center>Aceptar<br>SPACE</center></html>");
+        btnAceptar.setBorder(null);
         btnAceptar.setEnabled(false);
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,8 +240,11 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSalir.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnSalir.setBackground(new java.awt.Color(32, 182, 155));
+        btnSalir.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("<html><center>Cancelar<br>Alt+Q</center></html>");
+        btnSalir.setBorder(null);
         btnSalir.setPreferredSize(new java.awt.Dimension(75, 40));
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,61 +252,119 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        lblMontoVenta.setFont(new java.awt.Font("Arial", 0, 28)); // NOI18N
-        lblMontoVenta.setForeground(new java.awt.Color(255, 255, 255));
+        lblMontoVenta.setBackground(new java.awt.Color(255, 255, 255));
+        lblMontoVenta.setFont(new java.awt.Font("SansSerif", 1, 28)); // NOI18N
+        lblMontoVenta.setForeground(new java.awt.Color(28, 90, 125));
         lblMontoVenta.setText("Monto de la venta:");
 
-        lblMontoVentaValor.setFont(new java.awt.Font("Arial", 1, 30)); // NOI18N
-        lblMontoVentaValor.setForeground(new java.awt.Color(0, 0, 0));
+        lblMontoVentaValor.setBackground(new java.awt.Color(255, 255, 255));
+        lblMontoVentaValor.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
+        lblMontoVentaValor.setForeground(new java.awt.Color(28, 90, 125));
         lblMontoVentaValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblMontoVentaValor.setText("0.00");
 
-        jPanel2.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPanel2KeyPressed(evt);
             }
         });
 
-        lblFormaPago.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
-        lblFormaPago.setForeground(java.awt.Color.white);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 122, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 21, Short.MAX_VALUE)
+        );
+
+        lblSaldo.setBackground(new java.awt.Color(255, 255, 255));
+        lblSaldo.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblSaldo.setForeground(new java.awt.Color(28, 90, 125));
+        lblSaldo.setText("Saldo:");
+        lblSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        lblCambio.setBackground(new java.awt.Color(255, 255, 255));
+        lblCambio.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblCambio.setForeground(new java.awt.Color(28, 90, 125));
+        lblCambio.setText("Cambio:");
+
+        lblCambioValor.setBackground(new java.awt.Color(255, 255, 255));
+        lblCambioValor.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblCambioValor.setForeground(new java.awt.Color(28, 90, 125));
+        lblCambioValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblCambioValor.setText("0.00");
+
+        lblSaldoValor.setBackground(new java.awt.Color(255, 255, 255));
+        lblSaldoValor.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        lblSaldoValor.setForeground(new java.awt.Color(28, 90, 125));
+        lblSaldoValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblSaldoValor.setText("0.00");
+
+        jButton1.setBackground(new java.awt.Color(32, 182, 155));
+        jButton1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("<html><center>Agregar Pago<br>ENTER</center></html>");
+        jButton1.setBorder(null);
+        jButton1.setEnabled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro2-600x250.png"))); // NOI18N
+
+        info2.setBackground(new java.awt.Color(255, 255, 255));
+        info2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        info2.setForeground(new java.awt.Color(20, 90, 125));
+        info2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro2-600x60.png"))); // NOI18N
+
+        lblFormaPago.setBackground(new java.awt.Color(255, 255, 255));
+        lblFormaPago.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        lblFormaPago.setForeground(new java.awt.Color(28, 90, 125));
         lblFormaPago.setText("Forma de pago:");
 
-        lblMontoPagar.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
-        lblMontoPagar.setForeground(java.awt.Color.white);
-        lblMontoPagar.setText("Monto a pagar:");
-
-        txtMonto.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        txtMonto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtMonto.addActionListener(new java.awt.event.ActionListener() {
+        grupo.add(TDD);
+        TDD.setText("TDD");
+        TDD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMontoActionPerformed(evt);
-            }
-        });
-        txtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtMontoKeyTyped(evt);
-            }
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtMontoKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtMontoKeyReleased(evt);
+                TDDActionPerformed(evt);
             }
         });
 
-        tblTipoPago.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        tblTipoPago.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2"
+        grupo.add(EF);
+        EF.setText("EF");
+        EF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EFActionPerformed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(tblTipoPago);
+        });
+
+        grupo.add(TDC);
+        TDC.setText("TDC");
+        TDC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TDCActionPerformed(evt);
+            }
+        });
+
+        grupo.add(CTK);
+        CTK.setText("CTK");
+        CTK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CTKActionPerformed(evt);
+            }
+        });
+
+        lblBanco.setBackground(new java.awt.Color(255, 255, 255));
+        lblBanco.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        lblBanco.setForeground(new java.awt.Color(28, 90, 125));
+        lblBanco.setText("Banco:");
+        lblBanco.setEnabled(false);
 
         cmbBoxBancos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "BOD", "Provincial", "Venezuela" }));
         cmbBoxBancos.setEnabled(false);
@@ -319,18 +392,40 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        lblBanco.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
-        lblBanco.setForeground(java.awt.Color.white);
-        lblBanco.setText("Banco:");
-        lblBanco.setEnabled(false);
-
-        lblCT.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
-        lblCT.setForeground(java.awt.Color.white);
+        lblCT.setBackground(new java.awt.Color(255, 255, 255));
+        lblCT.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        lblCT.setForeground(new java.awt.Color(28, 90, 125));
         lblCT.setText("Cesta tickets:");
         lblCT.setEnabled(false);
 
+        txtCantidadCT.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtCantidadCT.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtCantidadCT.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
+        txtCantidadCT.setEnabled(false);
+        txtCantidadCT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadCTActionPerformed(evt);
+            }
+        });
+        txtCantidadCT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCantidadCTKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCantidadCTKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadCTKeyTyped(evt);
+            }
+        });
+
+        lblX.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblX.setText("X");
+        lblX.setEnabled(false);
+
         txtMontoCT.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         txtMontoCT.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtMontoCT.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtMontoCT.setEnabled(false);
         txtMontoCT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -349,68 +444,50 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        txtCantidadCT.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        txtCantidadCT.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtCantidadCT.setEnabled(false);
-        txtCantidadCT.addActionListener(new java.awt.event.ActionListener() {
+        tblTipoPago.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        tblTipoPago.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane1.setViewportView(tblTipoPago);
+
+        lblMontoPagar.setBackground(new java.awt.Color(255, 255, 255));
+        lblMontoPagar.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        lblMontoPagar.setForeground(new java.awt.Color(28, 90, 125));
+        lblMontoPagar.setText("Monto a pagar:");
+
+        txtMonto.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtMonto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtMonto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
+        txtMonto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCantidadCTActionPerformed(evt);
+                txtMontoActionPerformed(evt);
             }
         });
-        txtCantidadCT.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtMonto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCantidadCTKeyTyped(evt);
+                txtMontoKeyTyped(evt);
             }
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtCantidadCTKeyPressed(evt);
+                txtMontoKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtCantidadCTKeyReleased(evt);
+                txtMontoKeyReleased(evt);
             }
         });
 
-        lblX.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        lblX.setForeground(java.awt.Color.white);
-        lblX.setText("X");
-        lblX.setEnabled(false);
-
-        grupo.add(EF);
-        EF.setText("EF");
-        EF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EFActionPerformed(evt);
-            }
-        });
-
-        grupo.add(TDD);
-        TDD.setText("TDD");
-        TDD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TDDActionPerformed(evt);
-            }
-        });
-
-        grupo.add(TDC);
-        TDC.setText("TDC");
-        TDC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TDCActionPerformed(evt);
-            }
-        });
-
-        grupo.add(CTK);
-        CTK.setText("CTK");
-        CTK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CTKActionPerformed(evt);
-            }
-        });
-
-        apro1.setFont(new java.awt.Font("Arial", 0, 20)); // NOI18N
-        apro1.setForeground(java.awt.Color.white);
+        apro1.setBackground(new java.awt.Color(255, 255, 255));
+        apro1.setFont(new java.awt.Font("SansSerif", 1, 20)); // NOI18N
+        apro1.setForeground(new java.awt.Color(28, 90, 125));
         apro1.setText("Aprobacion:");
 
         apro2.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        apro2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         apro2.setPreferredSize(new java.awt.Dimension(4, 21));
         apro2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -429,169 +506,156 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblFormaPago)
-                                .addGap(18, 18, 18)
-                                .addComponent(EF, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TDD, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(TDC, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CTK, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addContainerGap(29, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblCT)
-                                    .addComponent(lblBanco))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lblX)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMontoCT))
-                                    .addComponent(cmbBoxBancos, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblMontoPagar)
-                        .addGap(4, 4, 4)
-                        .addComponent(txtMonto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(apro1)
-                        .addGap(2, 2, 2)
-                        .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblFormaPago)
-                            .addComponent(EF)
-                            .addComponent(TDD)
-                            .addComponent(TDC)
-                            .addComponent(CTK))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbBoxBancos, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblBanco))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMontoCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblX)
-                            .addComponent(lblCT)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMontoPagar)
-                    .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(apro1)
-                    .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42))
-        );
-
-        lblSaldo.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblSaldo.setForeground(new java.awt.Color(255, 255, 255));
-        lblSaldo.setText("Saldo:");
-        lblSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        lblCambio.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        lblCambio.setForeground(new java.awt.Color(255, 255, 255));
-        lblCambio.setText("Cambio:");
-
-        lblCambioValor.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblCambioValor.setForeground(new java.awt.Color(0, 0, 0));
-        lblCambioValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblCambioValor.setText("0.00");
-
-        lblSaldoValor.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        lblSaldoValor.setForeground(new java.awt.Color(0, 0, 0));
-        lblSaldoValor.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblSaldoValor.setText("0.00");
-
-        jButton1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jButton1.setText("<html><center>Agregar Pago<br>ENTER</center></html>");
-        jButton1.setEnabled(false);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCambio)
-                            .addComponent(lblSaldo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblBanco)
+                                    .addComponent(lblCT)
+                                    .addComponent(lblMontoPagar))
+                                .addGap(24, 24, 24))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblFormaPago)
+                                .addGap(18, 18, 18)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblCambioValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSaldoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(102, 102, 102)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtMonto)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(EF, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TDD, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(TDC, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(CTK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cmbBoxBancos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblX)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtMontoCT, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(apro1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(45, 45, 45))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(lblMontoVenta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMontoVentaValor, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblMontoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblMontoVentaValor, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(148, 148, 148)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblCambio)
+                                        .addGap(62, 62, 62)
+                                        .addComponent(lblCambioValor, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblSaldo)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblSaldoValor, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(19, 19, 19)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 673, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(508, Short.MAX_VALUE)))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(21, 21, 21)
+                    .addComponent(info2, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(568, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(332, 332, 332)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(79, 79, 79))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMontoVenta)
-                    .addComponent(lblMontoVentaValor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblSaldoValor)
-                    .addComponent(lblSaldo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCambioValor)
-                    .addComponent(lblCambio))
-                .addGap(79, 79, 79))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(lblMontoVenta))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(lblMontoVentaValor)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(EF)
+                                .addComponent(TDD)
+                                .addComponent(TDC)
+                                .addComponent(CTK))
+                            .addComponent(lblFormaPago))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cmbBoxBancos, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblBanco))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCT)
+                            .addComponent(txtCantidadCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblX)
+                            .addComponent(txtMontoCT, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblMontoPagar)
+                            .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(90, 90, 90)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblSaldoValor)
+                            .addComponent(lblSaldo))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCambio)
+                            .addComponent(lblCambioValor))
+                        .addGap(74, 74, 74))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(apro1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(apro2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(81, 81, 81)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(78, 78, 78))))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(91, 91, 91)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(215, Short.MAX_VALUE)))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(info2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(519, Short.MAX_VALUE)))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -672,26 +736,6 @@ public class Pago extends javax.swing.JInternalFrame {
         txtMontoCT.setBackground(Color.white);
         txtCantidadCT.setBackground(Color.white);
     }
-
-    private void txtMontoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyPressed
-        Object selected2 = cmbBoxBancos.getSelectedItem();
-        txtMonto.requestFocus();
-        if (evt.getKeyCode() == KeyEvent.VK_F1) {
-            PagoEfectivo();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F2) {
-            PagoTDD();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F3) {
-            PagoTDC();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F4) {
-            PagoCTK();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jButton1.doClick();
-        }
-    }//GEN-LAST:event_txtMontoKeyPressed
 
     public void factura() throws IOException, SQLException {
         List lista = new ArrayList();
@@ -792,7 +836,7 @@ public class Pago extends javax.swing.JInternalFrame {
                 //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 3).toString(), descrip + " (E)", "" + pagouni.toString(), jtbVenta.getValueAt(i, 5).toString(), cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip,
                         "" + pagouni.toString(), jtbVenta.getValueAt(i, 6).toString(), cantidad.toString(), nombre, cedula, direccion,
-                        factura, pagado, tipo, menuPrincipal.pais.getIdentificacion(), menuPrincipal.parametros.getNombre(),
+                        factura, pagado, tipo, menuPrincipal.parametros.getIdentificacion(), menuPrincipal.parametros.getNombre(),
                         menuPrincipal.parametros.getDireccion(), menuPrincipal.parametros.getTelefono(), menuPrincipal.pais.getSimbolo(),
                         "" + total_exento, "0.", venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 lista.add(nuevo);
@@ -800,7 +844,7 @@ public class Pago extends javax.swing.JInternalFrame {
 
                 PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(jtbVenta.getValueAt(i, 5).toString(), descrip,
                         "" + pagouni.toString(), total_producto, cantidad.toString(), nombre, cedula, direccion,
-                        factura, pagado, tipo, menuPrincipal.pais.getIdentificacion(), menuPrincipal.parametros.getNombre(),
+                        factura, pagado, tipo, menuPrincipal.parametros.getIdentificacion(), menuPrincipal.parametros.getNombre(),
                         menuPrincipal.parametros.getDireccion(), menuPrincipal.parametros.getTelefono(), menuPrincipal.pais.getSimbolo(),
                         "" + total_exento, "0.", venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
                 //PuntoVenta.reporte1 nuevo = new PuntoVenta.reporte1(cantidad_productos.toString(), descrip, "" + pagouni.toString(), string_total_pago_producto,cantidad.toString(), nombre, cedula, direccion, factura, pagado, tipo, menuPrincipal.empresa.getTipoEmpresa(), menuPrincipal.empresa.getRif(), menuPrincipal.empresa.getNombre(), menuPrincipal.empresa.getDireccion(), menuPrincipal.empresa.getMoneda(), "" + pagosiniva, "" + subtotal, venta.impuesto, vuelto, menuPrincipal.getEmpleado().getNombre() + " " +menuPrincipal.getEmpleado().getApellido());
@@ -809,7 +853,10 @@ public class Pago extends javax.swing.JInternalFrame {
         }
         
         int cantidadPoductos = jtbVenta.getRowCount();
-        
+        /*
+         * Para imprmir el PDF
+         *
+        */
         try {
             JasperReport reporte = (JasperReport) JRLoader.loadObject("src/PuntoVenta/ticket.jasper");
             JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
@@ -820,6 +867,28 @@ public class Pago extends javax.swing.JInternalFrame {
         } catch (JRException ex) {
             Logger.getLogger(Venta.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        /*
+         * Parte que enviar la informacion a la impresora
+         *   
+        */
+////      File reporteFile = menuPrincipal.getOBD().reimprimirReporte(codigoBarra, "reporte_venta", "venta", "id_venta", "reporteVenta");
+////        byte[] reporteBytea = menuPrincipal.getOBD().reimprimirReporte(codigoBarra, "reporte_venta", "venta", "id_venta", "reporteVenta");
+//        // TODO Auto-generated method stub
+//        String texto = "Esto es lo que va a la impresora";
+//
+//        PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
+//
+//        DocFlavor flavor = DocFlavor.BYTE_ARRAY.AUTOSENSE;
+//        DocPrintJob docPrintJob = printService.createPrintJob();
+////        Doc doc = new SimpleDoc(reporteBytea, flavor, null);
+//        try {
+//                docPrintJob.print(doc, null);
+//        } catch (PrintException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//        }
+            
         menuPrincipal.getOBD().descontarcantidad(ad);
         menuPrincipal.getOBD().setEstadoVenta(venta.getIdVenta(), ObjetoBaseDatos.EstadoVenta.Finalizada);
         //menuPrincipal.getOBD().actualizaiva(venta.getIdVenta(), venta.impuesto, montoVenta, pagoconiva, pagosiniva, pagado, vuelto, menuPrincipal.getEmpleado().getId());
@@ -831,83 +900,6 @@ public class Pago extends javax.swing.JInternalFrame {
         PuntoVenta.Inicio.MenuPrincipal.btnVentas.setEnabled(true);
         cerrarVentana();
     }
-
-    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        try {
-            factura();
-        } catch (IOException ex) {
-            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnAceptarActionPerformed
-
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-
-        PuntoVenta.Ventanas.Venta.txtProductoId.requestFocus();
-        cerrarVentana();
-
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMontoActionPerformed
-
-    private void cmbBoxBancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbBoxBancosActionPerformed
-
-    }//GEN-LAST:event_cmbBoxBancosActionPerformed
-
-    private void txtMontoCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoCTActionPerformed
-
-    }//GEN-LAST:event_txtMontoCTActionPerformed
-
-    private void txtMontoCTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoCTKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_F1) {
-            PagoEfectivo();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F2) {
-            PagoTDD();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F3) {
-            PagoTDC();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F4) {
-            PagoCTK();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jButton1.doClick();
-            txtMontoCT.setText("");
-            txtCantidadCT.setText("");
-            txtCantidadCT.requestFocus();
-        }
-    }//GEN-LAST:event_txtMontoCTKeyPressed
-
-    private void txtCantidadCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadCTActionPerformed
-
-    }//GEN-LAST:event_txtCantidadCTActionPerformed
-
-    private void txtCantidadCTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadCTKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_F1) {
-            PagoEfectivo();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F2) {
-            PagoTDD();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F3) {
-            PagoTDC();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_F4) {
-            PagoCTK();
-        }
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtMontoCT.requestFocus();
-        }
-    }//GEN-LAST:event_txtCantidadCTKeyPressed
-
-    private void jPanel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel2KeyPressed
-
-// TODO add your handling code here:
-    }//GEN-LAST:event_jPanel2KeyPressed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         Object selected2 = cmbBoxBancos.getSelectedItem();
@@ -998,34 +990,16 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_formKeyPressed
 
+    private void apro2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apro2KeyReleased
 
-    private void EFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EFActionPerformed
-        PagoEfectivo();
-    }//GEN-LAST:event_EFActionPerformed
-
-    private void TDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TDDActionPerformed
-        PagoTDD();
-    }//GEN-LAST:event_TDDActionPerformed
-
-    private void TDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TDCActionPerformed
-        PagoTDC();
-// TODO add your handling code here:
-    }//GEN-LAST:event_TDCActionPerformed
-
-    private void CTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CTKActionPerformed
-        PagoCTK();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CTKActionPerformed
-
-    private void cmbBoxBancosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbBoxBancosKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbBoxBancosKeyReleased
-
-    private void cmbBoxBancosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbBoxBancosKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            txtMonto.requestFocus();
+        if (Double.parseDouble(lblSaldoValor.getText()) > 0) {
+            if ((!"".equals(apro2.getText()) && cmbBoxBancos.getSelectedIndex() > 0)) {
+                jButton1.setEnabled(true);
+            } else {
+                jButton1.setEnabled(false);
+            }
         }
-    }//GEN-LAST:event_cmbBoxBancosKeyPressed
+    }//GEN-LAST:event_apro2KeyReleased
 
     private void apro2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apro2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F1) {
@@ -1061,8 +1035,48 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         }
 
-
     }//GEN-LAST:event_apro2KeyPressed
+
+    private void apro2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apro2KeyTyped
+        if (!Character.isDigit(evt.getKeyChar())) {
+            evt.consume();
+        }
+        if (apro2.getText().length() > 18) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_apro2KeyTyped
+
+    private void apro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apro2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_apro2ActionPerformed
+
+    private void txtMontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyReleased
+        if ("".equals(txtMonto.getText())) {
+            jButton1.setEnabled(false);
+        } else if (TDD.isSelected() || TDC.isSelected() ? !"".equals(apro2.getText()) && (Double.parseDouble(lblSaldoValor.getText()) > 0) && cmbBoxBancos.getSelectedIndex() != 0 : (Double.parseDouble(lblSaldoValor.getText()) > 0)) {
+            jButton1.setEnabled(true);
+        }
+    }//GEN-LAST:event_txtMontoKeyReleased
+
+    private void txtMontoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyPressed
+        Object selected2 = cmbBoxBancos.getSelectedItem();
+        txtMonto.requestFocus();
+        if (evt.getKeyCode() == KeyEvent.VK_F1) {
+            PagoEfectivo();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            PagoTDD();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            PagoTDC();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F4) {
+            PagoCTK();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            jButton1.doClick();
+        }
+    }//GEN-LAST:event_txtMontoKeyPressed
 
     private void txtMontoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyTyped
         if (txtMonto.getText().startsWith(".")) {
@@ -1079,19 +1093,9 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtMontoKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        crearPago();
+    private void txtMontoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void txtMontoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoKeyReleased
-        if ("".equals(txtMonto.getText())) {
-            jButton1.setEnabled(false);
-        } else if (TDD.isSelected() || TDC.isSelected() ? !"".equals(apro2.getText()) && (Double.parseDouble(lblSaldoValor.getText()) > 0) && cmbBoxBancos.getSelectedIndex() != 0 : (Double.parseDouble(lblSaldoValor.getText()) > 0)) {
-            jButton1.setEnabled(true);
-        }
-
-    }//GEN-LAST:event_txtMontoKeyReleased
+    }//GEN-LAST:event_txtMontoActionPerformed
 
     private void txtMontoCTKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoCTKeyReleased
         if (("".equals(txtMontoCT.getText()) && "".equals(txtCantidadCT.getText()))) {
@@ -1104,6 +1108,27 @@ public class Pago extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_txtMontoCTKeyReleased
+
+    private void txtMontoCTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoCTKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F1) {
+            PagoEfectivo();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            PagoTDD();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            PagoTDC();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F4) {
+            PagoCTK();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            jButton1.doClick();
+            txtMontoCT.setText("");
+            txtCantidadCT.setText("");
+            txtCantidadCT.requestFocus();
+        }
+    }//GEN-LAST:event_txtMontoCTKeyPressed
 
     private void txtMontoCTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMontoCTKeyTyped
         if (txtMonto.getText().startsWith(".")) {
@@ -1120,18 +1145,31 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtMontoCTKeyTyped
 
+    private void txtMontoCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMontoCTActionPerformed
+
+    }//GEN-LAST:event_txtMontoCTActionPerformed
+
     private void txtCantidadCTKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadCTKeyReleased
 
     }//GEN-LAST:event_txtCantidadCTKeyReleased
 
-    private void apro2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apro2KeyTyped
-        if (!Character.isDigit(evt.getKeyChar())) {
-            evt.consume();
+    private void txtCantidadCTKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadCTKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_F1) {
+            PagoEfectivo();
         }
-        if (apro2.getText().length() > 18) {
-            evt.consume();
+        if (evt.getKeyCode() == KeyEvent.VK_F2) {
+            PagoTDD();
         }
-    }//GEN-LAST:event_apro2KeyTyped
+        if (evt.getKeyCode() == KeyEvent.VK_F3) {
+            PagoTDC();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_F4) {
+            PagoCTK();
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtMontoCT.requestFocus();
+        }
+    }//GEN-LAST:event_txtCantidadCTKeyPressed
 
     private void txtCantidadCTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadCTKeyTyped
 
@@ -1144,18 +1182,26 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtCantidadCTKeyTyped
 
-    private void apro2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_apro2KeyReleased
+    private void txtCantidadCTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadCTActionPerformed
 
-        if (Double.parseDouble(lblSaldoValor.getText()) > 0) {
-            if ((!"".equals(apro2.getText()) && cmbBoxBancos.getSelectedIndex() > 0)) {
-                jButton1.setEnabled(true);
-            } else {
-                jButton1.setEnabled(false);
-            }
+    }//GEN-LAST:event_txtCantidadCTActionPerformed
+
+    private void cmbBoxBancosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbBoxBancosKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbBoxBancosKeyReleased
+
+    private void cmbBoxBancosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cmbBoxBancosKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            txtMonto.requestFocus();
         }
-    }//GEN-LAST:event_apro2KeyReleased
+    }//GEN-LAST:event_cmbBoxBancosKeyPressed
+
+    private void cmbBoxBancosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbBoxBancosActionPerformed
+
+    }//GEN-LAST:event_cmbBoxBancosActionPerformed
 
     private void cmbBoxBancosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbBoxBancosMouseClicked
+
     }//GEN-LAST:event_cmbBoxBancosMouseClicked
 
     private void cmbBoxBancosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbBoxBancosItemStateChanged
@@ -1168,9 +1214,50 @@ public class Pago extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_cmbBoxBancosItemStateChanged
 
-    private void apro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_apro2ActionPerformed
+    private void CTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CTKActionPerformed
+        PagoCTK();
         // TODO add your handling code here:
-    }//GEN-LAST:event_apro2ActionPerformed
+    }//GEN-LAST:event_CTKActionPerformed
+
+    private void TDCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TDCActionPerformed
+        PagoTDC();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TDCActionPerformed
+
+    private void EFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EFActionPerformed
+        PagoEfectivo();
+    }//GEN-LAST:event_EFActionPerformed
+
+    private void TDDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TDDActionPerformed
+        PagoTDD();
+    }//GEN-LAST:event_TDDActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        crearPago();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPanel2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel2KeyPressed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jPanel2KeyPressed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+
+        PuntoVenta.Ventanas.Venta.txtProductoId.requestFocus();
+        cerrarVentana();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        try {
+            factura();
+        } catch (IOException ex) {
+            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Pago.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnAceptarActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1184,8 +1271,10 @@ public class Pago extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSalir;
     public static javax.swing.JComboBox cmbBoxBancos;
     private javax.swing.ButtonGroup grupo;
+    private javax.swing.JLabel info2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel10;
+    public static javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel lblBanco;

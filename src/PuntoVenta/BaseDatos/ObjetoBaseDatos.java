@@ -1208,7 +1208,7 @@ public class ObjetoBaseDatos {
      * @param idCaja
      * @return Arraylist de HashMap
      */
-    public ArrayList<HashMap<String, String>> getArrayListEstadoCaja(int idCaja) {
+    public ArrayList<HashMap<String, String>> getArrayListEstadoCaja(int idCaja, String sql) {
         ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
@@ -1239,7 +1239,7 @@ public class ObjetoBaseDatos {
                 .append(" INNER JOIN spve.persona as p ON em.id_persona = p.id_persona")
                 .append(" WHERE ec.id_caja = ")
                 .append(idCaja)
-                .append(" AND activo_caja = 1")
+                .append(" AND activo_caja = 1").append(sql)
                 .append(" ORDER BY fecha_apertura DESC;");
         
         try {
@@ -1264,7 +1264,6 @@ public class ObjetoBaseDatos {
         } finally {
             postgreSQL.desconectar();
         }
-        System.out.println(resultado);
         return resultado;
     }
 /** Ernesto:
@@ -2731,8 +2730,6 @@ public class ObjetoBaseDatos {
         int resultado;
         int tipoInt = 0;
         
-        System.out.println("tipo: " + tipo);
-        
         switch(tipo) {
             case "Efectivo": tipoInt = 1; break;
             case "Débito": tipoInt = 2; break;
@@ -3765,18 +3762,39 @@ public class ObjetoBaseDatos {
     }
 
     // Método para traer los reportes pdf de la base de datos
-    public File reimprimirReporte(String codigo,  String campo, String tabla, String filtro, String fileName) throws IOException {
+    public byte[] reimprimirReporte(String codigo,  String campo, String tabla, String filtro, String fileName) throws IOException {
         GuardarReporte gr = new GuardarReporte();
-//        codigoBarra, "reporte_cierre", "cierre_caja", "id_cierre_caja", "reporteCierre"
         PostgreSQL d = new PostgreSQL();
         byte[] reporteBytea = {};
+        System.out.println("codigo: " + codigo);
+        String sql = "SELECT "+campo+" FROM spve."+tabla+" WHERE "+filtro+" = '"+codigo+"'";
         try{
-            d.buscar("SELECT "+campo+" FROM spve."+tabla+" WHERE "+filtro+" = '"+codigo+"'");
+            d.buscar(sql);
             while(d.rs.next()) {
                 reporteBytea = d.rs.getBytes(campo);
             }
         }catch(Exception e){}
-        return gr.ByteArrayToFile(reporteBytea,  fileName+".PDF");
+        
+        System.out.println("\nlength del bytea: "+ reporteBytea.length + "\n");
+//        return  gr.ByteArrayToFile(reporteBytea,  fileName+".PDF");
+        return reporteBytea;
+    }
+    
+    public File reimprimirReporteCierre(String codigo,  String campo, String tabla, String filtro, String fileName) throws IOException {
+        GuardarReporte gr = new GuardarReporte();
+        PostgreSQL d = new PostgreSQL();
+        byte[] reporteBytea = {};
+        System.out.println("codigo: " + codigo);
+        String sql = "SELECT reporte_cierre FROM spve.reporte WHERE id_cierre_caja = '2'";
+        try{
+            d.buscar(sql);
+            while(d.rs.next()) {
+                reporteBytea = d.rs.getBytes("reporte_cierre");
+            }
+        }catch(Exception e){}
+        
+        System.out.println("\nlength del bytea: "+ reporteBytea.length + "\n");
+        return  gr.ByteArrayToFile(reporteBytea,  fileName+".PDF");
     }
     
     /*

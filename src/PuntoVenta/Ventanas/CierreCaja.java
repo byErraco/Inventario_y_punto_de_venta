@@ -128,10 +128,8 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         this.addInternalFrameListener(listener);
 
     }
-
     private void cerrarVentana() {
         this.dispose();
-        menuPrincipal.abrirVentanaCaja();
     }
     
     private void focusPuntoInteres() {
@@ -174,7 +172,7 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         lblTotalCTK = new javax.swing.JLabel();
         txtTotalCestaTicketS = new javax.swing.JTextField();
         lblTotalVentas3 = new javax.swing.JLabel();
-        lblNumeroCaja = new javax.swing.JLabel();
+        info1 = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
         lblEmpleado = new javax.swing.JLabel();
         txtNumeroCaja = new javax.swing.JTextField();
@@ -192,6 +190,7 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         lblTotalVentas2 = new javax.swing.JLabel();
         lblTotalGlobal = new javax.swing.JLabel();
         txtTotalGlobal = new javax.swing.JTextField();
+        info3 = new javax.swing.JLabel();
         btnFinalizar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
@@ -212,6 +211,8 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         lblTotalCTK2 = new javax.swing.JLabel();
         txtTotalCestaTicketC = new javax.swing.JTextField();
         lblTotalVentas4 = new javax.swing.JLabel();
+        info2 = new javax.swing.JLabel();
+        lblNumeroCaja = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -226,134 +227,190 @@ public class CierreCaja extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(117, 133, 155));
         setClosable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
-        pnlContenedor.setBackground(new java.awt.Color(32, 182, 155));
+        pnlContenedor.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel4.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblTotalVentas.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalVentas.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalVentas.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalVentas.setText("Total Ventas:");
 
         txtTotalVentasS.setEditable(false);
-        txtTotalVentasS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalVentasS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalVentasS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalVentasS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCortes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCortes.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCortes.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCortes.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCortes.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCortes.setText("Total Cortes:");
 
         txtTotalCortesS.setEditable(false);
-        txtTotalCortesS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCortesS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCortesS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCortesS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblExcedente.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblExcedente.setForeground(new java.awt.Color(255, 255, 255));
-        lblExcedente.setText("Excedente");
+        lblExcedente.setBackground(new java.awt.Color(255, 255, 255));
+        lblExcedente.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblExcedente.setForeground(new java.awt.Color(28, 90, 125));
+        lblExcedente.setText("Excedente:");
 
         txtExcedenteS.setEditable(false);
-        txtExcedenteS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtExcedenteS.setBackground(new java.awt.Color(255, 255, 255));
+        txtExcedenteS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtExcedenteS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblRestante.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblRestante.setForeground(new java.awt.Color(255, 255, 255));
+        lblRestante.setBackground(new java.awt.Color(255, 255, 255));
+        lblRestante.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblRestante.setForeground(new java.awt.Color(28, 90, 125));
         lblRestante.setText("Restante:");
 
         txtRestanteS.setEditable(false);
-        txtRestanteS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtRestanteS.setBackground(new java.awt.Color(255, 255, 255));
+        txtRestanteS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtRestanteS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtRestanteS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRestanteSActionPerformed(evt);
             }
         });
 
-        lblTotalEfectivo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalEfectivo.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalEfectivo.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalEfectivo.setText("Total Efectivo:");
 
         txtTotalEfectivoS.setEditable(false);
-        txtTotalEfectivoS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalEfectivoS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalEfectivoS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalEfectivoS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalDebito.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalDebito.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalDebito.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalDebito.setText("Total Debito:");
 
         txtTotalDebitoS.setEditable(false);
-        txtTotalDebitoS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalDebitoS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalDebitoS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalDebitoS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCredito.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCredito.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCredito.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCredito.setText("Total Credito:");
 
         txtTotalCreditoS.setEditable(false);
-        txtTotalCreditoS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCreditoS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCreditoS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCreditoS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCTK.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCTK.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCTK.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCTK.setText("Total CestaTicket:");
 
         txtTotalCestaTicketS.setEditable(false);
-        txtTotalCestaTicketS.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCestaTicketS.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCestaTicketS.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCestaTicketS.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalVentas3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalVentas3.setForeground(new java.awt.Color(255, 255, 255));
-        lblTotalVentas3.setText("Totales en Sistema:");
+        lblTotalVentas3.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblTotalVentas3.setForeground(new java.awt.Color(28, 90, 125));
+        lblTotalVentas3.setText("Totales en Sistema");
+
+        info1.setBackground(new java.awt.Color(255, 255, 255));
+        info1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        info1.setForeground(new java.awt.Color(20, 90, 125));
+        info1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro2-400x400.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTotalEfectivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalDebito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalCredito, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalCTK, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                    .addComponent(lblTotalVentas)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lblExcedente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTotalCortes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(lblRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTotalCestaTicketS)
-                    .addComponent(txtTotalCreditoS)
-                    .addComponent(txtTotalDebitoS)
-                    .addComponent(txtTotalVentasS)
-                    .addComponent(txtTotalEfectivoS, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                    .addComponent(txtExcedenteS, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtTotalCortesS)
-                    .addComponent(txtRestanteS))
-                .addContainerGap())
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblTotalCredito, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTotalDebito, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTotalEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTotalVentas))
+                                .addGap(33, 33, 33))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblTotalCortes)
+                                    .addComponent(lblTotalCTK)
+                                    .addComponent(lblExcedente, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtExcedenteS)
+                                .addComponent(txtTotalCortesS, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtTotalCestaTicketS, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtRestanteS, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
+                            .addComponent(txtTotalVentasS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotalEfectivoS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotalDebitoS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTotalCreditoS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addComponent(lblTotalVentas3)))
+                .addContainerGap(79, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                    .addContainerGap(145, Short.MAX_VALUE)
-                    .addComponent(lblTotalVentas3)
-                    .addGap(137, 137, 137)))
+                .addComponent(info1, javax.swing.GroupLayout.DEFAULT_SIZE, 416, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(86, Short.MAX_VALUE)
+                .addGap(81, 81, 81)
+                .addComponent(lblTotalVentas3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalVentas)
                     .addComponent(txtTotalVentasS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalEfectivo)
                     .addComponent(txtTotalEfectivoS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalDebito)
                     .addComponent(txtTotalDebitoS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCredito)
                     .addComponent(txtTotalCreditoS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCTK)
                     .addComponent(txtTotalCestaTicketS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCortes)
                     .addComponent(txtTotalCortesS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -361,83 +418,87 @@ public class CierreCaja extends javax.swing.JInternalFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblExcedente)
                     .addComponent(txtExcedenteS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRestante)
                     .addComponent(txtRestanteS, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(22, 22, 22)
-                    .addComponent(lblTotalVentas3)
-                    .addContainerGap(297, Short.MAX_VALUE)))
+                    .addContainerGap()
+                    .addComponent(info1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
-        lblNumeroCaja.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblNumeroCaja.setForeground(new java.awt.Color(255, 255, 255));
-        lblNumeroCaja.setText("N° Caja:");
-        lblNumeroCaja.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        lblNumeroCaja.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        lblNumeroCaja.setMaximumSize(new java.awt.Dimension(74, 15));
-        lblNumeroCaja.setMinimumSize(new java.awt.Dimension(74, 15));
-        lblNumeroCaja.setPreferredSize(new java.awt.Dimension(74, 15));
-
-        lblFecha.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblFecha.setForeground(new java.awt.Color(255, 255, 255));
+        lblFecha.setBackground(new java.awt.Color(255, 255, 255));
+        lblFecha.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblFecha.setForeground(new java.awt.Color(28, 90, 125));
         lblFecha.setText("Fecha:");
         lblFecha.setMaximumSize(new java.awt.Dimension(74, 15));
         lblFecha.setMinimumSize(new java.awt.Dimension(74, 15));
         lblFecha.setPreferredSize(new java.awt.Dimension(74, 15));
 
-        lblEmpleado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblEmpleado.setForeground(new java.awt.Color(255, 255, 255));
+        lblEmpleado.setBackground(new java.awt.Color(255, 255, 255));
+        lblEmpleado.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblEmpleado.setForeground(new java.awt.Color(28, 90, 125));
         lblEmpleado.setText("Empleado:");
 
         txtNumeroCaja.setEditable(false);
-        txtNumeroCaja.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtNumeroCaja.setBackground(new java.awt.Color(255, 255, 255));
+        txtNumeroCaja.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtNumeroCaja.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
         txtFecha.setEditable(false);
-        txtFecha.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtFecha.setBackground(new java.awt.Color(255, 255, 255));
+        txtFecha.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtFecha.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
         txtEmpleado.setEditable(false);
-        txtEmpleado.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtEmpleado.setBackground(new java.awt.Color(255, 255, 255));
+        txtEmpleado.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtEmpleado.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        jPanel5.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblTotalEfectivo1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalEfectivo1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalEfectivo1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalEfectivo1.setText("Total Efectivo:");
 
-        txtTotalEfectivoF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalEfectivoF.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalEfectivoF.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtTotalEfectivoF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTotalEfectivoFKeyTyped(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTotalEfectivoFKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTotalEfectivoFKeyTyped(evt);
+            }
         });
 
-        lblTotalDebito1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalDebito1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalDebito1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalDebito1.setText("Total Debito:");
 
-        txtTotalDebitoF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalDebitoF.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalDebitoF.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtTotalDebitoF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtTotalDebitoFKeyTyped(evt);
-            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtTotalDebitoFKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTotalDebitoFKeyTyped(evt);
+            }
         });
 
-        lblTotalCredito1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCredito1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCredito1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCredito1.setText("Total Credito:");
 
-        txtTotalCreditoF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCreditoF.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCreditoF.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtTotalCreditoF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTotalCreditoFKeyTyped(evt);
@@ -447,11 +508,13 @@ public class CierreCaja extends javax.swing.JInternalFrame {
             }
         });
 
-        lblTotalCTK1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCTK1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCTK1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCTK1.setText("Total CestaTicket:");
 
-        txtTotalCestaTicketF.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCestaTicketF.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCestaTicketF.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtTotalCestaTicketF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtTotalCestaTicketFKeyTyped(evt);
@@ -461,90 +524,103 @@ public class CierreCaja extends javax.swing.JInternalFrame {
             }
         });
 
-        lblTotalVentas2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalVentas2.setForeground(new java.awt.Color(255, 255, 255));
-        lblTotalVentas2.setText("Total Fisico:");
+        lblTotalVentas2.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblTotalVentas2.setForeground(new java.awt.Color(28, 90, 125));
+        lblTotalVentas2.setText("Total Fisico");
 
-        lblTotalGlobal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalGlobal.setForeground(new java.awt.Color(255, 255, 255));
-        lblTotalGlobal.setText("Total en fisico :");
+        lblTotalGlobal.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalGlobal.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalGlobal.setForeground(new java.awt.Color(28, 90, 125));
+        lblTotalGlobal.setText("Total en fisico:");
 
         txtTotalGlobal.setEditable(false);
-        txtTotalGlobal.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalGlobal.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalGlobal.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalGlobal.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtTotalGlobal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTotalGlobalActionPerformed(evt);
             }
         });
 
+        info3.setBackground(new java.awt.Color(255, 255, 255));
+        info3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        info3.setForeground(new java.awt.Color(20, 90, 125));
+        info3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro2-400x400.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(35, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addComponent(lblTotalCredito1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(117, 117, 117)
-                        .addComponent(lblTotalVentas2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel5Layout.createSequentialGroup()
-                                    .addComponent(lblTotalDebito1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGap(4, 4, 4))
-                                .addComponent(lblTotalCredito1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblTotalCTK1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                    .addComponent(lblTotalEfectivo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(lblTotalGlobal)
-                                .addGap(66, 66, 66)))
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(txtTotalGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTotalEfectivoF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtTotalCreditoF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                        .addComponent(txtTotalDebitoF, javax.swing.GroupLayout.Alignment.TRAILING))
-                                    .addComponent(txtTotalCestaTicketF, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap())
+                            .addComponent(lblTotalCTK1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTotalGlobal)
+                            .addComponent(lblTotalEfectivo1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTotalDebito1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTotalCestaTicketF, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalEfectivoF, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalDebitoF, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalCreditoF, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(159, 159, 159)
+                .addComponent(lblTotalVentas2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(info3, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(86, 86, 86)
                 .addComponent(lblTotalVentas2)
-                .addGap(46, 46, 46)
+                .addGap(62, 62, 62)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTotalEfectivo1)
-                    .addComponent(txtTotalEfectivoF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTotalDebito1)
-                    .addComponent(txtTotalDebitoF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(txtTotalEfectivoF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalEfectivo1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtTotalDebitoF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalDebito1))
+                .addGap(21, 21, 21)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCredito1)
                     .addComponent(txtTotalCreditoF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCTK1)
                     .addComponent(txtTotalCestaTicketF, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(104, 104, 104)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(41, 41, 41)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblTotalGlobal)
                     .addComponent(txtTotalGlobal, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43))
+                .addContainerGap(165, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(23, 23, 23)
+                    .addComponent(info3, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(59, Short.MAX_VALUE)))
         );
 
+        btnFinalizar.setBackground(new java.awt.Color(32, 182, 155));
+        btnFinalizar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnFinalizar.setForeground(new java.awt.Color(255, 255, 255));
         btnFinalizar.setText("<html><center>Finalizar Cierre<br>F2</center></html>");
+        btnFinalizar.setBorder(null);
         btnFinalizar.setEnabled(false);
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -552,216 +628,284 @@ public class CierreCaja extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSalir.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        btnSalir.setBackground(new java.awt.Color(32, 182, 155));
+        btnSalir.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("<html><center>Salir<br>Alt + Q</center></html>");
+        btnSalir.setBorder(null);
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalirActionPerformed(evt);
             }
         });
 
-        jPanel6.setBackground(new java.awt.Color(32, 182, 155));
-        jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblTotalVentas1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalVentas1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalVentas1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalVentas1.setText("Total Ventas:");
 
         txtTotalVentasC.setEditable(false);
-        txtTotalVentasC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalVentasC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalVentasC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalVentasC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCortes1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCortes1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCortes1.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCortes1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCortes1.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCortes1.setText("Total Cortes:");
 
         txtTotalCortesC.setEditable(false);
-        txtTotalCortesC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCortesC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCortesC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCortesC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblExcedente1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblExcedente1.setForeground(new java.awt.Color(255, 255, 255));
-        lblExcedente1.setText("Excedente");
+        lblExcedente1.setBackground(new java.awt.Color(255, 255, 255));
+        lblExcedente1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblExcedente1.setForeground(new java.awt.Color(28, 90, 125));
+        lblExcedente1.setText("Excedente:");
 
         txtExcedenteC.setEditable(false);
-        txtExcedenteC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtExcedenteC.setBackground(new java.awt.Color(255, 255, 255));
+        txtExcedenteC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtExcedenteC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblRestante1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblRestante1.setForeground(new java.awt.Color(255, 255, 255));
+        lblRestante1.setBackground(new java.awt.Color(255, 255, 255));
+        lblRestante1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblRestante1.setForeground(new java.awt.Color(28, 90, 125));
         lblRestante1.setText("Restante:");
 
         txtRestanteC.setEditable(false);
-        txtRestanteC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtRestanteC.setBackground(new java.awt.Color(255, 255, 255));
+        txtRestanteC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtRestanteC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
         txtRestanteC.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRestanteCActionPerformed(evt);
             }
         });
 
-        lblTotalEfectivo2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalEfectivo2.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo2.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalEfectivo2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalEfectivo2.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalEfectivo2.setText("Total Efectivo:");
 
         txtTotalEfectivoC.setEditable(false);
-        txtTotalEfectivoC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalEfectivoC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalEfectivoC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalEfectivoC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalDebito2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalDebito2.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito2.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalDebito2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalDebito2.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalDebito2.setText("Total Debito:");
 
         txtTotalDebitoC.setEditable(false);
-        txtTotalDebitoC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalDebitoC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalDebitoC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalDebitoC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCredito2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCredito2.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito2.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCredito2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCredito2.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCredito2.setText("Total Credito:");
 
         txtTotalCreditoC.setEditable(false);
-        txtTotalCreditoC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCreditoC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCreditoC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCreditoC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalCTK2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalCTK2.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK2.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalCTK2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblTotalCTK2.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalCTK2.setText("Total CestaTicket:");
 
         txtTotalCestaTicketC.setEditable(false);
-        txtTotalCestaTicketC.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        txtTotalCestaTicketC.setBackground(new java.awt.Color(255, 255, 255));
+        txtTotalCestaTicketC.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalCestaTicketC.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(32, 182, 155), 1, true));
 
-        lblTotalVentas4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTotalVentas4.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas4.setBackground(new java.awt.Color(255, 255, 255));
+        lblTotalVentas4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblTotalVentas4.setForeground(new java.awt.Color(28, 90, 125));
         lblTotalVentas4.setText("Totales ingresados por cortes");
+
+        info2.setBackground(new java.awt.Color(255, 255, 255));
+        info2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        info2.setForeground(new java.awt.Color(20, 90, 125));
+        info2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/cuadro2-400x400.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(43, 43, 43)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTotalEfectivo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalDebito2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalCredito2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblTotalCTK2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(lblTotalVentas1)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(lblExcedente1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblTotalCortes1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(lblRestante1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTotalCestaTicketC)
-                    .addComponent(txtTotalCreditoC)
-                    .addComponent(txtTotalDebitoC)
-                    .addComponent(txtTotalVentasC)
-                    .addComponent(txtTotalEfectivoC, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                    .addComponent(txtExcedenteC, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtTotalCortesC)
-                    .addComponent(txtRestanteC))
-                .addContainerGap())
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(lblTotalCredito2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(44, 44, 44))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(lblTotalEfectivo2))
+                                    .addComponent(lblTotalDebito2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                                        .addComponent(lblTotalVentas1)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(42, 42, 42)))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtTotalEfectivoC, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addComponent(txtTotalDebitoC, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtTotalCreditoC, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtTotalVentasC)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblRestante1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(66, 66, 66)
+                        .addComponent(txtRestanteC))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblExcedente1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63)
+                        .addComponent(txtExcedenteC))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblTotalCortes1)
+                        .addGap(56, 56, 56)
+                        .addComponent(txtTotalCortesC))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(lblTotalCTK2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtTotalCestaTicketC)))
+                .addGap(88, 88, 88))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(lblTotalVentas4, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                    .addGap(127, 127, 127)
-                    .addComponent(lblTotalVentas4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(137, 137, 137)))
+                .addGroup(jPanel6Layout.createSequentialGroup()
+                    .addComponent(info2, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 47, Short.MAX_VALUE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(86, 86, 86)
+                .addComponent(lblTotalVentas4)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalVentas1)
                     .addComponent(txtTotalVentasC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalEfectivo2)
                     .addComponent(txtTotalEfectivoC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblTotalDebito2)
                     .addComponent(txtTotalDebitoC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCredito2)
                     .addComponent(txtTotalCreditoC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCTK2)
                     .addComponent(txtTotalCestaTicketC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotalCortes1)
                     .addComponent(txtTotalCortesC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblExcedente1)
-                    .addComponent(txtExcedenteC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRestante1)
-                    .addComponent(txtRestanteC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtExcedenteC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblExcedente1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtRestanteC, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblRestante1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel6Layout.createSequentialGroup()
-                    .addGap(22, 22, 22)
-                    .addComponent(lblTotalVentas4)
-                    .addContainerGap(325, Short.MAX_VALUE)))
+                    .addContainerGap()
+                    .addComponent(info2, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        lblNumeroCaja.setBackground(new java.awt.Color(255, 255, 255));
+        lblNumeroCaja.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        lblNumeroCaja.setForeground(new java.awt.Color(28, 90, 125));
+        lblNumeroCaja.setText("N° Caja:");
+        lblNumeroCaja.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblNumeroCaja.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        lblNumeroCaja.setMaximumSize(new java.awt.Dimension(74, 15));
+        lblNumeroCaja.setMinimumSize(new java.awt.Dimension(74, 15));
+        lblNumeroCaja.setPreferredSize(new java.awt.Dimension(74, 15));
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
         pnlContenedor.setLayout(pnlContenedorLayout);
         pnlContenedorLayout.setHorizontalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(19, 19, 19)
+                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(lblNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)
-                        .addComponent(txtNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(80, 80, 80)
-                        .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblEmpleado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43)
+                                .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(51, 51, 51)
-                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlContenedorLayout.createSequentialGroup()
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(pnlContenedorLayout.createSequentialGroup()
+                                        .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlContenedorLayout.createSequentialGroup()
+                                        .addComponent(lblEmpleado)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(txtEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         pnlContenedorLayout.setVerticalGroup(
             pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenedorLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(25, 25, 25)
                 .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNumeroCaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEmpleado)
+                    .addComponent(lblNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNumeroCaja, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblEmpleado)
                     .addComponent(txtEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlContenedorLayout.createSequentialGroup()
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlContenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
 
@@ -873,11 +1017,11 @@ public class CierreCaja extends javax.swing.JInternalFrame {
         }
         
         gr.GuardarBaseDatos(idCierreCaja, "reporteCierre.PDF");
-        caja.menuPrincipal.getOBD().setEstadoCaja(
-                caja.menuPrincipal.getIdEstadoCaja(),
-                caja.menuPrincipal.getModeloCaja().getId(),
-                caja.menuPrincipal.getEmpleado().getId(),
-                txtTotalGlobal.getText());
+//        caja.menuPrincipal.getOBD().setEstadoCaja(
+//                caja.menuPrincipal.getIdEstadoCaja(),
+//                caja.menuPrincipal.getModeloCaja().getId(),
+//                caja.menuPrincipal.getEmpleado().getId(),
+//                txtTotalGlobal.getText());
 
         caja.setBotonesCajaEnabled(false);
         caja.menuPrincipal.setIdEstadoCaja(-1);
@@ -894,6 +1038,12 @@ public class CierreCaja extends javax.swing.JInternalFrame {
     private void txtRestanteCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRestanteCActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRestanteCActionPerformed
+
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+        if(menuPrincipal.estacerrado(caja)) {
+            menuPrincipal.abrirVentanaCaja();
+        }
+    }//GEN-LAST:event_formInternalFrameClosed
 
     public void totalfisico() {
         double total = 0;
@@ -921,6 +1071,9 @@ public class CierreCaja extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JLabel info1;
+    private javax.swing.JLabel info2;
+    private javax.swing.JLabel info3;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
