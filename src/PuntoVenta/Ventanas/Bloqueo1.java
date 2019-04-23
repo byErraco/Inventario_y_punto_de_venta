@@ -223,15 +223,6 @@ public class Bloqueo1 extends javax.swing.JFrame {
     private javax.swing.JLabel lblUsuario;
     private static javax.swing.JTextField txtCedula;
     // End of variables declaration//GEN-END:variables
-
-    /* Konstanza: nueva función para entrar al sistema. 
-       La primera función 'entrarProgramador' no servía, los valores que asignaba a
-       las variables no están en la base de datos.
-    */
-    private void entrarProgramador() {
-        txtCedula.setText("0");
-        jpwClave.setText("admin");
-    }
     
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables

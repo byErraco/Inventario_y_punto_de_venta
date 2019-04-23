@@ -5,16 +5,13 @@ import java.util.HashMap;
 public class ModeloProducto {
 
     private int id;
-    private int cantidad; //añadido
     private String codigoBarra;
     private String descripcion;
-    private String tipo;//agregado
     private String baseImponible;
     private String pvp;
     private String isva;
-    private int limiteVentaPorPersona;
+    private double limiteVentaPorPersona;
     private int idPeriodoLimiteVenta;
-   
 
 
     /**
@@ -27,24 +24,25 @@ public class ModeloProducto {
             this.id = Integer.parseInt(map.get("id_producto"));
             
             String limiteVenta = map.get("limite_venta_persona");
-            
-            if(limiteVenta != null){
-                this.limiteVentaPorPersona = Integer.parseInt(map.get("limite_venta_persona"));
-                this.idPeriodoLimiteVenta = Integer.parseInt(map.get("id_periodo_venta_producto"));
+            String periodoLimite = map.get("id_periodo_venta_producto");
+                    
+            if(limiteVenta != null && periodoLimite != null){
+                this.limiteVentaPorPersona = Double.parseDouble(limiteVenta);
+                this.idPeriodoLimiteVenta = Integer.parseInt(periodoLimite);
             }
             else {
                 this.limiteVentaPorPersona = -1;
                 this.idPeriodoLimiteVenta = -1;
             }
+            
+            this.codigoBarra = map.get("codigo_venta_producto");
+            this.descripcion = map.get("descripcion_producto");
+            this.baseImponible = map.get("base_imponible");
+            this.pvp = map.get("precio_venta_publico");
+            this.isva = map.get("impuesto_producto");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        this.codigoBarra = map.get("codigo_venta_producto");
-        this.descripcion = map.get("descripcion_producto");
-        this.baseImponible = map.get("base_imponible");
-        this.pvp = map.get("precio_venta_publico");
-        this.isva = map.get("impuesto_producto");
     }
 
     /**
@@ -92,7 +90,7 @@ public class ModeloProducto {
     /**
      * @return the limiteVentaPorPersona
      */
-    public int getLimiteVentaPorPersona() {
+    public double getLimiteVentaPorPersona() {
         return limiteVentaPorPersona;
     }
     
@@ -101,17 +99,5 @@ public class ModeloProducto {
      */
     public int getIdPeriodoLimiteVenta() {
         return idPeriodoLimiteVenta;
-    }
-    
-    
-    
-   // agregados al codigo:
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public String getTipo() {
-        return tipo;
     }
 }

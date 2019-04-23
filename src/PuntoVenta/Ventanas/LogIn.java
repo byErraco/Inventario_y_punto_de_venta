@@ -210,7 +210,7 @@ public class LogIn extends javax.swing.JFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-        int dialogo_salir = JOptionPane.showConfirmDialog(this, "Desea salir del Sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+        int dialogo_salir = JOptionPane.showConfirmDialog(this, "¿Desea salir del sistema ahora?", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
 
         if (dialogo_salir == JOptionPane.YES_OPTION) {
             System.exit(0);
@@ -259,15 +259,6 @@ public class LogIn extends javax.swing.JFrame {
         cmbTipoIdentificacion.setSelectedIndex(0);
     }
     
-    /* Konstanza: nueva función para entrar al sistema. 
-       La primera función 'entrarProgramador' no servía, los valores que asignaba a
-       las variables no están en la base de datos.
-    */
-    private void entrarProgramador() {
-        txtCedula.setText("");
-        jpwClave.setText("");
-    }
-    
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables
      * conf y ctrl utiliza las variable del menuPrincipal llamadas configuracion
@@ -304,6 +295,7 @@ public class LogIn extends javax.swing.JFrame {
             menuPrincipal.setEmpleado(new PuntoVenta.Modelos.ModeloEmpleado(mapEmpleado));
             menuPrincipal.setExtendedState(MAXIMIZED_BOTH);
             menuPrincipal.setVisible(true);
+            menuPrincipal.sincronizar();
             this.dispose();
         } else {
             Utilidades.Sonidos.beep();

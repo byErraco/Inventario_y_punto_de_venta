@@ -4,26 +4,6 @@
  * and open the template in the editor.
  */
 package PuntoVenta.Ventanas;
-import ClasesExtendidas.Tablas.ArrayListTableModel;
-import PuntoVenta.Modelos.ModeloProducto;
-import PuntoVenta.Ventanas.Movimientos;
-import PuntoVenta.Inicio.MenuPrincipal;
-import PuntoVenta.BaseDatos.ObjetoBaseDatos;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
-import javax.swing.KeyStroke;
-import javax.swing.RowFilter;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.table.TableRowSorter;
 
 /**
  *

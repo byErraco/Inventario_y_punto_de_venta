@@ -6,40 +6,29 @@ import PuntoVenta.Inicio.RegistroAdministrador;
 import PuntoVenta.Ventanas.Bloqueo; //cambiado por bloqueo2
 import Administrador.Ventanas.Admin;
 import PuntoVenta.BaseDatos.Empleado;
-import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
 import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.BaseDatos.Parametros;
 import PuntoVenta.Modelos.ModeloCaja;
 import PuntoVenta.Modelos.ModeloEmpleado;
-import PuntoVenta.Modelos.ModeloProducto; // añadido
 import PuntoVenta.Ventanas.Caja;
 import PuntoVenta.Ventanas.Calculadora;
 import PuntoVenta.Ventanas.LogIn;
+import PuntoVenta.Cliente.Cliente;
 import PuntoVenta.Ventanas.Acerca;
 import PuntoVenta.Ventanas.Ayuda;
 import PuntoVenta.Ventanas.Factura;
 import PuntoVenta.Ventanas.Venta;
 import PuntoVenta.Ventanas.CierreCaja;
-import PuntoVenta.Ventanas.Productos; //añadido
-import PuntoVenta.Ventanas.Movimientos;//añadido
-import PuntoVenta.Ventanas.Detalles; //añadido para productos
-import PuntoVenta.Ventanas.Compra; //añadido para movimientos
-import PuntoVenta.Ventanas.Fabricacion;//añadido para movimientos
-import PuntoVenta.Ventanas.Ajuste;//añadido para movimientos
-import PuntoVenta.Ventanas.AgregarProducto1; //añadido para productos
 import PuntoVenta.Ventanas.ClaveSuperUsuario;
-import PuntoVenta.Ventanas.ModificarProducto1; //añadido para productos
-//import PuntoVenta.Ventanas.ModificarProducto2;
+import PuntoVenta.Ventanas.Inventario;
+import PuntoVenta.Ventanas.Productos;
 import PuntoVenta.fondo;
 import Utilidades.KeySaphiro;
 import Utilidades.currentLoger;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -49,8 +38,6 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -59,8 +46,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.InternalFrameAdapter;
@@ -87,7 +72,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public Pais pais;
     public CierreCaja cierre;
     public Productos productos; //añadido
-    public Movimientos movimiento;   // añadido
+    public Inventario inventario;   // añadido
 
     //OTRAS VENTANAS
     //UTILIZAR DESPUES PARA SISTEMA DE CAMBIO DE PANTALLAS
@@ -100,11 +85,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private boolean cajaAbierta;
     private ModeloCaja modeloCaja;
     private Factura factura;
-    private AgregarProducto1 agregar;
-    private Detalles detalles;
-    private Fabricacion fabricacion;
-    private Compra compra;
-    private Ajuste ajuste;
     private Acerca acerca = new Acerca();
     private Ayuda ayuda = new Ayuda();
     private int idEstadoCaja;
@@ -113,9 +93,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private Properties configuracion;
     private boolean logged;
     private Object actProd;
-    public ArrayList<JButton> ListadeBotones = new ArrayList<JButton>();
+    public ArrayList<JButton> ListadeBotones = new ArrayList<>();
 
-
+    private Cliente cliente;
+    
     /**
      * ?
      */
@@ -201,8 +182,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
             e.printStackTrace();
         }
         return configuracion;
-
     }
+    
     //valida el inicio
     public void validarInicio() {
         //Verifica si los parametros han sido creados, de no ser asi, abre la ventana para crearlos.
@@ -223,7 +204,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         ListadeBotones.add(btnVentas);
         ListadeBotones.add(btnFacturas);
         ListadeBotones.add(btnAdmin);
-        ListadeBotones.add(btnMovimientos);
+        ListadeBotones.add(btnInventario);
         ListadeBotones.add(btnProductos);
         ListadeBotones.add(btnAyuda);
         ListadeBotones.add(btnAcerca);
@@ -299,17 +280,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         return cerrado;
     }
-    
-    public void cerrarAplicacion() {
-        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
-        if (g == JOptionPane.YES_OPTION) {
-//            if(this.cajaAbierta)   JOptionPane.showMessageDialog(this, "Aun hay cajas abiertas, debe cerrarlas antes de salir del sistema");
-//            else System.exit(0);
-            System.exit(0);
-        } else if (g == JOptionPane.NO_OPTION) {
-            this.setVisible(true);
-        }
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -320,7 +290,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnVentas = new javax.swing.JButton();
         btnFacturas = new javax.swing.JButton();
         btnAdmin = new javax.swing.JButton();
-        btnMovimientos = new javax.swing.JButton();
+        btnInventario = new javax.swing.JButton();
         btnProductos = new javax.swing.JButton();
         btnAyuda = new javax.swing.JButton();
         btnAcerca = new javax.swing.JButton();
@@ -446,27 +416,27 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnAdmin);
 
-        btnMovimientos.setBackground(new java.awt.Color(255, 255, 255));
-        btnMovimientos.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        btnMovimientos.setForeground(new java.awt.Color(28, 90, 125));
-        btnMovimientos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/2-inventario.png"))); // NOI18N
-        btnMovimientos.setText("<html><center>Movimientos<br>F8</center></html>");
-        btnMovimientos.setBorder(null);
-        btnMovimientos.setFocusable(false);
-        btnMovimientos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnMovimientos.setPreferredSize(new java.awt.Dimension(130, 80));
-        btnMovimientos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnMovimientos.addActionListener(new java.awt.event.ActionListener() {
+        btnInventario.setBackground(new java.awt.Color(255, 255, 255));
+        btnInventario.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        btnInventario.setForeground(new java.awt.Color(28, 90, 125));
+        btnInventario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/PuntoVenta/Iconos/iconos p_v 24x24/2-inventario.png"))); // NOI18N
+        btnInventario.setText("<html><center>Inventario<br>F8</center></html>");
+        btnInventario.setBorder(null);
+        btnInventario.setFocusable(false);
+        btnInventario.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnInventario.setPreferredSize(new java.awt.Dimension(130, 80));
+        btnInventario.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMovimientosActionPerformed(evt);
+                btnInventarioActionPerformed(evt);
             }
         });
-        btnMovimientos.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnInventario.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnMovimientosKeyPressed(evt);
+                btnInventarioKeyPressed(evt);
             }
         });
-        jToolBar1.add(btnMovimientos);
+        jToolBar1.add(btnInventario);
 
         btnProductos.setBackground(new java.awt.Color(255, 255, 255));
         btnProductos.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
@@ -591,7 +561,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
         cerrarAplicacion();
     }//GEN-LAST:event_btnSalirActionPerformed
 
@@ -623,23 +592,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void btnProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnProductosKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F9) {
-            abrirVentanaProd();
+            abrirVentanaProductos();
         }
     }//GEN-LAST:event_btnProductosKeyPressed
 
     private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
-        abrirVentanaProd();
+        abrirVentanaProductos();
     }//GEN-LAST:event_btnProductosActionPerformed
 
-    private void btnMovimientosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnMovimientosKeyPressed
+    private void btnInventarioKeyPressed(java.awt.event.KeyEvent evt) {                                         
         if (evt.getKeyCode() == KeyEvent.VK_F8) {
-            abrirVentanaMovimientos();
+            abrirVentanaInventario();
         }
-    }//GEN-LAST:event_btnMovimientosKeyPressed
+    }                                        
 
-    private void btnMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMovimientosActionPerformed
-        abrirVentanaMovimientos();
-    }//GEN-LAST:event_btnMovimientosActionPerformed
+    private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
+        abrirVentanaInventario();
+    }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnAdminKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAdminKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_F6) {
@@ -696,14 +665,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         cerrarAplicacion();
-//         javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
-//        int g = JOptionPane.showConfirmDialog(this, "Desea salir del sistema ahora", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
-//
-//        if (g == JOptionPane.YES_OPTION) {
-//            System.exit(0);
-//        } else if (g == JOptionPane.NO_OPTION) {
-//            this.setVisible(true);
-//        }
     }//GEN-LAST:event_formWindowClosing
 
     private void ayuda() {
@@ -727,7 +688,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAcerca.setEnabled(false);
         btnAdmin.setEnabled(false);        
         btnProductos.setEnabled(false);
-        btnMovimientos.setEnabled(false);
+        btnInventario.setEnabled(false);
      // }
    }
  
@@ -740,7 +701,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnAcerca.setEnabled(true);
         btnAdmin.setEnabled(true);
         btnProductos.setEnabled(true);
-        btnMovimientos.setEnabled(true);
+        btnInventario.setEnabled(true);
      //  }
    }
 
@@ -752,7 +713,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public static javax.swing.JButton btnCaja;
     private javax.swing.JButton btnCalculadora;
     public static javax.swing.JButton btnFacturas;
-    public static javax.swing.JButton btnMovimientos;
+    public static javax.swing.JButton btnInventario;
     public static javax.swing.JButton btnProductos;
     private javax.swing.JButton btnSalir;
     public static javax.swing.JButton btnVentas;
@@ -886,13 +847,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
     
   
    
-    public void abrirVentanaProd(){
+    public void abrirVentanaProductos(){
       
         if (estacerrado(productos)) {
-             productos = new Productos(this);
-             Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = productos.getSize();
-        productos.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
+            productos = new Productos(this);
+            Dimension desktopSize = panel.getSize();
+            Dimension jInternalFrameSize = productos.getSize();
+            productos.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
                 panel.add(productos);
                 productos.show();
@@ -904,19 +865,19 @@ public class MenuPrincipal extends javax.swing.JFrame {
       
     }
     
-    public void abrirVentanaMovimientos(){
-         if (estacerrado(movimiento)) {
-             movimiento =  new Movimientos(this);
-              Dimension desktopSize = panel.getSize();
-        Dimension jInternalFrameSize = movimiento.getSize();
-        movimiento.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
+    public void abrirVentanaInventario(){
+         if (estacerrado(inventario)) {
+            inventario =  new Inventario(this);
+            Dimension desktopSize = panel.getSize();
+            Dimension jInternalFrameSize = inventario.getSize();
+            inventario.setLocation((desktopSize.width -jInternalFrameSize.width)/ 2,
                 (desktopSize.height - jInternalFrameSize.height )/ 2);
-                panel.add(movimiento);
-                movimiento.show();
-                setVentanaAbierta(Modulo.MOVIMIENTOS);
+                panel.add(inventario);
+            inventario.show();
+            setVentanaAbierta(Modulo.INVENTARIO);
         } else {
-           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.movimiento.getTitle()+ "\nya esta abierta...");
-           movimiento.moveToFront();
+           JOptionPane.showMessageDialog(this, "Error: La ventana\n"+this.inventario.getTitle()+ "\nya esta abierta...");
+           inventario.moveToFront();
         }
        
     }
@@ -1004,25 +965,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
             @Override
              public void actionPerformed(ActionEvent e){
                  
-                    abrirVentanaProd();
+                    abrirVentanaProductos();
                 }
             };
             
             //añadido a movimientos
-            Action actMovimiento = new AbstractAction (Modulo.MOVIMIENTOS.getAction()){
+            Action actInventario = new AbstractAction (Modulo.INVENTARIO.getAction()){
             
             @Override
              
             public void actionPerformed(ActionEvent e){
             
-                abrirVentanaMovimientos();
+                abrirVentanaInventario();
               }
             
             };
         
-        
-        
-        
+            
         actCaja.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
         actVentas.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
         actFacturas.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0));
@@ -1032,7 +991,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         actAyuda.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F10, 0));
         actAcerca.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
         actProducto.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F9,0));
-        actMovimiento.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
+        actInventario.putValue(Action.ACCELERATOR_KEY,KeyStroke.getKeyStroke(KeyEvent.VK_F8,0));
 
         
         getBtnCaja().getActionMap().put(Modulo.CAJA.getAction(), actCaja);
@@ -1059,8 +1018,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         btnProductos.getActionMap().put(Modulo.PRODUCTOS.getAction(),actProducto);
         btnProductos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actProducto.getValue(Action.ACCELERATOR_KEY),Modulo.PRODUCTOS.getAction());   //  producto
         
-        btnMovimientos.getActionMap().put(Modulo.MOVIMIENTOS.getAction(), actMovimiento);
-        btnMovimientos.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actMovimiento.getValue(Action.ACCELERATOR_KEY),Modulo.MOVIMIENTOS.getAction());  // movimiento
+        btnInventario.getActionMap().put(Modulo.INVENTARIO.getAction(), actInventario);
+        btnInventario.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)actInventario.getValue(Action.ACCELERATOR_KEY),Modulo.INVENTARIO.getAction());  // movimiento
     }
 
     /**
@@ -1074,8 +1033,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         return btnProductos;
     }
      
-      public javax.swing.JButton getBtnMovimiento() {
-        return btnMovimientos;
+      public javax.swing.JButton getBtnInventario() {
+        return btnInventario;
     }
 
     /**
@@ -1141,6 +1100,35 @@ public class MenuPrincipal extends javax.swing.JFrame {
         this.idEstadoCaja = idEstadoCaja;
     }
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void sincronizar() {
+        String servidor = configuracion.getProperty("servidor_api");
+        String apiKey = configuracion.getProperty("api_key");
+        
+        if(servidor != null && apiKey != null){
+            cliente = new Cliente(obd, servidor, apiKey);
+            cliente.sincronizar();
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "No se han establecido las variables de configuración del sistema de inventario", "Error de configuración", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void cerrarAplicacion() {
+        javax.swing.JOptionPane mensajedeerror = new javax.swing.JOptionPane();
+        int g = JOptionPane.showConfirmDialog(this, "¿Desea salir del sistema ahora?\nSe realizará una sincronización antes de cerrar la aplicación.", "Saphiro - Salir", JOptionPane.YES_NO_OPTION);
+
+        if (g == JOptionPane.YES_OPTION) {
+            cliente.sincronizar();
+            System.exit(0);
+        } else if (g == JOptionPane.NO_OPTION) {
+            this.setVisible(true);
+        }
+    }
+
     /**
      * Enum de los modulos disponibles
      */
@@ -1155,8 +1143,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         CALC(10, "actionCalculadora"),
         ADMIN(6, "actionAdmin"),
         PRODUCTOS(8,"actionProducto"),// nueva ventana
-//        PRODUCTO3(13,"actionProducto3"),// nueva ventana
-        MOVIMIENTOS(9,"actionMovimiento"), // nueva ventana
+        INVENTARIO(9,"actionInventario"), // nueva ventana
         BLOQUEO(12, "actionBloqueo");
 
         private final int id;

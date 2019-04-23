@@ -762,10 +762,6 @@ public class Caja extends javax.swing.JInternalFrame {
         return txtFiltro;
     }
     
-    /** Konstanza: 
-     * Nueva funcion
-     * Cambia el focus a 'jtbResultadoBusqueda'
-     */
     private void focusResultado() {
         if (jtbResultadoBusqueda.getRowCount() > 0) {
             jtbResultadoBusqueda.requestFocus();

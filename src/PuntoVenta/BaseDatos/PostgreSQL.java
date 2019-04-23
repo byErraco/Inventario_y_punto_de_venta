@@ -124,15 +124,8 @@ public class PostgreSQL {
      *
      * @param sql
      * @return ResulSet con el resultado del SELECon
-     * @throws PuntoVenta.BaseDatos.PostgreSQL.XSQLException
      */
     public ResultSet ejecutarSelect(String sql) {
-        /* Konstanza:
-            - Revisar para que funciona XSQLException
-            - Eliminar el if: si no hay conexión debería ir a catch no retornar null
-            - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
-              cuando puede dar otro error como que no haya un campo o una tabla
-        */
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return null; 
@@ -154,12 +147,6 @@ public class PostgreSQL {
      * @return true si se ejecutó el query 
      */
     public boolean ejecutarQuerySinResultado(String sql) {
-        /* Konstanza:
-            - Revisar para que funciona XSQLException
-            - Eliminar el if: si no hay conexión debería ir a catch no retornar null
-            - El error que se muestra no es el correcto, siempre dice que 'La base de datos no está conectada',
-              cuando puede dar otro error como que no haya un campo o una tabla
-        */
         try {
             if (this.conexion == null || this.conexion.isClosed()) {
                 return false; 
@@ -265,7 +252,6 @@ public class PostgreSQL {
     /**
      * Exception para la clase PostgreSQL.
      * 
-     * Konstanza: no le veo el uso a esta excepción
      */
     private static class XSQLException extends Exception {
 

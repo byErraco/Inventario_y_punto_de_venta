@@ -18,8 +18,11 @@ public class ProductoVentaTableModel extends ArrayListTableModel {
 
         Codigo("Código", "codigo_venta_producto"),
         Descripcion("Descripción", "descripcion_producto"),
+        IdUnidadInventario("Id de unidad de inventario", "id_unidad_inventario"),
+        Almacen("Almacén","almacen"),
+        Lote("Lote/Serie","codigo_lote"),
         PrecioBase("Precio base unitario", "precio_base_unitario"),
-        Impuesto("Impuesto unitario", "impuesto_producto"),
+        Impuesto("Impuesto unitario", "impuesto"),
         Precio("Total unitario", "precio_venta_publico"),
         Cantidad("Cantidad", "cantidad_producto"),
         Total("Total", "total");
@@ -33,38 +36,30 @@ public class ProductoVentaTableModel extends ArrayListTableModel {
 
         }
 
-        /**
-         * Obtiene el nombre de la columna dentro del resultset para obtener su
-         * valor.
-         *
-         * @return
-         */
-        private String getColumna() {
-            return this.columna;
+        private static String[] getHeaders() {
+            ArrayList<String> headers = new ArrayList();
+            for (Columnas col : Columnas.values()) {
+                headers.add(col.header);
+            }
+            return headers.toArray(new String[headers.size()]);
         }
-
-        /**
-         * Obtiene el nombre de la columna para asignar en el header de la
-         * tabla.
-         *
-         * @return
-         */
-        private String getHeader() {
-            return this.header;
+        
+        private static String[] getColumnas() {
+            ArrayList<String> columnas = new ArrayList();
+            for (Columnas col : Columnas.values()) {
+                columnas.add(col.columna);
+            }
+            return columnas.toArray(new String[columnas.size()]);
         }
     }
 
     public ProductoVentaTableModel(ArrayList<HashMap<String, String>> contenido) {
-        super(contenido,
-                new String[]{Columnas.Codigo.getHeader(), Columnas.Descripcion.getHeader(), Columnas.PrecioBase.getHeader(),
-                    Columnas.Impuesto.getHeader(), Columnas.Precio.getHeader(), Columnas.Cantidad.getHeader(), Columnas.Total.getHeader()},
-                new String[]{Columnas.Codigo.getColumna(), Columnas.Descripcion.getColumna(), Columnas.PrecioBase.getColumna(),
-                    Columnas.Impuesto.getColumna(), Columnas.Precio.getColumna(), Columnas.Cantidad.getColumna(), Columnas.Total.getColumna()});
+        super(contenido, Columnas.getHeaders(), Columnas.getColumnas());
     }
 
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
     }
-
+    
 }

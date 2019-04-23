@@ -18,6 +18,10 @@ public class ListaProductosCajeroTableModel extends ArrayListTableModel {
 
         Codigo("Código", "codigo_venta_producto"),
         Descripcion("Descripción", "descripcion_producto"),
+        IdUnidadInventario("Id de unidad de inventario", "id_unidad_inventario"),
+        AlmacenId("Id de almacén","almacen_id"),
+        Almacen("Almacén","almacen"),
+        Lote("Lote/Serie","codigo_lote"),
         Precio("Precio", "precio_venta_publico");
 
         String header;
@@ -29,36 +33,30 @@ public class ListaProductosCajeroTableModel extends ArrayListTableModel {
 
         }
 
-        /**
-         * Obtiene el nombre de la columna dentro del resultset para obtener su
-         * valor.
-         *
-         * @return
-         */
-        private String getColumna() {
-            return this.columna;
+        private static String[] getHeaders() {
+            ArrayList<String> headers = new ArrayList();
+            for (Columnas col : Columnas.values()) {
+                headers.add(col.header);
+            }
+            return headers.toArray(new String[headers.size()]);
         }
-
-        /**
-         * Obtiene el nombre de la columna para asignar en el header de la
-         * tabla.
-         *
-         * @return
-         */
-        private String getHeader() {
-            return this.header;
+        
+        private static String[] getColumnas() {
+            ArrayList<String> columnas = new ArrayList();
+            for (Columnas col : Columnas.values()) {
+                columnas.add(col.columna);
+            }
+            return columnas.toArray(new String[columnas.size()]);
         }
     }
 
     public ListaProductosCajeroTableModel(ArrayList<HashMap<String, String>> contenido) {
-        super(contenido,
-                new String[]{Columnas.Codigo.getHeader(), Columnas.Descripcion.getHeader(), Columnas.Precio.getHeader()},
-                new String[]{Columnas.Codigo.getColumna(), Columnas.Descripcion.getColumna(), Columnas.Precio.getColumna()});
+        super(contenido, Columnas.getHeaders(), Columnas.getColumnas());
     }
 
     @Override
     public boolean isCellEditable(int row, int column) {
         return false;
     }
-
+    
 }

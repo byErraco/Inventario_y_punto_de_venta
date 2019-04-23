@@ -6,11 +6,6 @@
 package PuntoVenta.BaseDatos;
 
 import ClasesExtendidas.Numeros.XBigDecimal;
-import PuntoVenta.Modelos.ModeloCliente;
-import PuntoVenta.Modelos.ModeloEmpleado;
-import PuntoVenta.Modelos.ModeloProducto;
-import PuntoVenta.Ventanas.LogIn;
-import PuntoVenta.reporte1;
 import Utilidades.ArticuloDescontar;
 import Utilidades.Cripto;
 import Utilidades.GuardarReporte;
@@ -18,13 +13,18 @@ import Utilidades.currentLoger;
 import Utilidades.ValorPagos;
 import java.io.File;
 import java.io.IOException;
-import java.math.RoundingMode;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,9 +93,11 @@ public class ObjetoBaseDatos {
         //LISTO//obd.getUltimaFechaVentaProducto('V', "0", "4321");
         //LISTO//System.out.println(obd.getTotalExentoVenta(1));
         //LISTO//System.out.println(obd.getTotalNoExentoVenta(1));
-        //System.out.println(obd.getTotalImpuestoVenta(1));
+        //LISTO//System.out.println(obd.getTotalImpuestoVenta(44));
         //LISTO//System.out.println(obd.getTotalBaseImponibleVenta(1));
-        //System.out.println(obd.getSubtotalVenta(1));
+        //LISTO//System.out.println(obd.getSubtotalVenta(44));
+        //LISTO//System.out.println(obd.getArrayListNacionalidad());
+        //System.out.println(obd.crearProducto("Chocolate", "0000", '', "Chocolate savoy", 25, 0, 0, "13-04-2018", 30, 12, 24, 224, 200, 0, 6));
     }
     
     /**
@@ -104,22 +106,23 @@ public class ObjetoBaseDatos {
      */
     private void crearMaps() {
         mapSchema.put("spve", "spve");
+        mapSchema.put("inventario", "inventario");
+        mapTabla.put("almacen", "almacen");
+        mapTabla.put("unidad", "unidad");
+        mapTabla.put("unidad_inventario", "unidad_inventario");
+        mapTabla.put("precio_unidad_inventario", "precio_unidad_inventario");
+        mapTabla.put("lote_produccion", "lote_produccion");
         mapTabla.put("caja", "caja");
         mapTabla.put("cierre_caja", "cierre_caja");
         mapTabla.put("corte_caja", "corte_caja");
         mapTabla.put("desglose_caja", "desglose_caja");
         mapTabla.put("estado_caja", "estado_caja");
         mapTabla.put("cargo", "cargo");
-        //mapTabla.put("cliente", "cliente");
-        //mapTabla.put("cliente__telefono", "cliente__telefono");
         mapTabla.put("empleado", "empleado");
         mapTabla.put("persona", "persona");
-        //mapTabla.put("estado_venta", "estado_venta");
-        //mapTabla.put("moneda", "moneda");
         mapTabla.put("venta", "venta");
         mapTabla.put("venta_producto", "venta_producto");
         mapTabla.put("pago", "pago");
-        //mapTabla.put("telefono", "telefono");
         mapTabla.put("tipo_pago", "tipo_pago");
         mapTabla.put("producto", "producto");
         mapTabla.put("ajuste", "ajuste");
@@ -128,12 +131,6 @@ public class ObjetoBaseDatos {
         mapTabla.put("producto_componente", "producto_componente");
         mapTabla.put("precio_producto", "precio_producto");
         mapTabla.put("periodo_venta_producto", "periodo_venta_producto");
-        //mapTabla.put("usuario", "usuario_sistema");
-        
-        //mapTabla.put("venta__pago", "venta__pago");
-        
-        //mapSchema.put("inventario", "inventario");
-        //mapTabla.put("producto", "producto");
 
     }
     //Valida que una persona existe
@@ -407,6 +404,143 @@ public class ObjetoBaseDatos {
         }
         return cargo;
     }
+    
+    /**
+     * Ernesto: 
+     * método para crear un producto en el sistema
+     * 
+     */
+    public int crearProducto(String descripcion_producto, String codigo_venta_producto, int limite_venta_persona, String descripcion_empaque, double cantidad_disponible, 
+                                int balanza, int producto_pre_fabricado, Date fecha_registro_precio, double margen_ganancia, double porcentaje_impuesto_producto, double impuesto_producto,
+                                double precio_venta_publico, double base_imponible, boolean producto_exento, int id_producto){
+        StringBuilder sqlQuery = new StringBuilder();
+        int resultado;
+        
+        sqlQuery.append("INSERT INTO ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append("(INSERT INTO spve.producto \n" +
+                        "(descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, \n" +
+                        "cantidad_disponible, balanza, producto_pre_fabricado) \n" +
+                        "VALUES (")
+                .append("'").append(descripcion_producto).append("', ")
+                .append("'").append(codigo_venta_producto).append("', ")
+                .append("'").append(limite_venta_persona).append("', ")
+                .append("'").append(descripcion_empaque).append("', ")
+                .append("'").append(cantidad_disponible).append("', ")
+                .append("'").append(balanza).append("', ")
+                .append("'").append(producto_pre_fabricado)
+                .append("');")
+                .append("INSERT INTO ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("precio_producto"))
+                .append(" (fecha_registro_precio, margen_ganancia, porcentaje_impuesto_producto, impuesto_producto, \n" +
+                        "precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, id_producto) \n" +
+                        "VALUES (")
+                .append("current_date").append(fecha_registro_precio).append(", ")
+                .append(margen_ganancia).append(", ")
+                .append(porcentaje_impuesto_producto).append(", ")
+                .append(impuesto_producto).append(", ")
+                .append(precio_venta_publico).append(", ")
+                .append(base_imponible).append(", ")
+                .append(producto_exento).append(", ")
+                .append(id_producto).append(");");
+
+        resultado = ejecutarCreate(sqlQuery.toString(), "producto");
+        resultado = ejecutarCreate(sqlQuery.toString(), "precio_producto");
+
+        return resultado;
+    }
+    
+    /**
+     * Ernesto:
+     * Método para obtener los tipos de personas existentes en un HashMap
+     * 
+     * @return tipo_persona
+     */
+    public ArrayList<HashMap<String, String>> getMapNacionalidad(){
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        HashMap<String, String> map = null;
+        
+        String[] columnaNacionalidad = {"tipo_persona AS nacionalidad"};
+        sqlQuery.append("SELECT DISTINCT ");
+        sqlQuery = addColumnasAlQuery(columnaNacionalidad, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(" FROM ")
+                .append("spve.persona")
+                .append(" WHERE activo_persona = 1;");
+         
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                map = new HashMap<>();
+
+                for (String columna : columnaNacionalidad) {
+                    map.put(columna, rs.getString(columna));
+
+                }
+                
+                resultado.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        
+        return resultado;
+    }
+    
+    /**
+     * Ernesto: método para obtener una lista de los tipos de personas existentes en
+     * la base de datos
+     * @return resultado
+     */
+    
+        public ArrayList getArrayListNacionalidad(){
+        ArrayList resultado = new ArrayList();
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        
+        String[] columnaNacionalidad = {"tipo_persona AS nacionalidad"};
+        sqlQuery.append("SELECT DISTINCT ");
+        sqlQuery = addColumnasAlQuery(columnaNacionalidad, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(" FROM ")
+                .append("spve.persona")
+                .append(" WHERE activo_persona = 1;");
+        try {
+            postgreSQL.conectar();
+            
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                ArrayList map = new ArrayList();
+                for(String columna : columnaNacionalidad){
+                    map.add(rs.getString(columna));
+                    for (int i = 0; i<map.lastIndexOf(columnaNacionalidad); i++) {
+                        map.add(i, columnaNacionalidad);
+                    }
+                System.out.println("map "+map);
+                }
+                
+                resultado.add(map);
+                System.out.println("resultado "+resultado);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        
+        return resultado;
+    }
 
     /**
      * Consulta los datos de la pararesa en la tabla stpv.pararesa.
@@ -527,7 +661,7 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         Producto produc = new Producto();
 
-        String query = "SELECT id_producto, descripcion_producto, codigo_venta_producto, descripcion_empaque, limite_venta_persona" +
+        String query = "SELECT id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona" +
                        " FROM spve.producto WHERE codigo_venta_producto = '"+codigo+"'";
         try {
             postgreSQL.conectar();
@@ -537,7 +671,6 @@ public class ObjetoBaseDatos {
                 produc.setCodigo(rs.getString("codigo_venta_producto"));
                 produc.setDescripcionProducto(rs.getString("descripcion_producto"));
                 produc.setLimiteVenta(rs.getInt("limite_venta_persona"));
-                produc.setDescripcionEmpaque(rs.getString("descripcion_empaque"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -905,7 +1038,7 @@ public class ObjetoBaseDatos {
                 PuntoVenta.Inicio.MenuPrincipal.btnAcerca.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnAdmin.setEnabled(true);
                 PuntoVenta.Inicio.MenuPrincipal.btnProductos.setEnabled(true);
-                PuntoVenta.Inicio.MenuPrincipal.btnMovimientos.setEnabled(true);
+                PuntoVenta.Inicio.MenuPrincipal.btnInventario.setEnabled(true);
                 PuntoVenta.Ventanas.Bloqueo1.btnIngresar.setEnabled(true);
                 PuntoVenta.Ventanas.Bloqueo1.btnIngresar.requestFocus();
 
@@ -1036,11 +1169,6 @@ public class ObjetoBaseDatos {
      * @return
      */
     //public int actualizarClienteAdmin(ModeloCliente cliente) {
-        /* Konstanza:
-            - ¡¿Qué es un 'ClienteAdmin'?!
-            - El nombre dice que actualiza cliente pero el query es para empleados
-            - El argumento de la función debería ser el modelo de empleado
-        */
         /*StringBuilder sqlQuery = new StringBuilder(ModeloCliente cliente, String nombre_persona, String apellido_persona, String tipo_persona, String numero_identificacion_persona, String telefono_persona, String email_persona, String direccion_persona){
         int resultado;
         modificarPersona(nombre_persona, apellido_persona, direccion_persona, telefono_persona, email_persona, numero_identificacion_persona);
@@ -1386,37 +1514,50 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-        String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto","cantidad_producto", "(CASE\n" +
-                                        "    WHEN producto_exento = 1 THEN precio_venta_publico\n" +
-                                        "    ELSE base_imponible\n" +
+        String[] columnaProductos = {"codigo_venta_producto", "descripcion_producto", "unidad_inventario.id AS id_unidad_inventario", "CONCAT(almacen.nombre, '. ', almacen.direccion) AS almacen", 
+                                        "lote_produccion.codigo AS codigo_lote", "venta_producto.cantidad_producto AS cantidad_producto", "(CASE\n" +
+                                        "    WHEN exento = TRUE THEN precio_venta_publico\n" +
+                                        "    ELSE COALESCE(base_imponible, 0)\n" +
                                         "END) AS precio_base_unitario", "(CASE\n" +
-                                        "    WHEN producto_exento = 1 THEN 0\n" +
-                                        "    ELSE impuesto_producto\n" +
-                                        "END) AS impuesto_producto", "precio_venta_publico AS precio_venta_publico", "(vp.cantidad_producto*pp.precio_venta_publico) AS total"};
+                                        "    WHEN exento = TRUE THEN 0\n" +
+                                        "    ELSE COALESCE(impuesto, 0)\n" +
+                                        "END) AS impuesto", "precio_venta_publico", "(venta_producto.cantidad_producto*precio_venta_publico) AS total"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnaProductos, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("producto")).append(" AS p")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("precio_producto")).append(" AS pp")
-                .append(" ON p.id_producto=pp.id_producto")
+                .append(mapTabla.get("producto"))
+                .append(" ON unidad_inventario.producto_id = producto.id_producto")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("almacen"))
+                .append(" ON unidad_inventario.almacen_id = almacen.id") 
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
                 .append(" LEFT JOIN ")
                 .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("venta_producto")).append(" AS vp")
-                .append(" ON vp.id_producto=p.id_producto")
-                .append(" WHERE id_venta=").append(idVenta).append(";");
+                .append(mapTabla.get("venta_producto"))
+                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
+                .append(" WHERE precio_unidad_inventario.activo = 1 AND activo_venta_producto = 1 AND id_venta=").append(idVenta).append(";");
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
             while (rs.next()) {
                 map = new HashMap<>();
                 for (String columna : columnaProductos) {
-                    if (("precio_base_unitario".equals(columna) || "impuesto_producto".equals(columna) || "precio_venta_publico".equals(columna) || "total".equals(columna))) {
+                    if (("precio_base_unitario".equals(columna) || "impuesto".equals(columna) || "precio_venta_publico".equals(columna) || "total".equals(columna))) {
                         map.put(columna, redondeo.format(Double.parseDouble(rs.getString(columna))).replace(",", "."));
                     } else {
                         map.put(columna, rs.getString(columna));
@@ -1446,9 +1587,7 @@ public class ObjetoBaseDatos {
         HashMap<String, String> map;
         ResultSet rs;
         StringBuilder sqlQuery = new StringBuilder();
-//        String[] columnaProducto = {"descripcion_producto", "codigo_venta_producto", "limite_venta_persona", "descripcion_paraaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "p.id_periodo_venta_producto AS id_periodo_venta_producto", "fecha_registro_precio", "margen_ganancia", "impuesto_producto", "precio_venta_publico", "base_imponible", "producto_exento"};
-        String[] columnaProducto = {"descripcion_producto", "codigo_venta_producto", "limite_venta_persona", "descripcion_empaque"};
-//      String[] columnasempleado = {"tipo_persona||'-'||numero_identificacion_persona AS identificacion_persona", "nombre_persona||' '||apellido_persona AS nombre_persona", "nombre_cargo"};
+        String[] columnaProducto = {"codigo_venta_producto", "descripcion_producto", "unidad.descripcion AS unidad", "balanza", "seguimiento"};
 
         sqlQuery.append("SELECT ");
         sqlQuery = addColumnasAlQuery(columnaProducto, "", sqlQuery);
@@ -1456,12 +1595,13 @@ public class ObjetoBaseDatos {
 
         sqlQuery.append(" FROM ")
                 .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("producto")).append(" AS p")
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("precio_producto")).append(" AS pp")
-                .append(" ON ").append("p.id_producto = pp.id_producto")
-                .append(" WHERE activo_producto = 1 AND activo_precio_producto = 1;");        
+                .append(mapTabla.get("producto"))
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad"))
+                .append(" ON producto.id_unidad = unidad.id")
+                .append(" WHERE activo_producto = 1;");
+
         try {
             postgreSQL.conectar();
             rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
@@ -1918,8 +2058,10 @@ public class ObjetoBaseDatos {
     }
 
     /**
-     * Utiliza el codigo de barras de un prodcuto para 
-     * crear un map<k, v> de la tabla producto
+     * Utiliza el codigo de barras de un producto para 
+     * crear un map<k, v> de la tabla producto, incluyendo
+     * los datos de la primera unidad de inventario que se encuentre 
+     * de dicho producto
      *
      * @param codigo_venta_producto
      * @return
@@ -1928,21 +2070,82 @@ public class ObjetoBaseDatos {
         StringBuilder sqlQuery = new StringBuilder();
         HashMap<String, String> map = new HashMap<>();
         ResultSet rs;
-        String[] columnaProducto = {"p.id_producto AS id_producto","descripcion_producto", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "descripcion_empaque", "cantidad_disponible", "balanza", "producto_pre_fabricado", "id_periodo_venta_producto"};
+        String[] columnaProducto = {"producto.id_producto AS id_producto","descripcion_producto", "unidad_inventario.id AS id_unidad_inventario", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "balanza", "almacen_id", "lote_produccion.codigo AS codigo_lote", "seguimiento", "producto_pre_fabricado", "id_periodo_venta_producto"};
         sqlQuery.append("SELECT ");
         addColumnasAlQuery(columnaProducto, "", sqlQuery);
         sqlQuery.deleteCharAt(sqlQuery.length() - 1);
 
         sqlQuery.append(" FROM ")
                 .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("producto")).append(" AS p ")
+                .append(mapTabla.get("producto"))
                 .append(" INNER JOIN ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("precio_producto")).append(" AS pp ")
-                .append(" ON p.id_producto = pp.id_producto")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON producto.id_producto = unidad_inventario.producto_id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON precio_unidad_inventario.unidad_inventario_id = unidad_inventario.id")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
                 .append(" WHERE ")
                 .append("codigo_venta_producto='").append(codigo_venta_producto).append("'")
-                .append(" AND activo_producto = 1;");
+                .append(" AND activo_producto = 1 AND unidad_inventario.activo = 1 AND precio_unidad_inventario.activo = 1 LIMIT 1;");
+       
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            if (rs.next()) {
+                for (String columna : columnaProducto) {
+                    
+                    map.put(columna, rs.getString(columna));
+                }System.out.println(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        return map;
+    }
+    
+    /**
+     * Utiliza un id de unidad de inventario para 
+     * crear un map<k, v> con los datos necesarios del producto para la venta
+     *
+     * @param id_unidad_inventario
+     * @return
+     */
+    public HashMap<String, String> getMapProducto(int id_unidad_inventario) {
+        StringBuilder sqlQuery = new StringBuilder();
+        HashMap<String, String> map = new HashMap<>();
+        ResultSet rs;
+        String[] columnaProducto = {"producto.id_producto AS id_producto","descripcion_producto", "unidad_inventario.id AS id_unidad_inventario", "codigo_venta_producto", "precio_venta_publico", "limite_venta_persona", "balanza", "almacen_id", "lote_produccion.codigo AS codigo_lote", "seguimiento", "producto_pre_fabricado", "id_periodo_venta_producto"};
+        sqlQuery.append("SELECT ");
+        addColumnasAlQuery(columnaProducto, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+
+        sqlQuery.append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON producto.id_producto = unidad_inventario.producto_id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON precio_unidad_inventario.unidad_inventario_id = unidad_inventario.id")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
+                .append(" WHERE ")
+                .append(" unidad_inventario.id =").append(id_unidad_inventario)
+                .append(" AND activo_producto = 1 AND unidad_inventario.activo = 1 AND precio_unidad_inventario.activo = 1 LIMIT 1;");
        
         try {
             postgreSQL.conectar();
@@ -2474,11 +2677,11 @@ public class ObjetoBaseDatos {
      *
      * @param idPersona
      * @param idEstadoCaja
+     * @param idEstadoVenta
      * @return id de la última venta al cliente o -1 si no se pudo crear ni actualizar
      */
-    public int crearVenta(int idPersona, int idEstadoCaja) {
+    public int crearVenta(int idPersona, int idEstadoCaja, int idEstadoVenta) {
         ResultSet rs;
-        Date date = new java.util.Date();
         StringBuilder sqlQuery = new StringBuilder();
         int resultado;
         int idVenta = -1;
@@ -2505,13 +2708,17 @@ public class ObjetoBaseDatos {
         }
 
         sqlQuery = new StringBuilder();
-
+        
+        LocalDateTime fechaActual = LocalDateTime.now();
+        
         if (idVenta > -1) {
             sqlQuery.append("UPDATE ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append(" SET estado_venta=").append(EstadoVenta.EnProceso)
-                    .append(" WHERE id_venta=").append(idVenta)
+                    .append(" SET estado_venta=").append(idEstadoVenta)
+                    .append(", fecha_ultima_modificacion='")
+                    .append(fechaActual)
+                    .append("' WHERE id_venta=").append(idVenta)
                     .append(";");
             
             try {
@@ -2529,13 +2736,14 @@ public class ObjetoBaseDatos {
             sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta"))
-                    .append("(id_persona, estado_venta, fecha_venta, id_estado_caja) VALUES (")
+                    .append("(id_persona, estado_venta, fecha_venta, fecha_ultima_modificacion, id_estado_caja) VALUES (")
                     .append(idPersona).append(", ")
-                    //.append(idEstadoVenta).append(", ")
                     .append(EstadoVenta.EnProceso).append(", ")
-                    .append("'").append(new Timestamp(date.getTime())).append("', '")
+                    .append("'").append(fechaActual)
+                    .append("', '").append(fechaActual)
+                    .append("', ")
                     .append(idEstadoCaja)
-                    .append("');");
+                    .append(");");
             
             resultado = ejecutarCreate(sqlQuery.toString(), "venta");
         }
@@ -2939,7 +3147,7 @@ public class ObjetoBaseDatos {
                 resultado = rs.getDouble("total_no_exento");
                 
             }
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
         } finally {
             postgreSQL.desconectar();
         }
@@ -2990,11 +3198,21 @@ public class ObjetoBaseDatos {
         ResultSet rs;
         double resultado = 0;
         
-        sqlQuery.append("SELECT SUM(impuesto_producto*cantidad_producto) AS total_impuesto FROM spve.precio_producto AS pp\n" +
-                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
-                        "INNER JOIN spve.venta_producto AS vp ON vp.id_producto = p.id_producto\n" +
-                        "WHERE producto_exento = 0 AND id_venta = "+id_venta+";");
-        
+        sqlQuery.append("SELECT COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0) AS total_impuesto")
+                .append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
+                .append(" WHERE exento = FALSE AND activo_venta_producto = 1 AND precio_unidad_inventario.activo = 1 AND id_venta = ")
+                .append(id_venta).append(";");
+                        
         try {
             postgreSQL.conectar();
             rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
@@ -3016,17 +3234,25 @@ public class ObjetoBaseDatos {
      * @param id_venta
      * @return
      */
-    
     public double getSubtotalVenta(int id_venta){
         StringBuilder sqlQuery = new StringBuilder();
         ResultSet rs;
         double resultado = 0;
         
-        sqlQuery.append("SELECT (SUM(precio_venta_publico *cantidad_producto) -SUM(impuesto_producto *cantidad_producto)) AS subtotal \n" +
-                        "FROM spve.precio_producto AS pp \n" +
-                        "INNER JOIN spve.producto AS p ON p.id_producto = pp.id_producto\n" +
-                        "INNER JOIN spve.venta_producto AS vp ON p.id_producto = vp.id_producto\n" +
-                        "WHERE id_venta = "+id_venta+";");
+        sqlQuery.append("SELECT (COALESCE(SUM(precio_venta_publico*venta_producto.cantidad_producto),0)-COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0)) AS subtotal")
+                .append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
+                .append(" WHERE activo_venta_producto = 1 AND precio_unidad_inventario.activo = 1 AND id_venta = ")
+                .append(id_venta).append(";");
         
         try {
             postgreSQL.conectar();
@@ -3043,6 +3269,7 @@ public class ObjetoBaseDatos {
         
         return resultado;
     }
+    
     /*
      * 
      * Método para asociar un pago a una venta.
@@ -3127,97 +3354,32 @@ public class ObjetoBaseDatos {
 
     /**
      * Método para incluir un producto en una venta. Si existe un producto del
-     * mismo idProducto en la la venta, se hace un UPDATE de la tabla. En caso
+     * mismo idUnidadInventario en la venta, se hace un UPDATE de la tabla. En caso
      * contrario se hace un INSERT
      *
      * @param idVenta
-     * @param codigo_venta_producto
+     * @param idUnidadInventario
      * @param cantidadProducto
      * @return
      */
-    public int agregarProductoEnVenta(int idVenta, String codigo_venta_producto, double cantidadProducto) {
+    public int agregarProductoEnVenta(int idVenta, int idUnidadInventario, double cantidadProducto) {
         StringBuilder sqlQuery = new StringBuilder();
-        ResultSet rs;
-        double cantidadAnterior = 0.00;
-        int resultado = -1;
-        int idVentaProducto = -1, idProducto;
-
-        sqlQuery.append("SELECT id_venta_producto, producto.id_producto, cantidad_producto FROM ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("venta_producto"))
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("producto"))
-                .append(" ON venta_producto.id_producto = producto.id_producto")
-                .append(" WHERE id_venta=").append(idVenta)
-                .append(" AND ")
-                .append("codigo_venta_producto='")
-                .append(codigo_venta_producto).append("'")
-                .append(" AND producto.activo_producto = 1;");
-
-        try {
-            postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
-            
-            if (rs.next()) {
-                idVentaProducto = rs.getInt("id_venta_producto");
-                cantidadAnterior = rs.getDouble("cantidad_producto");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
         
-        if (idVentaProducto > -1) {
-            sqlQuery = new StringBuilder();
-            sqlQuery.append("UPDATE ")
+        LocalDateTime fechaActual = LocalDateTime.now();
+        
+        sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("venta_producto"))
-                    .append(" SET cantidad_producto=").append(cantidadProducto + cantidadAnterior)
-                    .append(" WHERE id_venta_producto=").append(idVentaProducto)
-                    .append(";");
-            try{
-                postgreSQL.conectar();
-                postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
-            }catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                postgreSQL.desconectar();
-            }
-        } else {
-            StringBuilder queryID = new StringBuilder();
-            queryID.append("SELECT id_producto FROM ")
-                    .append(mapSchema.get("spve")).append(".")
-                    .append(mapTabla.get("producto"))
-                    .append(" WHERE codigo_venta_producto='").append(codigo_venta_producto).append("'")
-                    .append(" AND activo_producto = 1;");
-            try {
-                postgreSQL.conectar();
-                rs = postgreSQL.ejecutarSelect(queryID.toString());
-                
-                if (rs.next()) {
-                    idProducto = rs.getInt("id_producto");
-                    
-                    StringBuilder queryCrearVentaProducto = new StringBuilder();
-                    
-                    queryCrearVentaProducto.append("INSERT INTO ")
-                        .append(mapSchema.get("spve")).append(".")
-                        .append(mapTabla.get("venta_producto"))
-                        .append("(id_producto, id_venta, cantidad_producto) VALUES (")
-                        .append(idProducto).append(", ")
-                        .append(idVenta).append(", ")
-                        .append(cantidadProducto).append(");");
-            
-                    resultado = ejecutarCreate(queryCrearVentaProducto.toString(), "venta_producto");
-                }
-            } catch (Exception e) { 
-                e.printStackTrace();
-            } finally {
-                postgreSQL.desconectar();
-            }
-        }
-        return resultado;
+                    .append(" (id_unidad_inventario, id_venta, cantidad_producto, fecha_ultima_modificacion) VALUES (")
+                    .append(idUnidadInventario).append(", ")
+                    .append(idVenta).append(", ")
+                    .append(cantidadProducto).append(", '")
+                    .append(fechaActual)
+                    .append("')")
+                    .append(" ON CONFLICT ON CONSTRAINT venta_unidad_inventario DO UPDATE")
+                    .append(" SET cantidad_producto = venta_producto.cantidad_producto+EXCLUDED.cantidad_producto, fecha_ultima_modificacion=EXCLUDED.fecha_ultima_modificacion;");
+        
+        return ejecutarCreate(sqlQuery.toString(), "venta_producto");
     }
         
     /**
@@ -3247,14 +3409,22 @@ public class ObjetoBaseDatos {
                 .append(mapTabla.get("persona"))
                 .append(" ON venta.id_persona = persona.id_persona")
                 .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
+                .append(" INNER JOIN ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("producto"))
-                .append(" ON venta_producto.id_producto = producto.id_producto")
-                .append(" WHERE ").append("tipo_persona='"+tipo_persona+"'")
-                .append(" AND ").append("numero_identificacion_persona='"+numero_identificacion_persona+"'")
-                .append(" AND ").append("activo_persona = 1")
-                .append(" AND ").append("codigo_venta_producto = '"+codigo_venta_producto+"'")
-                .append(" AND ").append("activo_producto = 1");
+                .append(" ON unidad_inventario.producto_id = producto.id_producto")
+                .append(" WHERE ")
+                .append("tipo_persona='")
+                .append(tipo_persona).append("'")
+                .append(" AND numero_identificacion_persona='")
+                .append(numero_identificacion_persona).append("'")
+                .append(" AND activo_persona = 1")
+                .append(" AND codigo_venta_producto = '")
+                .append(codigo_venta_producto).append("'")
+                .append(" AND activo_producto = 1 AND unidad_inventario.activo = 1;");
         
         try {
             postgreSQL.conectar();
@@ -3274,51 +3444,31 @@ public class ObjetoBaseDatos {
     
     
     /**
-     * Elimina un producto incluido en una venta, dado un idVenta y el código de
-     * barra del producto. El código de barra es utilizado para sacar el id del
-     * producto ya que en la tabla de productos no se guarda su id, sino el
-     * codigo de barra.
+     * Elimina un producto incluido en una venta volviendo su activo 0, dado un idVenta y un idUnidadInventario
+     * y actualiza su fecha de última modificación. 
      *
      * @param idVenta Id de la venta que esté abierta.
-     * @param codigoBarra Codigo del producto que se desee eliminar.
+     * @param idUnidadInventario
      * @return
      */
-    public boolean eliminarProductoEnVenta(int idVenta, String codigoBarra) {
+    public boolean eliminarProductoEnVenta(int idVenta, int idUnidadInventario) {
+        LocalDateTime fechaActual = LocalDateTime.now();
+        
         StringBuilder sqlQuery = new StringBuilder();
-        boolean resultado = false;
-        ResultSet rs;
-        int idProducto = -1;
-        String queryIdProducto = "SELECT MAX(id_producto) FROM spve.producto WHERE codigo_venta_producto='" + codigoBarra + "' AND activo_producto = 1;";
         
-        try {
-            postgreSQL.conectar();
-            rs = postgreSQL.ejecutarSelect(queryIdProducto);
-            
-            if(rs.next()){
-                idProducto = rs.getInt("max");
-            }
-            
-            if(idProducto > -1){
-                sqlQuery.append("DELETE FROM ")
-                        .append(mapSchema.get("spve")).append(".")
-                        .append(mapTabla.get("venta_producto"))
-                        .append(" USING ")
-                        .append(mapSchema.get("spve")).append(".")
-                        .append(mapTabla.get("producto"))
-                        .append(" WHERE venta_producto.id_producto = producto.id_producto")
-                        .append(" AND ").append("codigo_venta_producto = '"+codigoBarra+"'")
-                        .append(" AND id_venta = ")
-                        .append(idVenta);
-
-                resultado = postgreSQL.ejecutarQuerySinResultado(sqlQuery.toString());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            postgreSQL.desconectar();
-        }
+        sqlQuery.append("UPDATE ")
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("venta_producto"))
+                    .append(" SET activo_venta_producto=0")
+                    .append(", fecha_ultima_modificacion='")
+                    .append(fechaActual)
+                    .append("' WHERE id_unidad_inventario = ")
+                    .append(idUnidadInventario)
+                    .append(" AND id_venta = ")
+                    .append(idVenta)  
+                    .append(";");
         
-        return resultado;
+        return ejecutarQuerySinResultado(sqlQuery.toString());
     }
 
     /**
@@ -3475,30 +3625,52 @@ public class ObjetoBaseDatos {
     /**
      * Consulta si hay cantidad disponible para vender un producto.
      * 
-     * @param codigo_venta_producto - Codigo del producto a vender.
+     * @param idVenta
+     * @param idUnidadInventario
      * @param cantidad_venta - Cantidad del producto a vender.
      * @return 
      */
-    public boolean consultastock(String codigo_venta_producto, String cantidad_venta) {
+    public boolean consultastock(int idVenta, int idUnidadInventario, double cantidad_venta) {
         ResultSet result;
-        String sql1 = "SELECT cantidad_disponible FROM  spve.producto WHERE codigo_venta_producto = '" + codigo_venta_producto + "';";
-
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        sqlQuery.append("SELECT unidad_inventario.cantidad_producto - COALESCE(SUM(CASE WHEN venta_producto.id_venta = ")
+                .append(idVenta).append(" OR estado_venta = ")
+                .append(EstadoVenta.Cancelada)
+                .append(" THEN 0 ELSE venta_producto.cantidad_producto END), 0) AS cantidad_disponible")
+                .append(" FROM ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" ON unidad_inventario.id = venta_producto.id_unidad_inventario")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" ON venta_producto.id_venta = venta.id_venta")
+                .append(" WHERE unidad_inventario.activo = 1 AND unidad_inventario.id = ")
+                .append(idUnidadInventario)
+                .append(" AND (activo_venta_producto IS NULL OR activo_venta_producto = 1)")
+                .append(" AND (activo_venta IS NULL OR activo_venta = 1)")
+                .append(" GROUP BY unidad_inventario.id;");
+        
         try {
             postgreSQL.conectar();
-            System.out.println(sql1);
-            result = postgreSQL.getSentencia().executeQuery(sql1);
+            System.out.println(sqlQuery.toString());
+            result = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
 
             if (result.next()) {
-                if ( result.getInt("cantidad_disponible") < Integer.parseInt(cantidad_venta)) {
-                    return false;
+                if (result.getDouble("cantidad_disponible") >= cantidad_venta) {
+                    return true;
                 }
             }
-            
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ObjetoBaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return true;
+        return false;
     }
+    
     //Ernesto:
     //Campo "iva" fue reparalazado por "impuesto"
     public void actualizaiva(int id, String iva, XBigDecimal monto, double pagoconinva, double pagosiniva, String totalpag, String cambio, int idEmp) {
@@ -3629,6 +3801,493 @@ public class ObjetoBaseDatos {
         }
         return idUltimoEstadoCaja;
     }
+            
+    public void actualizarUnidadesInventario(JsonArray unidades) {
+        if (unidades.size() > 0) {
+            StringBuilder sqlQuery = new StringBuilder();
+
+            String values = "";
+            for (JsonElement element : unidades) {
+                JsonObject unidad = element.getAsJsonObject();
+                int id = unidad.get("id").getAsInt();
+                BigDecimal cantidad_producto = unidad.get("cantidad_actual_sin_ventas").getAsBigDecimal();
+                int almacen_id = unidad.get("almacen").getAsInt();
+                JsonElement lote_produccion_id = unidad.get("lote_produccion");
+                String lote = (lote_produccion_id.isJsonNull())?"NULL":lote_produccion_id.getAsString();
+                int producto_id = unidad.get("producto").getAsInt();
+                int activo = unidad.get("activo").getAsBoolean()?1:0;
+                values += "(" + id + "," + cantidad_producto + "," + almacen_id + "," + lote + ","
+                        + producto_id + "," + activo + "),";
+            }
+            values = values.substring(0, values.length() - 1);
+
+            sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("inventario")).append(".")
+                    .append(mapTabla.get("unidad_inventario"))
+                    .append(" (id, cantidad_producto, almacen_id, lote_produccion_id, "
+                            + "producto_id, activo) "
+                            + "VALUES ")
+                    .append(values)
+                    .append(" ON CONFLICT (id) DO UPDATE")
+                    .append(" SET cantidad_producto = EXCLUDED.cantidad_producto, activo = EXCLUDED.activo;");
+
+            ejecutarQuerySinResultado(sqlQuery.toString());
+            
+            for (JsonElement element : unidades) {
+                JsonObject unidad = element.getAsJsonObject();
+                int id = unidad.get("id").getAsInt();
+                
+                JsonElement precio = unidad.get("precio_actual");
+                if(!precio.isJsonNull()) {
+                    desactivarPreciosUnidadInventario(id);
+                    actualizarPrecioUnidadInventario(id, precio.getAsJsonObject());
+                }
+            }
+        }
+    }
+
+    public void actualizarAlmacenes(JsonArray almacenes) {
+        if(almacenes.size() > 0){
+            StringBuilder sqlQuery = new StringBuilder();
+
+            String values = "";
+            for (JsonElement element : almacenes) {
+                JsonObject almacen = element.getAsJsonObject();
+                int id = almacen.get("id").getAsInt();
+                String nombre = almacen.get("nombre").getAsString();
+                String direccion = "";
+                if(!almacen.get("direccion").isJsonNull()) direccion = almacen.get("direccion").getAsString();
+                values += "(" + id + ",'" + nombre + "','" + direccion + "'),";
+            }
+            values = values.substring(0, values.length() - 1);
+
+            sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("inventario")).append(".")
+                    .append(mapTabla.get("almacen"))
+                    .append(" (id, nombre, direccion) VALUES ")
+                    .append(values)
+                    .append(" ON CONFLICT (id) DO UPDATE")
+                    .append(" SET nombre = EXCLUDED.nombre, direccion = EXCLUDED.direccion;");
+
+            ejecutarQuerySinResultado(sqlQuery.toString());
+        }
+    }
+
+    public void actualizarUnidadesProductos(JsonArray unidades) {
+        if (unidades.size() > 0) {
+            StringBuilder sqlQuery = new StringBuilder();
+
+            String values = "";
+            for (JsonElement element : unidades) {
+                JsonObject unidad = element.getAsJsonObject();
+                int id = unidad.get("id").getAsInt();
+                String nombre = unidad.get("nombre").getAsString();
+                String descripcion = unidad.get("descripcion").getAsString();
+                values += "(" + id + ",'" + nombre + "','" + descripcion + "'),";
+            }
+            values = values.substring(0, values.length() - 1);
+
+            sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("inventario")).append(".")
+                    .append(mapTabla.get("unidad"))
+                    .append(" (id, nombre, descripcion) VALUES ")
+                    .append(values)
+                    .append(" ON CONFLICT (id) DO UPDATE")
+                    .append(" SET nombre = EXCLUDED.nombre, descripcion = EXCLUDED.descripcion;");
+
+            ejecutarQuerySinResultado(sqlQuery.toString());
+        }
+    }
+    
+    public void desactivarPreciosUnidadInventario(int unidad_inventario_id) {
+        StringBuilder sqlQuery = new StringBuilder();
+
+        sqlQuery.append("UPDATE ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" SET activo = 0 WHERE unidad_inventario_id = ")
+                .append(unidad_inventario_id)
+                .append(" AND activo = 1;");
+
+        ejecutarQuerySinResultado(sqlQuery.toString());
+    }
+    
+    public void actualizarPrecioUnidadInventario(int unidadInventario, JsonObject precio) {
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        
+        sqlQuery.append("INSERT INTO ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" (id, base_imponible, margen_ganancia, porcentaje_impuesto, "
+                        + "impuesto, precio_venta_publico, exento, unidad_inventario_id, activo) "
+                        + "VALUES (")
+                .append(precio.get("id").getAsInt()).append(",")
+                .append(precio.get("base_imponible").isJsonNull()?"NULL":precio.get("base_imponible").getAsBigDecimal()).append(",")
+                .append(precio.get("margen_ganancia").isJsonNull()?"NULL":precio.get("margen_ganancia").getAsBigDecimal()).append(",")
+                .append(precio.get("porcentaje_impuesto").isJsonNull()?"NULL":precio.get("porcentaje_impuesto").getAsBigDecimal()).append(",")
+                .append(precio.get("impuesto").isJsonNull()?"NULL":precio.get("impuesto").getAsBigDecimal()).append(",")
+                .append(precio.get("precio_venta_publico").getAsBigDecimal()).append(",")
+                .append(precio.get("exento").getAsBoolean()).append(",")
+                .append(unidadInventario).append(",")
+                .append(precio.get("activo").getAsBoolean()?1:0)
+                .append(") ON CONFLICT (id) DO UPDATE")
+                .append(" SET base_imponible = EXCLUDED.base_imponible, margen_ganancia = EXCLUDED.margen_ganancia,"
+                        + "porcentaje_impuesto = EXCLUDED.porcentaje_impuesto, impuesto = EXCLUDED.impuesto,"
+                        + "precio_venta_publico = EXCLUDED.precio_venta_publico, exento = EXCLUDED.exento, "
+                        + "unidad_inventario_id = EXCLUDED.unidad_inventario_id,"
+                        + "activo = EXCLUDED.activo;");
+
+        ejecutarQuerySinResultado(sqlQuery.toString());
+    }
+    
+    public void actualizarProductos(JsonArray productos) {
+        if (productos.size() > 0) {
+            StringBuilder sqlQuery = new StringBuilder();
+
+            String values = "";
+            for (JsonElement element : productos) {
+                JsonObject producto = element.getAsJsonObject();
+                int id = producto.get("id").getAsInt();
+                String descripcion = producto.get("descripcion").getAsString();
+                String codigo_venta = producto.get("codigo_venta").getAsString();
+                
+                values += "(" + id + ",'" + descripcion + "','" + codigo_venta + "',";
+                
+                JsonElement limite_venta_persona = producto.get("limite_venta_persona");
+                if(!limite_venta_persona.isJsonNull()) values += limite_venta_persona.getAsBigDecimal()+",";
+                else values += "NULL,";
+                
+                JsonElement periodo_venta_producto = producto.get("periodo_venta_producto");
+                if(!periodo_venta_producto.isJsonNull()) values += periodo_venta_producto.getAsInt()+",";
+                else values += "NULL,";
+                
+                JsonElement id_unidad = producto.get("unidad");
+                if(!id_unidad.isJsonNull()) {
+                    values += id_unidad.getAsInt()+",";
+                } else {
+                    values += "NULL,";
+                }
+     
+                int balanza = producto.get("balanza").getAsBoolean()?1:0;
+                values += balanza  + ",";
+                        
+                JsonElement seguimiento = producto.get("seguimiento");
+                if (!seguimiento.isJsonNull()) {
+                    values += seguimiento.getAsInt() + ",";
+                } else {
+                    values += "NULL,";
+                }
+                
+                int producto_pre_fabricado = producto.get("producto_pre_fabricado").getAsBoolean()?1:0;
+                int activo = producto.get("activo").getAsBoolean()?1:0;
+                
+                values += producto_pre_fabricado + "," + activo + "),";
+                
+            }
+            values = values.substring(0, values.length() - 1);
+
+            sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("spve")).append(".")
+                    .append(mapTabla.get("producto"))
+                    .append(" (id_producto, descripcion_producto, codigo_venta_producto, limite_venta_persona, "
+                            + "id_periodo_venta_producto, id_unidad, balanza, seguimiento, producto_pre_fabricado, activo_producto) "
+                            + "VALUES ")
+                    .append(values)
+                    .append(" ON CONFLICT (id_producto) DO UPDATE")
+                    .append(" SET descripcion_producto = EXCLUDED.descripcion_producto, codigo_venta_producto = EXCLUDED.codigo_venta_producto,"
+                            + "limite_venta_persona = EXCLUDED.limite_venta_persona,"
+                            + "id_periodo_venta_producto = EXCLUDED.id_periodo_venta_producto, id_unidad = EXCLUDED.id_unidad,"
+                            + "balanza = EXCLUDED.balanza, seguimiento = EXCLUDED.seguimiento, producto_pre_fabricado = EXCLUDED.producto_pre_fabricado,"
+                            + "activo_producto = EXCLUDED.activo_producto;");
+
+            ejecutarQuerySinResultado(sqlQuery.toString());
+        }
+    }
+
+    public void actualizarLotes(JsonArray lotes) {
+        if (lotes.size() > 0) {
+            StringBuilder sqlQuery = new StringBuilder();
+
+            String values = "";
+            for (JsonElement element : lotes) {
+                JsonObject lote = element.getAsJsonObject();
+                int id = lote.get("id").getAsInt();
+                String codigo = lote.get("codigo").getAsString();
+                int producto_id = lote.get("producto").getAsInt();
+                values += "(" + id + ",'" + codigo + "'," + producto_id + "),";
+            }
+            values = values.substring(0, values.length() - 1);
+
+            sqlQuery.append("INSERT INTO ")
+                    .append(mapSchema.get("inventario")).append(".")
+                    .append(mapTabla.get("lote_produccion"))
+                    .append(" (id, codigo, producto_id) VALUES ")
+                    .append(values)
+                    .append(" ON CONFLICT (id) DO UPDATE")
+                    .append(" SET codigo = EXCLUDED.codigo;");
+
+            ejecutarQuerySinResultado(sqlQuery.toString());
+        }
+    }
+    
+    public ArrayList<HashMap<String, String>> getArrayListVentasParaSincronizar() {
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
+        HashMap<String, String> map;
+        ResultSet rs;
+        StringBuilder sqlQuery = new StringBuilder();
+        String[] columnas = {"id_venta AS id", "estado_venta AS estado", "activo_venta AS activo"};
+
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnas, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+
+        sqlQuery.append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" WHERE fecha_ultima_sincronizacion IS NULL OR fecha_ultima_modificacion > fecha_ultima_sincronizacion;");
+
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                map = new HashMap<>();
+                for (String columna : columnas) {
+                    map.put(columna, rs.getString(columna));
+                }
+                System.out.println("MAP " + map);
+                resultado.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        return resultado;
+    }
+    
+    public ArrayList<HashMap<String, String>> getArrayListVentasProductosParaSincronizar() {
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
+        HashMap<String, String> map;
+        ResultSet rs;
+        StringBuilder sqlQuery = new StringBuilder();
+        String[] columnas = {"id_venta_producto AS id", "cantidad_producto AS cantidad", 
+            "id_unidad_inventario AS unidad_inventario", "v.id_venta AS venta", "activo_venta_producto AS activo"};
+
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnas, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+
+        sqlQuery.append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto")).append(" AS vp")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta")).append(" AS v")
+                .append(" ON vp.id_venta = v.id_venta")
+                .append(" WHERE fecha_ultima_sincronizacion IS NULL OR vp.fecha_ultima_modificacion > fecha_ultima_sincronizacion OR v.fecha_ultima_modificacion > fecha_ultima_sincronizacion;");
+        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                map = new HashMap<>();
+                for (String columna : columnas) {
+                    map.put(columna, rs.getString(columna));
+                }
+                System.out.println("MAP " + map);
+                resultado.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        return resultado;
+    }
+
+    public void actualizarFechaSincronizacionVentas() {
+        StringBuilder sqlQuery = new StringBuilder();
+        
+        LocalDateTime fechaActual = LocalDateTime.now();
+        
+        sqlQuery.append("UPDATE ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" SET fecha_ultima_sincronizacion = '")
+                .append(fechaActual)
+                .append("', fecha_ultima_modificacion = '")
+                .append(fechaActual)
+                .append("' WHERE fecha_ultima_sincronizacion IS NULL OR fecha_ultima_modificacion > fecha_ultima_sincronizacion;");
+
+        ejecutarQuerySinResultado(sqlQuery.toString());
+    }
+
+    public ArrayList<HashMap<String, String>> getArrayListUnidadesInventario() {
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        HashMap<String, String> map;
+        
+        String[] columnasUnidades = {
+            "almacen.id AS almacen_id", "CONCAT(almacen.nombre, '. ', almacen.direccion) AS almacen", "producto.codigo_venta_producto AS codigo_venta_producto", 
+            "lote_produccion.codigo AS codigo_lote", "CONCAT(unidad_inventario.cantidad_producto - COALESCE(SUM(CASE WHEN estado_venta = "+EstadoVenta.Cancelada+" THEN 0 ELSE venta_producto.cantidad_producto END), 0), ' ', unidad.descripcion) AS cantidad",
+            "precio_venta_publico", "base_imponible", "margen_ganancia", "porcentaje_impuesto", "exento"
+        };
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnasUnidades, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(" FROM ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" ON unidad_inventario.id = venta_producto.id_unidad_inventario")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta"))
+                .append(" ON venta_producto.id_venta = venta.id_venta")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("almacen"))
+                .append(" ON unidad_inventario.almacen_id = almacen.id") 
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" ON unidad_inventario.producto_id = producto.id_producto")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad"))
+                .append(" ON producto.id_unidad = unidad.id ")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
+                .append("WHERE unidad_inventario.activo = 1 AND precio_unidad_inventario.activo = 1 "
+                        + "AND (activo_venta_producto IS NULL OR activo_venta_producto = 1) AND "
+                        + "(activo_venta IS NULL OR activo_venta = 1) ")
+                .append("GROUP BY unidad_inventario.id, almacen.id, almacen, codigo_venta_producto, codigo_lote, unidad.descripcion,")
+                .append("precio_venta_publico, base_imponible, margen_ganancia, porcentaje_impuesto, exento;");
+                
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                map = new HashMap<>();
+                for (String columna : columnasUnidades) {
+                    map.put(columna, rs.getString(columna));
+                }
+                resultado.add(map);
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        System.out.println(resultado);
+        return resultado;
+    }
+
+    public ArrayList<HashMap<String, String>> getArrayListProductosCajero() {
+        ArrayList<HashMap<String, String>> resultado = new ArrayList<>();
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        HashMap<String, String> map;
+
+        String[] columnasUnidades = {
+            "almacen.id AS almacen_id", "CONCAT(almacen.nombre, '. ', almacen.direccion) AS almacen", "codigo_venta_producto", "descripcion_producto",
+            "unidad_inventario.id AS id_unidad_inventario", "lote_produccion.codigo AS codigo_lote", "precio_venta_publico"
+        };
+    
+        sqlQuery.append("SELECT ");
+        sqlQuery = addColumnasAlQuery(columnasUnidades, "", sqlQuery);
+        sqlQuery.deleteCharAt(sqlQuery.length() - 1);
+        sqlQuery.append(" FROM ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("producto"))
+                .append(" ON unidad_inventario.producto_id = producto.id_producto")
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("almacen"))
+                .append(" ON unidad_inventario.almacen_id = almacen.id") 
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
+                .append("WHERE unidad_inventario.activo = 1 AND precio_unidad_inventario.activo = 1;");
+
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.ejecutarSelect(sqlQuery.toString());
+            while (rs.next()) {
+                map = new HashMap<>();
+                for (String columna : columnasUnidades) {
+                    map.put(columna, rs.getString(columna));
+                }
+                resultado.add(map);
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            resultado = null;
+        } finally {
+            postgreSQL.desconectar();
+        }
+        System.out.println(resultado);
+        return resultado;
+    }
+
+    public int getIdUnidadInventario(int idProducto, int idAlmacen, String codigoLote) {
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        int resultado = -1;
+
+        sqlQuery.append("SELECT unidad_inventario.id AS id_unidad_inventario")
+                .append(" FROM ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" LEFT JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("lote_produccion"))
+                .append(" ON unidad_inventario.lote_produccion_id = lote_produccion.id")
+                .append(" WHERE ")
+                .append(" unidad_inventario.producto_id = ")
+                .append(idProducto)
+                .append(" AND almacen_id = ")
+                .append(idAlmacen)
+                .append(" AND (lote_produccion.codigo IS NULL OR lote_produccion.codigo = '")
+                .append(codigoLote)
+                .append("') AND activo = 1;");
+
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getInt("id_unidad_inventario");
+                System.out.println("resultado " + resultado);
+
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+
+        return resultado;
+    }
 
     /**
      * Enum de los estados de una venta.
@@ -3719,7 +4378,7 @@ public class ObjetoBaseDatos {
             postgreSQL.conectar();
             resultado = postgreSQL.ejecutarQuerySinResultado(query);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } finally {
             postgreSQL.desconectar();
         }

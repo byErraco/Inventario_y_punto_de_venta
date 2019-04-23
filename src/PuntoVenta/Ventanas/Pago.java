@@ -8,7 +8,6 @@ import ClasesExtendidas.Numeros.XBigDecimal;
 import ClasesExtendidas.Tablas.PagoTableModel;
 import ClasesExtendidas.Tablas.TipoPagoTableModel;
 import PuntoVenta.BaseDatos.ObjetoBaseDatos;
-import PuntoVenta.BaseDatos.Empresa;
 import PuntoVenta.Inicio.MenuPrincipal;
 import static PuntoVenta.Ventanas.Venta.jtbVenta;
 import static PuntoVenta.Ventanas.Venta.txtDocumento;
@@ -44,13 +43,6 @@ import Utilidades.GuardarReporte;
 import Utilidades.ValorPagos;
 import java.io.IOException;
 import java.sql.SQLException;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintException;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
 
 /**
  *

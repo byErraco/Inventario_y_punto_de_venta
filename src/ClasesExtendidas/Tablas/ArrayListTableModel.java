@@ -48,5 +48,8 @@ public class ArrayListTableModel extends DefaultTableModel {
     public boolean isCellEditable(int row, int column) {
         return column == 3;
     }
-
+    
+    public Object getValueAt(int row, String column){
+        return getValueAt(row, findColumn(column));
+    }
 }

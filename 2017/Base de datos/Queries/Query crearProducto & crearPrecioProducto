@@ -1,0 +1,9 @@
+﻿INSERT INTO spve.producto 
+(descripcion_producto, codigo_venta_producto, limite_venta_persona, descripcion_empaque, 
+cantidad_disponible, balanza, producto_pre_fabricado) 
+VALUES ('Jugo de tapara', '1122', 0, 'Carton de jugo', '100', 0, 0);
+
+INSERT INTO spve.precio_producto
+(fecha_registro_precio, margen_ganancia, porcentaje_impuesto_producto, impuesto_producto, 
+precio_venta_publico, base_imponible, producto_exento, activo_precio_producto, id_producto) 
+VALUES (current_date, 30, 12, 24, 224, 200, 0, 1, 5);

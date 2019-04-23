@@ -1,6 +1,5 @@
 package PuntoVenta.Ventanas;
 
-import ClasesExtendidas.Tablas.ArrayListTableModel;
 import ClasesExtendidas.Tablas.ListaProductosCajeroTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +14,7 @@ import javax.swing.RowFilter;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -23,6 +23,7 @@ import javax.swing.table.TableRowSorter;
  */
 public class ListaProductos extends JInternalFrame {
 
+    private ListaProductosCajeroTableModel jtbProductosModel;
     private final Venta venta;
 
     public ListaProductos(Venta venta) {
@@ -85,9 +86,10 @@ public class ListaProductos extends JInternalFrame {
         if (venta.getIdVenta() > 0) {
             int row = jtbProductos.getSelectedRow();
             if (row >= 0) {
-                String codigoBarra = jtbProductos.getValueAt(row, 0).toString();
+                String codigoBarra = jtbProductosModel.getValueAt(row, "Código").toString();
+                int idUnidadInventario = Integer.parseInt(jtbProductosModel.getValueAt(row, "Id de unidad de inventario").toString());
                 cerrarVentana();
-                venta.cargarInformacionProducto(codigoBarra);
+                venta.cargarInformacionProducto(codigoBarra, idUnidadInventario);
             } else {
                 Utilidades.Sonidos.beep();
             }
@@ -280,17 +282,13 @@ public class ListaProductos extends JInternalFrame {
                 jtbProductos.requestFocus();
                 jtbProductos.setRowSelectionInterval(0, 0);
             }
-            
         }
     }//GEN-LAST:event_txtCampoDescripcionKeyPressed
 
     private void txtCampoDescripcionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCampoDescripcionKeyReleased
         
         if (evt.getKeyCode() != KeyEvent.VK_ENTER) {
-            String filtro = getTxtCampoDescripcion().getText();
-            TableRowSorter sorter = new TableRowSorter(jtbProductos.getModel());
-            sorter.setRowFilter(RowFilter.regexFilter(filtro));
-            jtbProductos.setRowSorter(sorter);
+            buscar();
         }
     }//GEN-LAST:event_txtCampoDescripcionKeyReleased
 
@@ -301,11 +299,7 @@ public class ListaProductos extends JInternalFrame {
     }//GEN-LAST:event_jtbProductosKeyPressed
 
     private void txtCampoDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCampoDescripcionActionPerformed
- String filtro = getTxtCampoDescripcion().getText();
-            TableRowSorter sorter = new TableRowSorter(jtbProductos.getModel());
-            sorter.setRowFilter(RowFilter.regexFilter(filtro));
-            jtbProductos.setRowSorter(sorter);           
-  
+        buscar();
     }//GEN-LAST:event_txtCampoDescripcionActionPerformed
 
     private void cerrarVentana() {
@@ -313,9 +307,13 @@ public class ListaProductos extends JInternalFrame {
     }
 
     private void actualizarTabla() {
-        ArrayList<HashMap<String, String>> listaProductos = venta.menuPrincipal.getOBD().getArrayListProductos();
+        ArrayList<HashMap<String, String>> listaProductos = venta.menuPrincipal.getOBD().getArrayListProductosCajero();
         ListaProductosCajeroTableModel model = new ListaProductosCajeroTableModel(listaProductos);
         jtbProductos.setModel(model);
+        jtbProductosModel = model;
+        
+        TableColumnModel tcm = jtbProductos.getColumnModel();
+        tcm.removeColumn(tcm.getColumn(tcm.getColumnIndex("Id de unidad de inventario")));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -335,7 +333,13 @@ public class ListaProductos extends JInternalFrame {
      * @return the txtCampoDescripcion
      */
     public javax.swing.JTextField getTxtCampoDescripcion() {
-    String marmol=txtCampoDescripcion.getText();
         return txtCampoDescripcion;
+    }
+
+    private void buscar() {
+        String filtro = getTxtCampoDescripcion().getText();
+        TableRowSorter sorter = new TableRowSorter(jtbProductos.getModel());
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + filtro));
+        jtbProductos.setRowSorter(sorter);
     }
 }

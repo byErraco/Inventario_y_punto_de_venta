@@ -2,21 +2,10 @@ package PuntoVenta.Ventanas;
 
 import PuntoVenta.BaseDatos.Pais;
 import PuntoVenta.Inicio.MenuPrincipal;
-import static PuntoVenta.Inicio.MenuPrincipal.btnAcerca;
-import static PuntoVenta.Inicio.MenuPrincipal.btnAdmin;
-import static PuntoVenta.Inicio.MenuPrincipal.btnAyuda;
-import static PuntoVenta.Inicio.MenuPrincipal.btnCaja;
-import static PuntoVenta.Inicio.MenuPrincipal.btnFacturas;
-import static PuntoVenta.Inicio.MenuPrincipal.btnMovimientos;
-import static PuntoVenta.Inicio.MenuPrincipal.btnProductos;
-import static PuntoVenta.Inicio.MenuPrincipal.btnVentas;
-//import static PuntoVenta.Ventanas.Bloqueo.jpwContrasena;
-import static PuntoVenta.Ventanas.LogIn.cmbTipoIdentificacion;
 //import static PuntoVenta.Ventanas.LogIn.jpwClave;
 //import static PuntoVenta.Ventanas.bloqueo2.pass;
 import static java.awt.Frame.MAXIMIZED_BOTH;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
@@ -260,25 +249,6 @@ public class Bloqueo extends javax.swing.JFrame {
         cmbTipoIdentificacion.insertItemAt(p.getNacionalidad(), 0);
         cmbTipoIdentificacion.setSelectedIndex(0);
     }    
-
-    /**
-     * Método para asignar usuario y clave automatico.
-     */
-    private void entrarProgramador() {
-        String nombre = "inverdata@inverdata.com.ve";
-        String password = "1234";
-        txtCedula.setText(nombre);
-        jpwContrasena.setText(password);
-    }
-
-    // KONSTANZA NUEVA FUNCION
-    private void entrarProgramador2() {
-        String ced ="1";
-        String pass = "1";
-        txtCedula.setText(ced);
-        jpwContrasena.setText(pass);
-    }
-  
     
     /**
      * Método sustituto para entrar al sistema, en vez de utilizar las variables
