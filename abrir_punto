@@ -1,0 +1,4 @@
+#!/bin/bash
+cd punto-de-venta/dist
+java -jar "Factura.jar"
+read -p "Presione ENTER para salir"

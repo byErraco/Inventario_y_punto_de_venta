@@ -1,0 +1,6 @@
+#!/bin/bash
+source venv/bin/activate
+cd inventario
+./manage.py runserver
+deactivate
+read -p "Presione la tecla ENTER para salir"
