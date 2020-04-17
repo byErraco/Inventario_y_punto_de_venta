@@ -803,7 +803,7 @@ public class Pago extends javax.swing.JInternalFrame {
         for (int i = 0; i < jtbVenta.getRowCount(); i++) {
             ad.add(new ArticuloDescontar(jtbVenta.getValueAt(i, 0).toString(), jtbVenta.getValueAt(i, 5).toString()));
             Double subtotal = pagoconiva - Double.parseDouble(venta.impuesto);
-            Double pagouni = Double.parseDouble((String) jtbVenta.getValueAt(i, 2));// Ernesto: el resto de esta expresion duplica el precio del producto + Double.parseDouble(jtbVenta.getValueAt(i, 4).toString());
+            Double pagouni = Double.parseDouble((String) jtbVenta.getValueAt(i, 8));// Ernesto: el resto de esta expresion duplica el precio del producto + Double.parseDouble(jtbVenta.getValueAt(i, 4).toString());
             String descrip = "";
             if (jtbVenta.getValueAt(i, 1).toString().length() > 13) {
                 for (int k = 0; k < jtbVenta.getValueAt(i, 1).toString().length(); k++) {
@@ -1236,7 +1236,7 @@ public class Pago extends javax.swing.JInternalFrame {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
 
-        PuntoVenta.Ventanas.Venta.txtProductoId.requestFocus();
+        PuntoVenta.Ventanas.Venta.getTxtIdProducto().requestFocus();
         cerrarVentana();
     }//GEN-LAST:event_btnSalirActionPerformed
 

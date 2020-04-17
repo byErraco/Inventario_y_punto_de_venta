@@ -2794,6 +2794,7 @@ public class ObjetoBaseDatos {
         return venta;
     }
 
+    
     /**
      * Realiza un UPDATE a la tabla producto-
      *
@@ -2801,12 +2802,12 @@ public class ObjetoBaseDatos {
      * @param cantidad
      * @return
      * @throws java.sql.SQLException
-     */
+     *//*
     public int descontarCantidad(String codigo, double cantidad) throws SQLException {
 
         ResultSet rs;
         int resultado = -1;
-        double can = Double.parseDouble((String) PuntoVenta.Ventanas.Venta.txtCantidad.getText());
+        double can = Double.parseDouble((String) PuntoVenta.Ventanas.Venta.getTxtCantidad().getText());
 
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("UPDATE ")
@@ -2832,7 +2833,7 @@ public class ObjetoBaseDatos {
         //int res1 = us1.executeUpdate();
 //        System.out.println(sqlQuery);
         return resultado;
-    }
+    }*/
 
     /**
      * Realiza un UPDATE a la tabla producto-
@@ -3228,6 +3229,78 @@ public class ObjetoBaseDatos {
         return resultado;
     }
     
+        public double getTotalDivisaVenta(int id_venta){
+        StringBuilder sqlQuery = new StringBuilder();
+        ResultSet rs;
+        double resultado = 0;
+        // sqlQuery.append("SELECT (COALESCE(SUM(precio_venta_publico*venta_producto.cantidad_producto),0)/COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0)) AS subtotal")
+        sqlQuery.append("SELECT COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0) AS total_impuesto")
+                .append(" FROM ")
+                .append(mapSchema.get("spve")).append(".")
+                .append(mapTabla.get("venta_producto"))
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("unidad_inventario"))
+                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
+                .append(" INNER JOIN ")
+                .append(mapSchema.get("inventario")).append(".")
+                .append(mapTabla.get("precio_unidad_inventario"))
+                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
+                .append(" WHERE exento = FALSE AND activo_venta_producto = 1 AND precio_unidad_inventario.activo = 1 AND id_venta = ")
+                .append(id_venta).append(";");
+                        
+        try {
+            postgreSQL.conectar();
+            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            if (rs.next()) {
+                resultado = rs.getDouble("total_impuesto");
+                
+            }
+        } catch (Exception e) {
+        } finally {
+            postgreSQL.desconectar();
+        }
+        
+        return resultado;
+    }    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Método para obtener el subtotal de una venta
      * 
@@ -3517,22 +3590,24 @@ public class ObjetoBaseDatos {
      * @param monto_apertura
      * @return 
      */
-    public int abrirCaja(int id_caja, int id_empleado, String monto_apertura){
+    public int abrirCaja(int id_caja, int id_empleado, String monto_apertura, String monto_divisa){
         Date date = new java.util.Date();
         Date fecha_apertura = new Timestamp(date.getTime());
         
         int resultado;
         StringBuilder sqlQuery = new StringBuilder();
-        
+        System.out.println("ajamano");
         sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("estado_caja"))
-                    .append(" (fecha_apertura, monto_apertura, id_empleado, id_caja, caja_abierta) VALUES ('")
+                    .append(" (fecha_apertura, monto_apertura,monto_divisa, id_empleado, id_caja, caja_abierta) VALUES ('")
                     .append(fecha_apertura).append("', '")
                     .append(monto_apertura).append("', '")
+                    .append(monto_divisa).append("', '")
                     .append(id_empleado).append("', '")
                     .append(id_caja).append("', '")
                     .append(1).append("');");
+                  
         resultado = ejecutarCreate(sqlQuery.toString(), "estado_caja");
         
         return resultado;

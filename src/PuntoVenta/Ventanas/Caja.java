@@ -246,16 +246,18 @@ public class Caja extends javax.swing.JInternalFrame {
      */
     public void abrirCaja() {
         String montoApertura;
+        String montoDivisa;
 
         if(!menuPrincipal.isCajaAbierta()){
             do {
                 montoApertura = JOptionPane.showInputDialog(this, "Monto de apertura", 0);
+                montoDivisa = JOptionPane.showInputDialog(this, "Monto de Divisa", 0);
             } while (!montoApertura.matches(Globales.patronCantidad));
-            System.out.println("montoApertura: " + montoApertura);
+            System.out.println("montoApertura: " + montoApertura + "montoDivisa:" + montoDivisa);
             
             int idEstadoCaja = menuPrincipal.getOBD().abrirCaja(menuPrincipal.getModeloCaja().getId(),
                                                                 menuPrincipal.getEmpleado().getId(),
-                                                                montoApertura);
+                                                                montoApertura,montoDivisa);
             
             if(idEstadoCaja >= 0){
                 actualizarTabla();

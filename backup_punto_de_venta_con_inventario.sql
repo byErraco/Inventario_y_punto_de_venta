@@ -1,4 +1,4 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
@@ -22,7 +22,7 @@ SET row_security = off;
 CREATE SCHEMA inventario;
 
 
-ALTER SCHEMA inventario OWNER TO inverdata;
+
 
 --
 -- Name: spve; Type: SCHEMA; Schema: -; Owner: inverdata
@@ -31,7 +31,6 @@ ALTER SCHEMA inventario OWNER TO inverdata;
 CREATE SCHEMA spve;
 
 
-ALTER SCHEMA spve OWNER TO inverdata;
 
 SET default_tablespace = '';
 
@@ -48,7 +47,6 @@ CREATE TABLE inventario.almacen (
 );
 
 
-ALTER TABLE inventario.almacen OWNER TO inverdata;
 
 --
 -- Name: almacen_id_seq; Type: SEQUENCE; Schema: inventario; Owner: inverdata
@@ -62,7 +60,7 @@ CREATE SEQUENCE inventario.almacen_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventario.almacen_id_seq OWNER TO inverdata;
+
 
 --
 -- Name: almacen_id_seq; Type: SEQUENCE OWNED BY; Schema: inventario; Owner: inverdata
@@ -82,7 +80,7 @@ CREATE TABLE inventario.lote_produccion (
 );
 
 
-ALTER TABLE inventario.lote_produccion OWNER TO inverdata;
+
 
 --
 -- Name: lote_produccion_id_seq; Type: SEQUENCE; Schema: inventario; Owner: inverdata
@@ -96,7 +94,7 @@ CREATE SEQUENCE inventario.lote_produccion_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventario.lote_produccion_id_seq OWNER TO inverdata;
+
 
 --
 -- Name: lote_produccion_id_seq; Type: SEQUENCE OWNED BY; Schema: inventario; Owner: inverdata
@@ -122,7 +120,7 @@ CREATE TABLE inventario.precio_unidad_inventario (
 );
 
 
-ALTER TABLE inventario.precio_unidad_inventario OWNER TO inverdata;
+
 
 --
 -- Name: precio_unidad_inventario_id_seq; Type: SEQUENCE; Schema: inventario; Owner: inverdata
@@ -136,7 +134,7 @@ CREATE SEQUENCE inventario.precio_unidad_inventario_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventario.precio_unidad_inventario_id_seq OWNER TO inverdata;
+
 
 --
 -- Name: precio_unidad_inventario_id_seq; Type: SEQUENCE OWNED BY; Schema: inventario; Owner: inverdata
@@ -156,7 +154,7 @@ CREATE TABLE inventario.unidad (
 );
 
 
-ALTER TABLE inventario.unidad OWNER TO inverdata;
+
 
 --
 -- Name: unidad_id_seq; Type: SEQUENCE; Schema: inventario; Owner: inverdata
@@ -170,7 +168,7 @@ CREATE SEQUENCE inventario.unidad_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventario.unidad_id_seq OWNER TO inverdata;
+
 
 --
 -- Name: unidad_id_seq; Type: SEQUENCE OWNED BY; Schema: inventario; Owner: inverdata
@@ -193,7 +191,7 @@ CREATE TABLE inventario.unidad_inventario (
 );
 
 
-ALTER TABLE inventario.unidad_inventario OWNER TO inverdata;
+
 
 --
 -- Name: unidad_inventario_id_seq; Type: SEQUENCE; Schema: inventario; Owner: inverdata
@@ -207,7 +205,7 @@ CREATE SEQUENCE inventario.unidad_inventario_id_seq
     CACHE 1;
 
 
-ALTER TABLE inventario.unidad_inventario_id_seq OWNER TO inverdata;
+
 
 --
 -- Name: unidad_inventario_id_seq; Type: SEQUENCE OWNED BY; Schema: inventario; Owner: inverdata
@@ -231,7 +229,6 @@ CREATE TABLE public.jpais (
 );
 
 
-ALTER TABLE public.jpais OWNER TO inverdata;
 
 --
 -- Name: pais; Type: TABLE; Schema: public; Owner: inverdata
@@ -248,7 +245,6 @@ CREATE TABLE public.pais (
 );
 
 
-ALTER TABLE public.pais OWNER TO inverdata;
 
 --
 -- Name: ajuste_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -262,7 +258,7 @@ CREATE SEQUENCE spve.ajuste_seq
     CACHE 1;
 
 
-ALTER TABLE spve.ajuste_seq OWNER TO inverdata;
+
 
 --
 -- Name: caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -276,7 +272,7 @@ CREATE SEQUENCE spve.caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.caja_seq OWNER TO inverdata;
+
 
 --
 -- Name: caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -289,7 +285,7 @@ CREATE TABLE spve.caja (
 );
 
 
-ALTER TABLE spve.caja OWNER TO inverdata;
+
 
 --
 -- Name: cargo_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -303,7 +299,7 @@ CREATE SEQUENCE spve.cargo_seq
     CACHE 1;
 
 
-ALTER TABLE spve.cargo_seq OWNER TO inverdata;
+
 
 --
 -- Name: cargo; Type: TABLE; Schema: spve; Owner: inverdata
@@ -316,7 +312,7 @@ CREATE TABLE spve.cargo (
 );
 
 
-ALTER TABLE spve.cargo OWNER TO inverdata;
+
 
 --
 -- Name: cierre_caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -334,7 +330,7 @@ CREATE TABLE spve.cierre_caja (
 );
 
 
-ALTER TABLE spve.cierre_caja OWNER TO inverdata;
+
 
 --
 -- Name: cierre_caja_id_cierre_caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -348,7 +344,7 @@ CREATE SEQUENCE spve.cierre_caja_id_cierre_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.cierre_caja_id_cierre_caja_seq OWNER TO inverdata;
+
 
 --
 -- Name: cierre_caja_id_cierre_caja_seq; Type: SEQUENCE OWNED BY; Schema: spve; Owner: inverdata
@@ -369,7 +365,7 @@ CREATE SEQUENCE spve.cierre_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.cierre_caja_seq OWNER TO inverdata;
+
 
 --
 -- Name: codigo_factura_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -383,7 +379,7 @@ CREATE SEQUENCE spve.codigo_factura_seq
     CACHE 1;
 
 
-ALTER TABLE spve.codigo_factura_seq OWNER TO inverdata;
+
 
 --
 -- Name: compra_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -397,7 +393,7 @@ CREATE SEQUENCE spve.compra_seq
     CACHE 1;
 
 
-ALTER TABLE spve.compra_seq OWNER TO inverdata;
+
 
 --
 -- Name: corte_caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -411,7 +407,7 @@ CREATE SEQUENCE spve.corte_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.corte_caja_seq OWNER TO inverdata;
+
 
 --
 -- Name: corte_caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -430,7 +426,6 @@ CREATE TABLE spve.corte_caja (
 );
 
 
-ALTER TABLE spve.corte_caja OWNER TO inverdata;
 
 --
 -- Name: desglose_caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -444,7 +439,6 @@ CREATE SEQUENCE spve.desglose_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.desglose_caja_seq OWNER TO inverdata;
 
 --
 -- Name: desglose_caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -459,7 +453,6 @@ CREATE TABLE spve.desglose_caja (
 );
 
 
-ALTER TABLE spve.desglose_caja OWNER TO inverdata;
 
 --
 -- Name: empleado_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -473,7 +466,6 @@ CREATE SEQUENCE spve.empleado_seq
     CACHE 1;
 
 
-ALTER TABLE spve.empleado_seq OWNER TO inverdata;
 
 --
 -- Name: empleado; Type: TABLE; Schema: spve; Owner: inverdata
@@ -488,7 +480,6 @@ CREATE TABLE spve.empleado (
 );
 
 
-ALTER TABLE spve.empleado OWNER TO inverdata;
 
 --
 -- Name: estado_caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -502,7 +493,6 @@ CREATE SEQUENCE spve.estado_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.estado_caja_seq OWNER TO inverdata;
 
 --
 -- Name: estado_caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -519,7 +509,6 @@ CREATE TABLE spve.estado_caja (
 );
 
 
-ALTER TABLE spve.estado_caja OWNER TO inverdata;
 
 --
 -- Name: montos_cierre_caja; Type: TABLE; Schema: spve; Owner: inverdata
@@ -535,7 +524,6 @@ CREATE TABLE spve.montos_cierre_caja (
 );
 
 
-ALTER TABLE spve.montos_cierre_caja OWNER TO inverdata;
 
 --
 -- Name: montos_cierre_caja_id_montos_cierre_caja_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -549,7 +537,6 @@ CREATE SEQUENCE spve.montos_cierre_caja_id_montos_cierre_caja_seq
     CACHE 1;
 
 
-ALTER TABLE spve.montos_cierre_caja_id_montos_cierre_caja_seq OWNER TO inverdata;
 
 --
 -- Name: montos_cierre_caja_id_montos_cierre_caja_seq; Type: SEQUENCE OWNED BY; Schema: spve; Owner: inverdata
@@ -570,7 +557,6 @@ CREATE SEQUENCE spve.pago_seq
     CACHE 1;
 
 
-ALTER TABLE spve.pago_seq OWNER TO inverdata;
 
 --
 -- Name: pago; Type: TABLE; Schema: spve; Owner: inverdata
@@ -587,7 +573,6 @@ CREATE TABLE spve.pago (
 );
 
 
-ALTER TABLE spve.pago OWNER TO inverdata;
 
 --
 -- Name: pais; Type: TABLE; Schema: spve; Owner: inverdata
@@ -607,7 +592,6 @@ CREATE TABLE spve.pais (
 );
 
 
-ALTER TABLE spve.pais OWNER TO inverdata;
 
 --
 -- Name: parametros; Type: TABLE; Schema: spve; Owner: inverdata
@@ -619,7 +603,6 @@ CREATE TABLE spve.parametros (
 );
 
 
-ALTER TABLE spve.parametros OWNER TO inverdata;
 
 --
 -- Name: periodo_venta_producto_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -633,7 +616,6 @@ CREATE SEQUENCE spve.periodo_venta_producto_seq
     CACHE 1;
 
 
-ALTER TABLE spve.periodo_venta_producto_seq OWNER TO inverdata;
 
 --
 -- Name: periodo_venta_producto; Type: TABLE; Schema: spve; Owner: inverdata
@@ -646,7 +628,6 @@ CREATE TABLE spve.periodo_venta_producto (
 );
 
 
-ALTER TABLE spve.periodo_venta_producto OWNER TO inverdata;
 
 --
 -- Name: persona_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -660,7 +641,6 @@ CREATE SEQUENCE spve.persona_seq
     CACHE 1;
 
 
-ALTER TABLE spve.persona_seq OWNER TO inverdata;
 
 --
 -- Name: persona; Type: TABLE; Schema: spve; Owner: inverdata
@@ -679,7 +659,6 @@ CREATE TABLE spve.persona (
 );
 
 
-ALTER TABLE spve.persona OWNER TO inverdata;
 
 --
 -- Name: precio_producto_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -693,7 +672,6 @@ CREATE SEQUENCE spve.precio_producto_seq
     CACHE 1;
 
 
-ALTER TABLE spve.precio_producto_seq OWNER TO inverdata;
 
 --
 -- Name: produccion_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -707,7 +685,6 @@ CREATE SEQUENCE spve.produccion_seq
     CACHE 1;
 
 
-ALTER TABLE spve.produccion_seq OWNER TO inverdata;
 
 --
 -- Name: producto_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -721,7 +698,6 @@ CREATE SEQUENCE spve.producto_seq
     CACHE 1;
 
 
-ALTER TABLE spve.producto_seq OWNER TO inverdata;
 
 --
 -- Name: producto; Type: TABLE; Schema: spve; Owner: inverdata
@@ -741,7 +717,6 @@ CREATE TABLE spve.producto (
 );
 
 
-ALTER TABLE spve.producto OWNER TO inverdata;
 
 --
 -- Name: producto_componente_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -755,7 +730,6 @@ CREATE SEQUENCE spve.producto_componente_seq
     CACHE 1;
 
 
-ALTER TABLE spve.producto_componente_seq OWNER TO inverdata;
 
 --
 -- Name: tipo_monto_cierre; Type: TABLE; Schema: spve; Owner: inverdata
@@ -768,7 +742,6 @@ CREATE TABLE spve.tipo_monto_cierre (
 );
 
 
-ALTER TABLE spve.tipo_monto_cierre OWNER TO inverdata;
 
 --
 -- Name: tipo_monto_cierre_id_tipo_monto_cierre_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -782,7 +755,6 @@ CREATE SEQUENCE spve.tipo_monto_cierre_id_tipo_monto_cierre_seq
     CACHE 1;
 
 
-ALTER TABLE spve.tipo_monto_cierre_id_tipo_monto_cierre_seq OWNER TO inverdata;
 
 --
 -- Name: tipo_monto_cierre_id_tipo_monto_cierre_seq; Type: SEQUENCE OWNED BY; Schema: spve; Owner: inverdata
@@ -803,7 +775,6 @@ CREATE SEQUENCE spve.tipo_pago_seq
     CACHE 1;
 
 
-ALTER TABLE spve.tipo_pago_seq OWNER TO inverdata;
 
 --
 -- Name: tipo_pago; Type: TABLE; Schema: spve; Owner: inverdata
@@ -816,7 +787,6 @@ CREATE TABLE spve.tipo_pago (
 );
 
 
-ALTER TABLE spve.tipo_pago OWNER TO inverdata;
 
 --
 -- Name: venta_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -830,7 +800,6 @@ CREATE SEQUENCE spve.venta_seq
     CACHE 1;
 
 
-ALTER TABLE spve.venta_seq OWNER TO inverdata;
 
 --
 -- Name: venta; Type: TABLE; Schema: spve; Owner: inverdata
@@ -850,7 +819,6 @@ CREATE TABLE spve.venta (
 );
 
 
-ALTER TABLE spve.venta OWNER TO inverdata;
 
 --
 -- Name: venta_producto_seq; Type: SEQUENCE; Schema: spve; Owner: inverdata
@@ -864,7 +832,6 @@ CREATE SEQUENCE spve.venta_producto_seq
     CACHE 1;
 
 
-ALTER TABLE spve.venta_producto_seq OWNER TO inverdata;
 
 --
 -- Name: venta_producto; Type: TABLE; Schema: spve; Owner: inverdata
@@ -880,7 +847,6 @@ CREATE TABLE spve.venta_producto (
 );
 
 
-ALTER TABLE spve.venta_producto OWNER TO inverdata;
 
 --
 -- Name: almacen id; Type: DEFAULT; Schema: inventario; Owner: inverdata
@@ -1765,7 +1731,6 @@ ALTER TABLE ONLY spve.montos_cierre_caja
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
 REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO inverdata;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
@@ -1774,8 +1739,8 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 
 REVOKE ALL ON TABLE inventario.almacen FROM PUBLIC;
-REVOKE ALL ON TABLE inventario.almacen FROM inverdata;
-GRANT ALL ON TABLE inventario.almacen TO inverdata;
+GRANT ALL ON TABLE inventario.almacen TO postgres;
+GRANT ALL ON TABLE inventario.almacen TO PUBLIC;
 
 
 --

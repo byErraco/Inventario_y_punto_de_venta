@@ -43,6 +43,10 @@ import javax.swing.table.TableColumnModel;
 
 public class Venta extends javax.swing.JInternalFrame {
 
+    static Object getTxtProductoId() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private ProductoVentaTableModel jtbVentaModel;
             
     private DecimalFormat redondeo = new DecimalFormat("0.00");
@@ -1207,7 +1211,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JPanel pnlInformacionVenta;
     private javax.swing.JPanel pnlTotal;
     private static javax.swing.JTextField txtAlmacen;
-    private javax.swing.JTextField txtCantidad;
+    private static javax.swing.JTextField txtCantidad;
     public static javax.swing.JTextField txtDocumento;
     private static javax.swing.JTextField txtLote;
     public static javax.swing.JTextField txtNombreCliente;
@@ -1906,12 +1910,8 @@ public class Venta extends javax.swing.JInternalFrame {
     /**
      * @return the txtIdProducto
      */
-    public javax.swing.JTextField getTxtIdProducto() {
+    public static javax.swing.JTextField getTxtIdProducto() {
         return txtProductoId;
-    }
-
-    public static javax.swing.JTextField getTxtProductoNombre() {
-        return txtProductoNombre;
     }
 
     /**
