@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -270,6 +271,7 @@ public class Venta extends javax.swing.JInternalFrame {
         lblImpuestoValor = new javax.swing.JLabel();
         info3 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        lblTotalDivisa = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
 
         jButton4.setText("Terminar");
@@ -852,6 +854,11 @@ public class Venta extends javax.swing.JInternalFrame {
         jLabel13.setForeground(new java.awt.Color(28, 90, 125));
         jLabel13.setText("Total");
 
+        lblTotalDivisa.setBackground(new java.awt.Color(0, 0, 0));
+        lblTotalDivisa.setFont(new java.awt.Font("SansSerif", 1, 30)); // NOI18N
+        lblTotalDivisa.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTotalDivisa.setText("0.00");
+
         javax.swing.GroupLayout pnlTotalLayout = new javax.swing.GroupLayout(pnlTotal);
         pnlTotal.setLayout(pnlTotalLayout);
         pnlTotalLayout.setHorizontalGroup(
@@ -874,7 +881,10 @@ public class Venta extends javax.swing.JInternalFrame {
                             .addGroup(pnlTotalLayout.createSequentialGroup()
                                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(59, 59, 59)
-                                .addComponent(lblTotalValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(lblTotalValor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(pnlTotalLayout.createSequentialGroup()
+                                .addGap(146, 146, 146)
+                                .addComponent(lblTotalDivisa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap(276, Short.MAX_VALUE))
             .addGroup(pnlTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnlTotalLayout.createSequentialGroup()
@@ -899,6 +909,8 @@ public class Venta extends javax.swing.JInternalFrame {
                 .addGroup(pnlTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
                     .addComponent(lblTotalValor))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblTotalDivisa)
                 .addContainerGap(64, Short.MAX_VALUE))
             .addGroup(pnlTotalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTotalLayout.createSequentialGroup()
@@ -1203,6 +1215,7 @@ public class Venta extends javax.swing.JInternalFrame {
     private javax.swing.JLabel lblSubtotal;
     private javax.swing.JLabel lblSubtotalValor;
     private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lblTotalDivisa;
     private javax.swing.JLabel lblTotalValor;
     private javax.swing.JLabel lblValorFechaFactura;
     private javax.swing.JPanel pnlBotones;
@@ -1624,10 +1637,12 @@ public class Venta extends javax.swing.JInternalFrame {
             actualizarLblSubtotal();
             actualizarLblImpuesto();
             actualizarLblTotal();
+            actualizarLblTotalDivisas();
         } else {
             this.lblTotalValor.setText("0.00");
             this.lblSubtotalValor.setText("0.00");
             this.lblImpuestoValor.setText("0.00");
+            this.lblTotalDivisa.setText("0.00");
         }
 
     }
@@ -1847,6 +1862,23 @@ public class Venta extends javax.swing.JInternalFrame {
     }
 
     /**
+     * Actualiza el lblTotalValor con el precio de todos los productos includos
+     * en la venta.
+     *
+     */
+    public void actualizarLblTotalDivisas() {
+        XBigDecimal montoTotal = new XBigDecimal(getLblTotalValor().getText());
+        System.out.println("Monto total: " + montoTotal);
+        XBigDecimal valorDivisa = menuPrincipal.getOBD().getValorDivisa();
+        System.out.println("valor de la divisa:" + valorDivisa);
+        double vd = valorDivisa.doubleValue(); 
+        double mt = montoTotal.doubleValue();
+        double montoTotalDiv =  mt/vd;
+        
+        this.getLblTotalDivisa().setText(String.format("%5.2f", montoTotalDiv));
+    }    
+    
+    /**
      * Activa/desactiva los botones de Totaliza, Eliminar, Cancelar, Modificar y
      * Experar. Tambien desactiva los campos de idProducto y cantidad.
      *
@@ -1949,6 +1981,9 @@ public class Venta extends javax.swing.JInternalFrame {
         return lblTotalValor;
     }
 
+    public javax.swing.JLabel getLblTotalDivisa(){
+        return lblTotalDivisa;
+    }
     /**
      * @return the idVenta
      */

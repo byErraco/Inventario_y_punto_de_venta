@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package Utilidades;
-import static com.sun.javafx.tk.Toolkit.getToolkit;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

@@ -17,6 +17,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -3229,39 +3231,28 @@ public class ObjetoBaseDatos {
         return resultado;
     }
     
-        public double getTotalDivisaVenta(int id_venta){
-        StringBuilder sqlQuery = new StringBuilder();
-        ResultSet rs;
-        double resultado = 0;
-        // sqlQuery.append("SELECT (COALESCE(SUM(precio_venta_publico*venta_producto.cantidad_producto),0)/COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0)) AS subtotal")
-        sqlQuery.append("SELECT COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0) AS total_impuesto")
-                .append(" FROM ")
-                .append(mapSchema.get("spve")).append(".")
-                .append(mapTabla.get("venta_producto"))
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("inventario")).append(".")
-                .append(mapTabla.get("unidad_inventario"))
-                .append(" ON venta_producto.id_unidad_inventario = unidad_inventario.id")
-                .append(" INNER JOIN ")
-                .append(mapSchema.get("inventario")).append(".")
-                .append(mapTabla.get("precio_unidad_inventario"))
-                .append(" ON unidad_inventario.id = precio_unidad_inventario.unidad_inventario_id ")
-                .append(" WHERE exento = FALSE AND activo_venta_producto = 1 AND precio_unidad_inventario.activo = 1 AND id_venta = ")
-                .append(id_venta).append(";");
-                        
+    public XBigDecimal getValorDivisa() {
+            
+        String query = "SELECT DISTINCT ON (id_estado_caja)\n" +
+                        "	monto_divisa\n" +
+                        "FROM spve.estado_caja\n" +
+                        "ORDER BY id_estado_caja DESC LIMIT 1;";
+                    
         try {
             postgreSQL.conectar();
-            rs = postgreSQL.getSentencia().executeQuery(sqlQuery.toString());
+            ResultSet rs = postgreSQL.getSentencia().executeQuery(query);
             if (rs.next()) {
-                resultado = rs.getDouble("total_impuesto");
-                
+                double r = rs.getDouble(1);
+                return new XBigDecimal(r);
             }
+            System.out.println("No se encontro ningun registro");
+            return null;
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         } finally {
             postgreSQL.desconectar();
         }
-        
-        return resultado;
     }    
     
     
@@ -3313,6 +3304,7 @@ public class ObjetoBaseDatos {
         double resultado = 0;
         
         sqlQuery.append("SELECT (COALESCE(SUM(precio_venta_publico*venta_producto.cantidad_producto),0)-COALESCE(SUM(impuesto*venta_producto.cantidad_producto), 0)) AS subtotal")
+                .append(" ")
                 .append(" FROM ")
                 .append(mapSchema.get("spve")).append(".")
                 .append(mapTabla.get("venta_producto"))
@@ -3596,7 +3588,7 @@ public class ObjetoBaseDatos {
         
         int resultado;
         StringBuilder sqlQuery = new StringBuilder();
-        System.out.println("ajamano");
+        System.out.println("Abriendo Estado de caja");
         sqlQuery.append("INSERT INTO ")
                     .append(mapSchema.get("spve")).append(".")
                     .append(mapTabla.get("estado_caja"))
